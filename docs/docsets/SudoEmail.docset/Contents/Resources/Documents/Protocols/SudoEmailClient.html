@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SudoEmailClient Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Protocol/SudoEmailClient" class="dashAnchor"></a>
+
+    <a title="SudoEmailClient Protocol Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SudoEmail 1.0.0 Docs
+        </a>
+        
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SudoEmail Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      SudoEmailClient Protocol Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/DefaultSudoEmailClient.html">DefaultSudoEmailClient</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/BoolFilter.html">BoolFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CachePolicy.html">CachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/EmailMessageDirectionFilter.html">EmailMessageDirectionFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/EmailMessageStateFilter.html">EmailMessageStateFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PlatformSubscriptionStatus.html">PlatformSubscriptionStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/StringFilter.html">StringFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SudoEmailError.html">SudoEmailError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AWSRegionType.html">AWSRegionType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SubscriptionToken.html">SubscriptionToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SudoEmailClient.html">SudoEmailClient</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AnyError.html">AnyError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailMessage.html">EmailMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailMessage/Direction.html">– Direction</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailMessage/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListOutput.html">ListOutput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Owner.html">Owner</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>SudoEmailClient</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SudoEmailClient</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>Client used to interface with the Sudo Email Platform service.</p>
+
+<p>It is recommended to code to this interface, rather than the implementation class (<code><a href="../Classes/DefaultSudoEmailClient.html">DefaultSudoEmailClient</a></code>) as
+the implementation class is only meant to be used for initializing an instance of the client.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Lifecycle"></a>
+                <a name="//apple_ref/swift/Section/Lifecycle" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Lifecycle"></a>
+                  <h3 class="section-name"><p>Lifecycle</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP5resetyyKF"></a>
+                    <a name="//apple_ref/swift/Method/reset()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP5resetyyKF">reset()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes all keys associated with this client, resets any cached data, cleans up subscriptions, and purges any pending operations.</p>
+
+<p>It is important to note that this will clear ALL cached data related to all
+sudo services.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">reset</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Mutations"></a>
+                <a name="//apple_ref/swift/Section/Mutations" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Mutations"></a>
+                  <h3 class="section-name"><p>Mutations</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP09provisionB7Address_6sudoId10completionySS_SSys6ResultOyAA0bE0Vs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/provisionEmailAddress(_:sudoId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP09provisionB7Address_6sudoId10completionySS_SSys6ResultOyAA0bE0Vs5Error_pGctF">provisionEmailAddress(_:<wbr>sudoId:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provision an email address.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">provisionEmailAddress</span><span class="p">(</span><span class="n">_</span> <span class="nv">emailAddress</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">sudoId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Email address to provision.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sudoId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the sudo to provision email with.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Successfully provisioned email.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP011deprovisionB7Address_10completionySS_ys6ResultOyAA0bE0Vs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/deprovisionEmailAddress(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deprovisionB7Address_10completionySS_ys6ResultOyAA0bE0Vs5Error_pGctF">deprovisionEmailAddress(_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deprovision an email address.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deprovisionEmailAddress</span><span class="p">(</span><span class="n">_</span> <span class="nv">emailAddress</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Email address to be deprovisioned.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Successfully deprovisioned email.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP04sendB7Message14withRFC822Data06senderB7Address10completiony10Foundation0H0V_SSys6ResultOySSs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/sendEmailMessage(withRFC822Data:senderEmailAddress:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04sendB7Message14withRFC822Data06senderB7Address10completiony10Foundation0H0V_SSys6ResultOySSs5Error_pGctF">sendEmailMessage(withRFC822Data:<wbr>senderEmailAddress:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Send an email message using <a href="https://tools.ietf.org/html/rfc822">RFC-822</a> data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sendEmailMessage</span><span class="p">(</span><span class="n">withRFC822Data</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">senderEmailAddress</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data formatted under the <a href="https://tools.ietf.org/html/rfc822">RFC-822</a> standard.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>senderEmailAddress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>email address being used to send the email. The address must match the address of the <code>from</code> field in the RFC-822 data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Identifier of the email message that is being sent.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP06deleteB7Message6withId10completionySS_ys6ResultOySSs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/deleteEmailMessage(withId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB7Message6withId10completionySS_ys6ResultOySSs5Error_pGctF">deleteEmailMessage(withId:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delete an email message.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deleteEmailMessage</span><span class="p">(</span><span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the email message to be deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Identifier of the email message that was deleted.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Queries"></a>
+                <a name="//apple_ref/swift/Section/Queries" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Queries"></a>
+                  <h3 class="section-name"><p>Queries</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP012getSupportedB22DomainsWithCachePolicy_10completionyAA0hI0O_ys6ResultOySaySSGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getSupportedEmailDomainsWithCachePolicy(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP012getSupportedB22DomainsWithCachePolicy_10completionyAA0hI0O_ys6ResultOySaySSGs5Error_pGctF">getSupportedEmailDomainsWithCachePolicy(_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get a list of the supported email domains from the service.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getSupportedEmailDomainsWithCachePolicy</span><span class="p">(</span><span class="n">_</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">String</span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+API calls.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Array of supported domains.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP03getb11AddressWithE0_11cachePolicy10completionySS_AA05CacheH0Oys6ResultOyAA0bE0VSgs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailAddressWithAddress(_:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getb11AddressWithE0_11cachePolicy10completionySS_AA05CacheH0Oys6ResultOyAA0bE0VSgs5Error_pGctF">getEmailAddressWithAddress(_:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get a <code>EmailAddress</code> record using the <code>address</code> parameter. If the email address cannot be found, <code>nil</code> will be returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailAddressWithAddress</span><span class="p">(</span><span class="n">_</span> <span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the email address to be retrieved.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+API calls.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Email address associated with <code>id</code>, or <code>nil</code> if the email address cannot be found.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP03getB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailAddressesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">getEmailAddressesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get a list of email addresses. If no email addresses can be found, an empty list will be returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailAddressesWithFilter</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a></span><span class="p">?,</span>
+    <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span>
+    <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+    <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="o">&gt;&gt;</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>filter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Filter to be applied to results of query.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>limit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Number of email addresses to return. If <code>nil</code>, the limit is 10.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>nextToken</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Generated token by previous calls to <code>getEmailAddressesWithFilter</code>. This is used for pagination. This value should be pre-generated from
+a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
+previously generated <code>nextToken</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+API calls.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Email addresses associated with user, or empty list if no email address can be found.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP03getB13MessageWithId_11cachePolicy10completionySS_AA05CacheI0Oys6ResultOyAA0bE0VSgs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailMessageWithId(_:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB13MessageWithId_11cachePolicy10completionySS_AA05CacheI0Oys6ResultOyAA0bE0VSgs5Error_pGctF">getEmailMessageWithId(_:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get an email message using the <code>id</code> parameter. If the email message cannot be found, <code>nil</code> will be returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailMessageWithId</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the email message to be retrieved.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+API calls.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Email message associated with <code>id</code>, or <code>nil</code> if the email message cannot be found.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP03getB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailMessagesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">getEmailMessagesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get a list of email messages. If no email messages can be found, an empty list will be returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailMessagesWithFilter</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a></span><span class="p">?,</span>
+    <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span>
+    <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+    <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;&gt;</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>filter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Filter to be applied to results of query.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>limit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Number of email messages to return. If <code>nil</code>, the limit is 10.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>nextToken</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Generated token by previous calls to <code>getEmailMessagesWithFilter</code>. This is used for pagination. This value should be pre-generated from
+a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
+previously generated <code>nextToken</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+API calls.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Email messages associated with user, or empty list if no email message can be found.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP03getB23MessageRFC822DataWithId_10completionySS_ys6ResultOy10Foundation0G0Vs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailMessageRFC822DataWithId(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB23MessageRFC822DataWithId_10completionySS_ys6ResultOy10Foundation0G0Vs5Error_pGctF">getEmailMessageRFC822DataWithId(_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the raw RFC822 data of an email message associated with the <code>messageId</code>.</p>
+
+<p>If no email message exists for <code>messageId</code>, <code><a href="../Enums/SudoEmailError.html#/s:9SudoEmail0aB5ErrorO02noB22MessageRFC822AvailableyA2CmF">SudoEmailError.noEmailMessageRFC822Available</a></code> will be returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailMessageRFC822DataWithId</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">Data</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messageId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Message identifier associated with the RFC822 data attempting to be fetched.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Stored RFC822 email message data of the email message.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html#/s:9SudoEmail0aB5ErrorO02noB22MessageRFC822AvailableyA2CmF">SudoEmailError.noEmailMessageRFC822Available</a></code> if the email message cannot be accessed/found.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Subscriptions"></a>
+                <a name="//apple_ref/swift/Section/Subscriptions" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Subscriptions"></a>
+                  <h3 class="section-name"><p>Subscriptions</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13resultHandlerAA17SubscriptionToken_pys6ResultOyAA0bF0Vs5Error_pGc_tKF"></a>
+                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageCreated(resultHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13resultHandlerAA17SubscriptionToken_pys6ResultOyAA0bF0Vs5Error_pGc_tKF">subscribeToEmailMessageCreated(resultHandler:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subscribe to email message creation events.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code> if an error occurs while setting up the initial connection the subscription.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">subscribeToEmailMessageCreated</span><span class="p">(</span><span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resultHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Updated email message event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></code> object to cancel the subscription. On denitialization, the subscription will be cancelled.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageDeleted13resultHandlerAA17SubscriptionToken_pys6ResultOyAA0bF0Vs5Error_pGc_tKF"></a>
+                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageDeleted(resultHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageDeleted13resultHandlerAA17SubscriptionToken_pys6ResultOyAA0bF0Vs5Error_pGc_tKF">subscribeToEmailMessageDeleted(resultHandler:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subscribe to email message deleted events.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code> if an error occurs while setting up the initial connection the subscription.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">subscribeToEmailMessageDeleted</span><span class="p">(</span><span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of a specific deletion event to watch for. If <code>nil</code>, all deletion events will be handled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></code> object to cancel the subscription. On denitialization, the subscription will be cancelled.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2020-07-22)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

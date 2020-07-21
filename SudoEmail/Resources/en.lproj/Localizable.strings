@@ -1,0 +1,30 @@
+/* 
+  Copyright © 2020 Anonyome Labs, Inc. All rights reserved.
+
+  SPDX-License-Identifier: Apache-2.0
+
+*/
+
+// MARK: - Errors: Client
+
+"email.errors.invalidConfig" = "There was an issue with the configuration file. Please check that a valid configuration is included in the bundle";
+"email.errors.notSignedIn" = "Not signed in";
+"email.errors.noEmailMessageRFC822Available" = "No RFC822 data is available for this message";
+
+// MARK: - Errors: Service
+
+"email.errors.entitlementExceeded" = "Entitlement exceeded";
+"email.errors.addressNotFound" = "Email address could not be found";
+"email.errors.emailMessageNotFound" = "Email message could not be found";
+"email.errors.unauthorizedAddress" = "Unauthorized access to email address";
+
+// MARK: - Errors: SudoPlatformError
+
+"email.errors.serviceError" = "Service error has occurred";
+"email.errors.decodingError" = "A decoding error has occurred";
+"email.errors.environmentError" = "An environment error has occurred";
+"email.errors.policyFailed" = "A policy has failed";
+"email.errors.invalidTokenError" = "An invalid token error has occurred";
+"email.errors.accountLockedError" = "Account is locked";
+"email.errors.identityInsufficient" = "Identity is insufficient";
+"email.errors.identityNotVerified" = "Identity is not verified";

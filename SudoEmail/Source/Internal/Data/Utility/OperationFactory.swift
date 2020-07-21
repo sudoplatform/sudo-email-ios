@@ -1,0 +1,43 @@
+//
+// Copyright © 2020 Anonyome Labs, Inc. All rights reserved.
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+import Foundation
+import AWSAppSync
+import SudoOperations
+import SudoLogging
+
+class OperationFactory {
+
+    func generateQueryOperation<Query: GraphQLQuery>(
+        query: Query,
+        appSyncClient: AWSAppSyncClient,
+        cachePolicy: CachePolicy,
+        logger: Logger
+    ) -> PlatformQueryOperation<Query> {
+        return PlatformQueryOperation(
+            appSyncClient: appSyncClient,
+            query: query,
+            cachePolicy: cachePolicy.toSudoOperationsCachePolicy(),
+            logger: logger)
+    }
+
+    func generateMutationOperation<Mutation: GraphQLMutation>(
+        mutation: Mutation,
+        optimisticUpdate: OptimisticResponseBlock? = nil,
+        optimisticCleanup: OptimisticCleanupBlock? = nil,
+        appSyncClient: AWSAppSyncClient,
+        logger: Logger
+    ) -> PlatformMutationOperation<Mutation> {
+        return PlatformMutationOperation(
+            appSyncClient: appSyncClient,
+            serviceErrorTransformations: [SudoEmailError.init(graphQLError:)],
+            mutation: mutation,
+            optimisticUpdate: optimisticUpdate,
+            optimisticCleanup: optimisticCleanup,
+            logger: logger)
+    }
+
+}
