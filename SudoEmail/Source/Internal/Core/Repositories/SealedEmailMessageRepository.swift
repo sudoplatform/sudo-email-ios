@@ -69,7 +69,8 @@ protocol SealedEmailMessageRepository: class {
     func fetchEmailMessageRFC822DataWithSealedId(_ sealedId: String, completion: @escaping ClientCompletion<Data>)
 
     /// Subscribe to all sealed email messages created events.
-    /// - Parameter direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be returned.
+    /// - Parameter direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be
+    ///     returned.
     /// - Parameter resultHandler: Result handler for each incoming or outgoing email message.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
     func subscribeToEmailMessageCreated(

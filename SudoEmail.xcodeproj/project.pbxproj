@@ -94,6 +94,8 @@
 		845C4CD62372345E00AC8B99 /* EmailMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845C4CD52372345E00AC8B99 /* EmailMessage.swift */; };
 		845C4CDA2373C46800AC8B99 /* ListOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845C4CD92373C46800AC8B99 /* ListOutput.swift */; };
 		8460A32C23D97655004AB5A9 /* Owner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460A32B23D97655004AB5A9 /* Owner.swift */; };
+		84770ACE24CEA5FC00FC8C8D /* DataFactoryNamespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84770ACD24CEA5FC00FC8C8D /* DataFactoryNamespace.swift */; };
+		84770AD024CEA60F00FC8C8D /* DataFactory+TestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84770ACF24CEA60F00FC8C8D /* DataFactory+TestUtility.swift */; };
 		84783B34231C916200CCBC27 /* SudoEmail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84783B2A231C916200CCBC27 /* SudoEmail.framework */; };
 		84783B3B231C916200CCBC27 /* SudoEmail.h in Headers */ = {isa = PBXBuildFile; fileRef = 84783B2D231C916200CCBC27 /* SudoEmail.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847EF2B924BD5DD500423B74 /* DataFactory+GraphQL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847EF2B824BD5DD500423B74 /* DataFactory+GraphQL.swift */; };
@@ -405,6 +407,8 @@
 		845C4CD92373C46800AC8B99 /* ListOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOutput.swift; sourceTree = "<group>"; };
 		8460A32723D95830004AB5A9 /* GetOwnershipProofOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOwnershipProofOperationTests.swift; sourceTree = "<group>"; };
 		8460A32B23D97655004AB5A9 /* Owner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Owner.swift; sourceTree = "<group>"; };
+		84770ACD24CEA5FC00FC8C8D /* DataFactoryNamespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFactoryNamespace.swift; sourceTree = "<group>"; };
+		84770ACF24CEA60F00FC8C8D /* DataFactory+TestUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFactory+TestUtility.swift"; sourceTree = "<group>"; };
 		84783B2A231C916200CCBC27 /* SudoEmail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SudoEmail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84783B2D231C916200CCBC27 /* SudoEmail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SudoEmail.h; sourceTree = "<group>"; };
 		84783B2E231C916200CCBC27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -683,7 +687,6 @@
 				844D993224972E6500B942F2 /* MockDeviceKeyWorker.swift */,
 				84B2605A2488B14700E99401 /* MockDomainRepository.swift */,
 				84B25FE42485FF6600E99401 /* MockEmailAccountRepository.swift */,
-				84B2609E248DF61700E99401 /* MockSealedEmailMessageRepository.swift */,
 				844D99342497301300B942F2 /* MockEmailMessageUnsealerService.swift */,
 				84F652A824A9A41F009EDD3A /* MockFetchEmailAccountUseCase.swift */,
 				84288957249B13C700D39E6C /* MockFetchEmailMessageRFC822DataUseCase.swift */,
@@ -708,6 +711,7 @@
 				84F652B424AAD5B6009EDD3A /* MockS3LifecycleStrategy.swift */,
 				84B260B1248E134E00E99401 /* MockS3TransferUtility.swift */,
 				84B260B7248F28AE00E99401 /* MockS3UploadOperation.swift */,
+				84B2609E248DF61700E99401 /* MockSealedEmailMessageRepository.swift */,
 				84B260B3248F250900E99401 /* MockSendEmailMessageUseCase.swift */,
 				849AF01D24A2CE80005CFA2E /* MockSubscribeToEmailMessageCreatedUseCase.swift */,
 				84A4561424B6C9F1002DBF0D /* MockSubscribeToEmailMessageDeletedUseCase.swift */,
@@ -874,9 +878,9 @@
 				843064E6233C34E30083874D /* Date+MillisecondsSinceEpoch.swift */,
 				84B25FCD2484D1F400E99401 /* OperationArray+Convenience.swift */,
 				8407BD1C23E135B90018ABEA /* PublicKeyEncryptionAlgorithm+StringInitializable.swift */,
+				8483151D24BC14E6004E89EA /* Result+ErrorMap.swift */,
 				84B2609A248DEAF300E99401 /* S3TransferUtility+Generator.swift */,
 				843678BE2325D45C00007E05 /* SudoLogger+Email.swift */,
-				8483151D24BC14E6004E89EA /* Result+ErrorMap.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -974,9 +978,9 @@
 			children = (
 				84B2604E2488AA3F00E99401 /* DomainRepository.swift */,
 				84B25FC52484C39400E99401 /* EmailAccountRepository.swift */,
-				84B260892489F8D300E99401 /* SealedEmailMessageRepository.swift */,
 				84B25FC12484BF1300E99401 /* KeyRepository.swift */,
 				84B25FBD2484BCB000E99401 /* OwnershipProofRepository.swift */,
+				84B260892489F8D300E99401 /* SealedEmailMessageRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1087,20 +1091,20 @@
 		848314ED24B81B80004E89EA /* DefaultSudoEmailClient Tests */ = {
 			isa = PBXGroup;
 			children = (
-				848314EE24B81BA1004E89EA /* TestCase.swift */,
-				848314F024B81C38004E89EA /* LifecycleTests.swift */,
-				848314F224B81CCD004E89EA /* ProvisionEmailAddressTests.swift */,
-				848314F424B81D1A004E89EA /* DeprovisionEmailAddressTests.swift */,
-				848314F624B81D2E004E89EA /* SendEmailMessageTests.swift */,
 				848314F824B81D3E004E89EA /* DeleteEmailMessageTests.swift */,
-				848314FA24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift */,
+				848314F424B81D1A004E89EA /* DeprovisionEmailAddressTests.swift */,
 				848314FC24B81D68004E89EA /* GetEmailAddressByAddressTests.swift */,
 				848314FE24B81D80004E89EA /* GetEmailAddressesWithFilterTests.swift */,
-				8483150024B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift */,
-				8483150824B81F5A004E89EA /* GetEmailMessagesWithFilterTests.swift */,
 				8483150224B81DBB004E89EA /* GetEmailMessageRFC822DataWithIdTests.swift */,
-				8483150424B81DD0004E89EA /* SubscribeToEmailMessageTests.swift */,
+				8483150824B81F5A004E89EA /* GetEmailMessagesWithFilterTests.swift */,
+				8483150024B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift */,
+				848314FA24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift */,
+				848314F024B81C38004E89EA /* LifecycleTests.swift */,
+				848314F224B81CCD004E89EA /* ProvisionEmailAddressTests.swift */,
+				848314F624B81D2E004E89EA /* SendEmailMessageTests.swift */,
 				8483150624B81DDF004E89EA /* SubscribeToEmailMessageDeletedTests.swift */,
+				8483150424B81DD0004E89EA /* SubscribeToEmailMessageTests.swift */,
+				848314EE24B81BA1004E89EA /* TestCase.swift */,
 			);
 			path = "DefaultSudoEmailClient Tests";
 			sourceTree = "<group>";
@@ -1279,8 +1283,8 @@
 		84B25FD52485E67600E99401 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				8483151C24BBE2C5004E89EA /* Services */,
 				84B2600824872CAD00E99401 /* Repositories */,
+				8483151C24BBE2C5004E89EA /* Services */,
 				84B260C42490A0A800E99401 /* Shared */,
 				84B2601B24876DA900E99401 /* Transformers */,
 				84F6529724A971FA009EDD3A /* Utility */,
@@ -1353,9 +1357,9 @@
 			isa = PBXGroup;
 			children = (
 				841145112343214800D3612A /* AnyError.swift */,
-				8483152324BD2065004E89EA /* DataFactoryNamespace.swift */,
 				8483152524BD2094004E89EA /* DataFactory+Core.swift */,
 				847EF2B824BD5DD500423B74 /* DataFactory+GraphQL.swift */,
+				8483152324BD2065004E89EA /* DataFactoryNamespace.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1454,8 +1458,8 @@
 				84B260682488C6CE00E99401 /* GetSupportedDomainsIntegrationTests.swift */,
 				84B2603C248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift */,
 				84B260B9248F405400E99401 /* SendEmailMessageIntegrationTests.swift */,
-				848314E524B6D82F004E89EA /* SubscribeToEmailMessageDeletedIntegrationTests.swift */,
 				84F652A024A994CA009EDD3A /* SubscribeToEmailMessageCreatedIntegrationTests.swift */,
+				848314E524B6D82F004E89EA /* SubscribeToEmailMessageDeletedIntegrationTests.swift */,
 				84B2603E248888C400E99401 /* SudoEmailClientTestCase.swift */,
 			);
 			path = SudoEmailClient;
@@ -1475,6 +1479,8 @@
 		84B2604524888BA500E99401 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				84770ACF24CEA60F00FC8C8D /* DataFactory+TestUtility.swift */,
+				84770ACD24CEA5FC00FC8C8D /* DataFactoryNamespace.swift */,
 				84B2604A24888DA700E99401 /* Result+Convenience.swift */,
 				84B2604624888BC200E99401 /* XCTestCase+Utility.swift */,
 			);
@@ -1548,10 +1554,10 @@
 				84B2602024876DE000E99401 /* EmailAccountEntityTransformerTests.swift */,
 				84B2601E24876DD500E99401 /* EmailAddressEntityTransformerTests.swift */,
 				8428896F249B225700D39E6C /* EmailMessageDirectionEntityTransformerTests.swift */,
-				842888DD2497435400D39E6C /* SealedEmailMessageEntityTransformerTests.swift */,
 				8428896D249B224100D39E6C /* EmailMessageStateEntityTransformerTests.swift */,
 				84B2601C24876DBE00E99401 /* KeyEntityTransformerTests.swift */,
 				84B260382488841600E99401 /* OwnerEntityTranformerTests.swift */,
+				842888DD2497435400D39E6C /* SealedEmailMessageEntityTransformerTests.swift */,
 				84A6E18F2491E1B20025F05A /* StringFilterEntityTransformerTests.swift */,
 			);
 			path = "Entity Transformers";
@@ -2092,6 +2098,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84770AD024CEA60F00FC8C8D /* DataFactory+TestUtility.swift in Sources */,
+				84770ACE24CEA5FC00FC8C8D /* DataFactoryNamespace.swift in Sources */,
 				848314E824B6D83A004E89EA /* DeleteEmailMessageIntegrationTests.swift in Sources */,
 				84B260762489D99C00E99401 /* DeprovisionEmailAddressIntegrationTests.swift in Sources */,
 				84F652AF24A9B602009EDD3A /* GetEmailAddressByAddressIntegrationTests.swift in Sources */,
@@ -2105,8 +2113,8 @@
 				84B260BC248F4BF100E99401 /* RFC822Generator.swift in Sources */,
 				84B260BA248F405400E99401 /* SendEmailMessageIntegrationTests.swift in Sources */,
 				84B2604224888B3E00E99401 /* SSMParameters.swift in Sources */,
-				848314E624B6D82F004E89EA /* SubscribeToEmailMessageDeletedIntegrationTests.swift in Sources */,
 				84F652A124A994CA009EDD3A /* SubscribeToEmailMessageCreatedIntegrationTests.swift in Sources */,
+				848314E624B6D82F004E89EA /* SubscribeToEmailMessageDeletedIntegrationTests.swift in Sources */,
 				84B2603F248888C400E99401 /* SudoEmailClientTestCase.swift in Sources */,
 				84B2604424888B9100E99401 /* TestKeyAuthenticationInfo.swift in Sources */,
 				84B2604924888BE900E99401 /* TestKeyAuthenticationProvider.swift in Sources */,
@@ -2131,8 +2139,9 @@
 				843064E7233C34E30083874D /* Date+MillisecondsSinceEpoch.swift in Sources */,
 				84B260572488AC1D00E99401 /* DefaultDomainRepository.swift in Sources */,
 				84B260162487693900E99401 /* DefaultEmailAccountRespository.swift in Sources */,
-				84B2608E248A15F000E99401 /* DefaultSealedEmailMessageRepository.swift in Sources */,
+				8483151924B9A36D004E89EA /* DefaultEmailMessageUnsealerService.swift in Sources */,
 				84B26002248622A700E99401 /* DefaultKeyRepository.swift in Sources */,
+				84B2608E248A15F000E99401 /* DefaultSealedEmailMessageRepository.swift in Sources */,
 				849CA2E023221F6F0075EA21 /* DefaultSudoEmailClient.swift in Sources */,
 				84A455F724B55D71002DBF0D /* DeleteEmailMessageUseCase.swift in Sources */,
 				84B2606D2489C65B00E99401 /* DeprovisionEmailAccountUseCase.swift in Sources */,
@@ -2152,7 +2161,6 @@
 				84B260E22490B71F00E99401 /* EmailAddressFilterInputGQLTransformer.swift in Sources */,
 				845C4CD62372345E00AC8B99 /* EmailMessage.swift in Sources */,
 				842888E62497548D00D39E6C /* EmailMessageAPITransformer.swift in Sources */,
-				8483151E24BC14E6004E89EA /* Result+ErrorMap.swift in Sources */,
 				84288952249B0BC900D39E6C /* EmailMessageDirectionEntityTransformer.swift in Sources */,
 				8428892A249AEB0700D39E6C /* EmailMessageDirectionFilter.swift in Sources */,
 				84288933249AEFD800D39E6C /* EmailMessageDirectionFilterEntity.swift in Sources */,
@@ -2164,13 +2172,13 @@
 				8428892D249AECB600D39E6C /* EmailMessageFilterEntity.swift in Sources */,
 				8428893A249AF17C00D39E6C /* EmailMessageFilterEntityTransformer.swift in Sources */,
 				84288940249AF8BA00D39E6C /* EmailMessageFilterInputGQLTransformer.swift in Sources */,
-				84B2608A2489F8D300E99401 /* SealedEmailMessageRepository.swift in Sources */,
 				84288954249B0BE500D39E6C /* EmailMessageStateEntityTransformer.swift in Sources */,
 				84288928249AEA5F00D39E6C /* EmailMessageStateFilter.swift in Sources */,
 				84288930249AEFC400D39E6C /* EmailMessageStateFilterEntity.swift in Sources */,
 				84288939249AF17C00D39E6C /* EmailMessageStateFilterEntityTransformer.swift in Sources */,
 				8428894C249AFD1500D39E6C /* EmailMessageStateFilterInputGQLTransformer.swift in Sources */,
 				84288943249AFB1200D39E6C /* EmailMessageStateGQLTransformer.swift in Sources */,
+				8483151624B9A2E8004E89EA /* EmailMessageUnsealerService.swift in Sources */,
 				84F652B324AAC4A9009EDD3A /* EmailS3LifecycleStrategy.swift in Sources */,
 				849AF01624A08AE7005CFA2E /* EmailSubscriptionToken.swift in Sources */,
 				84F652A524A99E07009EDD3A /* FetchEmailAccountUseCase.swift in Sources */,
@@ -2180,7 +2188,6 @@
 				8428894F249B072700D39E6C /* FetchListEmailMessagesUseCase.swift in Sources */,
 				84B260592488AEF400E99401 /* FetchSupportedDomainsUseCase.swift in Sources */,
 				84F652A324A99DF6009EDD3A /* GetEmailAccountUseCase.swift in Sources */,
-				8483151924B9A36D004E89EA /* DefaultEmailMessageUnsealerService.swift in Sources */,
 				842888E22497526A00D39E6C /* GetEmailMessageUseCase.swift in Sources */,
 				84288950249B072700D39E6C /* GetListEmailMessagesUseCase.swift in Sources */,
 				84B25FCA2484CA3C00E99401 /* GetOwnershipProofOperation.swift in Sources */,
@@ -2208,12 +2215,14 @@
 				84B25FBA2484B94400E99401 /* ProvisionEmailAccountUseCase.swift in Sources */,
 				8407BD1D23E135B90018ABEA /* PublicKeyEncryptionAlgorithm+StringInitializable.swift in Sources */,
 				84B2602E2488745200E99401 /* Resetable.swift in Sources */,
+				8483151E24BC14E6004E89EA /* Result+ErrorMap.swift in Sources */,
 				84F652B124AAADB1009EDD3A /* S3LifecycleStrategy.swift in Sources */,
-				8483151324B9A2A7004E89EA /* SealedEmailMessageEntity.swift in Sources */,
-				8483151624B9A2E8004E89EA /* EmailMessageUnsealerService.swift in Sources */,
 				84B2609B248DEAF300E99401 /* S3TransferUtility+Generator.swift in Sources */,
 				84B260B0248E10F100E99401 /* S3TransferUtility.swift in Sources */,
 				84B26092248A216500E99401 /* S3UploadOperation.swift in Sources */,
+				8483151324B9A2A7004E89EA /* SealedEmailMessageEntity.swift in Sources */,
+				8483151B24BBC828004E89EA /* SealedEmailMessageEntityTransformer.swift in Sources */,
+				84B2608A2489F8D300E99401 /* SealedEmailMessageRepository.swift in Sources */,
 				84B260C02490515200E99401 /* SendEmailMessageOperation.swift in Sources */,
 				84B260852489F0CF00E99401 /* SendEmailMessageUseCase.swift in Sources */,
 				845AABCD2383BC9C00E4A13C /* SignedInCondition.swift in Sources */,
@@ -2231,7 +2240,6 @@
 				845AABC32383A42600E4A13C /* SudoEmailError.swift in Sources */,
 				843678BF2325D45C00007E05 /* SudoLogger+Email.swift in Sources */,
 				84B260312488783C00E99401 /* UseCaseFactory.swift in Sources */,
-				8483151B24BBC828004E89EA /* SealedEmailMessageEntityTransformer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2244,19 +2252,22 @@
 				84288966249B1BA700D39E6C /* BooleanFilterInputGQLTransformerTests.swift in Sources */,
 				84288972249B226500D39E6C /* BoolFilterEntityTransformerTests.swift in Sources */,
 				84B25FEC24860B3800E99401 /* CreateEmailAccountOperationTests.swift in Sources */,
+				8483152624BD2094004E89EA /* DataFactory+Core.swift in Sources */,
+				847EF2B924BD5DD500423B74 /* DataFactory+GraphQL.swift in Sources */,
+				8483152424BD2066004E89EA /* DataFactoryNamespace.swift in Sources */,
 				84B25FF924861D1F00E99401 /* Date+MillisecondsSinceEpochTests.swift in Sources */,
 				844D992E24972B7C00B942F2 /* DefaultDeviceKeyWorkerTests.swift in Sources */,
 				84B260622488B43A00E99401 /* DefaultDomainRepositoryTests.swift in Sources */,
 				84B26025248774A900E99401 /* DefaultEmailAccountRespositoryTests.swift in Sources */,
-				84B260A5248E012F00E99401 /* DefaultSealedEmailMessageRepositoryTests.swift in Sources */,
 				844D993124972BA100B942F2 /* DefaultEmailMessageUnsealerServiceTests.swift in Sources */,
-				848314FB24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift in Sources */,
 				84B2600B24872CC800E99401 /* DefaultKeyRepositoryTests.swift in Sources */,
+				84B260A5248E012F00E99401 /* DefaultSealedEmailMessageRepositoryTests.swift in Sources */,
+				848314F924B81D3E004E89EA /* DeleteEmailMessageTests.swift in Sources */,
 				84A455FC24B56DE9002DBF0D /* DeleteEmailMessageUseCaseTests.swift in Sources */,
 				84B260702489CBAD00E99401 /* DeprovisionEmailAccountUseCaseTests.swift in Sources */,
+				848314F524B81D1A004E89EA /* DeprovisionEmailAddressTests.swift in Sources */,
 				84B2602124876DE000E99401 /* EmailAccountEntityTransformerTests.swift in Sources */,
 				84A6E18E2491E0350025F05A /* EmailAccountFilterEntityTransformerTests.swift in Sources */,
-				848314F924B81D3E004E89EA /* DeleteEmailMessageTests.swift in Sources */,
 				84B260802489E19F00E99401 /* EmailAddressAPITransformerTests.swift in Sources */,
 				84B25FD92485E99B00E99401 /* EmailAddressEntityTests.swift in Sources */,
 				84B2601F24876DD500E99401 /* EmailAddressEntityTransformerTests.swift in Sources */,
@@ -2266,16 +2277,12 @@
 				84288974249B227500D39E6C /* EmailMessageDirectionFilterEntityTransformerTests.swift in Sources */,
 				84288962249B1B8E00D39E6C /* EmailMessageDirectionFilterInputGQLTransformerTests.swift in Sources */,
 				84288968249B1BB800D39E6C /* EmailMessageDirectionGQLTransformerTests.swift in Sources */,
-				842888DF2497439100D39E6C /* SealedEmailMessageEntityTransformerTests.swift in Sources */,
 				84288976249B228900D39E6C /* EmailMessageFilterEntityTransformerTests.swift in Sources */,
 				84288960249B1B8000D39E6C /* EmailMessageFilterInputGQLTransformerTests.swift in Sources */,
 				8428896E249B224100D39E6C /* EmailMessageStateEntityTransformerTests.swift in Sources */,
 				84288978249B229400D39E6C /* EmailMessageStateFilterEntityTransformerTests.swift in Sources */,
 				84288964249B1B9900D39E6C /* EmailMessageStateFilterInputGQLTransformerTests.swift in Sources */,
-				848314F524B81D1A004E89EA /* DeprovisionEmailAddressTests.swift in Sources */,
-				848314F124B81C38004E89EA /* LifecycleTests.swift in Sources */,
 				8428896A249B1BC200D39E6C /* EmailMessageStateGQLTransformerTests.swift in Sources */,
-				848314FF24B81D80004E89EA /* GetEmailAddressesWithFilterTests.swift in Sources */,
 				84F6529D24A98475009EDD3A /* EmailSubscriptionTokenTests.swift in Sources */,
 				845AABD423848B7D00E4A13C /* Error+Equality.swift in Sources */,
 				84F652AD24A9AC42009EDD3A /* FetchEmailAccountUseCaseTests.swift in Sources */,
@@ -2285,13 +2292,20 @@
 				8428897A249B2E0700D39E6C /* FetchListEmailMessagesUseCaseTests.swift in Sources */,
 				84B260602488B3BB00E99401 /* FetchSupportedDomainsUseCaseTests.swift in Sources */,
 				84F652AB24A9ABD8009EDD3A /* GetEmailAccountUseCaseTests.swift in Sources */,
+				848314FD24B81D68004E89EA /* GetEmailAddressByAddressTests.swift in Sources */,
+				848314FF24B81D80004E89EA /* GetEmailAddressesWithFilterTests.swift in Sources */,
+				8483150324B81DBB004E89EA /* GetEmailMessageRFC822DataWithIdTests.swift in Sources */,
+				8483150924B81F5A004E89EA /* GetEmailMessagesWithFilterTests.swift in Sources */,
+				8483150124B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift in Sources */,
 				842888EB2498416800D39E6C /* GetEmailMessageUseCaseTests.swift in Sources */,
 				8428897C249B2E1B00D39E6C /* GetListEmailMessagesUseCaseTests.swift in Sources */,
 				84B25FEA2486075500E99401 /* GetOwnershipProofOperationTests.swift in Sources */,
 				84B25FF22486151F00E99401 /* GetRegisteredKeyPairOperationTests.swift in Sources */,
 				84B2605E2488B26200E99401 /* GetSupportedDomainsUseCaseTests.swift in Sources */,
+				848314FB24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift in Sources */,
 				84A4561324B6C578002DBF0D /* GraphQLResultWorkerTests.swift in Sources */,
 				84B2601D24876DBE00E99401 /* KeyEntityTransformerTests.swift in Sources */,
+				848314F124B81C38004E89EA /* LifecycleTests.swift in Sources */,
 				84A6E19C2491FAF70025F05A /* ListEmailAccountsUseCaseTests.swift in Sources */,
 				84A6E1942491E4E80025F05A /* ListOutputAPITransformerTests.swift in Sources */,
 				84B260002486201F00E99401 /* ListOutputTests.swift in Sources */,
@@ -2299,11 +2313,9 @@
 				845AAB9C237E2D7600E4A13C /* MockAWSNetworkTransport.swift in Sources */,
 				84A455F924B55F78002DBF0D /* MockDeleteEmailMessageUseCase.swift in Sources */,
 				84B260722489D55D00E99401 /* MockDeprovisionEmailAccountUseCase.swift in Sources */,
-				8483152424BD2066004E89EA /* DataFactoryNamespace.swift in Sources */,
 				844D993324972E6500B942F2 /* MockDeviceKeyWorker.swift in Sources */,
 				84B2605B2488B14700E99401 /* MockDomainRepository.swift in Sources */,
 				84B25FE52485FF6600E99401 /* MockEmailAccountRepository.swift in Sources */,
-				84B2609F248DF61700E99401 /* MockSealedEmailMessageRepository.swift in Sources */,
 				844D99352497301300B942F2 /* MockEmailMessageUnsealerService.swift in Sources */,
 				84F652A924A9A41F009EDD3A /* MockFetchEmailAccountUseCase.swift in Sources */,
 				84288958249B13C700D39E6C /* MockFetchEmailMessageRFC822DataUseCase.swift in Sources */,
@@ -2315,31 +2327,25 @@
 				842888F12498469F00D39E6C /* MockGetEmailMessageUseCase.swift in Sources */,
 				849AF00D249C57AE005CFA2E /* MockGetListEmailMessagesUseCase.swift in Sources */,
 				84B25FF0248610C500E99401 /* MockGetOwnershipProofOperation.swift in Sources */,
-				8483150324B81DBB004E89EA /* GetEmailMessageRFC822DataWithIdTests.swift in Sources */,
 				84B25FEE24860ED600E99401 /* MockGetRegisteredKeyPairOperation.swift in Sources */,
 				84B260642488C2D500E99401 /* MockGetSupportedDomainsUseCase.swift in Sources */,
-				848314EF24B81BA1004E89EA /* TestCase.swift in Sources */,
 				84269C49233C4EC300BF13D6 /* MockGraphQL.swift in Sources */,
-				8483152024BC1514004E89EA /* Result+ErrorMapTests.swift in Sources */,
 				8409EC7623D51FAD00553022 /* MockKeyManager.swift in Sources */,
 				84B25FE32485FEF200E99401 /* MockKeyRepository.swift in Sources */,
-				8483150124B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift in Sources */,
 				84A6E18A2491C3180025F05A /* MockListEmailAccountsUseCase.swift in Sources */,
 				84B260122487542900E99401 /* MockOperationFactory.swift in Sources */,
 				84B25FE12485FEA200E99401 /* MockOwnershipProofRepository.swift in Sources */,
 				845AAB73237B945B00E4A13C /* MockPlatformOperationQueue.swift in Sources */,
 				84B2603724887ADB00E99401 /* MockProvisionEmailAccountUseCase.swift in Sources */,
 				84F652B524AAD5B6009EDD3A /* MockS3LifecycleStrategy.swift in Sources */,
-				8483150524B81DD0004E89EA /* SubscribeToEmailMessageTests.swift in Sources */,
 				84B260B2248E134E00E99401 /* MockS3TransferUtility.swift in Sources */,
 				84B260B8248F28AE00E99401 /* MockS3UploadOperation.swift in Sources */,
+				84B2609F248DF61700E99401 /* MockSealedEmailMessageRepository.swift in Sources */,
 				84B260B4248F250900E99401 /* MockSendEmailMessageUseCase.swift in Sources */,
 				849AF01E24A2CE80005CFA2E /* MockSubscribeToEmailMessageCreatedUseCase.swift in Sources */,
 				84A4561524B6C9F1002DBF0D /* MockSubscribeToEmailMessageDeletedUseCase.swift in Sources */,
-				848314FD24B81D68004E89EA /* GetEmailAddressByAddressTests.swift in Sources */,
 				84F6529B24A972C8009EDD3A /* MockSubscriptionManager.swift in Sources */,
 				849AF02024A2CF65005CFA2E /* MockSubscriptionToken.swift in Sources */,
-				8483150724B81DDF004E89EA /* SubscribeToEmailMessageDeletedTests.swift in Sources */,
 				845AAB7F237CCBB700E4A13C /* MockSudoProfilesClient.swift in Sources */,
 				845AABBD2382B95800E4A13C /* MockSudoUserClient.swift in Sources */,
 				84B2603524887A6300E99401 /* MockUseCaseFactory.swift in Sources */,
@@ -2347,22 +2353,24 @@
 				84B260392488841600E99401 /* OwnerEntityTranformerTests.swift in Sources */,
 				84B26023248771E500E99401 /* ProfilesOwnershipProofRepositoryTests.swift in Sources */,
 				84B25FDD2485EB3700E99401 /* ProvisionEmailAccountUseCaseTests.swift in Sources */,
-				84B25FFB24861D7B00E99401 /* PublicKeyEncryptionAlgorithm+StringInitializableTests.swift in Sources */,
-				84B260A8248E017300E99401 /* S3UploadOperationTests.swift in Sources */,
-				8483150924B81F5A004E89EA /* GetEmailMessagesWithFilterTests.swift in Sources */,
-				84B260B6248F27E400E99401 /* SendEmailMessageOperationTests.swift in Sources */,
-				84B260A2248E00BA00E99401 /* SendEmailMessageUseCaseTests.swift in Sources */,
-				848314F724B81D2E004E89EA /* SendEmailMessageTests.swift in Sources */,
 				848314F324B81CCD004E89EA /* ProvisionEmailAddressTests.swift in Sources */,
-				8483152624BD2094004E89EA /* DataFactory+Core.swift in Sources */,
+				84B25FFB24861D7B00E99401 /* PublicKeyEncryptionAlgorithm+StringInitializableTests.swift in Sources */,
+				8483152024BC1514004E89EA /* Result+ErrorMapTests.swift in Sources */,
+				84B260A8248E017300E99401 /* S3UploadOperationTests.swift in Sources */,
+				842888DF2497439100D39E6C /* SealedEmailMessageEntityTransformerTests.swift in Sources */,
+				84B260B6248F27E400E99401 /* SendEmailMessageOperationTests.swift in Sources */,
+				848314F724B81D2E004E89EA /* SendEmailMessageTests.swift in Sources */,
+				84B260A2248E00BA00E99401 /* SendEmailMessageUseCaseTests.swift in Sources */,
 				84B25FF624861C8A00E99401 /* SignedInConditionTests.swift in Sources */,
 				84A6E1902491E1B20025F05A /* StringFilterEntityTransformerTests.swift in Sources */,
 				84A6E1992491EAF90025F05A /* StringFilterInputGQLTransformerTests.swift in Sources */,
 				84F6529F24A99198009EDD3A /* SubscribeToEmailMessageCreatedUseCaseTests.swift in Sources */,
+				8483150724B81DDF004E89EA /* SubscribeToEmailMessageDeletedTests.swift in Sources */,
 				84A4561124B6C478002DBF0D /* SubscribeToEmailMessageDeletedUseCaseTests.swift in Sources */,
+				8483150524B81DD0004E89EA /* SubscribeToEmailMessageTests.swift in Sources */,
 				84F6529924A97210009EDD3A /* SubscriptionManagerTests.swift in Sources */,
 				84A4560124B59129002DBF0D /* SudoEmailErrorTests.swift in Sources */,
-				847EF2B924BD5DD500423B74 /* DataFactory+GraphQL.swift in Sources */,
+				848314EF24B81BA1004E89EA /* TestCase.swift in Sources */,
 				84B25FE7248604BE00E99401 /* XCTestCase+Utility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
