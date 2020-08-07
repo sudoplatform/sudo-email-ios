@@ -102,7 +102,7 @@ class DefaultKeyRepository: KeyRepository, Resetable {
             return
         }
         let query = GetKeyRingForEmailQuery(keyRingId: publicKey.keyRingId)
-        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: .useOnline, logger: logger)
+        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: .remoteOnly, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation, weak self] _, errors in
             guard let weakSelf = self else { return }
             if let error = errors.first {
@@ -122,7 +122,7 @@ class DefaultKeyRepository: KeyRepository, Resetable {
 
     func getPublicKeyById(_ id: String, completion: @escaping ClientCompletion<KeyEntity?>) {
         let query = GetPublicKeyForEmailQuery(keyId: id)
-        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: .useOnline, logger: logger)
+        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: .remoteOnly, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
             if let error = errors.first {
                 completion(.failure(error))

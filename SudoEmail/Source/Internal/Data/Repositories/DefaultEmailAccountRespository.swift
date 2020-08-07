@@ -96,12 +96,12 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
     }
 
     func getWithEmailAddress(_ emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        let operation = constructGetEmailAddressQueryOperationWithEmailAddress(emailAddress, cachePolicy: .useCache, completion: completion)
+        let operation = constructGetEmailAddressQueryOperationWithEmailAddress(emailAddress, cachePolicy: .cacheOnly, completion: completion)
         queue.addOperation(operation)
     }
 
     func fetchWithEmailAddress(_ emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        let operation = constructGetEmailAddressQueryOperationWithEmailAddress(emailAddress, cachePolicy: .useOnline, completion: completion)
+        let operation = constructGetEmailAddressQueryOperationWithEmailAddress(emailAddress, cachePolicy: .remoteOnly, completion: completion)
         queue.addOperation(operation)
     }
 
@@ -115,7 +115,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             filter,
             limit: limit,
             nextToken: nextToken,
-            cachePolicy: .useOnline,
+            cachePolicy: .remoteOnly,
             completion: completion
         )
         queue.addOperation(operation)
@@ -131,7 +131,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             filter,
             limit: limit,
             nextToken: nextToken,
-            cachePolicy: .useCache,
+            cachePolicy: .cacheOnly,
             completion: completion
         )
         queue.addOperation(operation)

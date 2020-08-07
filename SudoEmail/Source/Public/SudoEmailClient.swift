@@ -66,7 +66,7 @@ public protocol SudoEmailClient: class {
 
     /// Get a list of the supported email domains from the service.
     /// - Parameters:
-    ///   - cachePolicy: Determines how the data is fetched. When using `useCache`, please be aware that this will only return cached results of similar exact
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
     ///       API calls.
     /// - Returns:
     ///   - Success: Array of supported domains.
@@ -76,7 +76,7 @@ public protocol SudoEmailClient: class {
     /// Get a `EmailAddress` record using the `address` parameter. If the email address cannot be found, `nil` will be returned.
     /// - Parameters:
     ///   - id: Identifier of the email address to be retrieved.
-    ///   - cachePolicy: Determines how the data is fetched. When using `useCache`, please be aware that this will only return cached results of similar exact
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
     ///       API calls.
     /// - Returns:
     ///   - Success: Email address associated with `id`, or `nil` if the email address cannot be found.
@@ -87,15 +87,15 @@ public protocol SudoEmailClient: class {
     /// - Parameters:
     ///   - filter: Filter to be applied to results of query.
     ///   - limit: Number of email addresses to return. If `nil`, the limit is 10.
-    ///   - nextToken: Generated token by previous calls to `getEmailAddressesWithFilter`. This is used for pagination. This value should be pre-generated from
+    ///   - nextToken: Generated token by previous calls to `listEmailAddressesWithFilter`. This is used for pagination. This value should be pre-generated from
     ///       a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
     ///       previously generated `nextToken`.
-    ///   - cachePolicy: Determines how the data is fetched. When using `useCache`, please be aware that this will only return cached results of similar exact
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
     ///       API calls.
     /// - Returns:
     ///   - Success: Email addresses associated with user, or empty list if no email address can be found.
     ///   - Failure: `SudoEmailError`.
-    func getEmailAddressesWithFilter(
+    func listEmailAddressesWithFilter(
         _ filter: EmailAddressFilter?,
         limit: Int?,
         nextToken: String?,
@@ -106,7 +106,7 @@ public protocol SudoEmailClient: class {
     /// Get an email message using the `id` parameter. If the email message cannot be found, `nil` will be returned.
     /// - Parameters:
     ///   - id: Identifier of the email message to be retrieved.
-    ///   - cachePolicy: Determines how the data is fetched. When using `useCache`, please be aware that this will only return cached results of similar exact
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
     ///       API calls.
     /// - Returns:
     ///   - Success: Email message associated with `id`, or `nil` if the email message cannot be found.
@@ -117,15 +117,15 @@ public protocol SudoEmailClient: class {
     /// - Parameters:
     ///   - filter: Filter to be applied to results of query.
     ///   - limit: Number of email messages to return. If `nil`, the limit is 10.
-    ///   - nextToken: Generated token by previous calls to `getEmailMessagesWithFilter`. This is used for pagination. This value should be pre-generated from
+    ///   - nextToken: Generated token by previous calls to `listEmailMessagesWithFilter`. This is used for pagination. This value should be pre-generated from
     ///       a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
     ///       previously generated `nextToken`.
-    ///   - cachePolicy: Determines how the data is fetched. When using `useCache`, please be aware that this will only return cached results of similar exact
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
     ///       API calls.
     /// - Returns:
     ///   - Success: Email messages associated with user, or empty list if no email message can be found.
     ///   - Failure: `SudoEmailError`.
-    func getEmailMessagesWithFilter(
+    func listEmailMessagesWithFilter(
         _ filter: EmailMessageFilter?,
         limit: Int?,
         nextToken: String?,

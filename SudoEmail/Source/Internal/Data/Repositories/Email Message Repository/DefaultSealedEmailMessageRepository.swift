@@ -136,7 +136,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         let operation = constructGetEmailMessageQueryOperationWithId(
             id,
             keyId: keyId,
-            cachePolicy: .useCache,
+            cachePolicy: .cacheOnly,
             completion: completion
         )
         queue.addOperation(operation)
@@ -146,7 +146,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         let operation = constructGetEmailMessageQueryOperationWithId(
             id,
             keyId: keyId,
-            cachePolicy: .useOnline,
+            cachePolicy: .remoteOnly,
             completion: completion
         )
         queue.addOperation(operation)
@@ -162,7 +162,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
             filter,
             limit: limit,
             nextToken: nextToken,
-            cachePolicy: .useCache,
+            cachePolicy: .cacheOnly,
             completion: completion
         )
         queue.addOperation(operation)
@@ -178,7 +178,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
             filter,
             limit: limit,
             nextToken: nextToken,
-            cachePolicy: .useOnline,
+            cachePolicy: .remoteOnly,
             completion: completion
         )
         queue.addOperation(operation)

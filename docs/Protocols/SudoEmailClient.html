@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 1.1.0 Docs
+          SudoEmail 2.0.0 Docs
         </a>
         
       </p>
@@ -496,7 +496,7 @@ sudo services.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of similar exact
 API calls.</p>
                                 </div>
                               </td>
@@ -562,7 +562,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of similar exact
 API calls.</p>
                                 </div>
                               </td>
@@ -583,9 +583,9 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP03getB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/getEmailAddressesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">getEmailAddressesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP04listB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/listEmailAddressesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">listEmailAddressesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -600,7 +600,7 @@ API calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailAddressesWithFilter</span><span class="p">(</span>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailAddressesWithFilter</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a></span><span class="p">?,</span>
     <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span>
     <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
@@ -646,7 +646,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Generated token by previous calls to <code>getEmailAddressesWithFilter</code>. This is used for pagination. This value should be pre-generated from
+                                  <p>Generated token by previous calls to <code>listEmailAddressesWithFilter</code>. This is used for pagination. This value should be pre-generated from
 a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
 previously generated <code>nextToken</code>.</p>
                                 </div>
@@ -660,7 +660,7 @@ previously generated <code>nextToken</code>.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of similar exact
 API calls.</p>
                                 </div>
                               </td>
@@ -726,7 +726,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of similar exact
 API calls.</p>
                                 </div>
                               </td>
@@ -747,9 +747,9 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP03getB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/getEmailMessagesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">getEmailMessagesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP04listB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/listEmailMessagesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">listEmailMessagesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -764,7 +764,7 @@ API calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailMessagesWithFilter</span><span class="p">(</span>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailMessagesWithFilter</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a></span><span class="p">?,</span>
     <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span>
     <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
@@ -810,7 +810,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Generated token by previous calls to <code>getEmailMessagesWithFilter</code>. This is used for pagination. This value should be pre-generated from
+                                  <p>Generated token by previous calls to <code>listEmailMessagesWithFilter</code>. This is used for pagination. This value should be pre-generated from
 a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
 previously generated <code>nextToken</code>.</p>
                                 </div>
@@ -824,7 +824,7 @@ previously generated <code>nextToken</code>.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Determines how the data is fetched. When using <code>useCache</code>, please be aware that this will only return cached results of similar exact
+                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of similar exact
 API calls.</p>
                                 </div>
                               </td>
@@ -1028,7 +1028,7 @@ API calls.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2020-07-29)</p>
+      <p>&copy; 2020 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2020-08-07)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

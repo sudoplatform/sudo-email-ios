@@ -202,10 +202,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             completion(result)
         }
         switch cachePolicy {
-        case .useCache:
+        case .cacheOnly:
             let useCase = useCaseFactory.generateGetSupportedDomainsUseCase(domainRepository: domainRepository)
             useCase.execute(completion: useCaseCompletion)
-        case .useOnline:
+        case .remoteOnly:
             let useCase = useCaseFactory.generateFetchSupportedDomainsUseCase(domainRepository: domainRepository)
             useCase.execute(completion: useCaseCompletion)
         }
@@ -228,16 +228,16 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
         /// Execute use case based on cache policy.
         switch cachePolicy {
-        case .useCache:
+        case .cacheOnly:
             let useCase = useCaseFactory.generateGetEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
             useCase.execute(withEmailAddress: emailAddressEntity, completion: useCaseCompletion)
-        case .useOnline:
+        case .remoteOnly:
             let useCase = useCaseFactory.generateFetchEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
             useCase.execute(withEmailAddress: emailAddressEntity, completion: useCaseCompletion)
         }
     }
 
-    public func getEmailAddressesWithFilter(
+    public func listEmailAddressesWithFilter(
         _ filter: EmailAddressFilter?,
         limit: Int?,
         nextToken: String?,
@@ -258,10 +258,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
         /// Execute use case based on cache policy.
         switch cachePolicy {
-        case .useCache:
+        case .cacheOnly:
             let useCase = useCaseFactory.generateListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
             useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
-        case .useOnline:
+        case .remoteOnly:
             let useCase = useCaseFactory.generateFetchListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
             useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
         }
@@ -276,7 +276,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
         /// Execute use case based on cache policy.
         switch cachePolicy {
-        case .useCache:
+        case .cacheOnly:
             let useCase = useCaseFactory.generateGetEmailMessageUseCase(
                 sealedEmailMessageRepository:
                 sealedEmailMessageRepository,
@@ -284,7 +284,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
                 emailMessageUnsealerService: emailMessageUnsealerServiceService
             )
             useCase.execute(withMessageId: messageId, completion: useCaseCompletion)
-        case .useOnline:
+        case .remoteOnly:
             let useCase = useCaseFactory.generateFetchEmailMessageUseCase(
                 sealedEmailMessageRepository: sealedEmailMessageRepository,
                 keyRepository: keyRepository,
@@ -294,7 +294,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
     }
 
-    public func getEmailMessagesWithFilter(
+    public func listEmailMessagesWithFilter(
         _ filter: EmailMessageFilter?,
         limit: Int?,
         nextToken: String?,
@@ -315,13 +315,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
         /// Execute use case based on cache policy.
         switch cachePolicy {
-        case .useCache:
+        case .cacheOnly:
             let useCase = useCaseFactory.generateGetListEmailMessagesUseCase(
                 sealedEmailMessageRepository: sealedEmailMessageRepository,
                 emailMessageUnsealerService: emailMessageUnsealerServiceService
             )
             useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
-        case .useOnline:
+        case .remoteOnly:
             let useCase = useCaseFactory.generateFetchListEmailMessagesUseCase(
                 sealedEmailMessageRepository: sealedEmailMessageRepository,
                 emailMessageUnsealerService: emailMessageUnsealerServiceService

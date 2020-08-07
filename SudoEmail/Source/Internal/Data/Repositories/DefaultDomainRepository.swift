@@ -43,12 +43,12 @@ class DefaultDomainRepsitory: DomainRepository, Resetable {
     // MARK: - DomainRepository
 
     func getSupportedDomains(completion: @escaping ClientCompletion<[DomainEntity]>) {
-        let operation = constructQueryOperationWithCachePolicy(.useCache, completion: completion)
+        let operation = constructQueryOperationWithCachePolicy(.cacheOnly, completion: completion)
         queue.addOperation(operation)
     }
 
     func fetchSupportedDomains(completion: @escaping ClientCompletion<[DomainEntity]>) {
-        let operation = constructQueryOperationWithCachePolicy(.useOnline, completion: completion)
+        let operation = constructQueryOperationWithCachePolicy(.remoteOnly, completion: completion)
         queue.addOperation(operation)
     }
 

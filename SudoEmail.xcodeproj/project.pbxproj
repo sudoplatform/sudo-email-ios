@@ -217,10 +217,7 @@
 		84B260392488841600E99401 /* OwnerEntityTranformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B260382488841600E99401 /* OwnerEntityTranformerTests.swift */; };
 		84B2603D248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2603C248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift */; };
 		84B2603F248888C400E99401 /* SudoEmailClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2603E248888C400E99401 /* SudoEmailClientTestCase.swift */; };
-		84B2604224888B3E00E99401 /* SSMParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604124888B3E00E99401 /* SSMParameters.swift */; };
-		84B2604424888B9100E99401 /* TestKeyAuthenticationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604324888B9100E99401 /* TestKeyAuthenticationInfo.swift */; };
 		84B2604724888BC200E99401 /* XCTestCase+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604624888BC200E99401 /* XCTestCase+Utility.swift */; };
-		84B2604924888BE900E99401 /* TestKeyAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604824888BE900E99401 /* TestKeyAuthenticationProvider.swift */; };
 		84B2604B24888DA700E99401 /* Result+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604A24888DA700E99401 /* Result+Convenience.swift */; };
 		84B2604D2488AA0600E99401 /* DomainEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604C2488AA0600E99401 /* DomainEntity.swift */; };
 		84B2604F2488AA3F00E99401 /* DomainRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2604E2488AA3F00E99401 /* DomainRepository.swift */; };
@@ -533,10 +530,7 @@
 		84B260382488841600E99401 /* OwnerEntityTranformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerEntityTranformerTests.swift; sourceTree = "<group>"; };
 		84B2603C248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisionEmailAddressIntegrationTests.swift; sourceTree = "<group>"; };
 		84B2603E248888C400E99401 /* SudoEmailClientTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudoEmailClientTestCase.swift; sourceTree = "<group>"; };
-		84B2604124888B3E00E99401 /* SSMParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSMParameters.swift; sourceTree = "<group>"; };
-		84B2604324888B9100E99401 /* TestKeyAuthenticationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestKeyAuthenticationInfo.swift; sourceTree = "<group>"; };
 		84B2604624888BC200E99401 /* XCTestCase+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utility.swift"; sourceTree = "<group>"; };
-		84B2604824888BE900E99401 /* TestKeyAuthenticationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestKeyAuthenticationProvider.swift; sourceTree = "<group>"; };
 		84B2604A24888DA700E99401 /* Result+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Convenience.swift"; sourceTree = "<group>"; };
 		84B2604C2488AA0600E99401 /* DomainEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainEntity.swift; sourceTree = "<group>"; };
 		84B2604E2488AA3F00E99401 /* DomainRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainRepository.swift; sourceTree = "<group>"; };
@@ -1469,9 +1463,6 @@
 			isa = PBXGroup;
 			children = (
 				84B260BB248F4BF100E99401 /* RFC822Generator.swift */,
-				84B2604124888B3E00E99401 /* SSMParameters.swift */,
-				84B2604324888B9100E99401 /* TestKeyAuthenticationInfo.swift */,
-				84B2604824888BE900E99401 /* TestKeyAuthenticationProvider.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1983,7 +1974,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -f /var/anonyome_key/* \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\ncp -f identity-system-test-config/anonyome_ssm_parameter_register_key.json \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\ncp -f identity-system-test-config/config.json \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\n";
+			shellScript = "cp -f /var/anonyome_key/* \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\ncp -f config/register_key.private \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\ncp -f config/register_key.id \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\n";
 		};
 		846891642378D2C8001FA865 /* Swift Lint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2019,7 +2010,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp -f identity-system-test-config/sudoplatformconfig.json \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nls ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp -f config/sudoplatformconfig.json \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nls ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\n";
 		};
 		A01EE7303133F798BC0E6D61 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2112,12 +2103,9 @@
 				84B2604B24888DA700E99401 /* Result+Convenience.swift in Sources */,
 				84B260BC248F4BF100E99401 /* RFC822Generator.swift in Sources */,
 				84B260BA248F405400E99401 /* SendEmailMessageIntegrationTests.swift in Sources */,
-				84B2604224888B3E00E99401 /* SSMParameters.swift in Sources */,
 				84F652A124A994CA009EDD3A /* SubscribeToEmailMessageCreatedIntegrationTests.swift in Sources */,
 				848314E624B6D82F004E89EA /* SubscribeToEmailMessageDeletedIntegrationTests.swift in Sources */,
 				84B2603F248888C400E99401 /* SudoEmailClientTestCase.swift in Sources */,
-				84B2604424888B9100E99401 /* TestKeyAuthenticationInfo.swift in Sources */,
-				84B2604924888BE900E99401 /* TestKeyAuthenticationProvider.swift in Sources */,
 				84B2604724888BC200E99401 /* XCTestCase+Utility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
