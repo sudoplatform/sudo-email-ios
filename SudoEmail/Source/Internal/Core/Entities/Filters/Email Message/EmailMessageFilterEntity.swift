@@ -6,6 +6,20 @@
 
 /// Core entity representation of a email message filter business rule. Depicts the rules for filtering email messages.
 indirect enum EmailMessageFilterEntity: Equatable {
+    /// Filter rule for an `id` property.
+    case id(StringFilterEntity)
+    /// Filter rule for an `messageId` property.
+    case messageId(StringFilterEntity)
+    /// Filter rule for an `sudoId` property.
+    case sudoId(StringFilterEntity)
+    /// Filter rule for an `emailAddressId` property.
+    case emailAddressId(StringFilterEntity)
+    /// Filter rule for an `algorithm` property.
+    case algorithm(StringFilterEntity)
+    /// Filter rule for an `keyId` property.
+    case keyId(StringFilterEntity)
+    /// Filter rule for an `clientRefId` property.
+    case clientRefId(StringFilterEntity)
     /// Filter rule for an `direction` property.
     case direction(EmailMessageDirectionFilterEntity)
     /// Filter rule for an `seen` property.

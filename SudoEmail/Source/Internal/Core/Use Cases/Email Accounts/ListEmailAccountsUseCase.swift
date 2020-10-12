@@ -25,17 +25,19 @@ class ListEmailAccountsUseCase {
 
     /// Execute the use case.
     /// - Parameters:
+    ///   - sudoId: Identifier of the sudo associated with the results to list.
     ///   - filter: Filter rules to be applied to the list.
     ///   - limit: Limit of the results to return.
     ///   - nextToken: Next token to be used when accessing the next page of information.
     ///   - completion: Returns a list of results with a next token is there if more results to fetch, or error on failure.
     func execute(
-        withFilter filter: EmailAccountFilterEntity?,
+        withSudoId sudoId: String?,
+        filter: EmailAccountFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
     ) {
-        emailAccountRepository.listWithFilter(filter, limit: limit, nextToken: nextToken, completion: completion)
+        emailAccountRepository.listWithSudoId(sudoId, filter: filter, limit: limit, nextToken: nextToken, completion: completion)
     }
 
 }

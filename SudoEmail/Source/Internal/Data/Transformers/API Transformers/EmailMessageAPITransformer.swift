@@ -45,6 +45,14 @@ struct EmailMessageAPITransformer {
         }
     }
 
+    /// Utility class to transform email message address entities from the core level to output results of the SDK
+    struct EmailAddressAPITransformer {
+        /// Transform an email message address entity into an email message address result of the SDK.
+        func transform(_ emailAddressEntity: EmailAddressEntity) -> EmailMessage.EmailAddress {
+            return EmailMessage.EmailAddress(address: emailAddressEntity.address, displayName: emailAddressEntity.displayName)
+        }
+    }
+
     // MARK: - Properties
 
     /// Utility to transform email message direction entities to result direction outputs of the SDK.
@@ -52,6 +60,9 @@ struct EmailMessageAPITransformer {
 
     /// Utility to transform email message state entities to result state outputs of the SDK.
     let stateTransformer = StateAPITransformer()
+
+    /// Utility to transform email message address entities from the core level to output results of the SDK
+    let emailAddressAPITransformer = EmailAddressAPITransformer()
 
     /// Transform a email message entity into an email message result of the SDK.
     ///
@@ -65,32 +76,36 @@ struct EmailMessageAPITransformer {
 
     /// Transform a email message state entity into an email message state result of the SDK.
     func transform(_ entity: EmailMessageEntity) -> EmailMessage {
-        let id = entity.id
+        /// Mapping to messageId is correct as the internal `id` is used internally only.
+        let id = entity.messageId
         let clientRefid = entity.clientRefId
-        let owner = entity.owner
+        let userId = entity.userId
+        let sudoId = entity.sudoId
         let created = entity.created
         let updated = entity.updated
-        let address = entity.accountAddress.address
+        let emailAddressId = entity.emailAddressId
         let seen = entity.seen
         let direction = directionTransformer.transform(entity.direction)
         let state = stateTransformer.transform(entity.state)
-        let from = entity.from.map { $0.address }
-        let to = entity.to.map { $0.address }
-        let cc = entity.cc.map { $0.address }
-        let bcc = entity.bcc.map { $0.address }
+        let from = entity.from.map { emailAddressAPITransformer.transform($0) }
+        let replyTo = entity.replyTo.map { emailAddressAPITransformer.transform($0) }
+        let to = entity.to.map { emailAddressAPITransformer.transform($0) }
+        let cc = entity.cc.map { emailAddressAPITransformer.transform($0) }
+        let bcc = entity.bcc.map { emailAddressAPITransformer.transform($0) }
         let subject = entity.subject
-
         return EmailMessage(
             id: id,
             clientRefId: clientRefid,
-            owner: owner,
+            userId: userId,
+            sudoId: sudoId,
+            emailAddressId: emailAddressId,
             created: created,
             updated: updated,
-            address: address,
             seen: seen,
             direction: direction,
             state: state,
             from: from,
+            replyTo: replyTo,
             to: to,
             cc: cc,
             bcc: bcc,

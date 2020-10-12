@@ -10,9 +10,15 @@ public struct EmailAddress: Equatable {
 
     // MARK: - Properties
 
-    public let address: String
+    public let id: String
 
-    public let owner: String
+    public let userId: String
+
+    public let sudoId: String
+
+    public let identityId: String
+
+    public let emailAddress: String
 
     public let owners: [Owner]
 
@@ -23,9 +29,21 @@ public struct EmailAddress: Equatable {
     public let updated: Date
 
     /// Initialize an instance of `EmailAddress`.
-    public init(address: String, owner: String, owners: [Owner], created: Date, updated: Date) {
-        self.address = address
-        self.owner = owner
+    public init(
+        id: String,
+        userId: String,
+        sudoId: String,
+        identityId: String,
+        emailAddress: String,
+        owners: [Owner],
+        created: Date,
+        updated: Date
+    ) {
+        self.id = id
+        self.userId = userId
+        self.sudoId = sudoId
+        self.identityId = identityId
+        self.emailAddress = emailAddress
         self.owners = owners
         self.created = created
         self.updated = updated

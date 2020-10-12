@@ -23,14 +23,20 @@ struct EmailAddressAPITransformer {
     /// - Parameter entity: Entity to be transformed.
     /// - Returns: Output result.
     func transform(_ entity: EmailAccountEntity) -> EmailAddress {
-        let owner = entity.owner
+        let id = entity.id
+        let userId = entity.userId
+        let sudoId = entity.sudoId
+        let identityId = entity.identityId
+        let emailAddress = entity.emailAddress.address
         let owners = entity.owners.map(ownerTransformer.transform(_:))
-        let address = entity.emailAddress.address
         let created = entity.created
         let updated = entity.updated
         return EmailAddress(
-            address: address,
-            owner: owner,
+            id: id,
+            userId: userId,
+            sudoId: sudoId,
+            identityId: identityId,
+            emailAddress: emailAddress,
             owners: owners,
             created: created,
             updated: updated

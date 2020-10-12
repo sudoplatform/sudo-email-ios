@@ -82,7 +82,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
 
     // MARK: - SealedEmailMessageRepository
 
-    func sendEmailMessage(withRFC822Data data: Data, fromAccount account: EmailAccountEntity, completion: @escaping ClientCompletion<String>) {
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, completion: @escaping ClientCompletion<String>) {
         guard let key = generateS3Key() else {
             completion(.failure(SudoEmailError.notSignedIn))
             return
@@ -94,7 +94,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         }
         let s3UploadOperation = S3UploadOperation(data: data, key: key, bucket: transientBucket, region: region, s3TransferUtility: s3TransferUtility)
         let sendEmailMessageOperation = SendEmailMessageOperation(
-            emailAddress: account.emailAddress,
+            emailAccountId: emailAccountId,
             appSyncClient: appSyncClient,
             operationFactory: operationFactory,
             logger: logger
@@ -116,7 +116,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
     }
 
     func deleteEmailMessage(withId id: String, completion: @escaping ClientCompletion<String>) {
-        let input = DeleteEmailMessageInput(id: id)
+        let input = DeleteEmailMessageInput(messageId: id)
         let mutation = DeleteEmailMessageMutation(input: input)
         let operation = operationFactory.generateMutationOperation(mutation: mutation, appSyncClient: appSyncClient, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
@@ -152,14 +152,18 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         queue.addOperation(operation)
     }
 
-    func getListEmailMessagesByFilter(
-        _ filter: EmailMessageFilterEntity?,
+    func getListEmailMessagesBySudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<SealedEmailMessageEntity>>
     ) {
-        let operation = constructListEmailMessageQueryOperationWithFilter(
-            filter,
+        let operation = constructListEmailMessageQueryOperationWithSudoId(
+            sudoId,
+            emailAddressId: emailAddressId,
+            filter: filter,
             limit: limit,
             nextToken: nextToken,
             cachePolicy: .cacheOnly,
@@ -168,14 +172,18 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         queue.addOperation(operation)
     }
 
-    func fetchListEmailMessagesByFilter(
-        _ filter: EmailMessageFilterEntity?,
+    func fetchListEmailMessagesBySudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<SealedEmailMessageEntity>>
     ) {
-        let operation = constructListEmailMessageQueryOperationWithFilter(
-            filter,
+        let operation = constructListEmailMessageQueryOperationWithSudoId(
+            sudoId,
+            emailAddressId: emailAddressId,
+            filter: filter,
             limit: limit,
             nextToken: nextToken,
             cachePolicy: .remoteOnly,
@@ -184,8 +192,8 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         queue.addOperation(operation)
     }
 
-    func fetchEmailMessageRFC822DataWithSealedId(_ sealedId: String, completion: @escaping ClientCompletion<Data>) {
-        guard let s3Key = getS3KeyForId(sealedId) else {
+    func fetchEmailMessageRFC822DataWithId(_ id: String, completion: @escaping ClientCompletion<Data>) {
+        guard let s3Key = getS3KeyForId(id) else {
             completion(.failure(SudoEmailError.notSignedIn))
             return
         }
@@ -211,12 +219,12 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) throws -> SubscriptionToken {
         let subscriptionId = UUID().uuidString
-        let owner = try getOwner()
+        let userId = try getUserId()
         let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(subscriptionId, resultHandler: resultHandler)
         if let direction = direction {
             let directionTransformer = EmailMessageDirectionGQLTransformer()
             let graphQLDirection = directionTransformer.transform(direction)
-            let graphQLSubscription = OnEmailMessageCreatedWithDirectionSubscription(owner: owner, direction: graphQLDirection)
+            let graphQLSubscription = OnEmailMessageCreatedWithDirectionSubscription(userId: userId, direction: graphQLDirection)
             let subscriptionResultHandler = constructSubscriptionResultHandler(
                 type: OnEmailMessageCreatedWithDirectionSubscription.self,
                 transform: { graphQL in
@@ -235,7 +243,7 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
                 resultHandler: subscriptionResultHandler
             )
         } else {
-            let graphQLSubscription = OnEmailMessageCreatedSubscription(owner: owner)
+            let graphQLSubscription = OnEmailMessageCreatedSubscription(userId: userId)
             let subscriptionResultHandler = constructSubscriptionResultHandler(
                 type: OnEmailMessageCreatedSubscription.self,
                 transform: { graphQL -> SealedEmailMessageEntity? in
@@ -258,8 +266,8 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
 
     func subscribeToEmailMessageDeleted(resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>) throws -> SubscriptionToken {
         let subscriptionId = UUID().uuidString
-        let owner = try getOwner()
-        let graphQLSubscription = OnEmailMessageDeletedSubscription(owner: owner)
+        let userId = try getUserId()
+        let graphQLSubscription = OnEmailMessageDeletedSubscription(userId: userId)
         let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(subscriptionId, resultHandler: resultHandler)
         let subscriptionResultHandler = constructSubscriptionResultHandler(
             type: OnEmailMessageDeletedSubscription.self,
@@ -296,7 +304,8 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         cachePolicy: CachePolicy,
         completion: @escaping ClientCompletion<SealedEmailMessageEntity?>
     ) -> PlatformQueryOperation<GetEmailMessageQuery> {
-        let query = GetEmailMessageQuery(id: id, keyId: keyId)
+        let sealedId = "\(id)-\(keyId)"
+        let query = GetEmailMessageQuery(id: sealedId)
         let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation, weak self] _, errors in
             guard let weakSelf = self else { return }
@@ -328,8 +337,10 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
     ///   - cachePolicy: Cache policy to access the data with.
     ///   - completion: Returns the found email message, `nil` if it could not be found, or error on failure.
     /// - Returns: Constructed operation.
-    func constructListEmailMessageQueryOperationWithFilter(
-        _ filter: EmailMessageFilterEntity?,
+    func constructListEmailMessageQueryOperationWithSudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilterEntity?,
         limit: Int?,
         nextToken: String?,
         cachePolicy: CachePolicy,
@@ -340,7 +351,14 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
             let transformer = EmailMessageFilterInputGQLTransformer()
             inputFilter = transformer.transform(filter)
         }
-        let query = ListEmailMessagesQuery(filter: inputFilter, limit: limit, nextToken: nextToken)
+        let input = ListEmailMessagesInput(
+            sudoId: sudoId,
+            emailAddressId: emailAddressId,
+            filter: inputFilter,
+            limit: limit,
+            nextToken: nextToken
+        )
+        let query = ListEmailMessagesQuery(input: input)
         let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [weak self] _, errors in
             guard let weakSelf = self else { return }
@@ -460,21 +478,21 @@ class DefaultSealedEmailMessageRepository: SealedEmailMessageRepository, Resetab
         }
     }
 
-    /// Get the owner property from `SudoUserClient.`
+    /// Get the userId property from `SudoUserClient.`
     /// - Throws: `SudoEmailError.notSignedIn` if cannot retrieve the subject.
     /// - Returns: Owner property.
-    func getOwner() throws -> String {
-        let owner: String
+    func getUserId() throws -> String {
+        let userId: String
         do {
-            guard let o = try userClient.getSubject() else {
+            guard let uid = try userClient.getSubject() else {
                 throw SudoEmailError.internalError("user subject is nil")
             }
-            owner = o
+            userId = uid
         } catch {
             logger.error("Failed to get user subject: \(error.localizedDescription)")
             throw SudoEmailError.notSignedIn
         }
-        return owner
+        return userId
     }
 
     /// Generate an S3 key to use when sending an email message to the transient bucket.

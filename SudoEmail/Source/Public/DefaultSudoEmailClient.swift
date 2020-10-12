@@ -56,15 +56,37 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     /// Initialize an instance of `DefaultSudoEmailClient`. It uses configuration parameters defined in `sudoplatformconfig.json` file located in the app
     /// bundle.
     /// - Parameters:
-    ///   - keyNamespace: Namespace to use for the keys and passwords. Typically this is the application name.
+    ///   - keyNamespace: Namespace to use for the keys and passwords. This should be left as the default property.
     ///   - userClient: SudoUserClient instance used for authentication.
     ///   - profilesClient: SudoProfilesClient instance used for verifying sudo ownership proof.
     /// Throws:
     ///     - `SudoEmailError` if invalid config.
-    public convenience init(keyNamespace: String, userClient: SudoUserClient, profilesClient: SudoProfilesClient) throws {
-        guard let appSyncClient = try ApiClientManager.instance?.getClient(sudoUserClient: userClient) else {
-            throw SudoEmailError.invalidConfig
+    public convenience init(keyNamespace: String = "com.sudoplatform.email", userClient: SudoUserClient, profilesClient: SudoProfilesClient) throws {
+        try self.init(config: nil, keyNamespace: keyNamespace, userClient: userClient, profilesClient: profilesClient)
+    }
+
+    convenience init(
+        config: SudoEmailConfig?,
+        keyNamespace: String = "com.sudoplatform.email",
+        userClient: SudoUserClient,
+        profilesClient: SudoProfilesClient
+    ) throws {
+        let appSyncClient: AWSAppSyncClient
+        if let config = config {
+            let authProvider = GraphQLAuthProvider(client: userClient)
+            let cacheConfiguration = try AWSAppSyncCacheConfiguration()
+            let appSyncConfig = try AWSAppSyncClientConfiguration(
+                appSyncServiceConfig: config,
+                userPoolsAuthProvider: authProvider,
+                cacheConfiguration: cacheConfiguration)
+            appSyncClient = try AWSAppSyncClient(appSyncConfig: appSyncConfig)
+        } else {
+            guard let asClient = try ApiClientManager.instance?.getClient(sudoUserClient: userClient) else {
+                throw SudoEmailError.invalidConfig
+            }
+            appSyncClient = asClient
         }
+
         // Setup utility classes / workers
         let deviceKeyWorker = DefaultDeviceKeyWorker(keyNamespace: keyNamespace, userClient: userClient)
         let emailMessageUnsealerService = DefaultEmailMessageUnsealerService(deviceKeyWorker: deviceKeyWorker)
@@ -158,42 +180,35 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
     }
 
-    public func deprovisionEmailAddress(_ emailAddress: String, completion: @escaping ClientCompletion<EmailAddress>) {
+    public func deprovisionEmailAddressWithId(_ emailAddressId: String, completion: @escaping ClientCompletion<EmailAddress>) {
         let useCase = useCaseFactory.generateDeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
-        let transformer = EmailAddressEntityTransformer()
-        let entity: EmailAddressEntity
-        do {
-            entity = try transformer.transform(emailAddress)
-        } catch {
-            completion(.failure(error))
-            return
-        }
-        useCase.execute(emailAddress: entity) { result in
+        useCase.execute(emailAccountId: emailAddressId) { result in
             let transformer = EmailAddressAPITransformer()
             let result = result.map(transformer.transform(_:))
             completion(result)
         }
     }
 
-    public func sendEmailMessage(withRFC822Data data: Data, senderEmailAddress: String, completion: @escaping ClientCompletion<String>) {
+    public func sendEmailMessage(withRFC822Data data: Data, emailAddressId: String, completion: @escaping ClientCompletion<String>) {
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
-            emailAccountRepository: emailAccountRepository,
             sealedEmailMessageRepository: sealedEmailMessageRepository
         )
-        let emailAddressEntity: EmailAddressEntity
-        do {
-            let transformer = EmailAddressEntityTransformer()
-            emailAddressEntity = try transformer.transform(senderEmailAddress)
-        } catch {
-            completion(.failure(error))
-            return
-        }
-        useCase.execute(withRFC822Data: data, emailAddress: emailAddressEntity, completion: completion)
+        useCase.execute(withRFC822Data: data, emailAccountId: emailAddressId, completion: completion)
     }
 
     public func deleteEmailMessage(withId id: String, completion: @escaping ClientCompletion<String>) {
         let useCase = useCaseFactory.generateDeleteEmailMessageUseCase(sealedEmailMessageRepository: sealedEmailMessageRepository)
         useCase.execute(withId: id, completion: completion)
+    }
+
+    public func checkEmailAddressAvailabilityWithLocalParts(_ localParts: [String], domains: [String]?, completion: @escaping ClientCompletion<[String]>) {
+        let useCase = useCaseFactory.generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: emailAccountRepository)
+        let domainTransformer = DomainEntityTransformer()
+        let domainEntities = domains.map { $0.map(domainTransformer.transform(_:)) }
+        useCase.execute(withLocalParts: localParts, domains: domainEntities) { result in
+            let result = result.map { $0.map { $0.address } }
+            completion(result)
+        }
     }
 
     public func getSupportedEmailDomainsWithCachePolicy(_ cachePolicy: CachePolicy, completion: @escaping ClientCompletion<[String]>) {
@@ -211,34 +226,27 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
     }
 
-    public func getEmailAddressWithAddress(_ address: String, cachePolicy: CachePolicy, completion: @escaping ClientCompletion<EmailAddress?>) {
+    public func getEmailAddressWithId(_ id: String, cachePolicy: CachePolicy, completion: @escaping ClientCompletion<EmailAddress?>) {
         /// Setup completion for either use case.
         let useCaseCompletion: ClientCompletion<EmailAccountEntity?> = { result in
             let transformer = EmailAddressAPITransformer()
             let result = result.map(transformer.transform(_:))
             completion(result)
         }
-        let emailAddressEntity: EmailAddressEntity
-        do {
-            let emailAddressTransformer = EmailAddressEntityTransformer()
-            emailAddressEntity = try emailAddressTransformer.transform(address)
-        } catch {
-            completion(.failure(error))
-            return
-        }
         /// Execute use case based on cache policy.
         switch cachePolicy {
         case .cacheOnly:
             let useCase = useCaseFactory.generateGetEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
-            useCase.execute(withEmailAddress: emailAddressEntity, completion: useCaseCompletion)
+            useCase.execute(withEmailAddressId: id, completion: useCaseCompletion)
         case .remoteOnly:
             let useCase = useCaseFactory.generateFetchEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
-            useCase.execute(withEmailAddress: emailAddressEntity, completion: useCaseCompletion)
+            useCase.execute(withEmailAddressId: id, completion: useCaseCompletion)
         }
     }
 
-    public func listEmailAddressesWithFilter(
-        _ filter: EmailAddressFilter?,
+    public func listEmailAddressesWithSudoId(
+        _ sudoId: String?,
+        filter: EmailAddressFilter?,
         limit: Int?,
         nextToken: String?,
         cachePolicy: CachePolicy,
@@ -260,10 +268,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         switch cachePolicy {
         case .cacheOnly:
             let useCase = useCaseFactory.generateListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
-            useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
+            useCase.execute(withSudoId: sudoId, filter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
         case .remoteOnly:
             let useCase = useCaseFactory.generateFetchListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
-            useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
+            useCase.execute(withSudoId: sudoId, filter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
         }
     }
 
@@ -294,13 +302,16 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
     }
 
-    public func listEmailMessagesWithFilter(
-        _ filter: EmailMessageFilter?,
+    public func listEmailMessagesWithSudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilter?,
         limit: Int?,
         nextToken: String?,
         cachePolicy: CachePolicy,
         completion: @escaping ClientCompletion<ListOutput<EmailMessage>>
     ) {
+        // TODO: Check  if email address is not null then sudo id is not either, otherwise throw
         /// Setup completion for either use case.
         let useCaseCompletion: ClientCompletion<ListOutputEntity<EmailMessageEntity>> = { result in
             let transformer = ListOutputAPITransformer()
@@ -320,13 +331,27 @@ public class DefaultSudoEmailClient: SudoEmailClient {
                 sealedEmailMessageRepository: sealedEmailMessageRepository,
                 emailMessageUnsealerService: emailMessageUnsealerServiceService
             )
-            useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
+            useCase.execute(
+                withSudoId: sudoId,
+                emailAddressId: emailAddressId,
+                filter: entityFilter,
+                limit: limit,
+                nextToken: nextToken,
+                completion: useCaseCompletion
+            )
         case .remoteOnly:
             let useCase = useCaseFactory.generateFetchListEmailMessagesUseCase(
                 sealedEmailMessageRepository: sealedEmailMessageRepository,
                 emailMessageUnsealerService: emailMessageUnsealerServiceService
             )
-            useCase.execute(withFilter: entityFilter, limit: limit, nextToken: nextToken, completion: useCaseCompletion)
+            useCase.execute(
+                withSudoId: sudoId,
+                emailAddressId: emailAddressId,
+                filter: entityFilter,
+                limit: limit,
+                nextToken: nextToken,
+                completion: useCaseCompletion
+            )
         }
     }
 
@@ -339,14 +364,17 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         useCase.execute(withMessageId: messageId, completion: completion)
     }
 
-    public func subscribeToEmailMessageCreated(resultHandler: @escaping ClientCompletion<EmailMessage>) throws -> SubscriptionToken {
+    public func subscribeToEmailMessageCreated(
+        withDirection direction: EmailMessage.Direction? = nil,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) throws -> SubscriptionToken {
         let useCase = useCaseFactory.generateSubscribeToEmailMessageCreatedUseCase(
             sealedEmailMessageRepository: sealedEmailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerServiceService
         )
-//        let directionTransformer = EmailMessageDirectionEntityTransformer()
-//        let directionEntity = directionTransformer.transform(direction)
-        let token = try useCase.execute(withDirection: nil) { result in
+        let directionTransformer = EmailMessageDirectionEntityTransformer()
+        let directionEntity = directionTransformer.transform(direction)
+        let token = try useCase.execute(withDirection: directionEntity) { result in
             let transformer = EmailMessageAPITransformer()
             let result = result.map(transformer.transform(_:))
             resultHandler(result)

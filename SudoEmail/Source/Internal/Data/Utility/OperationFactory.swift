@@ -19,6 +19,7 @@ class OperationFactory {
     ) -> PlatformQueryOperation<Query> {
         return PlatformQueryOperation(
             appSyncClient: appSyncClient,
+            serviceErrorTransformations: [SudoEmailError.init(graphQLError:)],
             query: query,
             cachePolicy: cachePolicy.toSudoOperationsCachePolicy(),
             logger: logger)

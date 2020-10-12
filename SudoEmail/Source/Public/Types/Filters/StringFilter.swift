@@ -12,10 +12,6 @@ public enum StringFilter: Equatable {
     case equals(String)
     /// Filter by non-equality of `String`.
     case notEquals(String)
-    /// Filter by searching for matches containing `String`.
-    case contains(String)
-    /// Filter by searching for matches that does **not** contain `String`.
-    case notContains(String)
     /// Filter by searching for match that begins with `String`.
     case beginsWith(String)
 }

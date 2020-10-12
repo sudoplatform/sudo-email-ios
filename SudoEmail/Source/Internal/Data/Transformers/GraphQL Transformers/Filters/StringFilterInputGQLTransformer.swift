@@ -10,18 +10,26 @@ import Foundation
 struct StringFilterInputGQLTransformer {
 
     /// Transform a `StringFilterEntity` filter rule into a GraphQL `StringFilterInput` filter rule.
-    func transform(_ entity: StringFilterEntity) -> StringFilterInput {
+    func transformToStringFilterInput(_ entity: StringFilterEntity) -> StringFilterInput {
         switch entity {
         case let .equals(string):
             return StringFilterInput(eq: string)
         case let .notEquals(string):
             return StringFilterInput(ne: string)
-        case let .contains(string):
-            return StringFilterInput(contains: string)
-        case let .notContains(string):
-            return StringFilterInput(notContains: string)
         case let .beginsWith(string):
             return StringFilterInput(beginsWith: string)
+        }
+    }
+
+    /// Transform a `StringFilterEntity` filter rule into a GraphQL `IDFilterInput` filter rule.
+    func transformToIdFilterInput(_ entity: StringFilterEntity) -> IDFilterInput {
+        switch entity {
+        case let .equals(string):
+            return IDFilterInput(eq: string)
+        case let .notEquals(string):
+            return IDFilterInput(ne: string)
+        case let .beginsWith(string):
+            return IDFilterInput(beginsWith: string)
         }
     }
 

@@ -4,12 +4,12 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-/// Core use case representation of a operation to fetch the RFC822 data of the email message remotely.
+/// Core use case representation of a operation to fetch the RFC 6854 (supersedes RFC 822) data of the email message remotely.
 class FetchEmailMessageRFC822DataUseCase {
 
     // MARK: - Properties
 
-    /// Email message repository used to access email message records and the RFC822 data of the message.
+    /// Email message repository used to access email message records and the RFC 6854 (supersedes RFC 822) data of the message.
     let sealedEmailMessageRepository: SealedEmailMessageRepository
 
     /// Key repository to access the device key to use to query the email message record.
@@ -54,7 +54,7 @@ class FetchEmailMessageRFC822DataUseCase {
                     completion(.failure(SudoEmailError.noEmailMessageRFC822Available))
                     return
                 }
-                self.sealedEmailMessageRepository.fetchEmailMessageRFC822DataWithSealedId(emailMessage.sealedId) { result in
+                self.sealedEmailMessageRepository.fetchEmailMessageRFC822DataWithId(emailMessage.id) { result in
                     let result = result.mapThrowingSuccess {
                         return try self.emailMessageUnsealerService.unsealEmailMessageRFC822Data(
                             $0,

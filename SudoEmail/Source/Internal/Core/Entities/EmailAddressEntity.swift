@@ -17,6 +17,9 @@ struct EmailAddressEntity: Equatable {
     /// The domain of the email address. For example, `example@sudoplatform.com`, `sudoplatform.com` is the domain.
     var domain: String
 
+    /// The display name of the email address
+    var displayName: String?
+
     /// Returns the fully structured email address.
     var address: String {
         return "\(localPart)@\(domain)"
@@ -28,9 +31,10 @@ struct EmailAddressEntity: Equatable {
     /// - Parameters:
     ///   - localPart: Local part of the email address.
     ///   - domain: Domain of the email address.
-    init(localPart: String, domain: String) {
+    init(localPart: String, domain: String, displayName: String? = nil) {
         self.localPart = localPart
         self.domain = domain
+        self.displayName = displayName
     }
 
 }

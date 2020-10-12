@@ -34,14 +34,17 @@ class UseCaseFactory {
     }
 
     func generateSendEmailMessageUseCase(
-        emailAccountRepository: EmailAccountRepository,
         sealedEmailMessageRepository: SealedEmailMessageRepository
     ) -> SendEmailMessageUseCase {
-        return SendEmailMessageUseCase(emailAccountRepository: emailAccountRepository, sealedEmailMessageRepository: sealedEmailMessageRepository)
+        return SendEmailMessageUseCase(sealedEmailMessageRepository: sealedEmailMessageRepository)
     }
 
     func generateDeleteEmailMessageUseCase(sealedEmailMessageRepository: SealedEmailMessageRepository) -> DeleteEmailMessageUseCase {
         return DeleteEmailMessageUseCase(sealedEmailMessageRepository: sealedEmailMessageRepository)
+    }
+
+    func generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: EmailAccountRepository) -> CheckEmailAddressAvailabilityUseCase {
+        return CheckEmailAddressAvailabilityUseCase(emailAccountRepository: emailAccountRepository)
     }
 
     func generateGetEmailAccountUseCase(emailAccountRepository: EmailAccountRepository) -> GetEmailAccountUseCase {

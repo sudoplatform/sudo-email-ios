@@ -18,7 +18,7 @@ class FetchEmailAccountUseCase {
 
     // MARK: - Methods
 
-    func execute(withEmailAddress emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        emailAccountRepository.fetchWithEmailAddress(emailAddress, completion: completion)
+    func execute(withEmailAddressId id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
+        emailAccountRepository.fetchWithEmailAddressId(id, completion: completion)
     }
 }

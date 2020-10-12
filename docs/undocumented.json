@@ -37,56 +37,56 @@
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 41,
+      "line": 47,
       "symbol": "SudoEmailError.decodingError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 42,
+      "line": 48,
       "symbol": "SudoEmailError.environmentError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 43,
+      "line": 49,
       "symbol": "SudoEmailError.policyFailed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 44,
+      "line": 50,
       "symbol": "SudoEmailError.invalidTokenError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 45,
+      "line": 51,
       "symbol": "SudoEmailError.accountLockedError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 46,
+      "line": 52,
       "symbol": "SudoEmailError.identityInsufficient",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 47,
+      "line": 53,
       "symbol": "SudoEmailError.identityNotVerified",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
-      "line": 48,
+      "line": 54,
       "symbol": "SudoEmailError.internalError(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
@@ -96,6 +96,20 @@
       "line": 9,
       "symbol": "EmailAddress",
       "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
+      "line": 36,
+      "symbol": "EmailMessage.EmailAddress",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
+      "line": 79,
+      "symbol": "EmailMessage.replyTo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     }
   ],

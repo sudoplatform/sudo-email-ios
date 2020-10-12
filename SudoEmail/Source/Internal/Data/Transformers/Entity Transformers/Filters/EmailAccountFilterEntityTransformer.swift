@@ -15,9 +15,18 @@ struct EmailAccountFilterEntityTransformer {
     /// Transform an API `EmailAddressFilter` to `EmailAccountFilterEntity`.
     func transform(_ filter: EmailAddressFilter) -> EmailAccountFilterEntity {
         switch filter {
-        case let .address(stringFilter):
+        case let .id(stringFilter):
             let filterEntity = stringFilterTransformer.transform(stringFilter)
-            return .address(filterEntity)
+            return .id(filterEntity)
+        case let .sudoId(stringFilter):
+            let filterEntity = stringFilterTransformer.transform(stringFilter)
+            return .sudoId(filterEntity)
+        case let .identityId(stringFilter):
+            let filterEntity = stringFilterTransformer.transform(stringFilter)
+            return .identityId(filterEntity)
+        case let .emailAddress(stringFilter):
+            let filterEntity = stringFilterTransformer.transform(stringFilter)
+            return .emailAddress(filterEntity)
         case let .not(emailAddressFilter):
             let filterEntity = transform(emailAddressFilter)
             return .not(filterEntity)

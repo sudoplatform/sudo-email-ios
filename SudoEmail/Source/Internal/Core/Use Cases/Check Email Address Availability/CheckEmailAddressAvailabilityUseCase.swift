@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-class GetEmailAccountUseCase {
+class CheckEmailAddressAvailabilityUseCase {
 
     // MARK: - Properties
 
@@ -18,7 +18,7 @@ class GetEmailAccountUseCase {
 
     // MARK: - Methods
 
-    func execute(withEmailAddressId id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        emailAccountRepository.getWithEmailAddressId(id, completion: completion)
+    func execute(withLocalParts localParts: [String], domains: [DomainEntity]?, completion: @escaping ClientCompletion<[EmailAddressEntity]>) {
+        emailAccountRepository.checkEmailAddressAvailabilityWithLocalParts(localParts, domains: domains, completion: completion)
     }
 }

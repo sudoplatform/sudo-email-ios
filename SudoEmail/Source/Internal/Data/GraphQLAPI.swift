@@ -3,35 +3,57 @@
 
 import AWSAppSync
 
-/// Input definition to search for available email addresses by search.
-internal struct SearchEmailAddressInput: GraphQLMapConvertible {
+internal struct CheckEmailAddressAvailabilityInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(localPart: String, domain: Optional<String?> = nil, limit: Optional<Int?> = nil) {
-    graphQLMap = ["localPart": localPart, "domain": domain, "limit": limit]
+  internal init(localParts: [String], domains: Optional<[String]?> = nil) {
+    graphQLMap = ["localParts": localParts, "domains": domains]
   }
 
-  /// Local part of the email address.
-  internal var localPart: String {
+  internal var localParts: [String] {
     get {
-      return graphQLMap["localPart"] as! String
+      return graphQLMap["localParts"] as! [String]
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "localPart")
+      graphQLMap.updateValue(newValue, forKey: "localParts")
     }
   }
 
-  /// Domain of the email to search for.
-  internal var domain: Optional<String?> {
+  internal var domains: Optional<[String]?> {
     get {
-      return graphQLMap["domain"] as! Optional<String?>
+      return graphQLMap["domains"] as! Optional<[String]?>
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "domain")
+      graphQLMap.updateValue(newValue, forKey: "domains")
+    }
+  }
+}
+
+internal struct ListEmailAddressesInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(sudoId: Optional<String?> = nil, filter: Optional<EmailAddressFilterInput?> = nil, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil) {
+    graphQLMap = ["sudoId": sudoId, "filter": filter, "limit": limit, "nextToken": nextToken]
+  }
+
+  internal var sudoId: Optional<String?> {
+    get {
+      return graphQLMap["sudoId"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sudoId")
     }
   }
 
-  /// Limit the number of search results.
+  internal var filter: Optional<EmailAddressFilterInput?> {
+    get {
+      return graphQLMap["filter"] as! Optional<EmailAddressFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "filter")
+    }
+  }
+
   internal var limit: Optional<Int?> {
     get {
       return graphQLMap["limit"] as! Optional<Int?>
@@ -40,21 +62,66 @@ internal struct SearchEmailAddressInput: GraphQLMapConvertible {
       graphQLMap.updateValue(newValue, forKey: "limit")
     }
   }
+
+  internal var nextToken: Optional<String?> {
+    get {
+      return graphQLMap["nextToken"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "nextToken")
+    }
+  }
 }
 
 internal struct EmailAddressFilterInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(address: Optional<StringFilterInput?> = nil, and: Optional<[EmailAddressFilterInput?]?> = nil, or: Optional<[EmailAddressFilterInput?]?> = nil, not: Optional<EmailAddressFilterInput?> = nil) {
-    graphQLMap = ["address": address, "and": and, "or": or, "not": not]
+  internal init(id: Optional<IDFilterInput?> = nil, sudoId: Optional<IDFilterInput?> = nil, identityId: Optional<IDFilterInput?> = nil, keyRingId: Optional<IDFilterInput?> = nil, emailAddress: Optional<StringFilterInput?> = nil, and: Optional<[EmailAddressFilterInput?]?> = nil, or: Optional<[EmailAddressFilterInput?]?> = nil, not: Optional<EmailAddressFilterInput?> = nil) {
+    graphQLMap = ["id": id, "sudoId": sudoId, "identityId": identityId, "keyRingId": keyRingId, "emailAddress": emailAddress, "and": and, "or": or, "not": not]
   }
 
-  internal var address: Optional<StringFilterInput?> {
+  internal var id: Optional<IDFilterInput?> {
     get {
-      return graphQLMap["address"] as! Optional<StringFilterInput?>
+      return graphQLMap["id"] as! Optional<IDFilterInput?>
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "address")
+      graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  internal var sudoId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["sudoId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sudoId")
+    }
+  }
+
+  internal var identityId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["identityId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "identityId")
+    }
+  }
+
+  internal var keyRingId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["keyRingId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "keyRingId")
+    }
+  }
+
+  internal var emailAddress: Optional<StringFilterInput?> {
+    get {
+      return graphQLMap["emailAddress"] as! Optional<StringFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddress")
     }
   }
 
@@ -86,11 +153,46 @@ internal struct EmailAddressFilterInput: GraphQLMapConvertible {
   }
 }
 
+internal struct IDFilterInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(ne: Optional<GraphQLID?> = nil, eq: Optional<GraphQLID?> = nil, beginsWith: Optional<GraphQLID?> = nil) {
+    graphQLMap = ["ne": ne, "eq": eq, "beginsWith": beginsWith]
+  }
+
+  internal var ne: Optional<GraphQLID?> {
+    get {
+      return graphQLMap["ne"] as! Optional<GraphQLID?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "ne")
+    }
+  }
+
+  internal var eq: Optional<GraphQLID?> {
+    get {
+      return graphQLMap["eq"] as! Optional<GraphQLID?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "eq")
+    }
+  }
+
+  internal var beginsWith: Optional<GraphQLID?> {
+    get {
+      return graphQLMap["beginsWith"] as! Optional<GraphQLID?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "beginsWith")
+    }
+  }
+}
+
 internal struct StringFilterInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(ne: Optional<String?> = nil, eq: Optional<String?> = nil, contains: Optional<String?> = nil, notContains: Optional<String?> = nil, beginsWith: Optional<String?> = nil) {
-    graphQLMap = ["ne": ne, "eq": eq, "contains": contains, "notContains": notContains, "beginsWith": beginsWith]
+  internal init(ne: Optional<String?> = nil, eq: Optional<String?> = nil, beginsWith: Optional<String?> = nil) {
+    graphQLMap = ["ne": ne, "eq": eq, "beginsWith": beginsWith]
   }
 
   internal var ne: Optional<String?> {
@@ -111,24 +213,6 @@ internal struct StringFilterInput: GraphQLMapConvertible {
     }
   }
 
-  internal var contains: Optional<String?> {
-    get {
-      return graphQLMap["contains"] as! Optional<String?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "contains")
-    }
-  }
-
-  internal var notContains: Optional<String?> {
-    get {
-      return graphQLMap["notContains"] as! Optional<String?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "notContains")
-    }
-  }
-
   internal var beginsWith: Optional<String?> {
     get {
       return graphQLMap["beginsWith"] as! Optional<String?>
@@ -139,7 +223,6 @@ internal struct StringFilterInput: GraphQLMapConvertible {
   }
 }
 
-/// Possible directions for a email message.
 internal enum EmailMessageDirection: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
   internal typealias RawValue = String
   case inbound
@@ -173,13 +256,6 @@ internal enum EmailMessageDirection: RawRepresentable, Equatable, JSONDecodable,
   }
 }
 
-/// Possible states for an email message.
-/// QUEUED      - Outbound message queued sending upstream.
-/// SENT        - Outbound message sent upstream.
-/// DELIVERED   - Outbound message acknowledged as delivered upstream.
-/// UNDELIVERED - Outbound message acknowledged as undelivered upstream.
-/// FAILED      - Outbound message acknowledged as failed upstream.
-/// RECEIVED    - Inbound message stored locally.
 internal enum EmailMessageState: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
   internal typealias RawValue = String
   case queued
@@ -229,11 +305,109 @@ internal enum EmailMessageState: RawRepresentable, Equatable, JSONDecodable, JSO
   }
 }
 
+internal struct ListEmailMessagesInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(sudoId: Optional<GraphQLID?> = nil, emailAddressId: Optional<GraphQLID?> = nil, filter: Optional<EmailMessageFilterInput?> = nil, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil) {
+    graphQLMap = ["sudoId": sudoId, "emailAddressId": emailAddressId, "filter": filter, "limit": limit, "nextToken": nextToken]
+  }
+
+  internal var sudoId: Optional<GraphQLID?> {
+    get {
+      return graphQLMap["sudoId"] as! Optional<GraphQLID?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sudoId")
+    }
+  }
+
+  internal var emailAddressId: Optional<GraphQLID?> {
+    get {
+      return graphQLMap["emailAddressId"] as! Optional<GraphQLID?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var filter: Optional<EmailMessageFilterInput?> {
+    get {
+      return graphQLMap["filter"] as! Optional<EmailMessageFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "filter")
+    }
+  }
+
+  internal var limit: Optional<Int?> {
+    get {
+      return graphQLMap["limit"] as! Optional<Int?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "limit")
+    }
+  }
+
+  internal var nextToken: Optional<String?> {
+    get {
+      return graphQLMap["nextToken"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "nextToken")
+    }
+  }
+}
+
 internal struct EmailMessageFilterInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(keyId: Optional<IDFilterInput?> = nil, direction: Optional<EmailMessageDirectionFilterInput?> = nil, seen: Optional<BooleanFilterInput?> = nil, state: Optional<EmailMessageStateFilterInput?> = nil, and: Optional<[EmailMessageFilterInput?]?> = nil, or: Optional<[EmailMessageFilterInput?]?> = nil, not: Optional<EmailMessageFilterInput?> = nil) {
-    graphQLMap = ["keyId": keyId, "direction": direction, "seen": seen, "state": state, "and": and, "or": or, "not": not]
+  internal init(id: Optional<IDFilterInput?> = nil, messageId: Optional<IDFilterInput?> = nil, sudoId: Optional<IDFilterInput?> = nil, emailAddressId: Optional<IDFilterInput?> = nil, algorithm: Optional<StringFilterInput?> = nil, keyId: Optional<IDFilterInput?> = nil, direction: Optional<EmailMessageDirectionFilterInput?> = nil, seen: Optional<BooleanFilterInput?> = nil, clientRefId: Optional<IDFilterInput?> = nil, state: Optional<EmailMessageStateFilterInput?> = nil, and: Optional<[EmailMessageFilterInput?]?> = nil, or: Optional<[EmailMessageFilterInput?]?> = nil, not: Optional<EmailMessageFilterInput?> = nil) {
+    graphQLMap = ["id": id, "messageId": messageId, "sudoId": sudoId, "emailAddressId": emailAddressId, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "clientRefId": clientRefId, "state": state, "and": and, "or": or, "not": not]
+  }
+
+  internal var id: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["id"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  internal var messageId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["messageId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "messageId")
+    }
+  }
+
+  internal var sudoId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["sudoId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sudoId")
+    }
+  }
+
+  internal var emailAddressId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["emailAddressId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var algorithm: Optional<StringFilterInput?> {
+    get {
+      return graphQLMap["algorithm"] as! Optional<StringFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "algorithm")
+    }
   }
 
   internal var keyId: Optional<IDFilterInput?> {
@@ -260,6 +434,15 @@ internal struct EmailMessageFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "seen")
+    }
+  }
+
+  internal var clientRefId: Optional<IDFilterInput?> {
+    get {
+      return graphQLMap["clientRefId"] as! Optional<IDFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "clientRefId")
     }
   }
 
@@ -296,59 +479,6 @@ internal struct EmailMessageFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "not")
-    }
-  }
-}
-
-internal struct IDFilterInput: GraphQLMapConvertible {
-  internal var graphQLMap: GraphQLMap
-
-  internal init(ne: Optional<GraphQLID?> = nil, eq: Optional<GraphQLID?> = nil, contains: Optional<GraphQLID?> = nil, notContains: Optional<GraphQLID?> = nil, beginsWith: Optional<GraphQLID?> = nil) {
-    graphQLMap = ["ne": ne, "eq": eq, "contains": contains, "notContains": notContains, "beginsWith": beginsWith]
-  }
-
-  internal var ne: Optional<GraphQLID?> {
-    get {
-      return graphQLMap["ne"] as! Optional<GraphQLID?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "ne")
-    }
-  }
-
-  internal var eq: Optional<GraphQLID?> {
-    get {
-      return graphQLMap["eq"] as! Optional<GraphQLID?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "eq")
-    }
-  }
-
-  internal var contains: Optional<GraphQLID?> {
-    get {
-      return graphQLMap["contains"] as! Optional<GraphQLID?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "contains")
-    }
-  }
-
-  internal var notContains: Optional<GraphQLID?> {
-    get {
-      return graphQLMap["notContains"] as! Optional<GraphQLID?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "notContains")
-    }
-  }
-
-  internal var beginsWith: Optional<GraphQLID?> {
-    get {
-      return graphQLMap["beginsWith"] as! Optional<GraphQLID?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "beginsWith")
     }
   }
 }
@@ -449,25 +579,22 @@ internal struct EmailMessageStateFilterInput: GraphQLMapConvertible {
   }
 }
 
-/// Input definition to provision a email address.
 internal struct ProvisionEmailAddressInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(address: String, keyRingId: String, ownerProofs: [String]) {
-    graphQLMap = ["address": address, "keyRingId": keyRingId, "ownerProofs": ownerProofs]
+  internal init(emailAddress: String, keyRingId: String, ownershipProofTokens: [String]) {
+    graphQLMap = ["emailAddress": emailAddress, "keyRingId": keyRingId, "ownershipProofTokens": ownershipProofTokens]
   }
 
-  /// Address in format 'local-part@dmain' of the email to provision.
-  internal var address: String {
+  internal var emailAddress: String {
     get {
-      return graphQLMap["address"] as! String
+      return graphQLMap["emailAddress"] as! String
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "address")
+      graphQLMap.updateValue(newValue, forKey: "emailAddress")
     }
   }
 
-  /// Key ring ID that dictates which keys the child resources of this email address will be encrypted with.
   internal var keyRingId: String {
     get {
       return graphQLMap["keyRingId"] as! String
@@ -477,55 +604,49 @@ internal struct ProvisionEmailAddressInput: GraphQLMapConvertible {
     }
   }
 
-  /// Ownership proof tokens
-  internal var ownerProofs: [String] {
+  internal var ownershipProofTokens: [String] {
     get {
-      return graphQLMap["ownerProofs"] as! [String]
+      return graphQLMap["ownershipProofTokens"] as! [String]
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "ownerProofs")
+      graphQLMap.updateValue(newValue, forKey: "ownershipProofTokens")
     }
   }
 }
 
-/// Input definition to delete an email address.
 internal struct DeprovisionEmailAddressInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(address: String) {
-    graphQLMap = ["address": address]
+  internal init(emailAddressId: GraphQLID) {
+    graphQLMap = ["emailAddressId": emailAddressId]
   }
 
-  /// Address in format 'local-part@dmain' of the email to delete.
-  internal var address: String {
+  internal var emailAddressId: GraphQLID {
     get {
-      return graphQLMap["address"] as! String
+      return graphQLMap["emailAddressId"] as! GraphQLID
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "address")
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
     }
   }
 }
 
-/// Input definition to send a message.
 internal struct SendEmailMessageInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(address: String, message: S3EmailObjectInput, clientRefId: Optional<String?> = nil) {
-    graphQLMap = ["address": address, "message": message, "clientRefId": clientRefId]
+  internal init(emailAddressId: GraphQLID, message: S3EmailObjectInput, clientRefId: Optional<String?> = nil) {
+    graphQLMap = ["emailAddressId": emailAddressId, "message": message, "clientRefId": clientRefId]
   }
 
-  /// Source email address.
-  internal var address: String {
+  internal var emailAddressId: GraphQLID {
     get {
-      return graphQLMap["address"] as! String
+      return graphQLMap["emailAddressId"] as! GraphQLID
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "address")
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
     }
   }
 
-  /// Pointer to S3 Media object posted to S3 by client.
   internal var message: S3EmailObjectInput {
     get {
       return graphQLMap["message"] as! S3EmailObjectInput
@@ -535,7 +656,6 @@ internal struct SendEmailMessageInput: GraphQLMapConvertible {
     }
   }
 
-  /// ID used for the client to subscribe to specific events.
   internal var clientRefId: Optional<String?> {
     get {
       return graphQLMap["clientRefId"] as! Optional<String?>
@@ -546,7 +666,6 @@ internal struct SendEmailMessageInput: GraphQLMapConvertible {
   }
 }
 
-/// Representation of the S3 Email Object.
 internal struct S3EmailObjectInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
@@ -554,7 +673,6 @@ internal struct S3EmailObjectInput: GraphQLMapConvertible {
     graphQLMap = ["key": key, "bucket": bucket, "region": region]
   }
 
-  /// Key of object in S3.
   internal var key: String {
     get {
       return graphQLMap["key"] as! String
@@ -564,7 +682,6 @@ internal struct S3EmailObjectInput: GraphQLMapConvertible {
     }
   }
 
-  /// Name of S3 bucket.
   internal var bucket: String {
     get {
       return graphQLMap["bucket"] as! String
@@ -574,7 +691,6 @@ internal struct S3EmailObjectInput: GraphQLMapConvertible {
     }
   }
 
-  /// Region S3 bucket is located in.
   internal var region: String {
     get {
       return graphQLMap["region"] as! String
@@ -585,21 +701,19 @@ internal struct S3EmailObjectInput: GraphQLMapConvertible {
   }
 }
 
-/// Input definition to delete a message.
 internal struct DeleteEmailMessageInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(id: GraphQLID) {
-    graphQLMap = ["id": id]
+  internal init(messageId: GraphQLID) {
+    graphQLMap = ["messageId": messageId]
   }
 
-  /// v4 UUID assigned to message record.
-  internal var id: GraphQLID {
+  internal var messageId: GraphQLID {
     get {
-      return graphQLMap["id"] as! GraphQLID
+      return graphQLMap["messageId"] as! GraphQLID
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "id")
+      graphQLMap.updateValue(newValue, forKey: "messageId")
     }
   }
 }
@@ -689,7 +803,6 @@ internal final class GetEmailDomainsQuery: GraphQLQuery {
       self.init(snapshot: ["__typename": "Query", "getEmailDomains": getEmailDomains.snapshot])
     }
 
-    /// Returns an array of supported domains.
     internal var getEmailDomains: GetEmailDomain {
       get {
         return GetEmailDomain(snapshot: snapshot["getEmailDomains"]! as! Snapshot)
@@ -738,13 +851,13 @@ internal final class GetEmailDomainsQuery: GraphQLQuery {
   }
 }
 
-internal final class SearchForEmailAddressQuery: GraphQLQuery {
+internal final class CheckEmailAddressAvailabilityQuery: GraphQLQuery {
   internal static let operationString =
-    "query SearchForEmailAddress($input: SearchEmailAddressInput!) {\n  searchForEmailAddress(input: $input) {\n    __typename\n    localPart\n    domain\n    results\n    limit\n  }\n}"
+    "query CheckEmailAddressAvailability($input: CheckEmailAddressAvailabilityInput!) {\n  checkEmailAddressAvailability(input: $input) {\n    __typename\n    addresses\n  }\n}"
 
-  internal var input: SearchEmailAddressInput
+  internal var input: CheckEmailAddressAvailabilityInput
 
-  internal init(input: SearchEmailAddressInput) {
+  internal init(input: CheckEmailAddressAvailabilityInput) {
     self.input = input
   }
 
@@ -756,7 +869,7 @@ internal final class SearchForEmailAddressQuery: GraphQLQuery {
     internal static let possibleTypes = ["Query"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("searchForEmailAddress", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(SearchForEmailAddress.selections))),
+      GraphQLField("checkEmailAddressAvailability", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(CheckEmailAddressAvailability.selections))),
     ]
 
     internal var snapshot: Snapshot
@@ -765,29 +878,25 @@ internal final class SearchForEmailAddressQuery: GraphQLQuery {
       self.snapshot = snapshot
     }
 
-    internal init(searchForEmailAddress: SearchForEmailAddress) {
-      self.init(snapshot: ["__typename": "Query", "searchForEmailAddress": searchForEmailAddress.snapshot])
+    internal init(checkEmailAddressAvailability: CheckEmailAddressAvailability) {
+      self.init(snapshot: ["__typename": "Query", "checkEmailAddressAvailability": checkEmailAddressAvailability.snapshot])
     }
 
-    /// Search for available email address(es) for given criteria.
-    internal var searchForEmailAddress: SearchForEmailAddress {
+    internal var checkEmailAddressAvailability: CheckEmailAddressAvailability {
       get {
-        return SearchForEmailAddress(snapshot: snapshot["searchForEmailAddress"]! as! Snapshot)
+        return CheckEmailAddressAvailability(snapshot: snapshot["checkEmailAddressAvailability"]! as! Snapshot)
       }
       set {
-        snapshot.updateValue(newValue.snapshot, forKey: "searchForEmailAddress")
+        snapshot.updateValue(newValue.snapshot, forKey: "checkEmailAddressAvailability")
       }
     }
 
-    internal struct SearchForEmailAddress: GraphQLSelectionSet {
-      internal static let possibleTypes = ["EmailAddressSearch"]
+    internal struct CheckEmailAddressAvailability: GraphQLSelectionSet {
+      internal static let possibleTypes = ["AvailableAddresses"]
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("localPart", type: .nonNull(.scalar(String.self))),
-        GraphQLField("domain", type: .scalar(String.self)),
-        GraphQLField("results", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("limit", type: .scalar(Int.self)),
+        GraphQLField("addresses", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
       ]
 
       internal var snapshot: Snapshot
@@ -796,8 +905,8 @@ internal final class SearchForEmailAddressQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(localPart: String, domain: String? = nil, results: [String], limit: Int? = nil) {
-        self.init(snapshot: ["__typename": "EmailAddressSearch", "localPart": localPart, "domain": domain, "results": results, "limit": limit])
+      internal init(addresses: [String]) {
+        self.init(snapshot: ["__typename": "AvailableAddresses", "addresses": addresses])
       }
 
       internal var __typename: String {
@@ -809,43 +918,12 @@ internal final class SearchForEmailAddressQuery: GraphQLQuery {
         }
       }
 
-      /// Local part of the email address.
-      internal var localPart: String {
+      internal var addresses: [String] {
         get {
-          return snapshot["localPart"]! as! String
+          return snapshot["addresses"]! as! [String]
         }
         set {
-          snapshot.updateValue(newValue, forKey: "localPart")
-        }
-      }
-
-      /// Domain of the email address.
-      internal var domain: String? {
-        get {
-          return snapshot["domain"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "domain")
-        }
-      }
-
-      /// Array of available email addresses.
-      internal var results: [String] {
-        get {
-          return snapshot["results"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "results")
-        }
-      }
-
-      /// Limit the number of search results.
-      internal var limit: Int? {
-        get {
-          return snapshot["limit"] as? Int
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "limit")
+          snapshot.updateValue(newValue, forKey: "addresses")
         }
       }
     }
@@ -854,23 +932,23 @@ internal final class SearchForEmailAddressQuery: GraphQLQuery {
 
 internal final class GetEmailAddressQuery: GraphQLQuery {
   internal static let operationString =
-    "query GetEmailAddress($address: String!) {\n  getEmailAddress(address: $address) {\n    __typename\n    owner\n    owners {\n      __typename\n      id\n      issuer\n    }\n    address\n    identityId\n    keyRingId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "query GetEmailAddress($id: String!) {\n  getEmailAddress(id: $id) {\n    __typename\n    id\n    userId\n    sudoId\n    identityId\n    keyRingId\n    owners {\n      __typename\n      id\n      issuer\n    }\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    emailAddress\n  }\n}"
 
-  internal var address: String
+  internal var id: String
 
-  internal init(address: String) {
-    self.address = address
+  internal init(id: String) {
+    self.id = id
   }
 
   internal var variables: GraphQLMap? {
-    return ["address": address]
+    return ["id": id]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Query"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("getEmailAddress", arguments: ["address": GraphQLVariable("address")], type: .object(GetEmailAddress.selections)),
+      GraphQLField("getEmailAddress", arguments: ["id": GraphQLVariable("id")], type: .object(GetEmailAddress.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -883,7 +961,6 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
       self.init(snapshot: ["__typename": "Query", "getEmailAddress": getEmailAddress.flatMap { $0.snapshot }])
     }
 
-    /// Get an email address record by address.
     internal var getEmailAddress: GetEmailAddress? {
       get {
         return (snapshot["getEmailAddress"] as? Snapshot).flatMap { GetEmailAddress(snapshot: $0) }
@@ -898,14 +975,16 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
-        GraphQLField("identityId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyRingId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
         GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -914,8 +993,8 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(owner: GraphQLID, owners: [Owner], address: String, identityId: String, keyRingId: String, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "EmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "address": address, "identityId": identityId, "keyRingId": keyRingId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, identityId: GraphQLID, keyRingId: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddress: String) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "userId": userId, "sudoId": sudoId, "identityId": identityId, "keyRingId": keyRingId, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddress": emailAddress])
       }
 
       internal var __typename: String {
@@ -927,17 +1006,51 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         }
       }
 
-      /// v4 UUID of user that owns the email address resource.
-      internal var owner: GraphQLID {
+      internal var id: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["id"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "id")
         }
       }
 
-      /// Array of owner Ids that are extracted from the owner proofs to tie an email address to a Sudo.
+      internal var userId: GraphQLID {
+        get {
+          return snapshot["userId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "userId")
+        }
+      }
+
+      internal var sudoId: GraphQLID {
+        get {
+          return snapshot["sudoId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "sudoId")
+        }
+      }
+
+      internal var identityId: GraphQLID {
+        get {
+          return snapshot["identityId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "identityId")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
+        }
+      }
+
       internal var owners: [Owner] {
         get {
           return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
@@ -947,37 +1060,15 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         }
       }
 
-      /// Address in format 'local-part@dmain' of the email.
-      internal var address: String {
+      internal var version: Int {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// The identityId of the user that owns the email address resource.
-      internal var identityId: String {
-        get {
-          return snapshot["identityId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "identityId")
-        }
-      }
-
-      /// Key ring ID that dictates which keys the child resources of this email address will be encrypted with.
-      internal var keyRingId: String {
-        get {
-          return snapshot["keyRingId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyRingId")
-        }
-      }
-
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -987,7 +1078,6 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         }
       }
 
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -997,13 +1087,12 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         }
       }
 
-      /// Version of this email address record, increments on update.
-      internal var version: Int {
+      internal var emailAddress: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["emailAddress"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "emailAddress")
         }
       }
 
@@ -1059,27 +1148,23 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
 
 internal final class ListEmailAddressesQuery: GraphQLQuery {
   internal static let operationString =
-    "query ListEmailAddresses($filter: EmailAddressFilterInput, $limit: Int, $nextToken: String) {\n  listEmailAddresses(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      owner\n      owners {\n        __typename\n        id\n        issuer\n      }\n      address\n      identityId\n      keyRingId\n      createdAtEpochMs\n      updatedAtEpochMs\n      version\n    }\n    nextToken\n  }\n}"
+    "query ListEmailAddresses($input: ListEmailAddressesInput!) {\n  listEmailAddresses(input: $input) {\n    __typename\n    items {\n      __typename\n      id\n      userId\n      sudoId\n      identityId\n      keyRingId\n      owners {\n        __typename\n        id\n        issuer\n      }\n      version\n      createdAtEpochMs\n      updatedAtEpochMs\n      emailAddress\n    }\n    nextToken\n  }\n}"
 
-  internal var filter: EmailAddressFilterInput?
-  internal var limit: Int?
-  internal var nextToken: String?
+  internal var input: ListEmailAddressesInput
 
-  internal init(filter: EmailAddressFilterInput? = nil, limit: Int? = nil, nextToken: String? = nil) {
-    self.filter = filter
-    self.limit = limit
-    self.nextToken = nextToken
+  internal init(input: ListEmailAddressesInput) {
+    self.input = input
   }
 
   internal var variables: GraphQLMap? {
-    return ["filter": filter, "limit": limit, "nextToken": nextToken]
+    return ["input": input]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Query"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("listEmailAddresses", arguments: ["filter": GraphQLVariable("filter"), "limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken")], type: .nonNull(.object(ListEmailAddress.selections))),
+      GraphQLField("listEmailAddresses", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(ListEmailAddress.selections))),
     ]
 
     internal var snapshot: Snapshot
@@ -1092,7 +1177,6 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
       self.init(snapshot: ["__typename": "Query", "listEmailAddresses": listEmailAddresses.snapshot])
     }
 
-    /// Returns a list of email addresses.
     internal var listEmailAddresses: ListEmailAddress {
       get {
         return ListEmailAddress(snapshot: snapshot["listEmailAddresses"]! as! Snapshot)
@@ -1153,14 +1237,16 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
 
         internal static let selections: [GraphQLSelection] = [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
-          GraphQLField("address", type: .nonNull(.scalar(String.self))),
-          GraphQLField("identityId", type: .nonNull(.scalar(String.self))),
-          GraphQLField("keyRingId", type: .nonNull(.scalar(String.self))),
+          GraphQLField("version", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
           GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-          GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
         ]
 
         internal var snapshot: Snapshot
@@ -1169,8 +1255,8 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(owner: GraphQLID, owners: [Owner], address: String, identityId: String, keyRingId: String, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-          self.init(snapshot: ["__typename": "EmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "address": address, "identityId": identityId, "keyRingId": keyRingId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+        internal init(id: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, identityId: GraphQLID, keyRingId: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddress: String) {
+          self.init(snapshot: ["__typename": "EmailAddress", "id": id, "userId": userId, "sudoId": sudoId, "identityId": identityId, "keyRingId": keyRingId, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddress": emailAddress])
         }
 
         internal var __typename: String {
@@ -1182,17 +1268,51 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           }
         }
 
-        /// v4 UUID of user that owns the email address resource.
-        internal var owner: GraphQLID {
+        internal var id: GraphQLID {
           get {
-            return snapshot["owner"]! as! GraphQLID
+            return snapshot["id"]! as! GraphQLID
           }
           set {
-            snapshot.updateValue(newValue, forKey: "owner")
+            snapshot.updateValue(newValue, forKey: "id")
           }
         }
 
-        /// Array of owner Ids that are extracted from the owner proofs to tie an email address to a Sudo.
+        internal var userId: GraphQLID {
+          get {
+            return snapshot["userId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "userId")
+          }
+        }
+
+        internal var sudoId: GraphQLID {
+          get {
+            return snapshot["sudoId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "sudoId")
+          }
+        }
+
+        internal var identityId: GraphQLID {
+          get {
+            return snapshot["identityId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "identityId")
+          }
+        }
+
+        internal var keyRingId: GraphQLID {
+          get {
+            return snapshot["keyRingId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "keyRingId")
+          }
+        }
+
         internal var owners: [Owner] {
           get {
             return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
@@ -1202,37 +1322,15 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           }
         }
 
-        /// Address in format 'local-part@dmain' of the email.
-        internal var address: String {
+        internal var version: Int {
           get {
-            return snapshot["address"]! as! String
+            return snapshot["version"]! as! Int
           }
           set {
-            snapshot.updateValue(newValue, forKey: "address")
+            snapshot.updateValue(newValue, forKey: "version")
           }
         }
 
-        /// The identityId of the user that owns the email address resource.
-        internal var identityId: String {
-          get {
-            return snapshot["identityId"]! as! String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "identityId")
-          }
-        }
-
-        /// Key ring ID that dictates which keys the child resources of this email address will be encrypted with.
-        internal var keyRingId: String {
-          get {
-            return snapshot["keyRingId"]! as! String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "keyRingId")
-          }
-        }
-
-        /// Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
         internal var createdAtEpochMs: Double {
           get {
             return snapshot["createdAtEpochMs"]! as! Double
@@ -1242,7 +1340,6 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           }
         }
 
-        /// Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
         internal var updatedAtEpochMs: Double {
           get {
             return snapshot["updatedAtEpochMs"]! as! Double
@@ -1252,13 +1349,12 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           }
         }
 
-        /// Version of this email address record, increments on update.
-        internal var version: Int {
+        internal var emailAddress: String {
           get {
-            return snapshot["version"]! as! Int
+            return snapshot["emailAddress"]! as! String
           }
           set {
-            snapshot.updateValue(newValue, forKey: "version")
+            snapshot.updateValue(newValue, forKey: "emailAddress")
           }
         }
 
@@ -1315,25 +1411,23 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
 
 internal final class GetEmailMessageQuery: GraphQLQuery {
   internal static let operationString =
-    "query GetEmailMessage($id: ID!, $keyId: String!) {\n  getEmailMessage(id: $id, keyId: $keyId) {\n    __typename\n    id\n    sealedId\n    owner\n    address\n    from\n    to\n    cc\n    bcc\n    direction\n    subject\n    seen\n    state\n    algorithm\n    keyId\n    clientRefId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "query GetEmailMessage($id: ID!) {\n  getEmailMessage(id: $id) {\n    __typename\n    id\n    messageId\n    userId\n    sudoId\n    emailAddressId\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    algorithm\n    keyId\n    direction\n    seen\n    state\n    clientRefId\n    from\n    replyTo\n    to\n    cc\n    bcc\n    subject\n  }\n}"
 
   internal var id: GraphQLID
-  internal var keyId: String
 
-  internal init(id: GraphQLID, keyId: String) {
+  internal init(id: GraphQLID) {
     self.id = id
-    self.keyId = keyId
   }
 
   internal var variables: GraphQLMap? {
-    return ["id": id, "keyId": keyId]
+    return ["id": id]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Query"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("getEmailMessage", arguments: ["id": GraphQLVariable("id"), "keyId": GraphQLVariable("keyId")], type: .object(GetEmailMessage.selections)),
+      GraphQLField("getEmailMessage", arguments: ["id": GraphQLVariable("id")], type: .object(GetEmailMessage.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -1346,7 +1440,6 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
       self.init(snapshot: ["__typename": "Query", "getEmailMessage": getEmailMessage.flatMap { $0.snapshot }])
     }
 
-    /// Get an email message record by ID.
     internal var getEmailMessage: GetEmailMessage? {
       get {
         return (snapshot["getEmailMessage"] as? Snapshot).flatMap { GetEmailMessage(snapshot: $0) }
@@ -1362,23 +1455,25 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
+        GraphQLField("messageId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+        GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("replyTo", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("subject", type: .scalar(String.self)),
-        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("clientRefId", type: .scalar(String.self)),
-        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -1387,8 +1482,8 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, messageId: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, algorithm: String, keyId: String, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, from: [String], replyTo: [String], to: [String], cc: [String], bcc: [String], subject: String? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "messageId": messageId, "userId": userId, "sudoId": sudoId, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "from": from, "replyTo": replyTo, "to": to, "cc": cc, "bcc": bcc, "subject": subject])
       }
 
       internal var __typename: String {
@@ -1400,7 +1495,6 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         }
       }
 
-      /// UNSEALED: v4 UUID assigned to message record.
       internal var id: GraphQLID {
         get {
           return snapshot["id"]! as! GraphQLID
@@ -1410,147 +1504,51 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         }
       }
 
-      /// UNSEALED: v4 UUID composite key.
-      internal var sealedId: String {
+      internal var messageId: GraphQLID {
         get {
-          return snapshot["sealedId"]! as! String
+          return snapshot["messageId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "sealedId")
+          snapshot.updateValue(newValue, forKey: "messageId")
         }
       }
 
-      /// UNSEALED: v4 UUID of user that owns the message resource.
-      internal var owner: GraphQLID {
+      internal var userId: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["userId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "userId")
         }
       }
 
-      /// UNSEALED: The email address related to the message resource.
-      internal var address: String {
+      internal var sudoId: GraphQLID {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["sudoId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "sudoId")
         }
       }
 
-      /// SEALED: from email address(es).
-      internal var from: [String] {
+      internal var emailAddressId: GraphQLID {
         get {
-          return snapshot["from"]! as! [String]
+          return snapshot["emailAddressId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "from")
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
         }
       }
 
-      /// SEALED: to email address(es).
-      internal var to: [String] {
+      internal var version: Int {
         get {
-          return snapshot["to"]! as! [String]
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "to")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// SEALED: cc email address(es).
-      internal var cc: [String] {
-        get {
-          return snapshot["cc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "cc")
-        }
-      }
-
-      /// SEALED: bcc email address(es).
-      internal var bcc: [String] {
-        get {
-          return snapshot["bcc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "bcc")
-        }
-      }
-
-      /// UNSEALED: Direction of message.
-      internal var direction: EmailMessageDirection {
-        get {
-          return snapshot["direction"]! as! EmailMessageDirection
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "direction")
-        }
-      }
-
-      /// SEALED: Email message subject.
-      internal var subject: String? {
-        get {
-          return snapshot["subject"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "subject")
-        }
-      }
-
-      /// UNSEALED: Has this message been marked as seen on client.
-      internal var seen: Bool {
-        get {
-          return snapshot["seen"]! as! Bool
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "seen")
-        }
-      }
-
-      /// UNSEALED: State of message record.
-      internal var state: EmailMessageState {
-        get {
-          return snapshot["state"]! as! EmailMessageState
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "state")
-        }
-      }
-
-      /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
-      internal var algorithm: String {
-        get {
-          return snapshot["algorithm"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "algorithm")
-        }
-      }
-
-      /// UNSEALED: Client generated key ID for the internal key.
-      internal var keyId: String {
-        get {
-          return snapshot["keyId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyId")
-        }
-      }
-
-      /// UNSEALED: ID used for the client to subscribe to specific events.
-      internal var clientRefId: String? {
-        get {
-          return snapshot["clientRefId"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "clientRefId")
-        }
-      }
-
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -1560,7 +1558,6 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -1570,13 +1567,111 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         }
       }
 
-      /// UNSEALED: Version of this object, increments on update.
-      internal var version: Int {
+      internal var algorithm: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["algorithm"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "algorithm")
+        }
+      }
+
+      internal var keyId: String {
+        get {
+          return snapshot["keyId"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyId")
+        }
+      }
+
+      internal var direction: EmailMessageDirection {
+        get {
+          return snapshot["direction"]! as! EmailMessageDirection
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "direction")
+        }
+      }
+
+      internal var seen: Bool {
+        get {
+          return snapshot["seen"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var state: EmailMessageState {
+        get {
+          return snapshot["state"]! as! EmailMessageState
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "state")
+        }
+      }
+
+      internal var clientRefId: String? {
+        get {
+          return snapshot["clientRefId"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "clientRefId")
+        }
+      }
+
+      internal var from: [String] {
+        get {
+          return snapshot["from"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "from")
+        }
+      }
+
+      internal var replyTo: [String] {
+        get {
+          return snapshot["replyTo"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "replyTo")
+        }
+      }
+
+      internal var to: [String] {
+        get {
+          return snapshot["to"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "to")
+        }
+      }
+
+      internal var cc: [String] {
+        get {
+          return snapshot["cc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "cc")
+        }
+      }
+
+      internal var bcc: [String] {
+        get {
+          return snapshot["bcc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "bcc")
+        }
+      }
+
+      internal var subject: String? {
+        get {
+          return snapshot["subject"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "subject")
         }
       }
     }
@@ -1585,27 +1680,23 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
 
 internal final class ListEmailMessagesQuery: GraphQLQuery {
   internal static let operationString =
-    "query ListEmailMessages($filter: EmailMessageFilterInput, $limit: Int, $nextToken: String) {\n  listEmailMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      sealedId\n      owner\n      address\n      from\n      to\n      cc\n      bcc\n      direction\n      subject\n      seen\n      state\n      algorithm\n      keyId\n      clientRefId\n      createdAtEpochMs\n      updatedAtEpochMs\n      version\n    }\n    nextToken\n  }\n}"
+    "query ListEmailMessages($input: ListEmailMessagesInput!) {\n  listEmailMessages(input: $input) {\n    __typename\n    items {\n      __typename\n      id\n      messageId\n      userId\n      sudoId\n      emailAddressId\n      version\n      createdAtEpochMs\n      updatedAtEpochMs\n      algorithm\n      keyId\n      direction\n      seen\n      state\n      clientRefId\n      from\n      replyTo\n      to\n      cc\n      bcc\n      subject\n    }\n    nextToken\n  }\n}"
 
-  internal var filter: EmailMessageFilterInput?
-  internal var limit: Int?
-  internal var nextToken: String?
+  internal var input: ListEmailMessagesInput
 
-  internal init(filter: EmailMessageFilterInput? = nil, limit: Int? = nil, nextToken: String? = nil) {
-    self.filter = filter
-    self.limit = limit
-    self.nextToken = nextToken
+  internal init(input: ListEmailMessagesInput) {
+    self.input = input
   }
 
   internal var variables: GraphQLMap? {
-    return ["filter": filter, "limit": limit, "nextToken": nextToken]
+    return ["input": input]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Query"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("listEmailMessages", arguments: ["filter": GraphQLVariable("filter"), "limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken")], type: .nonNull(.object(ListEmailMessage.selections))),
+      GraphQLField("listEmailMessages", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(ListEmailMessage.selections))),
     ]
 
     internal var snapshot: Snapshot
@@ -1618,7 +1709,6 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
       self.init(snapshot: ["__typename": "Query", "listEmailMessages": listEmailMessages.snapshot])
     }
 
-    /// Returns a list of email messages.
     internal var listEmailMessages: ListEmailMessage {
       get {
         return ListEmailMessage(snapshot: snapshot["listEmailMessages"]! as! Snapshot)
@@ -1680,23 +1770,25 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
         internal static let selections: [GraphQLSelection] = [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-          GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-          GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-          GraphQLField("address", type: .nonNull(.scalar(String.self))),
+          GraphQLField("messageId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+          GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+          GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+          GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+          GraphQLField("clientRefId", type: .scalar(String.self)),
           GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("replyTo", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
           GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
           GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
           GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-          GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
           GraphQLField("subject", type: .scalar(String.self)),
-          GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-          GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-          GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-          GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-          GraphQLField("clientRefId", type: .scalar(String.self)),
-          GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-          GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-          GraphQLField("version", type: .nonNull(.scalar(Int.self))),
         ]
 
         internal var snapshot: Snapshot
@@ -1705,8 +1797,8 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+        internal init(id: GraphQLID, messageId: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, algorithm: String, keyId: String, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, from: [String], replyTo: [String], to: [String], cc: [String], bcc: [String], subject: String? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "messageId": messageId, "userId": userId, "sudoId": sudoId, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "from": from, "replyTo": replyTo, "to": to, "cc": cc, "bcc": bcc, "subject": subject])
         }
 
         internal var __typename: String {
@@ -1718,7 +1810,6 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           }
         }
 
-        /// UNSEALED: v4 UUID assigned to message record.
         internal var id: GraphQLID {
           get {
             return snapshot["id"]! as! GraphQLID
@@ -1728,147 +1819,51 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           }
         }
 
-        /// UNSEALED: v4 UUID composite key.
-        internal var sealedId: String {
+        internal var messageId: GraphQLID {
           get {
-            return snapshot["sealedId"]! as! String
+            return snapshot["messageId"]! as! GraphQLID
           }
           set {
-            snapshot.updateValue(newValue, forKey: "sealedId")
+            snapshot.updateValue(newValue, forKey: "messageId")
           }
         }
 
-        /// UNSEALED: v4 UUID of user that owns the message resource.
-        internal var owner: GraphQLID {
+        internal var userId: GraphQLID {
           get {
-            return snapshot["owner"]! as! GraphQLID
+            return snapshot["userId"]! as! GraphQLID
           }
           set {
-            snapshot.updateValue(newValue, forKey: "owner")
+            snapshot.updateValue(newValue, forKey: "userId")
           }
         }
 
-        /// UNSEALED: The email address related to the message resource.
-        internal var address: String {
+        internal var sudoId: GraphQLID {
           get {
-            return snapshot["address"]! as! String
+            return snapshot["sudoId"]! as! GraphQLID
           }
           set {
-            snapshot.updateValue(newValue, forKey: "address")
+            snapshot.updateValue(newValue, forKey: "sudoId")
           }
         }
 
-        /// SEALED: from email address(es).
-        internal var from: [String] {
+        internal var emailAddressId: GraphQLID {
           get {
-            return snapshot["from"]! as! [String]
+            return snapshot["emailAddressId"]! as! GraphQLID
           }
           set {
-            snapshot.updateValue(newValue, forKey: "from")
+            snapshot.updateValue(newValue, forKey: "emailAddressId")
           }
         }
 
-        /// SEALED: to email address(es).
-        internal var to: [String] {
+        internal var version: Int {
           get {
-            return snapshot["to"]! as! [String]
+            return snapshot["version"]! as! Int
           }
           set {
-            snapshot.updateValue(newValue, forKey: "to")
+            snapshot.updateValue(newValue, forKey: "version")
           }
         }
 
-        /// SEALED: cc email address(es).
-        internal var cc: [String] {
-          get {
-            return snapshot["cc"]! as! [String]
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "cc")
-          }
-        }
-
-        /// SEALED: bcc email address(es).
-        internal var bcc: [String] {
-          get {
-            return snapshot["bcc"]! as! [String]
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "bcc")
-          }
-        }
-
-        /// UNSEALED: Direction of message.
-        internal var direction: EmailMessageDirection {
-          get {
-            return snapshot["direction"]! as! EmailMessageDirection
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "direction")
-          }
-        }
-
-        /// SEALED: Email message subject.
-        internal var subject: String? {
-          get {
-            return snapshot["subject"] as? String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "subject")
-          }
-        }
-
-        /// UNSEALED: Has this message been marked as seen on client.
-        internal var seen: Bool {
-          get {
-            return snapshot["seen"]! as! Bool
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "seen")
-          }
-        }
-
-        /// UNSEALED: State of message record.
-        internal var state: EmailMessageState {
-          get {
-            return snapshot["state"]! as! EmailMessageState
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "state")
-          }
-        }
-
-        /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
-        internal var algorithm: String {
-          get {
-            return snapshot["algorithm"]! as! String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "algorithm")
-          }
-        }
-
-        /// UNSEALED: Client generated key ID for the internal key.
-        internal var keyId: String {
-          get {
-            return snapshot["keyId"]! as! String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "keyId")
-          }
-        }
-
-        /// UNSEALED: ID used for the client to subscribe to specific events.
-        internal var clientRefId: String? {
-          get {
-            return snapshot["clientRefId"] as? String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "clientRefId")
-          }
-        }
-
-        /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
         internal var createdAtEpochMs: Double {
           get {
             return snapshot["createdAtEpochMs"]! as! Double
@@ -1878,7 +1873,6 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           }
         }
 
-        /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
         internal var updatedAtEpochMs: Double {
           get {
             return snapshot["updatedAtEpochMs"]! as! Double
@@ -1888,13 +1882,111 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           }
         }
 
-        /// UNSEALED: Version of this object, increments on update.
-        internal var version: Int {
+        internal var algorithm: String {
           get {
-            return snapshot["version"]! as! Int
+            return snapshot["algorithm"]! as! String
           }
           set {
-            snapshot.updateValue(newValue, forKey: "version")
+            snapshot.updateValue(newValue, forKey: "algorithm")
+          }
+        }
+
+        internal var keyId: String {
+          get {
+            return snapshot["keyId"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "keyId")
+          }
+        }
+
+        internal var direction: EmailMessageDirection {
+          get {
+            return snapshot["direction"]! as! EmailMessageDirection
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "direction")
+          }
+        }
+
+        internal var seen: Bool {
+          get {
+            return snapshot["seen"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "seen")
+          }
+        }
+
+        internal var state: EmailMessageState {
+          get {
+            return snapshot["state"]! as! EmailMessageState
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "state")
+          }
+        }
+
+        internal var clientRefId: String? {
+          get {
+            return snapshot["clientRefId"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "clientRefId")
+          }
+        }
+
+        internal var from: [String] {
+          get {
+            return snapshot["from"]! as! [String]
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "from")
+          }
+        }
+
+        internal var replyTo: [String] {
+          get {
+            return snapshot["replyTo"]! as! [String]
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "replyTo")
+          }
+        }
+
+        internal var to: [String] {
+          get {
+            return snapshot["to"]! as! [String]
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "to")
+          }
+        }
+
+        internal var cc: [String] {
+          get {
+            return snapshot["cc"]! as! [String]
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "cc")
+          }
+        }
+
+        internal var bcc: [String] {
+          get {
+            return snapshot["bcc"]! as! [String]
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "bcc")
+          }
+        }
+
+        internal var subject: String? {
+          get {
+            return snapshot["subject"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "subject")
           }
         }
       }
@@ -2481,7 +2573,7 @@ internal final class GetKeyRingForEmailQuery: GraphQLQuery {
 
 internal final class ProvisionEmailAddressMutation: GraphQLMutation {
   internal static let operationString =
-    "mutation ProvisionEmailAddress($input: ProvisionEmailAddressInput!) {\n  provisionEmailAddress(input: $input) {\n    __typename\n    owner\n    owners {\n      __typename\n      id\n      issuer\n    }\n    address\n    identityId\n    keyRingId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "mutation ProvisionEmailAddress($input: ProvisionEmailAddressInput!) {\n  provisionEmailAddress(input: $input) {\n    __typename\n    id\n    userId\n    sudoId\n    identityId\n    keyRingId\n    owners {\n      __typename\n      id\n      issuer\n    }\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    emailAddress\n  }\n}"
 
   internal var input: ProvisionEmailAddressInput
 
@@ -2510,7 +2602,6 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
       self.init(snapshot: ["__typename": "Mutation", "provisionEmailAddress": provisionEmailAddress.snapshot])
     }
 
-    /// Provision email address.
     internal var provisionEmailAddress: ProvisionEmailAddress {
       get {
         return ProvisionEmailAddress(snapshot: snapshot["provisionEmailAddress"]! as! Snapshot)
@@ -2525,14 +2616,16 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
-        GraphQLField("identityId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyRingId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
         GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -2541,8 +2634,8 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(owner: GraphQLID, owners: [Owner], address: String, identityId: String, keyRingId: String, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "EmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "address": address, "identityId": identityId, "keyRingId": keyRingId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, identityId: GraphQLID, keyRingId: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddress: String) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "userId": userId, "sudoId": sudoId, "identityId": identityId, "keyRingId": keyRingId, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddress": emailAddress])
       }
 
       internal var __typename: String {
@@ -2554,17 +2647,51 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// v4 UUID of user that owns the email address resource.
-      internal var owner: GraphQLID {
+      internal var id: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["id"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "id")
         }
       }
 
-      /// Array of owner Ids that are extracted from the owner proofs to tie an email address to a Sudo.
+      internal var userId: GraphQLID {
+        get {
+          return snapshot["userId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "userId")
+        }
+      }
+
+      internal var sudoId: GraphQLID {
+        get {
+          return snapshot["sudoId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "sudoId")
+        }
+      }
+
+      internal var identityId: GraphQLID {
+        get {
+          return snapshot["identityId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "identityId")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
+        }
+      }
+
       internal var owners: [Owner] {
         get {
           return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
@@ -2574,37 +2701,15 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// Address in format 'local-part@dmain' of the email.
-      internal var address: String {
+      internal var version: Int {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// The identityId of the user that owns the email address resource.
-      internal var identityId: String {
-        get {
-          return snapshot["identityId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "identityId")
-        }
-      }
-
-      /// Key ring ID that dictates which keys the child resources of this email address will be encrypted with.
-      internal var keyRingId: String {
-        get {
-          return snapshot["keyRingId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyRingId")
-        }
-      }
-
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -2614,7 +2719,6 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -2624,13 +2728,12 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// Version of this email address record, increments on update.
-      internal var version: Int {
+      internal var emailAddress: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["emailAddress"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "emailAddress")
         }
       }
 
@@ -2686,7 +2789,7 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
 
 internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
   internal static let operationString =
-    "mutation DeprovisionEmailAddress($input: DeprovisionEmailAddressInput!) {\n  deprovisionEmailAddress(input: $input) {\n    __typename\n    owner\n    owners {\n      __typename\n      id\n      issuer\n    }\n    address\n    identityId\n    keyRingId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "mutation DeprovisionEmailAddress($input: DeprovisionEmailAddressInput!) {\n  deprovisionEmailAddress(input: $input) {\n    __typename\n    id\n    userId\n    sudoId\n    identityId\n    keyRingId\n    owners {\n      __typename\n      id\n      issuer\n    }\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    emailAddress\n  }\n}"
 
   internal var input: DeprovisionEmailAddressInput
 
@@ -2715,7 +2818,6 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
       self.init(snapshot: ["__typename": "Mutation", "deprovisionEmailAddress": deprovisionEmailAddress.snapshot])
     }
 
-    /// Deprovision email address.
     internal var deprovisionEmailAddress: DeprovisionEmailAddress {
       get {
         return DeprovisionEmailAddress(snapshot: snapshot["deprovisionEmailAddress"]! as! Snapshot)
@@ -2730,14 +2832,16 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
-        GraphQLField("identityId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyRingId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
         GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -2746,8 +2850,8 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(owner: GraphQLID, owners: [Owner], address: String, identityId: String, keyRingId: String, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "EmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "address": address, "identityId": identityId, "keyRingId": keyRingId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, identityId: GraphQLID, keyRingId: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddress: String) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "userId": userId, "sudoId": sudoId, "identityId": identityId, "keyRingId": keyRingId, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddress": emailAddress])
       }
 
       internal var __typename: String {
@@ -2759,17 +2863,51 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// v4 UUID of user that owns the email address resource.
-      internal var owner: GraphQLID {
+      internal var id: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["id"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "id")
         }
       }
 
-      /// Array of owner Ids that are extracted from the owner proofs to tie an email address to a Sudo.
+      internal var userId: GraphQLID {
+        get {
+          return snapshot["userId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "userId")
+        }
+      }
+
+      internal var sudoId: GraphQLID {
+        get {
+          return snapshot["sudoId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "sudoId")
+        }
+      }
+
+      internal var identityId: GraphQLID {
+        get {
+          return snapshot["identityId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "identityId")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
+        }
+      }
+
       internal var owners: [Owner] {
         get {
           return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
@@ -2779,37 +2917,15 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// Address in format 'local-part@dmain' of the email.
-      internal var address: String {
+      internal var version: Int {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// The identityId of the user that owns the email address resource.
-      internal var identityId: String {
-        get {
-          return snapshot["identityId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "identityId")
-        }
-      }
-
-      /// Key ring ID that dictates which keys the child resources of this email address will be encrypted with.
-      internal var keyRingId: String {
-        get {
-          return snapshot["keyRingId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyRingId")
-        }
-      }
-
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -2819,7 +2935,6 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -2829,13 +2944,12 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         }
       }
 
-      /// Version of this email address record, increments on update.
-      internal var version: Int {
+      internal var emailAddress: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["emailAddress"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "emailAddress")
         }
       }
 
@@ -2920,7 +3034,6 @@ internal final class SendEmailMessageMutation: GraphQLMutation {
       self.init(snapshot: ["__typename": "Mutation", "sendEmailMessage": sendEmailMessage])
     }
 
-    /// Send email message.
     internal var sendEmailMessage: GraphQLID {
       get {
         return snapshot["sendEmailMessage"]! as! GraphQLID
@@ -2963,7 +3076,6 @@ internal final class DeleteEmailMessageMutation: GraphQLMutation {
       self.init(snapshot: ["__typename": "Mutation", "deleteEmailMessage": deleteEmailMessage])
     }
 
-    /// Delete email message.
     internal var deleteEmailMessage: GraphQLID {
       get {
         return snapshot["deleteEmailMessage"]! as! GraphQLID
@@ -3293,25 +3405,25 @@ internal final class DeletePublicKeyForEmailMutation: GraphQLMutation {
   }
 }
 
-internal final class OnEmailAddressSubscription: GraphQLSubscription {
+internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailAddress($owner: String!) {\n  onEmailAddress(owner: $owner) {\n    __typename\n    owner\n    owners {\n      __typename\n      id\n      issuer\n    }\n    address\n    identityId\n    keyRingId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "subscription OnEmailAddressCreated($userId: ID!) {\n  onEmailAddressCreated(userId: $userId) {\n    __typename\n    id\n    userId\n    sudoId\n    identityId\n    keyRingId\n    owners {\n      __typename\n      id\n      issuer\n    }\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    emailAddress\n  }\n}"
 
-  internal var owner: String
+  internal var userId: GraphQLID
 
-  internal init(owner: String) {
-    self.owner = owner
+  internal init(userId: GraphQLID) {
+    self.userId = userId
   }
 
   internal var variables: GraphQLMap? {
-    return ["owner": owner]
+    return ["userId": userId]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Subscription"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("onEmailAddress", arguments: ["owner": GraphQLVariable("owner")], type: .object(OnEmailAddress.selections)),
+      GraphQLField("onEmailAddressCreated", arguments: ["userId": GraphQLVariable("userId")], type: .object(OnEmailAddressCreated.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -3320,34 +3432,34 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
       self.snapshot = snapshot
     }
 
-    internal init(onEmailAddress: OnEmailAddress? = nil) {
-      self.init(snapshot: ["__typename": "Subscription", "onEmailAddress": onEmailAddress.flatMap { $0.snapshot }])
+    internal init(onEmailAddressCreated: OnEmailAddressCreated? = nil) {
+      self.init(snapshot: ["__typename": "Subscription", "onEmailAddressCreated": onEmailAddressCreated.flatMap { $0.snapshot }])
     }
 
-    /// Owner id for the current logged in user.
-    /// ID used for the client to subscribe to specific provision events.
-    internal var onEmailAddress: OnEmailAddress? {
+    internal var onEmailAddressCreated: OnEmailAddressCreated? {
       get {
-        return (snapshot["onEmailAddress"] as? Snapshot).flatMap { OnEmailAddress(snapshot: $0) }
+        return (snapshot["onEmailAddressCreated"] as? Snapshot).flatMap { OnEmailAddressCreated(snapshot: $0) }
       }
       set {
-        snapshot.updateValue(newValue?.snapshot, forKey: "onEmailAddress")
+        snapshot.updateValue(newValue?.snapshot, forKey: "onEmailAddressCreated")
       }
     }
 
-    internal struct OnEmailAddress: GraphQLSelectionSet {
+    internal struct OnEmailAddressCreated: GraphQLSelectionSet {
       internal static let possibleTypes = ["EmailAddress"]
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
-        GraphQLField("identityId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyRingId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
         GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -3356,8 +3468,8 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(owner: GraphQLID, owners: [Owner], address: String, identityId: String, keyRingId: String, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "EmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "address": address, "identityId": identityId, "keyRingId": keyRingId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, identityId: GraphQLID, keyRingId: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddress: String) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "userId": userId, "sudoId": sudoId, "identityId": identityId, "keyRingId": keyRingId, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddress": emailAddress])
       }
 
       internal var __typename: String {
@@ -3369,17 +3481,51 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
         }
       }
 
-      /// v4 UUID of user that owns the email address resource.
-      internal var owner: GraphQLID {
+      internal var id: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["id"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "id")
         }
       }
 
-      /// Array of owner Ids that are extracted from the owner proofs to tie an email address to a Sudo.
+      internal var userId: GraphQLID {
+        get {
+          return snapshot["userId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "userId")
+        }
+      }
+
+      internal var sudoId: GraphQLID {
+        get {
+          return snapshot["sudoId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "sudoId")
+        }
+      }
+
+      internal var identityId: GraphQLID {
+        get {
+          return snapshot["identityId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "identityId")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
+        }
+      }
+
       internal var owners: [Owner] {
         get {
           return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
@@ -3389,37 +3535,15 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
         }
       }
 
-      /// Address in format 'local-part@dmain' of the email.
-      internal var address: String {
+      internal var version: Int {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// The identityId of the user that owns the email address resource.
-      internal var identityId: String {
-        get {
-          return snapshot["identityId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "identityId")
-        }
-      }
-
-      /// Key ring ID that dictates which keys the child resources of this email address will be encrypted with.
-      internal var keyRingId: String {
-        get {
-          return snapshot["keyRingId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyRingId")
-        }
-      }
-
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -3429,7 +3553,6 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
         }
       }
 
-      /// Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -3439,13 +3562,12 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
         }
       }
 
-      /// Version of this email address record, increments on update.
-      internal var version: Int {
+      internal var emailAddress: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["emailAddress"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "emailAddress")
         }
       }
 
@@ -3501,23 +3623,23 @@ internal final class OnEmailAddressSubscription: GraphQLSubscription {
 
 internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailMessageCreated($owner: String!) {\n  onEmailMessageCreated(owner: $owner) {\n    __typename\n    id\n    sealedId\n    owner\n    address\n    from\n    to\n    cc\n    bcc\n    direction\n    subject\n    seen\n    state\n    algorithm\n    keyId\n    clientRefId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "subscription OnEmailMessageCreated($userId: String!) {\n  onEmailMessageCreated(userId: $userId) {\n    __typename\n    id\n    messageId\n    userId\n    sudoId\n    emailAddressId\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    algorithm\n    keyId\n    direction\n    seen\n    state\n    clientRefId\n    from\n    replyTo\n    to\n    cc\n    bcc\n    subject\n  }\n}"
 
-  internal var owner: String
+  internal var userId: String
 
-  internal init(owner: String) {
-    self.owner = owner
+  internal init(userId: String) {
+    self.userId = userId
   }
 
   internal var variables: GraphQLMap? {
-    return ["owner": owner]
+    return ["userId": userId]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Subscription"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("onEmailMessageCreated", arguments: ["owner": GraphQLVariable("owner")], type: .object(OnEmailMessageCreated.selections)),
+      GraphQLField("onEmailMessageCreated", arguments: ["userId": GraphQLVariable("userId")], type: .object(OnEmailMessageCreated.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -3530,8 +3652,6 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
       self.init(snapshot: ["__typename": "Subscription", "onEmailMessageCreated": onEmailMessageCreated.flatMap { $0.snapshot }])
     }
 
-    /// Owner id for the current logged in user.
-    /// EmailMessageDirection used for the client to subscribe to inbound or outbound specific message events.
     internal var onEmailMessageCreated: OnEmailMessageCreated? {
       get {
         return (snapshot["onEmailMessageCreated"] as? Snapshot).flatMap { OnEmailMessageCreated(snapshot: $0) }
@@ -3547,23 +3667,25 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
+        GraphQLField("messageId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+        GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("replyTo", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("subject", type: .scalar(String.self)),
-        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("clientRefId", type: .scalar(String.self)),
-        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -3572,8 +3694,8 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, messageId: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, algorithm: String, keyId: String, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, from: [String], replyTo: [String], to: [String], cc: [String], bcc: [String], subject: String? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "messageId": messageId, "userId": userId, "sudoId": sudoId, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "from": from, "replyTo": replyTo, "to": to, "cc": cc, "bcc": bcc, "subject": subject])
       }
 
       internal var __typename: String {
@@ -3585,7 +3707,6 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: v4 UUID assigned to message record.
       internal var id: GraphQLID {
         get {
           return snapshot["id"]! as! GraphQLID
@@ -3595,147 +3716,51 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: v4 UUID composite key.
-      internal var sealedId: String {
+      internal var messageId: GraphQLID {
         get {
-          return snapshot["sealedId"]! as! String
+          return snapshot["messageId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "sealedId")
+          snapshot.updateValue(newValue, forKey: "messageId")
         }
       }
 
-      /// UNSEALED: v4 UUID of user that owns the message resource.
-      internal var owner: GraphQLID {
+      internal var userId: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["userId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "userId")
         }
       }
 
-      /// UNSEALED: The email address related to the message resource.
-      internal var address: String {
+      internal var sudoId: GraphQLID {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["sudoId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "sudoId")
         }
       }
 
-      /// SEALED: from email address(es).
-      internal var from: [String] {
+      internal var emailAddressId: GraphQLID {
         get {
-          return snapshot["from"]! as! [String]
+          return snapshot["emailAddressId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "from")
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
         }
       }
 
-      /// SEALED: to email address(es).
-      internal var to: [String] {
+      internal var version: Int {
         get {
-          return snapshot["to"]! as! [String]
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "to")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// SEALED: cc email address(es).
-      internal var cc: [String] {
-        get {
-          return snapshot["cc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "cc")
-        }
-      }
-
-      /// SEALED: bcc email address(es).
-      internal var bcc: [String] {
-        get {
-          return snapshot["bcc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "bcc")
-        }
-      }
-
-      /// UNSEALED: Direction of message.
-      internal var direction: EmailMessageDirection {
-        get {
-          return snapshot["direction"]! as! EmailMessageDirection
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "direction")
-        }
-      }
-
-      /// SEALED: Email message subject.
-      internal var subject: String? {
-        get {
-          return snapshot["subject"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "subject")
-        }
-      }
-
-      /// UNSEALED: Has this message been marked as seen on client.
-      internal var seen: Bool {
-        get {
-          return snapshot["seen"]! as! Bool
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "seen")
-        }
-      }
-
-      /// UNSEALED: State of message record.
-      internal var state: EmailMessageState {
-        get {
-          return snapshot["state"]! as! EmailMessageState
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "state")
-        }
-      }
-
-      /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
-      internal var algorithm: String {
-        get {
-          return snapshot["algorithm"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "algorithm")
-        }
-      }
-
-      /// UNSEALED: Client generated key ID for the internal key.
-      internal var keyId: String {
-        get {
-          return snapshot["keyId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyId")
-        }
-      }
-
-      /// UNSEALED: ID used for the client to subscribe to specific events.
-      internal var clientRefId: String? {
-        get {
-          return snapshot["clientRefId"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "clientRefId")
-        }
-      }
-
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -3745,7 +3770,6 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -3755,13 +3779,111 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: Version of this object, increments on update.
-      internal var version: Int {
+      internal var algorithm: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["algorithm"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "algorithm")
+        }
+      }
+
+      internal var keyId: String {
+        get {
+          return snapshot["keyId"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyId")
+        }
+      }
+
+      internal var direction: EmailMessageDirection {
+        get {
+          return snapshot["direction"]! as! EmailMessageDirection
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "direction")
+        }
+      }
+
+      internal var seen: Bool {
+        get {
+          return snapshot["seen"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var state: EmailMessageState {
+        get {
+          return snapshot["state"]! as! EmailMessageState
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "state")
+        }
+      }
+
+      internal var clientRefId: String? {
+        get {
+          return snapshot["clientRefId"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "clientRefId")
+        }
+      }
+
+      internal var from: [String] {
+        get {
+          return snapshot["from"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "from")
+        }
+      }
+
+      internal var replyTo: [String] {
+        get {
+          return snapshot["replyTo"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "replyTo")
+        }
+      }
+
+      internal var to: [String] {
+        get {
+          return snapshot["to"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "to")
+        }
+      }
+
+      internal var cc: [String] {
+        get {
+          return snapshot["cc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "cc")
+        }
+      }
+
+      internal var bcc: [String] {
+        get {
+          return snapshot["bcc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "bcc")
+        }
+      }
+
+      internal var subject: String? {
+        get {
+          return snapshot["subject"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "subject")
         }
       }
     }
@@ -3770,25 +3892,25 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
 
 internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailMessageCreatedWithDirection($owner: String!, $direction: EmailMessageDirection!) {\n  onEmailMessageCreated(owner: $owner, direction: $direction) {\n    __typename\n    id\n    sealedId\n    owner\n    address\n    from\n    to\n    cc\n    bcc\n    direction\n    subject\n    seen\n    state\n    algorithm\n    keyId\n    clientRefId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "subscription OnEmailMessageCreatedWithDirection($userId: String!, $direction: EmailMessageDirection!) {\n  onEmailMessageCreated(userId: $userId, direction: $direction) {\n    __typename\n    id\n    messageId\n    userId\n    sudoId\n    emailAddressId\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    algorithm\n    keyId\n    direction\n    seen\n    state\n    clientRefId\n    from\n    replyTo\n    to\n    cc\n    bcc\n    subject\n  }\n}"
 
-  internal var owner: String
+  internal var userId: String
   internal var direction: EmailMessageDirection
 
-  internal init(owner: String, direction: EmailMessageDirection) {
-    self.owner = owner
+  internal init(userId: String, direction: EmailMessageDirection) {
+    self.userId = userId
     self.direction = direction
   }
 
   internal var variables: GraphQLMap? {
-    return ["owner": owner, "direction": direction]
+    return ["userId": userId, "direction": direction]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Subscription"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("onEmailMessageCreated", arguments: ["owner": GraphQLVariable("owner"), "direction": GraphQLVariable("direction")], type: .object(OnEmailMessageCreated.selections)),
+      GraphQLField("onEmailMessageCreated", arguments: ["userId": GraphQLVariable("userId"), "direction": GraphQLVariable("direction")], type: .object(OnEmailMessageCreated.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -3801,8 +3923,6 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
       self.init(snapshot: ["__typename": "Subscription", "onEmailMessageCreated": onEmailMessageCreated.flatMap { $0.snapshot }])
     }
 
-    /// Owner id for the current logged in user.
-    /// EmailMessageDirection used for the client to subscribe to inbound or outbound specific message events.
     internal var onEmailMessageCreated: OnEmailMessageCreated? {
       get {
         return (snapshot["onEmailMessageCreated"] as? Snapshot).flatMap { OnEmailMessageCreated(snapshot: $0) }
@@ -3818,23 +3938,25 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
+        GraphQLField("messageId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+        GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("replyTo", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("subject", type: .scalar(String.self)),
-        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("clientRefId", type: .scalar(String.self)),
-        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -3843,8 +3965,8 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, messageId: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, algorithm: String, keyId: String, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, from: [String], replyTo: [String], to: [String], cc: [String], bcc: [String], subject: String? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "messageId": messageId, "userId": userId, "sudoId": sudoId, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "from": from, "replyTo": replyTo, "to": to, "cc": cc, "bcc": bcc, "subject": subject])
       }
 
       internal var __typename: String {
@@ -3856,7 +3978,6 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         }
       }
 
-      /// UNSEALED: v4 UUID assigned to message record.
       internal var id: GraphQLID {
         get {
           return snapshot["id"]! as! GraphQLID
@@ -3866,147 +3987,51 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         }
       }
 
-      /// UNSEALED: v4 UUID composite key.
-      internal var sealedId: String {
+      internal var messageId: GraphQLID {
         get {
-          return snapshot["sealedId"]! as! String
+          return snapshot["messageId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "sealedId")
+          snapshot.updateValue(newValue, forKey: "messageId")
         }
       }
 
-      /// UNSEALED: v4 UUID of user that owns the message resource.
-      internal var owner: GraphQLID {
+      internal var userId: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["userId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "userId")
         }
       }
 
-      /// UNSEALED: The email address related to the message resource.
-      internal var address: String {
+      internal var sudoId: GraphQLID {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["sudoId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "sudoId")
         }
       }
 
-      /// SEALED: from email address(es).
-      internal var from: [String] {
+      internal var emailAddressId: GraphQLID {
         get {
-          return snapshot["from"]! as! [String]
+          return snapshot["emailAddressId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "from")
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
         }
       }
 
-      /// SEALED: to email address(es).
-      internal var to: [String] {
+      internal var version: Int {
         get {
-          return snapshot["to"]! as! [String]
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "to")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// SEALED: cc email address(es).
-      internal var cc: [String] {
-        get {
-          return snapshot["cc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "cc")
-        }
-      }
-
-      /// SEALED: bcc email address(es).
-      internal var bcc: [String] {
-        get {
-          return snapshot["bcc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "bcc")
-        }
-      }
-
-      /// UNSEALED: Direction of message.
-      internal var direction: EmailMessageDirection {
-        get {
-          return snapshot["direction"]! as! EmailMessageDirection
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "direction")
-        }
-      }
-
-      /// SEALED: Email message subject.
-      internal var subject: String? {
-        get {
-          return snapshot["subject"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "subject")
-        }
-      }
-
-      /// UNSEALED: Has this message been marked as seen on client.
-      internal var seen: Bool {
-        get {
-          return snapshot["seen"]! as! Bool
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "seen")
-        }
-      }
-
-      /// UNSEALED: State of message record.
-      internal var state: EmailMessageState {
-        get {
-          return snapshot["state"]! as! EmailMessageState
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "state")
-        }
-      }
-
-      /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
-      internal var algorithm: String {
-        get {
-          return snapshot["algorithm"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "algorithm")
-        }
-      }
-
-      /// UNSEALED: Client generated key ID for the internal key.
-      internal var keyId: String {
-        get {
-          return snapshot["keyId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyId")
-        }
-      }
-
-      /// UNSEALED: ID used for the client to subscribe to specific events.
-      internal var clientRefId: String? {
-        get {
-          return snapshot["clientRefId"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "clientRefId")
-        }
-      }
-
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -4016,7 +4041,6 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -4026,226 +4050,6 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         }
       }
 
-      /// UNSEALED: Version of this object, increments on update.
-      internal var version: Int {
-        get {
-          return snapshot["version"]! as! Int
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "version")
-        }
-      }
-    }
-  }
-}
-
-internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
-  internal static let operationString =
-    "subscription OnEmailMessageDeleted($owner: String!) {\n  onEmailMessageDeleted(owner: $owner) {\n    __typename\n    id\n    sealedId\n    owner\n    address\n    from\n    to\n    cc\n    bcc\n    direction\n    subject\n    seen\n    state\n    algorithm\n    keyId\n    clientRefId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
-
-  internal var owner: String
-
-  internal init(owner: String) {
-    self.owner = owner
-  }
-
-  internal var variables: GraphQLMap? {
-    return ["owner": owner]
-  }
-
-  internal struct Data: GraphQLSelectionSet {
-    internal static let possibleTypes = ["Subscription"]
-
-    internal static let selections: [GraphQLSelection] = [
-      GraphQLField("onEmailMessageDeleted", arguments: ["owner": GraphQLVariable("owner")], type: .object(OnEmailMessageDeleted.selections)),
-    ]
-
-    internal var snapshot: Snapshot
-
-    internal init(snapshot: Snapshot) {
-      self.snapshot = snapshot
-    }
-
-    internal init(onEmailMessageDeleted: OnEmailMessageDeleted? = nil) {
-      self.init(snapshot: ["__typename": "Subscription", "onEmailMessageDeleted": onEmailMessageDeleted.flatMap { $0.snapshot }])
-    }
-
-    /// Owner id for the current logged in user.
-    /// ID of the message that was deleted
-    internal var onEmailMessageDeleted: OnEmailMessageDeleted? {
-      get {
-        return (snapshot["onEmailMessageDeleted"] as? Snapshot).flatMap { OnEmailMessageDeleted(snapshot: $0) }
-      }
-      set {
-        snapshot.updateValue(newValue?.snapshot, forKey: "onEmailMessageDeleted")
-      }
-    }
-
-    internal struct OnEmailMessageDeleted: GraphQLSelectionSet {
-      internal static let possibleTypes = ["SealedEmailMessage"]
-
-      internal static let selections: [GraphQLSelection] = [
-        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
-        GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
-        GraphQLField("subject", type: .scalar(String.self)),
-        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("clientRefId", type: .scalar(String.self)),
-        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
-      ]
-
-      internal var snapshot: Snapshot
-
-      internal init(snapshot: Snapshot) {
-        self.snapshot = snapshot
-      }
-
-      internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
-      }
-
-      internal var __typename: String {
-        get {
-          return snapshot["__typename"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "__typename")
-        }
-      }
-
-      /// UNSEALED: v4 UUID assigned to message record.
-      internal var id: GraphQLID {
-        get {
-          return snapshot["id"]! as! GraphQLID
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "id")
-        }
-      }
-
-      /// UNSEALED: v4 UUID composite key.
-      internal var sealedId: String {
-        get {
-          return snapshot["sealedId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "sealedId")
-        }
-      }
-
-      /// UNSEALED: v4 UUID of user that owns the message resource.
-      internal var owner: GraphQLID {
-        get {
-          return snapshot["owner"]! as! GraphQLID
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "owner")
-        }
-      }
-
-      /// UNSEALED: The email address related to the message resource.
-      internal var address: String {
-        get {
-          return snapshot["address"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "address")
-        }
-      }
-
-      /// SEALED: from email address(es).
-      internal var from: [String] {
-        get {
-          return snapshot["from"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "from")
-        }
-      }
-
-      /// SEALED: to email address(es).
-      internal var to: [String] {
-        get {
-          return snapshot["to"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "to")
-        }
-      }
-
-      /// SEALED: cc email address(es).
-      internal var cc: [String] {
-        get {
-          return snapshot["cc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "cc")
-        }
-      }
-
-      /// SEALED: bcc email address(es).
-      internal var bcc: [String] {
-        get {
-          return snapshot["bcc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "bcc")
-        }
-      }
-
-      /// UNSEALED: Direction of message.
-      internal var direction: EmailMessageDirection {
-        get {
-          return snapshot["direction"]! as! EmailMessageDirection
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "direction")
-        }
-      }
-
-      /// SEALED: Email message subject.
-      internal var subject: String? {
-        get {
-          return snapshot["subject"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "subject")
-        }
-      }
-
-      /// UNSEALED: Has this message been marked as seen on client.
-      internal var seen: Bool {
-        get {
-          return snapshot["seen"]! as! Bool
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "seen")
-        }
-      }
-
-      /// UNSEALED: State of message record.
-      internal var state: EmailMessageState {
-        get {
-          return snapshot["state"]! as! EmailMessageState
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "state")
-        }
-      }
-
-      /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
       internal var algorithm: String {
         get {
           return snapshot["algorithm"]! as! String
@@ -4255,7 +4059,6 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: Client generated key ID for the internal key.
       internal var keyId: String {
         get {
           return snapshot["keyId"]! as! String
@@ -4265,7 +4068,33 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: ID used for the client to subscribe to specific events.
+      internal var direction: EmailMessageDirection {
+        get {
+          return snapshot["direction"]! as! EmailMessageDirection
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "direction")
+        }
+      }
+
+      internal var seen: Bool {
+        get {
+          return snapshot["seen"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var state: EmailMessageState {
+        get {
+          return snapshot["state"]! as! EmailMessageState
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "state")
+        }
+      }
+
       internal var clientRefId: String? {
         get {
           return snapshot["clientRefId"] as? String
@@ -4275,33 +4104,57 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
-      internal var createdAtEpochMs: Double {
+      internal var from: [String] {
         get {
-          return snapshot["createdAtEpochMs"]! as! Double
+          return snapshot["from"]! as! [String]
         }
         set {
-          snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+          snapshot.updateValue(newValue, forKey: "from")
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
-      internal var updatedAtEpochMs: Double {
+      internal var replyTo: [String] {
         get {
-          return snapshot["updatedAtEpochMs"]! as! Double
+          return snapshot["replyTo"]! as! [String]
         }
         set {
-          snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+          snapshot.updateValue(newValue, forKey: "replyTo")
         }
       }
 
-      /// UNSEALED: Version of this object, increments on update.
-      internal var version: Int {
+      internal var to: [String] {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["to"]! as! [String]
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "to")
+        }
+      }
+
+      internal var cc: [String] {
+        get {
+          return snapshot["cc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "cc")
+        }
+      }
+
+      internal var bcc: [String] {
+        get {
+          return snapshot["bcc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "bcc")
+        }
+      }
+
+      internal var subject: String? {
+        get {
+          return snapshot["subject"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "subject")
         }
       }
     }
@@ -4310,25 +4163,25 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
 
 internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailMessageDeletedWithId($owner: String!, $id: ID!) {\n  onEmailMessageDeleted(owner: $owner, id: $id) {\n    __typename\n    id\n    sealedId\n    owner\n    address\n    from\n    to\n    cc\n    bcc\n    direction\n    subject\n    seen\n    state\n    algorithm\n    keyId\n    clientRefId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "subscription OnEmailMessageDeletedWithId($userId: ID!, $id: ID!) {\n  onEmailMessageDeleted(userId: $userId, id: $id) {\n    __typename\n    id\n    messageId\n    userId\n    sudoId\n    emailAddressId\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    algorithm\n    keyId\n    direction\n    seen\n    state\n    clientRefId\n    from\n    replyTo\n    to\n    cc\n    bcc\n    subject\n  }\n}"
 
-  internal var owner: String
+  internal var userId: GraphQLID
   internal var id: GraphQLID
 
-  internal init(owner: String, id: GraphQLID) {
-    self.owner = owner
+  internal init(userId: GraphQLID, id: GraphQLID) {
+    self.userId = userId
     self.id = id
   }
 
   internal var variables: GraphQLMap? {
-    return ["owner": owner, "id": id]
+    return ["userId": userId, "id": id]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Subscription"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("onEmailMessageDeleted", arguments: ["owner": GraphQLVariable("owner"), "id": GraphQLVariable("id")], type: .object(OnEmailMessageDeleted.selections)),
+      GraphQLField("onEmailMessageDeleted", arguments: ["userId": GraphQLVariable("userId"), "id": GraphQLVariable("id")], type: .object(OnEmailMessageDeleted.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -4341,8 +4194,6 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
       self.init(snapshot: ["__typename": "Subscription", "onEmailMessageDeleted": onEmailMessageDeleted.flatMap { $0.snapshot }])
     }
 
-    /// Owner id for the current logged in user.
-    /// ID of the message that was deleted
     internal var onEmailMessageDeleted: OnEmailMessageDeleted? {
       get {
         return (snapshot["onEmailMessageDeleted"] as? Snapshot).flatMap { OnEmailMessageDeleted(snapshot: $0) }
@@ -4358,23 +4209,25 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
+        GraphQLField("messageId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+        GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("replyTo", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("subject", type: .scalar(String.self)),
-        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("clientRefId", type: .scalar(String.self)),
-        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -4383,8 +4236,8 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, messageId: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, algorithm: String, keyId: String, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, from: [String], replyTo: [String], to: [String], cc: [String], bcc: [String], subject: String? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "messageId": messageId, "userId": userId, "sudoId": sudoId, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "from": from, "replyTo": replyTo, "to": to, "cc": cc, "bcc": bcc, "subject": subject])
       }
 
       internal var __typename: String {
@@ -4396,7 +4249,6 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         }
       }
 
-      /// UNSEALED: v4 UUID assigned to message record.
       internal var id: GraphQLID {
         get {
           return snapshot["id"]! as! GraphQLID
@@ -4406,147 +4258,51 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         }
       }
 
-      /// UNSEALED: v4 UUID composite key.
-      internal var sealedId: String {
+      internal var messageId: GraphQLID {
         get {
-          return snapshot["sealedId"]! as! String
+          return snapshot["messageId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "sealedId")
+          snapshot.updateValue(newValue, forKey: "messageId")
         }
       }
 
-      /// UNSEALED: v4 UUID of user that owns the message resource.
-      internal var owner: GraphQLID {
+      internal var userId: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["userId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "userId")
         }
       }
 
-      /// UNSEALED: The email address related to the message resource.
-      internal var address: String {
+      internal var sudoId: GraphQLID {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["sudoId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "sudoId")
         }
       }
 
-      /// SEALED: from email address(es).
-      internal var from: [String] {
+      internal var emailAddressId: GraphQLID {
         get {
-          return snapshot["from"]! as! [String]
+          return snapshot["emailAddressId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "from")
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
         }
       }
 
-      /// SEALED: to email address(es).
-      internal var to: [String] {
+      internal var version: Int {
         get {
-          return snapshot["to"]! as! [String]
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "to")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// SEALED: cc email address(es).
-      internal var cc: [String] {
-        get {
-          return snapshot["cc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "cc")
-        }
-      }
-
-      /// SEALED: bcc email address(es).
-      internal var bcc: [String] {
-        get {
-          return snapshot["bcc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "bcc")
-        }
-      }
-
-      /// UNSEALED: Direction of message.
-      internal var direction: EmailMessageDirection {
-        get {
-          return snapshot["direction"]! as! EmailMessageDirection
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "direction")
-        }
-      }
-
-      /// SEALED: Email message subject.
-      internal var subject: String? {
-        get {
-          return snapshot["subject"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "subject")
-        }
-      }
-
-      /// UNSEALED: Has this message been marked as seen on client.
-      internal var seen: Bool {
-        get {
-          return snapshot["seen"]! as! Bool
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "seen")
-        }
-      }
-
-      /// UNSEALED: State of message record.
-      internal var state: EmailMessageState {
-        get {
-          return snapshot["state"]! as! EmailMessageState
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "state")
-        }
-      }
-
-      /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
-      internal var algorithm: String {
-        get {
-          return snapshot["algorithm"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "algorithm")
-        }
-      }
-
-      /// UNSEALED: Client generated key ID for the internal key.
-      internal var keyId: String {
-        get {
-          return snapshot["keyId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyId")
-        }
-      }
-
-      /// UNSEALED: ID used for the client to subscribe to specific events.
-      internal var clientRefId: String? {
-        get {
-          return snapshot["clientRefId"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "clientRefId")
-        }
-      }
-
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -4556,7 +4312,6 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -4566,40 +4321,136 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         }
       }
 
-      /// UNSEALED: Version of this object, increments on update.
-      internal var version: Int {
+      internal var algorithm: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["algorithm"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "algorithm")
+        }
+      }
+
+      internal var keyId: String {
+        get {
+          return snapshot["keyId"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyId")
+        }
+      }
+
+      internal var direction: EmailMessageDirection {
+        get {
+          return snapshot["direction"]! as! EmailMessageDirection
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "direction")
+        }
+      }
+
+      internal var seen: Bool {
+        get {
+          return snapshot["seen"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var state: EmailMessageState {
+        get {
+          return snapshot["state"]! as! EmailMessageState
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "state")
+        }
+      }
+
+      internal var clientRefId: String? {
+        get {
+          return snapshot["clientRefId"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "clientRefId")
+        }
+      }
+
+      internal var from: [String] {
+        get {
+          return snapshot["from"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "from")
+        }
+      }
+
+      internal var replyTo: [String] {
+        get {
+          return snapshot["replyTo"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "replyTo")
+        }
+      }
+
+      internal var to: [String] {
+        get {
+          return snapshot["to"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "to")
+        }
+      }
+
+      internal var cc: [String] {
+        get {
+          return snapshot["cc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "cc")
+        }
+      }
+
+      internal var bcc: [String] {
+        get {
+          return snapshot["bcc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "bcc")
+        }
+      }
+
+      internal var subject: String? {
+        get {
+          return snapshot["subject"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "subject")
         }
       }
     }
   }
 }
 
-internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubscription {
+internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailMessageDeletedWithSealedId($owner: String!, $sealedId: String!) {\n  onEmailMessageDeleted(owner: $owner, sealedId: $sealedId) {\n    __typename\n    id\n    sealedId\n    owner\n    address\n    from\n    to\n    cc\n    bcc\n    direction\n    subject\n    seen\n    state\n    algorithm\n    keyId\n    clientRefId\n    createdAtEpochMs\n    updatedAtEpochMs\n    version\n  }\n}"
+    "subscription OnEmailMessageDeleted($userId: ID!) {\n  onEmailMessageDeleted(userId: $userId) {\n    __typename\n    id\n    messageId\n    userId\n    sudoId\n    emailAddressId\n    version\n    createdAtEpochMs\n    updatedAtEpochMs\n    algorithm\n    keyId\n    direction\n    seen\n    state\n    clientRefId\n    from\n    replyTo\n    to\n    cc\n    bcc\n    subject\n  }\n}"
 
-  internal var owner: String
-  internal var sealedId: String
+  internal var userId: GraphQLID
 
-  internal init(owner: String, sealedId: String) {
-    self.owner = owner
-    self.sealedId = sealedId
+  internal init(userId: GraphQLID) {
+    self.userId = userId
   }
 
   internal var variables: GraphQLMap? {
-    return ["owner": owner, "sealedId": sealedId]
+    return ["userId": userId]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Subscription"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("onEmailMessageDeleted", arguments: ["owner": GraphQLVariable("owner"), "sealedId": GraphQLVariable("sealedId")], type: .object(OnEmailMessageDeleted.selections)),
+      GraphQLField("onEmailMessageDeleted", arguments: ["userId": GraphQLVariable("userId")], type: .object(OnEmailMessageDeleted.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -4612,8 +4463,6 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
       self.init(snapshot: ["__typename": "Subscription", "onEmailMessageDeleted": onEmailMessageDeleted.flatMap { $0.snapshot }])
     }
 
-    /// Owner id for the current logged in user.
-    /// ID of the message that was deleted
     internal var onEmailMessageDeleted: OnEmailMessageDeleted? {
       get {
         return (snapshot["onEmailMessageDeleted"] as? Snapshot).flatMap { OnEmailMessageDeleted(snapshot: $0) }
@@ -4629,23 +4478,25 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("sealedId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("address", type: .nonNull(.scalar(String.self))),
+        GraphQLField("messageId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("userId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sudoId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+        GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("from", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("replyTo", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("to", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("cc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("bcc", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
-        GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("subject", type: .scalar(String.self)),
-        GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
-        GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
-        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("clientRefId", type: .scalar(String.self)),
-        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
-        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -4654,8 +4505,8 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, sealedId: String, owner: GraphQLID, address: String, from: [String], to: [String], cc: [String], bcc: [String], direction: EmailMessageDirection, subject: String? = nil, seen: Bool, state: EmailMessageState, algorithm: String, keyId: String, clientRefId: String? = nil, createdAtEpochMs: Double, updatedAtEpochMs: Double, version: Int) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "sealedId": sealedId, "owner": owner, "address": address, "from": from, "to": to, "cc": cc, "bcc": bcc, "direction": direction, "subject": subject, "seen": seen, "state": state, "algorithm": algorithm, "keyId": keyId, "clientRefId": clientRefId, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "version": version])
+      internal init(id: GraphQLID, messageId: GraphQLID, userId: GraphQLID, sudoId: GraphQLID, emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, algorithm: String, keyId: String, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, from: [String], replyTo: [String], to: [String], cc: [String], bcc: [String], subject: String? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "messageId": messageId, "userId": userId, "sudoId": sudoId, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "algorithm": algorithm, "keyId": keyId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "from": from, "replyTo": replyTo, "to": to, "cc": cc, "bcc": bcc, "subject": subject])
       }
 
       internal var __typename: String {
@@ -4667,7 +4518,6 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
         }
       }
 
-      /// UNSEALED: v4 UUID assigned to message record.
       internal var id: GraphQLID {
         get {
           return snapshot["id"]! as! GraphQLID
@@ -4677,147 +4527,51 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
         }
       }
 
-      /// UNSEALED: v4 UUID composite key.
-      internal var sealedId: String {
+      internal var messageId: GraphQLID {
         get {
-          return snapshot["sealedId"]! as! String
+          return snapshot["messageId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "sealedId")
+          snapshot.updateValue(newValue, forKey: "messageId")
         }
       }
 
-      /// UNSEALED: v4 UUID of user that owns the message resource.
-      internal var owner: GraphQLID {
+      internal var userId: GraphQLID {
         get {
-          return snapshot["owner"]! as! GraphQLID
+          return snapshot["userId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "owner")
+          snapshot.updateValue(newValue, forKey: "userId")
         }
       }
 
-      /// UNSEALED: The email address related to the message resource.
-      internal var address: String {
+      internal var sudoId: GraphQLID {
         get {
-          return snapshot["address"]! as! String
+          return snapshot["sudoId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "address")
+          snapshot.updateValue(newValue, forKey: "sudoId")
         }
       }
 
-      /// SEALED: from email address(es).
-      internal var from: [String] {
+      internal var emailAddressId: GraphQLID {
         get {
-          return snapshot["from"]! as! [String]
+          return snapshot["emailAddressId"]! as! GraphQLID
         }
         set {
-          snapshot.updateValue(newValue, forKey: "from")
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
         }
       }
 
-      /// SEALED: to email address(es).
-      internal var to: [String] {
+      internal var version: Int {
         get {
-          return snapshot["to"]! as! [String]
+          return snapshot["version"]! as! Int
         }
         set {
-          snapshot.updateValue(newValue, forKey: "to")
+          snapshot.updateValue(newValue, forKey: "version")
         }
       }
 
-      /// SEALED: cc email address(es).
-      internal var cc: [String] {
-        get {
-          return snapshot["cc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "cc")
-        }
-      }
-
-      /// SEALED: bcc email address(es).
-      internal var bcc: [String] {
-        get {
-          return snapshot["bcc"]! as! [String]
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "bcc")
-        }
-      }
-
-      /// UNSEALED: Direction of message.
-      internal var direction: EmailMessageDirection {
-        get {
-          return snapshot["direction"]! as! EmailMessageDirection
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "direction")
-        }
-      }
-
-      /// SEALED: Email message subject.
-      internal var subject: String? {
-        get {
-          return snapshot["subject"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "subject")
-        }
-      }
-
-      /// UNSEALED: Has this message been marked as seen on client.
-      internal var seen: Bool {
-        get {
-          return snapshot["seen"]! as! Bool
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "seen")
-        }
-      }
-
-      /// UNSEALED: State of message record.
-      internal var state: EmailMessageState {
-        get {
-          return snapshot["state"]! as! EmailMessageState
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "state")
-        }
-      }
-
-      /// UNSEALED: Algorithm descriptor describing internal and symmetric key encryption, e.g RSAEncryptionOAEPSHA256AESGCM.
-      internal var algorithm: String {
-        get {
-          return snapshot["algorithm"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "algorithm")
-        }
-      }
-
-      /// UNSEALED: Client generated key ID for the internal key.
-      internal var keyId: String {
-        get {
-          return snapshot["keyId"]! as! String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "keyId")
-        }
-      }
-
-      /// UNSEALED: ID used for the client to subscribe to specific events.
-      internal var clientRefId: String? {
-        get {
-          return snapshot["clientRefId"] as? String
-        }
-        set {
-          snapshot.updateValue(newValue, forKey: "clientRefId")
-        }
-      }
-
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was created.
       internal var createdAtEpochMs: Double {
         get {
           return snapshot["createdAtEpochMs"]! as! Double
@@ -4827,7 +4581,6 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
         }
       }
 
-      /// UNSEALED: Time in milliseconds since 1970-01-01T00:00:00Z when object was last updated.
       internal var updatedAtEpochMs: Double {
         get {
           return snapshot["updatedAtEpochMs"]! as! Double
@@ -4837,13 +4590,111 @@ internal final class OnEmailMessageDeletedWithSealedIdSubscription: GraphQLSubsc
         }
       }
 
-      /// UNSEALED: Version of this object, increments on update.
-      internal var version: Int {
+      internal var algorithm: String {
         get {
-          return snapshot["version"]! as! Int
+          return snapshot["algorithm"]! as! String
         }
         set {
-          snapshot.updateValue(newValue, forKey: "version")
+          snapshot.updateValue(newValue, forKey: "algorithm")
+        }
+      }
+
+      internal var keyId: String {
+        get {
+          return snapshot["keyId"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyId")
+        }
+      }
+
+      internal var direction: EmailMessageDirection {
+        get {
+          return snapshot["direction"]! as! EmailMessageDirection
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "direction")
+        }
+      }
+
+      internal var seen: Bool {
+        get {
+          return snapshot["seen"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var state: EmailMessageState {
+        get {
+          return snapshot["state"]! as! EmailMessageState
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "state")
+        }
+      }
+
+      internal var clientRefId: String? {
+        get {
+          return snapshot["clientRefId"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "clientRefId")
+        }
+      }
+
+      internal var from: [String] {
+        get {
+          return snapshot["from"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "from")
+        }
+      }
+
+      internal var replyTo: [String] {
+        get {
+          return snapshot["replyTo"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "replyTo")
+        }
+      }
+
+      internal var to: [String] {
+        get {
+          return snapshot["to"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "to")
+        }
+      }
+
+      internal var cc: [String] {
+        get {
+          return snapshot["cc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "cc")
+        }
+      }
+
+      internal var bcc: [String] {
+        get {
+          return snapshot["bcc"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "bcc")
+        }
+      }
+
+      internal var subject: String? {
+        get {
+          return snapshot["subject"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "subject")
         }
       }
     }

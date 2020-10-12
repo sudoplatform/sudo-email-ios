@@ -63,7 +63,7 @@ class SendEmailMessageOperation: PlatformOperation {
 
     var injectables: Injectables!
 
-    var emailAddress: EmailAddressEntity
+    var emailAccountId: String
 
     var queue: PlatformOperationQueue = PlatformOperationQueue()
 
@@ -73,8 +73,8 @@ class SendEmailMessageOperation: PlatformOperation {
 
     // MARK: - Lifecycle
 
-    init(emailAddress: EmailAddressEntity, appSyncClient: AWSAppSyncClient, operationFactory: OperationFactory, logger: Logger) {
-        self.emailAddress = emailAddress
+    init(emailAccountId: String, appSyncClient: AWSAppSyncClient, operationFactory: OperationFactory, logger: Logger) {
+        self.emailAccountId = emailAccountId
         self.appSyncClient = appSyncClient
         self.operationFactory = operationFactory
         super.init(logger: logger)
@@ -86,7 +86,7 @@ class SendEmailMessageOperation: PlatformOperation {
     override func execute() {
         let s3Result = injectables.s3UploadResult
         let s3Input = S3EmailObjectInput(key: s3Result.key, bucket: s3Result.bucket, region: s3Result.region)
-        let input = SendEmailMessageInput(address: emailAddress.address, message: s3Input)
+        let input = SendEmailMessageInput(emailAddressId: emailAccountId, message: s3Input)
         let mutation = SendEmailMessageMutation(input: input)
         let operation = operationFactory.generateMutationOperation(mutation: mutation, appSyncClient: appSyncClient, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation, weak self] _, errors in

@@ -23,24 +23,27 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
         let algorithm = message.algorithm
         do {
             let from = try message.from.map { try unsealEmailAddress($0, withKeyId: keyId, algorithm: algorithm) }
+            let replyTo = try message.replyTo.map { try unsealEmailAddress($0, withKeyId: keyId, algorithm: algorithm) }
             let to = try message.to.map { try unsealEmailAddress($0, withKeyId: message.keyId, algorithm: message.algorithm) }
             let cc = try message.cc.map { try unsealEmailAddress($0, withKeyId: message.keyId, algorithm: message.algorithm) }
             let bcc = try message.bcc.map { try unsealEmailAddress($0, withKeyId: message.keyId, algorithm: message.algorithm) }
             let subject = try message.subject.map { try deviceKeyWorker.unsealString($0, withKeyId: keyId, algorithm: algorithm)}
             return EmailMessageEntity(
                 id: message.id,
-                keyId: keyId,
-                algorithm: algorithm,
-                sealedId: message.sealedId,
+                messageId: message.messageId,
+                userId: message.userId,
+                sudoId: message.sudoId,
+                emailAddressId: message.emailAddressId,
+                keyId: message.keyId,
+                algorithm: message.algorithm,
                 clientRefId: message.clientRefId,
-                owner: message.owner,
                 created: message.created,
                 updated: message.updated,
-                accountAddress: message.accountAddress,
                 seen: message.seen,
                 direction: message.direction,
                 state: message.state,
                 from: from,
+                replyTo: replyTo,
                 to: to,
                 cc: cc,
                 bcc: bcc,

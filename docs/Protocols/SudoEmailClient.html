@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 2.0.1 Docs
+          SudoEmail 0.0.1 Docs
         </a>
         
       </p>
@@ -269,7 +269,7 @@ sudo services.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p><ul>
-<li>Success: Successfully provisioned email.</li>
+<li>Success: Successfully provisioned email. This address will return in all lower-case.</li>
 <li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
 </ul></p>
                       </div>
@@ -279,9 +279,9 @@ sudo services.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011deprovisionB7Address_10completionySS_ys6ResultOyAA0bE0Vs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/deprovisionEmailAddress(_:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deprovisionB7Address_10completionySS_ys6ResultOyAA0bE0Vs5Error_pGctF">deprovisionEmailAddress(_:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP011deprovisionB13AddressWithId_10completionySS_ys6ResultOyAA0bE0Vs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/deprovisionEmailAddressWithId(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deprovisionB13AddressWithId_10completionySS_ys6ResultOyAA0bE0Vs5Error_pGctF">deprovisionEmailAddressWithId(_:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -296,7 +296,7 @@ sudo services.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deprovisionEmailAddress</span><span class="p">(</span><span class="n">_</span> <span class="nv">emailAddress</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deprovisionEmailAddressWithId</span><span class="p">(</span><span class="n">_</span> <span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -307,12 +307,12 @@ sudo services.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>emailAddress</em>
+                                <em>emailAddressId</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>Email address to be deprovisioned.</p>
+                                  <p>Unique identifier of the email address to be deprovisioned.</p>
                                 </div>
                               </td>
                             </tr>
@@ -332,9 +332,9 @@ sudo services.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP04sendB7Message14withRFC822Data06senderB7Address10completiony10Foundation0H0V_SSys6ResultOySSs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/sendEmailMessage(withRFC822Data:senderEmailAddress:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04sendB7Message14withRFC822Data06senderB7Address10completiony10Foundation0H0V_SSys6ResultOySSs5Error_pGctF">sendEmailMessage(withRFC822Data:<wbr>senderEmailAddress:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP04sendB7Message14withRFC822Data14emailAddressId10completiony10Foundation0H0V_SSys6ResultOySSs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/sendEmailMessage(withRFC822Data:emailAddressId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04sendB7Message14withRFC822Data14emailAddressId10completiony10Foundation0H0V_SSys6ResultOySSs5Error_pGctF">sendEmailMessage(withRFC822Data:<wbr>emailAddressId:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -342,14 +342,14 @@ sudo services.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Send an email message using <a href="https://tools.ietf.org/html/rfc822">RFC-822</a> data.</p>
+                        <p>Send an email message using [RFC 6854] supersedes <a href="https://tools.ietf.org/html/rfc6854">RFC 822</a> data.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sendEmailMessage</span><span class="p">(</span><span class="n">withRFC822Data</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">senderEmailAddress</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sendEmailMessage</span><span class="p">(</span><span class="n">withRFC822Data</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -365,19 +365,20 @@ sudo services.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Data formatted under the <a href="https://tools.ietf.org/html/rfc822">RFC-822</a> standard.</p>
+                                  <p>Data formatted under the [RFC 6854] supersedes <a href="https://tools.ietf.org/html/rfc6854">RFC 822</a> standard.</p>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td>
                                 <code>
-                                <em>senderEmailAddress</em>
+                                <em>emailAddressId</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>email address being used to send the email. The address must match the address of the <code>from</code> field in the RFC-822 data.</p>
+                                  <p>Identifier of the email address being used to send the email. The address must match the address of the <code>from</code> field in the RFC 6854
+data.</p>
                                 </div>
                               </td>
                             </tr>
@@ -463,6 +464,71 @@ sudo services.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0aB6ClientP05checkB33AddressAvailabilityWithLocalParts_7domains10completionySaySSG_AGSgys6ResultOyAGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/checkEmailAddressAvailabilityWithLocalParts(_:domains:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP05checkB33AddressAvailabilityWithLocalParts_7domains10completionySaySSG_AGSgys6ResultOyAGs5Error_pGctF">checkEmailAddressAvailabilityWithLocalParts(_:<wbr>domains:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Check the availability of email address combinations.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">checkEmailAddressAvailabilityWithLocalParts</span><span class="p">(</span><span class="n">_</span> <span class="nv">localParts</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">domains</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">String</span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>localParts</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The local parts of the email address to check. All upper-case characters will be normalized and returned as lower-case.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>domains</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The domains of the email address to check. If <code>nil</code> is supplied, the registered service email address domains will be used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Returns the fully qualified email addresses, filtering out used email addresses. Email addresses are returned in all lower-case.</li>
+<li>Failure: <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP012getSupportedB22DomainsWithCachePolicy_10completionyAA0hI0O_ys6ResultOySaySSGs5Error_pGctF"></a>
                     <a name="//apple_ref/swift/Method/getSupportedEmailDomainsWithCachePolicy(_:completion:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP012getSupportedB22DomainsWithCachePolicy_10completionyAA0hI0O_ys6ResultOySaySSGs5Error_pGctF">getSupportedEmailDomainsWithCachePolicy(_:<wbr>completion:<wbr>)</a>
@@ -517,9 +583,9 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP03getb11AddressWithE0_11cachePolicy10completionySS_AA05CacheH0Oys6ResultOyAA0bE0VSgs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/getEmailAddressWithAddress(_:cachePolicy:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getb11AddressWithE0_11cachePolicy10completionySS_AA05CacheH0Oys6ResultOyAA0bE0VSgs5Error_pGctF">getEmailAddressWithAddress(_:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP03getB13AddressWithId_11cachePolicy10completionySS_AA05CacheI0Oys6ResultOyAA0bE0VSgs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailAddressWithId(_:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB13AddressWithId_11cachePolicy10completionySS_AA05CacheI0Oys6ResultOyAA0bE0VSgs5Error_pGctF">getEmailAddressWithId(_:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -527,14 +593,14 @@ API calls.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Get a <code>EmailAddress</code> record using the <code>address</code> parameter. If the email address cannot be found, <code>nil</code> will be returned.</p>
+                        <p>Get a <code>EmailAddress</code> record using the <code>id</code> parameter. If the email address cannot be found, <code>nil</code> will be returned.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailAddressWithAddress</span><span class="p">(</span><span class="n">_</span> <span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailAddressWithId</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt">EmailAddress</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -583,9 +649,9 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP04listB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/listEmailAddressesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB19AddressesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7AddressG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">listEmailAddressesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP04listb13AddressesWithA2Id_6filter5limit9nextToken11cachePolicy10completionySSSg_AA0B13AddressFilterOSgSiSgAjA05CacheM0Oys6ResultOyAA10ListOutputVyAA0bO0VGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/listEmailAddressesWithSudoId(_:filter:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listb13AddressesWithA2Id_6filter5limit9nextToken11cachePolicy10completionySSSg_AA0B13AddressFilterOSgSiSgAjA05CacheM0Oys6ResultOyAA10ListOutputVyAA0bO0VGs5Error_pGctF">listEmailAddressesWithSudoId(_:<wbr>filter:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -600,8 +666,9 @@ API calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailAddressesWithFilter</span><span class="p">(</span>
-    <span class="n">_</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a></span><span class="p">?,</span>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailAddressesWithSudoId</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">sudoId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+    <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a></span><span class="p">?,</span>
     <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span>
     <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
     <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span>
@@ -614,6 +681,18 @@ API calls.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sudoId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the sudo associated with the results to list.</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -634,7 +713,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Number of email addresses to return. If <code>nil</code>, the limit is 10.</p>
+                                  <p>Number of email addresses to return. If <code>nil</code>, the limit is upward of 1MB of data, before the filter is applied.</p>
                                 </div>
                               </td>
                             </tr>
@@ -646,7 +725,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Generated token by previous calls to <code>listEmailAddressesWithFilter</code>. This is used for pagination. This value should be pre-generated from
+                                  <p>Generated token by previous calls to <code>listEmailAddressesWithSudoId</code>. This is used for pagination. This value should be pre-generated from
 a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
 previously generated <code>nextToken</code>.</p>
                                 </div>
@@ -747,9 +826,9 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP04listB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF"></a>
-                    <a name="//apple_ref/swift/Method/listEmailMessagesWithFilter(_:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB18MessagesWithFilter_5limit9nextToken11cachePolicy10completionyAA0b7MessageG0OSg_SiSgSSSgAA05CacheL0Oys6ResultOyAA10ListOutputVyAA0bN0VGs5Error_pGctF">listEmailMessagesWithFilter(_:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP04listb12MessagesWithA2Id_012emailAddressG06filter5limit9nextToken11cachePolicy10completionySSSg_AkA0B13MessageFilterOSgSiSgAkA05CacheO0Oys6ResultOyAA10ListOutputVyAA0bQ0VGs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/listEmailMessagesWithSudoId(_:emailAddressId:filter:limit:nextToken:cachePolicy:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listb12MessagesWithA2Id_012emailAddressG06filter5limit9nextToken11cachePolicy10completionySSSg_AkA0B13MessageFilterOSgSiSgAkA05CacheO0Oys6ResultOyAA10ListOutputVyAA0bQ0VGs5Error_pGctF">listEmailMessagesWithSudoId(_:<wbr>emailAddressId:<wbr>filter:<wbr>limit:<wbr>nextToken:<wbr>cachePolicy:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -764,8 +843,10 @@ API calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailMessagesWithFilter</span><span class="p">(</span>
-    <span class="n">_</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a></span><span class="p">?,</span>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailMessagesWithSudoId</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">sudoId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+    <span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+    <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a></span><span class="p">?,</span>
     <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span>
     <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
     <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">,</span>
@@ -778,6 +859,31 @@ API calls.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sudoId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the sudo associated with the results to list. If an email address identifier is supplied, a sudoId <strong>MUST</strong> also be supplied,
+otherwise an error will occur.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddressId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of the sudo associated with the results to list.</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -798,7 +904,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Number of email messages to return. If <code>nil</code>, the limit is 10.</p>
+                                  <p>Number of email messages to return. If <code>nil</code>, the limit is upward of 1MB of data, before the filter is applied.</p>
                                 </div>
                               </td>
                             </tr>
@@ -810,7 +916,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Generated token by previous calls to <code>listEmailMessagesWithFilter</code>. This is used for pagination. This value should be pre-generated from
+                                  <p>Generated token by previous calls to <code>listEmailMessagesWithSudoId</code>. This is used for pagination. This value should be pre-generated from
 a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
 previously generated <code>nextToken</code>.</p>
                                 </div>
@@ -855,7 +961,7 @@ API calls.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Get the raw RFC822 data of an email message associated with the <code>messageId</code>.</p>
+                        <p>Get the raw RFC 6854 (supersedes RFC 822) data of an email message associated with the <code>messageId</code>.</p>
 
 <p>If no email message exists for <code>messageId</code>, <code><a href="../Enums/SudoEmailError.html#/s:9SudoEmail0aB5ErrorO02noB22MessageRFC822AvailableyA2CmF">SudoEmailError.noEmailMessageRFC822Available</a></code> will be returned.</p>
 
@@ -880,7 +986,7 @@ API calls.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Message identifier associated with the RFC822 data attempting to be fetched.</p>
+                                  <p>Message identifier associated with the RFC 6854 data attempting to be fetched.</p>
                                 </div>
                               </td>
                             </tr>
@@ -890,7 +996,7 @@ API calls.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p><ul>
-<li>Success: Stored RFC822 email message data of the email message.</li>
+<li>Success: Stored RFC 6854 email message data of the email message.</li>
 <li>Failure: <code><a href="../Enums/SudoEmailError.html#/s:9SudoEmail0aB5ErrorO02noB22MessageRFC822AvailableyA2CmF">SudoEmailError.noEmailMessageRFC822Available</a></code> if the email message cannot be accessed/found.</li>
 </ul></p>
                       </div>
@@ -913,9 +1019,9 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13resultHandlerAA17SubscriptionToken_pys6ResultOyAA0bF0Vs5Error_pGc_tKF"></a>
-                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageCreated(resultHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13resultHandlerAA17SubscriptionToken_pys6ResultOyAA0bF0Vs5Error_pGc_tKF">subscribeToEmailMessageCreated(resultHandler:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13withDirection13resultHandlerAA17SubscriptionToken_pAA0bF0V0I0OSg_ys6ResultOyAIs5Error_pGctKF"></a>
+                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageCreated(withDirection:resultHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13withDirection13resultHandlerAA17SubscriptionToken_pAA0bF0V0I0OSg_ys6ResultOyAIs5Error_pGctKF">subscribeToEmailMessageCreated(withDirection:<wbr>resultHandler:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -935,7 +1041,10 @@ API calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">subscribeToEmailMessageCreated</span><span class="p">(</span><span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">subscribeToEmailMessageCreated</span><span class="p">(</span>
+    <span class="n">withDirection</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">.</span><span class="kt">Direction</span><span class="p">?,</span>
+    <span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span>
+<span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span></code></pre>
 
                         </div>
                       </div>
@@ -952,6 +1061,18 @@ API calls.</p>
                               <td>
                                 <div>
                                   <p>Updated email message event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>direction</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Direction of the email message events to watch for. If <code>nil</code>, both directions will be watched.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1028,7 +1149,7 @@ API calls.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2020-08-10)</p>
+      <p>&copy; 2020 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2020-10-12)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

@@ -33,23 +33,36 @@ public struct EmailMessage: Equatable {
         case received
     }
 
+    public struct EmailAddress: Equatable {
+        public var address: String
+        public var displayName: String?
+
+        public init(address: String, displayName: String? = nil) {
+            self.address = address
+            self.displayName = displayName
+        }
+    }
+
     /// Unique identifier of the email message.
     public var id: String
 
     /// Unique client reference identifier.
     public var clientRefId: String?
 
-    /// Unique identifier of the owner of the email message.
-    public var owner: String
+    /// Unique identifier of the user of the email message.
+    public var userId: String
+
+    /// Unique identifier of the sudo of the email message.
+    public var sudoId: String
+
+    /// Email address id that is associated with the account of the email message - which account sent/received this message.
+    public var emailAddressId: String
 
     /// Date timestamp when the email message was created on the service.
     public var created: Date
 
     /// Date timestamp when the email message was last updated on the service.
     public var updated: Date
-
-    /// Email address that is associated with the account of the email message - which account sent/received this message.
-    public var address: String
 
     /// True if the user has seen the email message previously.
     public var seen: Bool
@@ -61,16 +74,18 @@ public struct EmailMessage: Equatable {
     public var state: State
 
     /// Array of from recipients of the email message.
-    public var from: [String]
+    public var from: [EmailMessage.EmailAddress]
+
+    public var replyTo: [EmailMessage.EmailAddress]
 
     /// Array of to recipients of the email message.
-    public var to: [String]
+    public var to: [EmailMessage.EmailAddress]
 
     /// Array of carbon copy recipients of the email message.
-    public var cc: [String]
+    public var cc: [EmailMessage.EmailAddress]
 
     /// Array of blind carbon copy recipients of the email message.
-    public var bcc: [String]
+    public var bcc: [EmailMessage.EmailAddress]
 
     /// Subject header of the email message.
     public var subject: String?
@@ -79,29 +94,33 @@ public struct EmailMessage: Equatable {
     public init(
         id: String,
         clientRefId: String?,
-        owner: String,
+        userId: String,
+        sudoId: String,
+        emailAddressId: String,
         created: Date,
         updated: Date,
-        address: String,
         seen: Bool,
         direction: Direction,
         state: State,
-        from: [String],
-        to: [String],
-        cc: [String],
-        bcc: [String],
+        from: [EmailMessage.EmailAddress],
+        replyTo: [EmailMessage.EmailAddress],
+        to: [EmailMessage.EmailAddress],
+        cc: [EmailMessage.EmailAddress],
+        bcc: [EmailMessage.EmailAddress],
         subject: String?
     ) {
         self.id = id
         self.clientRefId = clientRefId
-        self.owner = owner
+        self.userId = userId
+        self.sudoId = sudoId
         self.created = created
         self.updated = updated
-        self.address = address
+        self.emailAddressId = emailAddressId
         self.seen = seen
         self.direction = direction
         self.state = state
         self.from = from
+        self.replyTo = replyTo
         self.to = to
         self.cc = cc
         self.bcc = bcc

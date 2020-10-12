@@ -26,6 +26,27 @@ struct EmailMessageFilterInputGQLTransformer {
     /// Transform a `EmailMessageFilterEntity` filter rule into a GraphQL `EmailMessageFilterInput` filter rule.
     func transform(_ entity: EmailMessageFilterEntity) -> EmailMessageFilterInput {
         switch entity {
+        case let .id(id):
+            let id = stringFilterTransformer.transformToIdFilterInput(id)
+            return EmailMessageFilterInput(id: id)
+        case let .messageId(messageId):
+            let messageId = stringFilterTransformer.transformToIdFilterInput(messageId)
+            return EmailMessageFilterInput(messageId: messageId)
+        case let .sudoId(sudoId):
+            let sudoId = stringFilterTransformer.transformToIdFilterInput(sudoId)
+            return EmailMessageFilterInput(sudoId: sudoId)
+        case let .emailAddressId(emailAddressId):
+            let emailAddressId = stringFilterTransformer.transformToIdFilterInput(emailAddressId)
+            return EmailMessageFilterInput(emailAddressId: emailAddressId)
+        case let .algorithm(algorithm):
+            let algorithm = stringFilterTransformer.transformToStringFilterInput(algorithm)
+            return EmailMessageFilterInput(algorithm: algorithm)
+        case let .keyId(keyId):
+            let keyId = stringFilterTransformer.transformToIdFilterInput(keyId)
+            return EmailMessageFilterInput(keyId: keyId)
+        case let .clientRefId(clientRefId):
+            let clientRefId = stringFilterTransformer.transformToIdFilterInput(clientRefId)
+            return EmailMessageFilterInput(clientRefId: clientRefId)
         case let .direction(direction):
             let direction = directionFilterTransformer.transform(direction)
             return EmailMessageFilterInput(direction: direction)

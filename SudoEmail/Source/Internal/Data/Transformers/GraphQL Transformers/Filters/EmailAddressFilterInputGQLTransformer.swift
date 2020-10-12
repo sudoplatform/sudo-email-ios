@@ -15,9 +15,21 @@ struct EmailAddressFilterInputGQLTransformer {
     /// Transform a `EmailAccountFilterEntity` filter rule into a GraphQL `EmailAddressFilterInput` filter rule.
     func transform(_ entity: EmailAccountFilterEntity) -> EmailAddressFilterInput {
         switch entity {
-        case let .address(stringFilterEntity):
-            let stringFilterInput = stringTransformer.transform(stringFilterEntity)
-            return EmailAddressFilterInput(address: stringFilterInput)
+        case let .id(id):
+            let idFilterInput = stringTransformer.transformToIdFilterInput(id)
+            return EmailAddressFilterInput(id: idFilterInput)
+        case let .sudoId(id):
+            let idFilterInput = stringTransformer.transformToIdFilterInput(id)
+            return EmailAddressFilterInput(sudoId: idFilterInput)
+        case let .identityId(id):
+            let idFilterInput = stringTransformer.transformToIdFilterInput(id)
+            return EmailAddressFilterInput(identityId: idFilterInput)
+        case let .keyRingId(id):
+            let idFilterInput = stringTransformer.transformToIdFilterInput(id)
+            return EmailAddressFilterInput(keyRingId: idFilterInput)
+        case let .emailAddress(stringFilterEntity):
+            let stringFilterInput = stringTransformer.transformToStringFilterInput(stringFilterEntity)
+            return EmailAddressFilterInput(emailAddress: stringFilterInput)
         case let .not(emailFilterEntity):
             let emailFilterInput = transform(emailFilterEntity)
             return EmailAddressFilterInput(not: emailFilterInput)

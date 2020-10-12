@@ -6,6 +6,14 @@
 
 /// Filter for a `EmailMessage`.
 public indirect enum EmailMessageFilter {
+    /// Filter rule for an `id` property.
+    case id(StringFilter)
+    /// Filter rule for an `sudoId` property.
+    case sudoId(StringFilter)
+    /// Filter rule for an `emailAddressId` property.
+    case emailAddressId(StringFilter)
+    /// Filter rule for an `emailAddressId` property.
+    case clientRefId(StringFilter)
     /// Filter rule for an `direction` property.
     case direction(EmailMessageDirectionFilter)
     /// Filter rule for an `seen` property.

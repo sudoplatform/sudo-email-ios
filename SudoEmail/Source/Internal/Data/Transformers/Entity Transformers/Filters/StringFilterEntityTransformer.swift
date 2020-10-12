@@ -14,10 +14,6 @@ struct StringFilterEntityTransformer {
             return StringFilterEntity.equals(string)
         case let .notEquals(string):
             return StringFilterEntity.notEquals(string)
-        case let .contains(string):
-            return StringFilterEntity.contains(string)
-        case let .notContains(string):
-            return StringFilterEntity.notContains(string)
         case let .beginsWith(string):
             return StringFilterEntity.beginsWith(string)
         }

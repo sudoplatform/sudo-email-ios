@@ -34,9 +34,9 @@ class DeprovisionEmailAccountUseCase {
 
     /// Execute the use case.
     /// - Parameters:
-    ///   - emailAddress: Email address to deprovision.
+    ///   - emailAccountId: Identifier of the email account to deprovision.
     ///   - completion: Returns the email account that was deleted on success, or error on failure.
-    func execute(emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity>) {
-        emailAccountRepository.deleteWithEmailAddress(emailAddress, completion: completion)
+    func execute(emailAccountId: String, completion: @escaping ClientCompletion<EmailAccountEntity>) {
+        emailAccountRepository.deleteWithId(emailAccountId, completion: completion)
     }
 }

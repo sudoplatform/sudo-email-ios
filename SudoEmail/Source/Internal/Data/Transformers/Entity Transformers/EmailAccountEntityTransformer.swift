@@ -18,14 +18,22 @@ struct EmailAccountEntityTransformer {
     /// Transform the success result of `ProvisionEmailAddressMutation` from the service to a `EmailAccountEntity`.
     func transform(_ data: ProvisionEmailAddressMutation.Data) throws -> EmailAccountEntity {
         let graphQLEmail = data.provisionEmailAddress
-        let owner = graphQLEmail.owner
+        let id = graphQLEmail.id
+        let userId = graphQLEmail.userId
+        let sudoId = graphQLEmail.sudoId
+        let identityId = graphQLEmail.identityId
+        let keyRingId = graphQLEmail.keyRingId
+        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.emailAddress)
         let owners = graphQLEmail.owners.map(ownerTransformer.transform(_:))
-        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.address)
         let created = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updated = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         return EmailAccountEntity(
+            id: id,
+            userId: userId,
+            sudoId: sudoId,
+            identityId: identityId,
+            keyRingId: keyRingId,
             emailAddress: emailAddress,
-            owner: owner,
             owners: owners,
             created: created,
             updated: updated
@@ -35,14 +43,22 @@ struct EmailAccountEntityTransformer {
     /// Transform the success result of `DeprovisionEmailAddressMutation` from the service to a `EmailAccountEntity`.
     func transform(_ data: DeprovisionEmailAddressMutation.Data) throws -> EmailAccountEntity {
         let graphQLEmail = data.deprovisionEmailAddress
-        let owner = graphQLEmail.owner
+        let id = graphQLEmail.id
+        let userId = graphQLEmail.userId
+        let sudoId = graphQLEmail.sudoId
+        let identityId = graphQLEmail.identityId
+        let keyRingId = graphQLEmail.keyRingId
+        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.emailAddress)
         let owners = graphQLEmail.owners.map(ownerTransformer.transform(_:))
-        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.address)
         let created = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updated = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         return EmailAccountEntity(
+            id: id,
+            userId: userId,
+            sudoId: sudoId,
+            identityId: identityId,
+            keyRingId: keyRingId,
             emailAddress: emailAddress,
-            owner: owner,
             owners: owners,
             created: created,
             updated: updated
@@ -51,14 +67,22 @@ struct EmailAccountEntityTransformer {
 
     /// Transform the success result of `GetEmailAddressQuery` from the service to a `EmailAccountEntity`.
     func transform(_ graphQLEmail: GetEmailAddressQuery.Data.GetEmailAddress) throws -> EmailAccountEntity {
-        let owner = graphQLEmail.owner
+        let id = graphQLEmail.id
+        let userId = graphQLEmail.userId
+        let sudoId = graphQLEmail.sudoId
+        let identityId = graphQLEmail.identityId
+        let keyRingId = graphQLEmail.keyRingId
+        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.emailAddress)
         let owners = graphQLEmail.owners.map(ownerTransformer.transform(_:))
-        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.address)
         let created = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updated = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         return EmailAccountEntity(
+            id: id,
+            userId: userId,
+            sudoId: sudoId,
+            identityId: identityId,
+            keyRingId: keyRingId,
             emailAddress: emailAddress,
-            owner: owner,
             owners: owners,
             created: created,
             updated: updated
@@ -67,14 +91,22 @@ struct EmailAccountEntityTransformer {
 
     /// Transform the success result of `ListEmailAddressesQuery` from the service to a `EmailAccountEntity`.
     func transform(_ graphQLEmail: ListEmailAddressesQuery.Data.ListEmailAddress.Item) throws -> EmailAccountEntity {
-        let owner = graphQLEmail.owner
+        let id = graphQLEmail.id
+        let userId = graphQLEmail.userId
+        let sudoId = graphQLEmail.sudoId
+        let identityId = graphQLEmail.identityId
+        let keyRingId = graphQLEmail.keyRingId
+        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.emailAddress)
         let owners = graphQLEmail.owners.map(ownerTransformer.transform(_:))
-        let emailAddress = try emailAddressTransformer.transform(graphQLEmail.address)
         let created = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updated = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         return EmailAccountEntity(
+            id: id,
+            userId: userId,
+            sudoId: sudoId,
+            identityId: identityId,
+            keyRingId: keyRingId,
             emailAddress: emailAddress,
-            owner: owner,
             owners: owners,
             created: created,
             updated: updated

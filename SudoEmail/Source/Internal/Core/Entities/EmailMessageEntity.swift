@@ -33,8 +33,24 @@ enum StateEntity: Equatable {
 /// Core entity representation of a email message business rule. Depicts the meta data of an email message.
 struct EmailMessageEntity: Equatable {
 
-    /// Unique identifier of the email message.
+    /// Unique identifier of the email message. Combination of the `messageId` and the `keyId`.
+    ///
+    /// E.g. `\(messageId)-\(keyId)`
     var id: String
+
+    /// Unique identitfier of the message itself. All sealed copies of the message share this id.
+    var messageId: String
+
+    /// Unique identifier of the user of the email message.
+    var userId: String
+
+    /// Unique identifier of the sudo of the email message.
+    var sudoId: String
+
+    /// Email address identifier that is associated with the account of the email message.
+    ///
+    /// This is the id of the account that sent/received this message.
+    var emailAddressId: String
 
     /// Unique identifier associated with this entity for its key encryption/decryption.
     var keyId: String
@@ -42,24 +58,14 @@ struct EmailMessageEntity: Equatable {
     /// Algorithm used to encrypt/decrypt this entity.
     var algorithm: String
 
-    /// Unique identifier used for identifying where the message RFC822 is stored.
-    var sealedId: String
-
     /// Unique client reference identifier.
     var clientRefId: String?
-
-    /// Unique identifier of the owner of the email message.
-    var owner: String
 
     /// Date timestamp when the email message was created on the service.
     var created: Date
 
     /// Date timestamp when the email message was last updated on the service.
     var updated: Date
-
-    // TODO: We should consider doing a lookup for the account
-    /// Email address that is associated with the account of the email message - which account sent/received this message.
-    var accountAddress: EmailAddressEntity
 
     /// True if the user has seen the email message previously.
     var seen: Bool
@@ -72,6 +78,9 @@ struct EmailMessageEntity: Equatable {
 
     /// Array of from recipients of the email message.
     var from: [EmailAddressEntity]
+
+    /// Array of replyTo recipients of the email message.
+    var replyTo: [EmailAddressEntity]
 
     /// Array of to recipients of the email message.
     var to: [EmailAddressEntity]

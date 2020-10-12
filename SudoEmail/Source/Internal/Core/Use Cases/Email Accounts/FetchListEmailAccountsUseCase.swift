@@ -30,12 +30,13 @@ class FetchListEmailAccountsUseCase {
     ///   - nextToken: Next token to be used when accessing the next page of information.
     ///   - completion: Returns a list of results with a next token is there if more results to fetch, or error on failure.
     func execute(
-        withFilter filter: EmailAccountFilterEntity?,
+        withSudoId sudoId: String?,
+        filter: EmailAccountFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
     ) {
-        emailAccountRepository.fetchListWithFilter(filter, limit: limit, nextToken: nextToken, completion: completion)
+        emailAccountRepository.fetchListWithSudoId(sudoId, filter: filter, limit: limit, nextToken: nextToken, completion: completion)
     }
 
 }

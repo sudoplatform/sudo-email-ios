@@ -33,26 +33,27 @@ public protocol SudoEmailClient: class {
     ///   - emailAddress: Email address to provision.
     ///   - sudoId: Identifier of the sudo to provision email with.
     /// - Returns:
-    ///   - Success: Successfully provisioned email.
+    ///   - Success: Successfully provisioned email. This address will return in all lower-case.
     ///   - Failure: `SudoEmailError`.
     func provisionEmailAddress(_ emailAddress: String, sudoId: String, completion: @escaping ClientCompletion<EmailAddress>)
 
     /// Deprovision an email address.
     /// - Parameters:
-    ///   - emailAddress: Email address to be deprovisioned.
+    ///   - emailAddressId: Unique identifier of the email address to be deprovisioned.
     /// - Returns:
     ///   - Success: Successfully deprovisioned email.
     ///   - Failure: `SudoEmailError`.
-    func deprovisionEmailAddress(_ emailAddress: String, completion: @escaping ClientCompletion<EmailAddress>)
+    func deprovisionEmailAddressWithId(_ emailAddressId: String, completion: @escaping ClientCompletion<EmailAddress>)
 
-    /// Send an email message using [RFC-822](https://tools.ietf.org/html/rfc822) data.
+    /// Send an email message using [RFC 6854] supersedes [RFC 822] (https://tools.ietf.org/html/rfc6854) data.
     /// - Parameters:
-    ///   - data: Data formatted under the [RFC-822](https://tools.ietf.org/html/rfc822) standard.
-    ///   - senderEmailAddress: email address being used to send the email. The address must match the address of the `from` field in the RFC-822 data.
+    ///   - data: Data formatted under the [RFC 6854] supersedes [RFC 822] (https://tools.ietf.org/html/rfc6854) standard.
+    ///   - emailAddressId: Identifier of the email address being used to send the email. The address must match the address of the `from` field in the RFC 6854
+    ///       data.
     /// - Returns:
     ///   - Success: Identifier of the email message that is being sent.
     ///   - Failure: `SudoEmailError`.
-    func sendEmailMessage(withRFC822Data data: Data, senderEmailAddress: String, completion: @escaping ClientCompletion<String>)
+    func sendEmailMessage(withRFC822Data data: Data, emailAddressId: String, completion: @escaping ClientCompletion<String>)
 
     /// Delete an email message.
     /// - Parameters:
@@ -64,6 +65,15 @@ public protocol SudoEmailClient: class {
 
     // MARK: - Queries
 
+    /// Check the availability of email address combinations.
+    /// - Parameters:
+    ///   - localParts: The local parts of the email address to check. All upper-case characters will be normalized and returned as lower-case.
+    ///   - domains: The domains of the email address to check. If `nil` is supplied, the registered service email address domains will be used.
+    /// - Returns:
+    ///   - Success: Returns the fully qualified email addresses, filtering out used email addresses. Email addresses are returned in all lower-case.
+    ///   - Failure: `SudoEmailError`.
+    func checkEmailAddressAvailabilityWithLocalParts(_ localParts: [String], domains: [String]?, completion: @escaping ClientCompletion<[String]>)
+
     /// Get a list of the supported email domains from the service.
     /// - Parameters:
     ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
@@ -73,7 +83,7 @@ public protocol SudoEmailClient: class {
     ///   - Failure: `SudoEmailError`.
     func getSupportedEmailDomainsWithCachePolicy(_ cachePolicy: CachePolicy, completion: @escaping ClientCompletion<[String]>)
 
-    /// Get a `EmailAddress` record using the `address` parameter. If the email address cannot be found, `nil` will be returned.
+    /// Get a `EmailAddress` record using the `id` parameter. If the email address cannot be found, `nil` will be returned.
     /// - Parameters:
     ///   - id: Identifier of the email address to be retrieved.
     ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
@@ -81,13 +91,14 @@ public protocol SudoEmailClient: class {
     /// - Returns:
     ///   - Success: Email address associated with `id`, or `nil` if the email address cannot be found.
     ///   - Failure: `SudoEmailError`.
-    func getEmailAddressWithAddress(_ address: String, cachePolicy: CachePolicy, completion: @escaping ClientCompletion<EmailAddress?>)
+    func getEmailAddressWithId(_ id: String, cachePolicy: CachePolicy, completion: @escaping ClientCompletion<EmailAddress?>)
 
     /// Get a list of email addresses. If no email addresses can be found, an empty list will be returned.
     /// - Parameters:
+    ///   - sudoId: Identifier of the sudo associated with the results to list.
     ///   - filter: Filter to be applied to results of query.
-    ///   - limit: Number of email addresses to return. If `nil`, the limit is 10.
-    ///   - nextToken: Generated token by previous calls to `listEmailAddressesWithFilter`. This is used for pagination. This value should be pre-generated from
+    ///   - limit: Number of email addresses to return. If `nil`, the limit is upward of 1MB of data, before the filter is applied.
+    ///   - nextToken: Generated token by previous calls to `listEmailAddressesWithSudoId`. This is used for pagination. This value should be pre-generated from
     ///       a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
     ///       previously generated `nextToken`.
     ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
@@ -95,8 +106,9 @@ public protocol SudoEmailClient: class {
     /// - Returns:
     ///   - Success: Email addresses associated with user, or empty list if no email address can be found.
     ///   - Failure: `SudoEmailError`.
-    func listEmailAddressesWithFilter(
-        _ filter: EmailAddressFilter?,
+    func listEmailAddressesWithSudoId(
+        _ sudoId: String?,
+        filter: EmailAddressFilter?,
         limit: Int?,
         nextToken: String?,
         cachePolicy: CachePolicy,
@@ -115,9 +127,12 @@ public protocol SudoEmailClient: class {
 
     /// Get a list of email messages. If no email messages can be found, an empty list will be returned.
     /// - Parameters:
+    ///   - sudoId: Identifier of the sudo associated with the results to list. If an email address identifier is supplied, a sudoId **MUST** also be supplied,
+    ///       otherwise an error will occur.
+    ///   - emailAddressId: Identifier of the sudo associated with the results to list.
     ///   - filter: Filter to be applied to results of query.
-    ///   - limit: Number of email messages to return. If `nil`, the limit is 10.
-    ///   - nextToken: Generated token by previous calls to `listEmailMessagesWithFilter`. This is used for pagination. This value should be pre-generated from
+    ///   - limit: Number of email messages to return. If `nil`, the limit is upward of 1MB of data, before the filter is applied.
+    ///   - nextToken: Generated token by previous calls to `listEmailMessagesWithSudoId`. This is used for pagination. This value should be pre-generated from
     ///       a previous pagination call, otherwise it will throw an error. It is important to note that the same structured API call should be used if using a
     ///       previously generated `nextToken`.
     ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
@@ -125,21 +140,23 @@ public protocol SudoEmailClient: class {
     /// - Returns:
     ///   - Success: Email messages associated with user, or empty list if no email message can be found.
     ///   - Failure: `SudoEmailError`.
-    func listEmailMessagesWithFilter(
-        _ filter: EmailMessageFilter?,
+    func listEmailMessagesWithSudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilter?,
         limit: Int?,
         nextToken: String?,
         cachePolicy: CachePolicy,
         completion: @escaping ClientCompletion<ListOutput<EmailMessage>>
     )
 
-    /// Get the raw RFC822 data of an email message associated with the `messageId`.
+    /// Get the raw RFC 6854 (supersedes RFC 822) data of an email message associated with the `messageId`.
     ///
     /// If no email message exists for `messageId`, `SudoEmailError.noEmailMessageRFC822Available` will be returned.
     /// - Parameters:
-    ///   - messageId: Message identifier associated with the RFC822 data attempting to be fetched.
+    ///   - messageId: Message identifier associated with the RFC 6854 data attempting to be fetched.
     /// - Returns:
-    ///   - Success: Stored RFC822 email message data of the email message.
+    ///   - Success: Stored RFC 6854 email message data of the email message.
     ///   - Failure: `SudoEmailError.noEmailMessageRFC822Available` if the email message cannot be accessed/found.
     func getEmailMessageRFC822DataWithId(_ messageId: String, completion: @escaping ClientCompletion<Data>)
 
@@ -147,10 +164,15 @@ public protocol SudoEmailClient: class {
 
     /// Subscribe to email message creation events.
     ///
-    /// - Parameter resultHandler: Updated email message event.
+    /// - Parameters:
+    ///   - resultHandler: Updated email message event.
+    ///   - direction: Direction of the email message events to watch for. If `nil`, both directions will be watched.
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
-    func subscribeToEmailMessageCreated(resultHandler: @escaping ClientCompletion<EmailMessage>) throws -> SubscriptionToken
+    func subscribeToEmailMessageCreated(
+        withDirection direction: EmailMessage.Direction?,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) throws -> SubscriptionToken
 
     /// Subscribe to email message deleted events.
     /// - Parameters:
@@ -158,4 +180,56 @@ public protocol SudoEmailClient: class {
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
     func subscribeToEmailMessageDeleted(resultHandler: @escaping ClientCompletion<EmailMessage>) throws -> SubscriptionToken
+}
+
+extension SudoEmailClient {
+
+    func listEmailAddressesWithSudoId(
+        _ sudoId: String? = nil,
+        filter: EmailAddressFilter? = nil,
+        limit: Int? = nil,
+        nextToken: String? = nil,
+        cachePolicy: CachePolicy,
+        completion: @escaping ClientCompletion<ListOutput<EmailAddress>>
+    ) {
+        return listEmailAddressesWithSudoId(
+            sudoId,
+            filter: filter,
+            limit: limit,
+            nextToken: nextToken,
+            cachePolicy: cachePolicy,
+            completion: completion
+        )
+    }
+
+    func listEmailMessagesWithSudoId(
+        _ sudoId: String? = nil,
+        emailAddressId: String? = nil,
+        filter: EmailMessageFilter? = nil,
+        limit: Int? = nil,
+        nextToken: String? = nil,
+        cachePolicy: CachePolicy,
+        completion: @escaping ClientCompletion<ListOutput<EmailMessage>>
+    ) {
+        return listEmailMessagesWithSudoId(
+            sudoId,
+            emailAddressId: emailAddressId,
+            filter: filter,
+            limit: limit,
+            nextToken: nextToken,
+            cachePolicy: cachePolicy,
+            completion: completion
+        )
+    }
+
+    func subscribeToEmailMessageCreated(
+        withDirection direction: EmailMessage.Direction? = nil,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) throws -> SubscriptionToken {
+        return try subscribeToEmailMessageCreated(withDirection: direction, resultHandler: resultHandler)
+    }
+
+    func checkEmailAddressAvailabilityWithLocalParts(_ localParts: [String], domains: [String]? = nil, completion: @escaping ClientCompletion<[String]>) {
+        return checkEmailAddressAvailabilityWithLocalParts(localParts, domains: domains, completion: completion)
+    }
 }

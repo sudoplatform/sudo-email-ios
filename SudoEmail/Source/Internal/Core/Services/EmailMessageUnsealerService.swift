@@ -15,12 +15,12 @@ protocol EmailMessageUnsealerService: class {
     /// - Throws: `SudoEmailError` on failure to unseal email message
     func unsealEmailMessage(_ sealedEmailMessage: SealedEmailMessageEntity) throws -> EmailMessageEntity
 
-    /// Unseal the email message RFC822 data.
+    /// Unseal the email message RFC 6854 (supersedes RFC 822) data.
     /// - Parameters:
-    ///   - data: Sealed data containing the RFC822 data.
+    ///   - data: Sealed data containing the RFC 6854 data.
     ///   - keyId: Key identifier to use to lookup the key to unseal the data.
-    ///   - algorithm: Algorithm that was used to seal the input RFC822 data.
-    /// - Returns: Unsealed emial message RFC822 data.
+    ///   - algorithm: Algorithm that was used to seal the input RFC 6854 data.
+    /// - Returns: Unsealed emaill message RFC 6854 data.
     /// - Throws: `SudoEmailError` on failure to unseal email message data.
     func unsealEmailMessageRFC822Data(_ data: Data, withKeyId keyId: String, algorithm: String) throws -> Data
 }

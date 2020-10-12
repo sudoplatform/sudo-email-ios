@@ -26,6 +26,19 @@ struct EmailMessageFilterEntityTransformer {
     /// Transform a input `EmailMessageFilter` into a `EmailMessageFilterEntity`.
     func transform(_ filter: EmailMessageFilter) -> EmailMessageFilterEntity {
         switch filter {
+        case let .id(idFilter):
+            let idFilter = stringFilterTransformer.transform(idFilter)
+            /// This is not a typo - `id` maps to `messageId`
+            return .messageId(idFilter)
+        case let .sudoId(sudoIdFilter):
+            let sudoIdFilter = stringFilterTransformer.transform(sudoIdFilter)
+            return .sudoId(sudoIdFilter)
+        case let .emailAddressId(emailAddressIdFilter):
+            let emailAddressIdFilter = stringFilterTransformer.transform(emailAddressIdFilter)
+            return .emailAddressId(emailAddressIdFilter)
+        case let .clientRefId(clientRefIdFilter):
+            let clientRefIdFilter = stringFilterTransformer.transform(clientRefIdFilter)
+            return .clientRefId(clientRefIdFilter)
         case let .direction(directionFilter):
             let directionFilter = directionFilterTransformer.transform(directionFilter)
             return .direction(directionFilter)

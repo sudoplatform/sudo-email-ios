@@ -17,6 +17,9 @@
 "email.errors.addressNotFound" = "Email address could not be found";
 "email.errors.emailMessageNotFound" = "Email message could not be found";
 "email.errors.unauthorizedAddress" = "Unauthorized access to email address";
+"email.errors.invalidEmailAddressDomain" = "Email address domain is not supported";
+"email.errors.emailAddressFormatValidationFailed" = "Input information relating to email address is invalid";
+"email.errors.emailAddressUnavailable" = "Email address (or id associated with address) supplied is unavailable";
 
 // MARK: - Errors: SudoPlatformError
 

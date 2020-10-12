@@ -11,10 +11,10 @@ protocol SealedEmailMessageRepository: class {
 
     /// Send an email message.
     /// - Parameters:
-    ///   - data: RFC822 data to be sent representing the email message.
-    ///   - account: Email account to send the email message from. The user must own this account.
+    ///   - data: RFC 6854 (supersedes RFC 822) data to be sent representing the email message.
+    ///   - emailAccountId: Identifier of the email account to send the email message from. The user must own this account.
     ///   - completion: Returns, on success, the ID of the sent email address, or error on failure.
-    func sendEmailMessage(withRFC822Data data: Data, fromAccount account: EmailAccountEntity, completion: @escaping ClientCompletion<String>)
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, completion: @escaping ClientCompletion<String>)
 
     /// Delete an email message.
     /// - Parameters:
@@ -38,12 +38,17 @@ protocol SealedEmailMessageRepository: class {
 
     /// Get the list of sealed email messages from the device cache.
     /// - Parameters:
+    ///   - sudoId: Identifier of the sudo associated with the results to list. If an email address identifier is supplied, a sudoId **MUST** also be supplied,
+    ///       otherwise an error will occur.
+    ///   - emailAddressId: Identifier of the sudo associated with the results to list.
     ///   - filter: Filter rules to be applied to the list.
     ///   - limit: Limit of the results to return.
     ///   - nextToken: Next token to be used when accessing the next page of information.
     ///   - completion: Returns a list of results with a next token is there if more results to fetch, or error on failure.
-    func getListEmailMessagesByFilter(
-        _ filter: EmailMessageFilterEntity?,
+    func getListEmailMessagesBySudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<SealedEmailMessageEntity>>
@@ -51,22 +56,27 @@ protocol SealedEmailMessageRepository: class {
 
     /// Fetch the list of sealed email messages remotely.
     /// - Parameters:
+    ///   - sudoId: Identifier of the sudo associated with the results to list. If an email address identifier is supplied, a sudoId **MUST** also be supplied,
+    ///       otherwise an error will occur.
+    ///   - emailAddressId: Identifier of the sudo associated with the results to list.
     ///   - filter: Filter rules to be applied to the list.
     ///   - limit: Limit of the results to return.
     ///   - nextToken: Next token to be used when accessing the next page of information.
     ///   - completion: Returns a list of results with a next token is there if more results to fetch, or error on failure.
-    func fetchListEmailMessagesByFilter(
-        _ filter: EmailMessageFilterEntity?,
+    func fetchListEmailMessagesBySudoId(
+        _ sudoId: String?,
+        emailAddressId: String?,
+        filter: EmailMessageFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<SealedEmailMessageEntity>>
     )
 
-    /// Fetch the sealed email message RFC822 data remotely.
+    /// Fetch the sealed email message RFC 6854 (supersedes RFC 822) data remotely.
     /// - Parameters:
     ///   - message: Message to fetch the data for.
-    ///   - completion: Returns the RFC822 data of an email message, or error on failure.
-    func fetchEmailMessageRFC822DataWithSealedId(_ sealedId: String, completion: @escaping ClientCompletion<Data>)
+    ///   - completion: Returns the RFC 6854 data of an email message, or error on failure.
+    func fetchEmailMessageRFC822DataWithId(_ sealedId: String, completion: @escaping ClientCompletion<Data>)
 
     /// Subscribe to all sealed email messages created events.
     /// - Parameter direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be

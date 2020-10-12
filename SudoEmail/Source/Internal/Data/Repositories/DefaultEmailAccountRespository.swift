@@ -42,13 +42,47 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
 
     // MARK: - EmailAccountRepository
 
+    func checkEmailAddressAvailabilityWithLocalParts(
+        _ localParts: [String],
+        domains: [DomainEntity]?,
+        completion: @escaping ClientCompletion<[EmailAddressEntity]>
+    ) {
+        // Code is generated as a double nil so this mitigates problems with that.
+        var convertedDomains: [String]?? = Optional(nil)
+        if let domains = domains {
+            convertedDomains = domains.map { $0.name }
+        }
+        let input = CheckEmailAddressAvailabilityInput(localParts: localParts, domains: convertedDomains)
+        let query = CheckEmailAddressAvailabilityQuery(input: input)
+        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: .remoteOnly, logger: logger)
+        let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
+            if let error = errors.first {
+                completion(.failure(error))
+                return
+            }
+            guard let result = operation.result else {
+                return
+            }
+            do {
+                let transformer = EmailAddressEntityTransformer()
+                let entities = try result.checkEmailAddressAvailability.addresses.map(transformer.transform(_:))
+                completion(.success(entities))
+            } catch {
+                completion(.failure(error))
+            }
+        })
+        operation.addObserver(completionObserver)
+        queue.addOperation(operation)
+    }
+
     func createWithEmailAddress(
         _ emailAddress: EmailAddressEntity,
         publicKey: KeyEntity,
+        // TODO: RENAME all occurrences of `ownershipProof` to `ownershipProofToken`.
         ownershipProof: String,
         completion: @escaping ClientCompletion<EmailAccountEntity>
     ) {
-        let input = ProvisionEmailAddressInput(address: emailAddress.address, keyRingId: publicKey.keyRingId, ownerProofs: [ownershipProof])
+        let input = ProvisionEmailAddressInput(emailAddress: emailAddress.address, keyRingId: publicKey.keyRingId, ownershipProofTokens: [ownershipProof])
         let mutation = ProvisionEmailAddressMutation(input: input)
         let operation = operationFactory.generateMutationOperation(mutation: mutation, appSyncClient: appSyncClient, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
@@ -71,8 +105,8 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         queue.addOperation(operation)
     }
 
-    func deleteWithEmailAddress(_ emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity>) {
-        let input = DeprovisionEmailAddressInput(address: emailAddress.address)
+    func deleteWithId(_ id: String, completion: @escaping ClientCompletion<EmailAccountEntity>) {
+        let input = DeprovisionEmailAddressInput(emailAddressId: id)
         let mutation = DeprovisionEmailAddressMutation(input: input)
         let operation = operationFactory.generateMutationOperation(mutation: mutation, appSyncClient: appSyncClient, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
@@ -95,24 +129,26 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         queue.addOperation(operation)
     }
 
-    func getWithEmailAddress(_ emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        let operation = constructGetEmailAddressQueryOperationWithEmailAddress(emailAddress, cachePolicy: .cacheOnly, completion: completion)
+    func getWithEmailAddressId(_ id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
+        let operation = constructGetEmailAddressQueryOperationWithEmailAddressId(id, cachePolicy: .cacheOnly, completion: completion)
         queue.addOperation(operation)
     }
 
-    func fetchWithEmailAddress(_ emailAddress: EmailAddressEntity, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        let operation = constructGetEmailAddressQueryOperationWithEmailAddress(emailAddress, cachePolicy: .remoteOnly, completion: completion)
+    func fetchWithEmailAddressId(_ id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
+        let operation = constructGetEmailAddressQueryOperationWithEmailAddressId(id, cachePolicy: .remoteOnly, completion: completion)
         queue.addOperation(operation)
     }
 
-    func fetchListWithFilter(
-        _ filter: EmailAccountFilterEntity?,
+    func fetchListWithSudoId(
+        _ sudoId: String?,
+        filter: EmailAccountFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
     ) {
-        let operation = constructListEmailAddressQueryOperationWithFilter(
-            filter,
+        let operation = constructListEmailAddressQueryOperationWithSudoId(
+            sudoId,
+            filter: filter,
             limit: limit,
             nextToken: nextToken,
             cachePolicy: .remoteOnly,
@@ -121,14 +157,16 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         queue.addOperation(operation)
     }
 
-    func listWithFilter(
-        _ filter: EmailAccountFilterEntity?,
+    func listWithSudoId(
+        _ sudoId: String?,
+        filter: EmailAccountFilterEntity?,
         limit: Int?,
         nextToken: String?,
         completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
     ) {
-        let operation = constructListEmailAddressQueryOperationWithFilter(
-            filter,
+        let operation = constructListEmailAddressQueryOperationWithSudoId(
+            sudoId,
+            filter: filter,
             limit: limit,
             nextToken: nextToken,
             cachePolicy: .cacheOnly,
@@ -139,12 +177,12 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
 
     // MARK: - Helpers
 
-    func constructGetEmailAddressQueryOperationWithEmailAddress(
-        _ emailAddress: EmailAddressEntity,
+    func constructGetEmailAddressQueryOperationWithEmailAddressId(
+        _ emailAddressId: String,
         cachePolicy: CachePolicy,
         completion: @escaping ClientCompletion<EmailAccountEntity?>
     ) -> PlatformQueryOperation<GetEmailAddressQuery> {
-        let query = GetEmailAddressQuery(address: emailAddress.address)
+        let query = GetEmailAddressQuery(id: emailAddressId)
         let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
             if let error = errors.first {
@@ -174,8 +212,9 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
     ///   - cachePolicy: Policy to be used to detemine whether to access from the service or the cache.
     ///   - completion: Returns a list of results with a next token is there if more results to fetch, or error on failure.
     /// - Returns: Constructed operation.
-    func constructListEmailAddressQueryOperationWithFilter(
-        _ filter: EmailAccountFilterEntity?,
+    func constructListEmailAddressQueryOperationWithSudoId(
+        _ sudoId: String?,
+        filter: EmailAccountFilterEntity?,
         limit: Int?,
         nextToken: String?,
         cachePolicy: CachePolicy,
@@ -186,7 +225,13 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             let transformer = EmailAddressFilterInputGQLTransformer()
             inputFilter = transformer.transform(filter)
         }
-        let query = ListEmailAddressesQuery(filter: inputFilter, limit: limit, nextToken: nextToken)
+        let input = ListEmailAddressesInput(
+            sudoId: sudoId,
+            filter: inputFilter,
+            limit: limit,
+            nextToken: nextToken
+        )
+        let query = ListEmailAddressesQuery(input: input)
         let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
         let completionObserver = PlatformBlockObserver(finishHandler: { _, errors in
             if let error = errors.first {
