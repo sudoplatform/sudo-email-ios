@@ -27,7 +27,9 @@
 "email.errors.decodingError" = "A decoding error has occurred";
 "email.errors.environmentError" = "An environment error has occurred";
 "email.errors.policyFailed" = "A policy has failed";
+"email.errors.invalidArgument" = "An invalid argument has been provided";
 "email.errors.invalidTokenError" = "An invalid token error has occurred";
 "email.errors.accountLockedError" = "Account is locked";
 "email.errors.identityInsufficient" = "Identity is insufficient";
 "email.errors.identityNotVerified" = "Identity is not verified";
+"email.errors.unknownTimezone" = "Time zone is not known";

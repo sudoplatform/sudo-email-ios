@@ -87,7 +87,21 @@
     {
       "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 54,
+      "symbol": "SudoEmailError.unknownTimezone",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "line": 55,
       "symbol": "SudoEmailError.internalError(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "line": 56,
+      "symbol": "SudoEmailError.invalidArgument(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },

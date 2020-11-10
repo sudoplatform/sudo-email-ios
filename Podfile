@@ -1,7 +1,7 @@
 #
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '11.0'
+platform :ios, '13.0'
 
 workspace 'SudoEmail'
 use_frameworks!
@@ -19,16 +19,15 @@ project 'SudoEmail', {
 target 'SudoEmail' do
   inherit! :search_paths
   podspec :name => 'SudoEmail'
-end
 
-target 'SudoEmailTests' do
-  inherit! :search_paths
-  podspec :name => 'SudoEmail'
-end
+  target 'SudoEmailTests' do
+    podspec :name => 'SudoEmail'
+  end
 
-target 'SudoEmailIntegrationTests' do
-  inherit! :search_paths
-  podspec :name => 'SudoEmail'
+  target 'SudoEmailIntegrationTests' do
+    podspec :name => 'SudoEmail'
+  end
+
 end
 
 # Fix Xcode nagging warning on pod install/update

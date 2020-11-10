@@ -51,7 +51,9 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case accountLockedError
     case identityInsufficient
     case identityNotVerified
+    case unknownTimezone
     case internalError(_ cause: String?)
+    case invalidArgument(_ msg: String?)
 
     // MARK: - Lifecycle
 
@@ -101,8 +103,12 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             self = .identityInsufficient
         case .identityNotVerified:
             self = .identityNotVerified
+        case .unknownTimezone:
+            self = .unknownTimezone
         case let .internalError(cause):
             self = .internalError(cause)
+        case let .invalidArgument(msg):
+            self = .invalidArgument(msg)
         }
     }
 
@@ -146,6 +152,10 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return L10n.Email.Errors.emailAddressUnavailable
         case let .internalError(cause):
             return cause ?? "Internal Error"
+        case .unknownTimezone:
+            return L10n.Email.Errors.unknownTimezone
+        case let .invalidArgument(msg):
+            return msg ?? L10n.Email.Errors.invalidArgument
         }
     }
 

@@ -24,6 +24,7 @@ internal enum L10n {
         internal static let environmentError = L10n.tr("Localizable", "email.errors.environmentError")
         internal static let identityInsufficient = L10n.tr("Localizable", "email.errors.identityInsufficient")
         internal static let identityNotVerified = L10n.tr("Localizable", "email.errors.identityNotVerified")
+        internal static let invalidArgument = L10n.tr("Localizable", "email.errors.invalidArgument")
         internal static let invalidConfig = L10n.tr("Localizable", "email.errors.invalidConfig")
         internal static let invalidEmailAddressDomain = L10n.tr("Localizable", "email.errors.invalidEmailAddressDomain")
         internal static let invalidTokenError = L10n.tr("Localizable", "email.errors.invalidTokenError")
@@ -32,6 +33,7 @@ internal enum L10n {
         internal static let policyFailed = L10n.tr("Localizable", "email.errors.policyFailed")
         internal static let serviceError = L10n.tr("Localizable", "email.errors.serviceError")
         internal static let unauthorizedAddress = L10n.tr("Localizable", "email.errors.unauthorizedAddress")
+        internal static let unknownTimezone = L10n.tr("Localizable", "email.errors.unknownTimezone")
       }
     }
 }
