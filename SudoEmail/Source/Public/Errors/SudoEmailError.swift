@@ -43,17 +43,19 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
       * This section contains wrapped erros from `SudoPlatformError`.
      */
 
-    case serviceError
+    case accountLockedError
     case decodingError
     case environmentError
-    case policyFailed
-    case invalidTokenError
-    case accountLockedError
     case identityInsufficient
     case identityNotVerified
-    case unknownTimezone
+    case invalidTokenError
+    case insufficientEntitlementsError
     case internalError(_ cause: String?)
     case invalidArgument(_ msg: String?)
+    case noEntitlementsError
+    case policyFailed
+    case serviceError
+    case unknownTimezone
 
     // MARK: - Lifecycle
 
@@ -87,75 +89,83 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     /// Initialize a `SudoEmailError` from a `SudoPlatformError`.
     init(platformError error: SudoPlatformError) {
         switch error {
-        case .serviceError:
-            self = .serviceError
+        case .accountLockedError:
+            self = .accountLockedError
         case .decodingError:
             self = .decodingError
         case .environmentError:
             self = .environmentError
-        case .policyFailed:
-            self = .policyFailed
-        case .invalidTokenError:
-            self = .invalidTokenError
-        case .accountLockedError:
-            self = .accountLockedError
         case .identityInsufficient:
             self = .identityInsufficient
         case .identityNotVerified:
             self = .identityNotVerified
-        case .unknownTimezone:
-            self = .unknownTimezone
+        case .invalidTokenError:
+            self = .invalidTokenError
+        case .insufficientEntitlementsError:
+            self = .insufficientEntitlementsError
         case let .internalError(cause):
             self = .internalError(cause)
         case let .invalidArgument(msg):
             self = .invalidArgument(msg)
+        case .noEntitlementsError:
+            self = .noEntitlementsError
+        case .policyFailed:
+            self = .policyFailed
+        case .serviceError:
+            self = .serviceError
+        case .unknownTimezone:
+            self = .unknownTimezone
         }
     }
 
     public var errorDescription: String? {
         switch self {
-        case .invalidConfig:
-            return L10n.Email.Errors.invalidConfig
-        case .notSignedIn:
-            return L10n.Email.Errors.notSignedIn
-        case .noEmailMessageRFC822Available:
-            return L10n.Email.Errors.noEmailMessageRFC822Available
-        case .addressNotFound:
-            return L10n.Email.Errors.addressNotFound
-        case .emailMessageNotFound:
-            return L10n.Email.Errors.emailMessageNotFound
-        case .unauthorizedAddress:
-            return L10n.Email.Errors.unauthorizedAddress
-        case .invalidEmailAddressDomain:
-            return L10n.Email.Errors.invalidEmailAddressDomain
-        case .emailAddressFormatValidationFailed:
-            return L10n.Email.Errors.emailAddressFormatValidationFailed
-        case .entitlementExceeded:
-            return L10n.Email.Errors.entitlementExceeded
-        case .serviceError:
-            return L10n.Email.Errors.serviceError
-        case .decodingError:
-            return L10n.Email.Errors.decodingError
-        case .environmentError:
-            return L10n.Email.Errors.environmentError
-        case .policyFailed:
-            return L10n.Email.Errors.policyFailed
-        case .invalidTokenError:
-            return L10n.Email.Errors.invalidTokenError
         case .accountLockedError:
             return L10n.Email.Errors.accountLockedError
+        case .addressNotFound:
+            return L10n.Email.Errors.addressNotFound
+        case .decodingError:
+            return L10n.Email.Errors.decodingError
+        case .emailAddressFormatValidationFailed:
+            return L10n.Email.Errors.emailAddressFormatValidationFailed
+        case .emailAddressUnavailable:
+            return L10n.Email.Errors.emailAddressUnavailable
+        case .emailMessageNotFound:
+            return L10n.Email.Errors.emailMessageNotFound
+        case .entitlementExceeded:
+            return L10n.Email.Errors.entitlementExceeded
+        case .environmentError:
+            return L10n.Email.Errors.environmentError
         case .identityInsufficient:
             return L10n.Email.Errors.identityInsufficient
         case .identityNotVerified:
             return L10n.Email.Errors.identityNotVerified
-        case .emailAddressUnavailable:
-            return L10n.Email.Errors.emailAddressUnavailable
+        case .insufficientEntitlementsError:
+            return L10n.Email.Errors.insufficientEntitlementsError
         case let .internalError(cause):
             return cause ?? "Internal Error"
-        case .unknownTimezone:
-            return L10n.Email.Errors.unknownTimezone
         case let .invalidArgument(msg):
             return msg ?? L10n.Email.Errors.invalidArgument
+        case .invalidConfig:
+            return L10n.Email.Errors.invalidConfig
+        case .invalidEmailAddressDomain:
+            return L10n.Email.Errors.invalidEmailAddressDomain
+        case .invalidTokenError:
+            return L10n.Email.Errors.invalidTokenError
+        case .noEmailMessageRFC822Available:
+            return L10n.Email.Errors.noEmailMessageRFC822Available
+        case .noEntitlementsError:
+            return L10n.Email.Errors.noEntitlementsError
+        case .notSignedIn:
+            return L10n.Email.Errors.notSignedIn
+        case .policyFailed:
+            return L10n.Email.Errors.policyFailed
+        case .serviceError:
+            return L10n.Email.Errors.serviceError
+        case .unauthorizedAddress:
+            return L10n.Email.Errors.unauthorizedAddress
+        case .unknownTimezone:
+            return L10n.Email.Errors.unknownTimezone
         }
     }
 

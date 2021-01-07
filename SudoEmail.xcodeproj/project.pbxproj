@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00B86B0CB2830D18F2999D6B /* Pods_SudoEmail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7658A7A565F4F3A321493B79 /* Pods_SudoEmail.framework */; };
+		5DBA122925A6ADCB00FB4A9D /* MockSudoProfilesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBA122825A6ADCB00FB4A9D /* MockSudoProfilesClient.swift */; };
 		8407BD1D23E135B90018ABEA /* PublicKeyEncryptionAlgorithm+StringInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8407BD1C23E135B90018ABEA /* PublicKeyEncryptionAlgorithm+StringInitializable.swift */; };
 		8409EC7623D51FAD00553022 /* MockKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8409EC7523D51FAD00553022 /* MockKeyManager.swift */; };
 		841145122343214800D3612A /* AnyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841145112343214800D3612A /* AnyError.swift */; };
@@ -83,10 +84,8 @@
 		844D993324972E6500B942F2 /* MockDeviceKeyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844D993224972E6500B942F2 /* MockDeviceKeyWorker.swift */; };
 		844D99352497301300B942F2 /* MockEmailMessageUnsealerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844D99342497301300B942F2 /* MockEmailMessageUnsealerService.swift */; };
 		845AAB73237B945B00E4A13C /* MockPlatformOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AAB72237B945B00E4A13C /* MockPlatformOperationQueue.swift */; };
-		845AAB7F237CCBB700E4A13C /* MockSudoProfilesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AAB7E237CCBB600E4A13C /* MockSudoProfilesClient.swift */; };
 		845AAB93237E292A00E4A13C /* PlatformSubscriptionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AAB92237E292A00E4A13C /* PlatformSubscriptionStatus.swift */; };
 		845AAB9C237E2D7600E4A13C /* MockAWSNetworkTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AAB9B237E2D7600E4A13C /* MockAWSNetworkTransport.swift */; };
-		845AABBD2382B95800E4A13C /* MockSudoUserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AABBC2382B95800E4A13C /* MockSudoUserClient.swift */; };
 		845AABC32383A42600E4A13C /* SudoEmailError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AABC22383A42600E4A13C /* SudoEmailError.swift */; };
 		845AABCD2383BC9C00E4A13C /* SignedInCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AABCC2383BC9C00E4A13C /* SignedInCondition.swift */; };
 		845AABD423848B7D00E4A13C /* Error+Equality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845AABD323848B7D00E4A13C /* Error+Equality.swift */; };
@@ -320,6 +319,7 @@
 		49CD4C28A458B7B84009CFB0 /* Pods-SudoEmail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail/Pods-SudoEmail.debug.xcconfig"; sourceTree = "<group>"; };
 		55D7B747B7F27BA6C07614C6 /* Pods-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmailIntegrationTests/Pods-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		5D80DAFBF80ED1422CD3A7E6 /* Pods-SudoEmailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmailTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmailTests/Pods-SudoEmailTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DBA122825A6ADCB00FB4A9D /* MockSudoProfilesClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockSudoProfilesClient.swift; sourceTree = "<group>"; };
 		65BFD5441A621353BBBDAC77 /* Pods_SudoEmail_SudoEmailTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SudoEmail_SudoEmailTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7658A7A565F4F3A321493B79 /* Pods_SudoEmail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SudoEmail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A19DF4B24F897C182EF9957 /* Pods-SudoEmailTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmailTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmailTests/Pods-SudoEmailTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -402,10 +402,8 @@
 		844D993224972E6500B942F2 /* MockDeviceKeyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceKeyWorker.swift; sourceTree = "<group>"; };
 		844D99342497301300B942F2 /* MockEmailMessageUnsealerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEmailMessageUnsealerService.swift; sourceTree = "<group>"; };
 		845AAB72237B945B00E4A13C /* MockPlatformOperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlatformOperationQueue.swift; sourceTree = "<group>"; };
-		845AAB7E237CCBB600E4A13C /* MockSudoProfilesClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockSudoProfilesClient.swift; sourceTree = "<group>"; };
 		845AAB92237E292A00E4A13C /* PlatformSubscriptionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSubscriptionStatus.swift; sourceTree = "<group>"; };
 		845AAB9B237E2D7600E4A13C /* MockAWSNetworkTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAWSNetworkTransport.swift; sourceTree = "<group>"; };
-		845AABBC2382B95800E4A13C /* MockSudoUserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSudoUserClient.swift; sourceTree = "<group>"; };
 		845AABC22383A42600E4A13C /* SudoEmailError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudoEmailError.swift; sourceTree = "<group>"; };
 		845AABCC2383BC9C00E4A13C /* SignedInCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedInCondition.swift; sourceTree = "<group>"; };
 		845AABD323848B7D00E4A13C /* Error+Equality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Equality.swift"; sourceTree = "<group>"; };
@@ -717,8 +715,7 @@
 				84B2609E248DF61700E99401 /* MockSealedEmailMessageRepository.swift */,
 				84F6529A24A972C7009EDD3A /* MockSubscriptionManager.swift */,
 				849AF01F24A2CF65005CFA2E /* MockSubscriptionToken.swift */,
-				845AAB7E237CCBB600E4A13C /* MockSudoProfilesClient.swift */,
-				845AABBC2382B95800E4A13C /* MockSudoUserClient.swift */,
+				5DBA122825A6ADCB00FB4A9D /* MockSudoProfilesClient.swift */,
 				84B2603424887A6300E99401 /* MockUseCaseFactory.swift */,
 			);
 			path = Mocks;
@@ -2394,8 +2391,7 @@
 				84A4561524B6C9F1002DBF0D /* MockSubscribeToEmailMessageDeletedUseCase.swift in Sources */,
 				84F6529B24A972C8009EDD3A /* MockSubscriptionManager.swift in Sources */,
 				849AF02024A2CF65005CFA2E /* MockSubscriptionToken.swift in Sources */,
-				845AAB7F237CCBB700E4A13C /* MockSudoProfilesClient.swift in Sources */,
-				845AABBD2382B95800E4A13C /* MockSudoUserClient.swift in Sources */,
+				5DBA122925A6ADCB00FB4A9D /* MockSudoProfilesClient.swift in Sources */,
 				84B2603524887A6300E99401 /* MockUseCaseFactory.swift in Sources */,
 				84B260822489E2B300E99401 /* OwnerAPITransformerTests.swift in Sources */,
 				84B260392488841600E99401 /* OwnerEntityTranformerTests.swift in Sources */,
