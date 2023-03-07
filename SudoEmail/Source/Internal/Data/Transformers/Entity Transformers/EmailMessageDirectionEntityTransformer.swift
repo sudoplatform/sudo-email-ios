@@ -8,7 +8,7 @@
 struct EmailMessageDirectionEntityTransformer {
 
     /// Transform the success result of `EmailMessageDirection` from the service to a `EmailMessageEntity`.
-    func transform(_ graphQL: EmailMessageDirection) throws -> DirectionEntity {
+    func transform(_ graphQL: GraphQL.EmailMessageDirection) throws -> DirectionEntity {
         switch graphQL {
         case .inbound:
             return .inbound

@@ -26,9 +26,9 @@ class GetSupportedDomainsUseCase {
     // MARK: - Methods
 
     /// Execute the use case.
-    /// - Parameter completion: Returns a list of the supported domains from the cache of the device.
-    func execute(completion: @escaping ClientCompletion<[DomainEntity]>) {
-        domainRepository.getSupportedDomains(completion: completion)
+    /// - Returns: A list of the supported domains from the cache of the device.
+    func execute() async throws -> [DomainEntity] {
+        return try await domainRepository.getSupportedDomains()
     }
 
 }

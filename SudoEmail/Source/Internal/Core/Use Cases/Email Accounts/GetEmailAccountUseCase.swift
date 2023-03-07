@@ -18,7 +18,7 @@ class GetEmailAccountUseCase {
 
     // MARK: - Methods
 
-    func execute(withEmailAddressId id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        emailAccountRepository.getWithEmailAddressId(id, completion: completion)
+    func execute(withEmailAddressId id: String) async throws -> EmailAccountEntity? {
+        return try await emailAccountRepository.getWithEmailAddressId(id)
     }
 }

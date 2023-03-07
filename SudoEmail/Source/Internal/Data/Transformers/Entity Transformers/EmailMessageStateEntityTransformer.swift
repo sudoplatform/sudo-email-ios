@@ -8,7 +8,7 @@
 struct EmailMessageStateEntityTransformer {
 
     /// Transform the success result of `EmailMessageState` from the service to a `EmailMessageEntity`.
-    func transform(_ graphQL: EmailMessageState) throws -> StateEntity {
+    func transform(_ graphQL: GraphQL.EmailMessageState) throws -> StateEntity {
         switch graphQL {
         case .queued:
             return .queued

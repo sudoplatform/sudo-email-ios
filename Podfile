@@ -1,7 +1,7 @@
 #
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '13.0'
+platform :ios, '15.0'
 
 workspace 'SudoEmail'
 use_frameworks!
@@ -26,6 +26,9 @@ target 'SudoEmail' do
 
   target 'SudoEmailIntegrationTests' do
     podspec :name => 'SudoEmail'
+    pod 'SudoEntitlements', '~> 8.0'
+    pod 'SudoEntitlementsAdmin', '~> 4.0'
+    pod 'SudoProfiles', '~> 16.0'
   end
 
 end

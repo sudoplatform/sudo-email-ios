@@ -5,79 +5,66 @@
 //
 
 import Foundation
-import AWSAppSync
-import SudoOperations
+import SudoApiClient
 import SudoLogging
+
+/// Queue to handle the result events from AWS.
+private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-handler-queue")
 
 /// Data implementation of the core `DomainRepository`.
 ///
 /// Allows access of data from the email service and device cache, via AppSync GraphQL.
-class DefaultDomainRepsitory: DomainRepository, Resetable {
+class DefaultDomainRepsitory: DomainRepository {
 
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
-    var appSyncClient: AWSAppSyncClient
+    var appSyncClient: SudoApiClient
 
     /// Used to log diagnostic and error information.
     var logger: Logger
 
-    /// Utility factory class to generate mutation and query operations.
-    var operationFactory = OperationFactory()
-
-    /// Operation queue for enqueuing asynchronous tasks.
-    var queue = PlatformOperationQueue()
-
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultEmailAccountRepository`.
-    init(appSyncClient: AWSAppSyncClient, logger: Logger = .emailSDKLogger) {
+    init(appSyncClient: SudoApiClient, logger: Logger = .emailSDKLogger) {
         self.appSyncClient = appSyncClient
         self.logger = logger
     }
 
-    func reset() {
-        queue.cancelAllOperations()
-    }
-
     // MARK: - DomainRepository
 
-    func getSupportedDomains(completion: @escaping ClientCompletion<[DomainEntity]>) {
-        let operation = constructQueryOperationWithCachePolicy(.cacheOnly, completion: completion)
-        queue.addOperation(operation)
+    func getSupportedDomains() async throws -> [DomainEntity] {
+        return try await performGetEmailDomainsQuery(cachePolicy: CachePolicy.cacheOnly)
     }
 
-    func fetchSupportedDomains(completion: @escaping ClientCompletion<[DomainEntity]>) {
-        let operation = constructQueryOperationWithCachePolicy(.remoteOnly, completion: completion)
-        queue.addOperation(operation)
+    func fetchSupportedDomains() async throws -> [DomainEntity] {
+        return try await performGetEmailDomainsQuery(cachePolicy: CachePolicy.remoteOnly)
     }
 
     // MARK: - Helpers
 
-    /// Construct a `GetEmailDomainsQuery` operation to perform the work to access the supported domains.
+    /// Perform a `GetEmailDomainsQuery` with specified cache policy
     /// - Parameters:
-    ///   - cachePolicy: Cache policy to use for data access.
-    ///   - completion: Completion from the repository call.
-    /// - Returns: Constructed operation.
-    func constructQueryOperationWithCachePolicy(
-        _ cachePolicy: CachePolicy,
-        completion: @escaping ClientCompletion<[DomainEntity]>
-    ) -> PlatformQueryOperation<GetEmailDomainsQuery> {
-        let query = GetEmailDomainsQuery()
-        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
-        let completionObserver = PlatformBlockObserver(finishHandler: { _, errors in
-            if let error = errors.first {
-                completion(.failure(error))
-                return
+    ///   - cachePolicy specifies whether to use local cache or get results from the server
+    /// - Returns: A list of supported email domains
+    private func performGetEmailDomainsQuery(cachePolicy: CachePolicy) async throws -> [DomainEntity] {
+        let query = GraphQL.GetEmailDomainsQuery()
+        let cachePolicyTransformer = CachePolicyAPITransformer()
+        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: queryCachePolicy,
+            queue: dispatchQueue
+        )
+        guard let result = fetchResult?.data else {
+            guard let error = fetchError else {
+                return []
             }
-            var domainEntities: [DomainEntity] = []
-            if let domains = operation.result?.getEmailDomains.domains {
-                domainEntities = domains.map(DomainEntity.init(name:))
-            }
-            completion(.success(domainEntities))
-        })
-        operation.addObserver(completionObserver)
-        return operation
+            throw SudoEmailError.internalError("\(error)")
+        }
+        let transformer = DomainEntityTransformer()
+        return result.getEmailDomains.domains.map(transformer.transform(_:))
     }
 
 }

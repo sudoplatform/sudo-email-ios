@@ -10,42 +10,24 @@ class FetchEmailMessageUseCase {
 
     // MARK: - Properties
 
-    let sealedEmailMessageRepository: SealedEmailMessageRepository
-
-    let keyRepository: KeyRepository
+    let emailMessageRepository: EmailMessageRepository
 
     let emailMessageUnsealerService: EmailMessageUnsealerService
 
     // MARK: - Lifecycle
 
-    init(sealedEmailMessageRepository: SealedEmailMessageRepository, keyRepository: KeyRepository, emailMessageUnsealerService: EmailMessageUnsealerService) {
-        self.sealedEmailMessageRepository = sealedEmailMessageRepository
-        self.keyRepository = keyRepository
+    init(
+        emailMessageRepository: EmailMessageRepository,
+        emailMessageUnsealerService: EmailMessageUnsealerService
+    ) {
+        self.emailMessageRepository = emailMessageRepository
         self.emailMessageUnsealerService = emailMessageUnsealerService
     }
 
     // MARK: - Methods
 
-    func execute(withMessageId id: String, completion: @escaping ClientCompletion<EmailMessageEntity?>) {
-        let publicKey: KeyEntity
-        do {
-            let keyPair = try keyRepository.getCurrentKeyPair()
-            guard let pk = keyPair?.publicKey else {
-                throw SudoEmailError.internalError("No public key registered")
-            }
-            publicKey = pk
-        } catch {
-            completion(.failure(error))
-            return
-        }
-        sealedEmailMessageRepository.fetchEmailMessageById(id, keyId: publicKey.keyId) { result in
-            let result: Result<EmailMessageEntity?, Error> = result.mapThrowingSuccess { sealedMessage in
-                guard let sealedMessage = sealedMessage else {
-                    return nil
-                }
-                return try self.emailMessageUnsealerService.unsealEmailMessage(sealedMessage)
-            }
-            completion(result)
-        }
+    func execute(withMessageId id: String) async throws -> EmailMessageEntity? {
+        guard let sealedMessage = try await emailMessageRepository.fetchEmailMessageById(id) else { return nil }
+        return try self.emailMessageUnsealerService.unsealEmailMessage(sealedMessage)
     }
 }

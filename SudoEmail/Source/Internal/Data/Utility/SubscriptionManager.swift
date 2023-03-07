@@ -7,7 +7,7 @@
 import Foundation
 
 /// Utility class for mananging subscription in the SDK to the service.
-protocol SubscriptionManager: class {
+protocol SubscriptionManager: AnyObject {
 
     /// Add a subscription to the manager.
     func addSubscription(_ subscription: EmailSubscriptionToken)
@@ -91,6 +91,9 @@ class DefaultSubscriptionManager: SubscriptionManager {
 
     func removeAllSubscriptions() {
         subscriptionQueue.sync {
+            subscriptions.forEach { subscription in
+                subscription.cancel()
+            }
             subscriptions.removeAll()
         }
     }

@@ -7,8 +7,8 @@
 /// Utility class to transform email message state entity data to the GraphQL data.
 struct EmailMessageStateGQLTransformer {
 
-    /// Transform a `StateEntity` filter rule into a GraphQL `EmailMessageState` filter rule.
-    func transform(_ entity: StateEntity) -> EmailMessageState {
+    /// Transform a `StateEntity` into a GraphQL `EmailMessageState`.
+    func transform(_ entity: StateEntity) -> GraphQL.EmailMessageState {
         switch entity {
         case .queued:
             return .queued

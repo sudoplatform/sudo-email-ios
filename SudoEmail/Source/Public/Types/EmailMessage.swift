@@ -9,6 +9,16 @@ import Foundation
 /// Representation of a email message object associated with a email message in Platform SDK.
 public struct EmailMessage: Equatable {
 
+    public struct EmailAddress: Equatable {
+        public var address: String
+        public var displayName: String?
+
+        public init(address: String, displayName: String? = nil) {
+            self.address = address
+            self.displayName = displayName
+        }
+    }
+
     /// Direction of an email message.
     public enum Direction: Equatable {
         /// Message is inbound to the user - message has been received by the user.
@@ -33,16 +43,6 @@ public struct EmailMessage: Equatable {
         case received
     }
 
-    public struct EmailAddress: Equatable {
-        public var address: String
-        public var displayName: String?
-
-        public init(address: String, displayName: String? = nil) {
-            self.address = address
-            self.displayName = displayName
-        }
-    }
-
     /// Unique identifier of the email message.
     public var id: String
 
@@ -50,19 +50,28 @@ public struct EmailMessage: Equatable {
     public var clientRefId: String?
 
     /// Unique identifier of the user of the email message.
-    public var userId: String
+    public var owner: String
 
-    /// Unique identifier of the sudo of the email message.
-    public var sudoId: String
+    /// List of owner identifiers and issuers associated with this email message.
+    public var owners: [Owner]
 
     /// Email address id that is associated with the account of the email message - which account sent/received this message.
     public var emailAddressId: String
 
+    /// Unique identifier of the email folder which the message is assigned to.
+    public var folderId: String
+
+    /// Unique identifier of the previous email folder which the message resource was assigned to, if any.
+    public var previousFolderId: String?
+
     /// Date timestamp when the email message was created on the service.
-    public var created: Date
+    public var createdAt: Date
 
     /// Date timestamp when the email message was last updated on the service.
-    public var updated: Date
+    public var updatedAt: Date
+
+    /// Date timestamp when the email message was processed by the service.
+    public var sortDate: Date
 
     /// True if the user has seen the email message previously.
     public var seen: Bool
@@ -73,7 +82,14 @@ public struct EmailMessage: Equatable {
     /// State of the email message.
     public var state: State
 
-    /// Array of from recipients of the email message.
+    /// The size, in bytes, of the encrypted RFC822 data stored in the backend. This value is used to
+    /// calculate the total storage used by an email address or user and used to enforce email storage related
+    public var size: Double
+
+    /// Version of this entity, increments on update.
+    public var version: Int
+
+    /// Array of from email addresses, eg the authors, of the email message.
     public var from: [EmailMessage.EmailAddress]
 
     public var replyTo: [EmailMessage.EmailAddress]
@@ -90,41 +106,141 @@ public struct EmailMessage: Equatable {
     /// Subject header of the email message.
     public var subject: String?
 
+    /// True if the email message includes one or more attachments.
+    public var hasAttachments: Bool
+
     /// Initialize an instance of `EmailMessage`.
     public init(
         id: String,
         clientRefId: String?,
-        userId: String,
-        sudoId: String,
+        owner: String,
+        owners: [Owner],
         emailAddressId: String,
-        created: Date,
-        updated: Date,
+        folderId: String,
+        previousFolderId: String?,
+        createdAt: Date,
+        updatedAt: Date,
+        sortDate: Date,
         seen: Bool,
         direction: Direction,
         state: State,
+        version: Int,
+        size: Double,
         from: [EmailMessage.EmailAddress],
         replyTo: [EmailMessage.EmailAddress],
         to: [EmailMessage.EmailAddress],
         cc: [EmailMessage.EmailAddress],
         bcc: [EmailMessage.EmailAddress],
-        subject: String?
+        subject: String?,
+        hasAttachments: Bool
     ) {
         self.id = id
         self.clientRefId = clientRefId
-        self.userId = userId
-        self.sudoId = sudoId
-        self.created = created
-        self.updated = updated
+        self.owner = owner
+        self.owners = owners
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.sortDate = sortDate
         self.emailAddressId = emailAddressId
+        self.folderId = folderId
+        self.previousFolderId = previousFolderId
         self.seen = seen
         self.direction = direction
         self.state = state
+        self.version = version
+        self.size = size
         self.from = from
         self.replyTo = replyTo
         self.to = to
         self.cc = cc
         self.bcc = bcc
         self.subject = subject
+        self.hasAttachments = hasAttachments
     }
 
+}
+
+/// Representation of an email message object without any unsealed attributes associated with a email message in Platform SDK.
+public struct PartialEmailMessage: Equatable {
+
+    /// Unique identifier of the email message.
+    public var id: String
+
+    /// Unique client reference identifier.
+    public var clientRefId: String?
+
+    /// Unique identifier of the user of the email message.
+    public var owner: String
+
+    /// List of owner identifiers and issuers associated with this email message.
+    public var owners: [Owner]
+
+    /// Email address id that is associated with the account of the email message - which account sent/received this message.
+    public var emailAddressId: String
+
+    /// Unique identifier of the email folder which the message is assigned to.
+    public var folderId: String
+
+    /// Unique identifier of the previous email folder which the message resource was assigned to, if any.
+    public var previousFolderId: String?
+
+    /// Date timestamp when the email message was created on the service.
+    public var createdAt: Date
+
+    /// Date timestamp when the email message was last updated on the service.
+    public var updatedAt: Date
+
+    /// Date timestamp when the email message was processed by the service.
+    public var sortDate: Date
+
+    /// True if the user has seen the email message previously.
+    public var seen: Bool
+
+    /// Direction of the email message.
+    public var direction: EmailMessage.Direction
+
+    /// State of the email message.
+    public var state: EmailMessage.State
+
+    /// The size, in bytes, of the encrypted RFC822 data stored in the backend. This value is used to
+    /// calculate the total storage used by an email address or user and used to enforce email storage related
+    public var size: Double
+
+    /// Version of this entity, increments on update.
+    public var version: Int
+
+    /// Initialize an instance of `EmailMessage`.
+    public init(
+        id: String,
+        clientRefId: String?,
+        owner: String,
+        owners: [Owner],
+        emailAddressId: String,
+        folderId: String,
+        previousFolderId: String?,
+        createdAt: Date,
+        updatedAt: Date,
+        sortDate: Date,
+        seen: Bool,
+        direction: EmailMessage.Direction,
+        state: EmailMessage.State,
+        version: Int,
+        size: Double
+    ) {
+        self.id = id
+        self.clientRefId = clientRefId
+        self.owner = owner
+        self.owners = owners
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.sortDate = sortDate
+        self.emailAddressId = emailAddressId
+        self.folderId = folderId
+        self.previousFolderId = previousFolderId
+        self.seen = seen
+        self.direction = direction
+        self.state = state
+        self.version = version
+        self.size = size
+    }
 }

@@ -13,10 +13,10 @@ struct EmailAccountEntity: Equatable {
     var id: String
 
     /// Unique identifier of the user that owns the email account.
-    var userId: String
+    var owner: String
 
-    /// Unique identifier of the sudo that owns the email account.
-    var sudoId: String
+    /// The identifier and issuer of the owners of the email account.
+    var owners: [OwnerEntity]
 
     /// Unique identifier of the identity of the email account.
     var identityId: String
@@ -24,16 +24,27 @@ struct EmailAccountEntity: Equatable {
     /// Unique identifier of the key ring associated with the email account.
     var keyRingId: String
 
+    /// Unique identifiers of the keys associated with the email account.
+    var keyIds: [String]
+
     /// Email address associated with the account.
     var emailAddress: EmailAddressEntity
 
-    /// Identifier of the owners of the account.
-    var owners: [OwnerEntity]
+    /// The total size in bytes of all email messages assigned to the email account.
+    var size: Double
+
+    /// Version of this entity, increments on update.
+    var version: Int
 
     /// Timestamp of when the account was created on the service.
-    var created: Date
+    var createdAt: Date
 
     /// Timestamp of when the account was last updated on the service.
-    var updated: Date
+    var updatedAt: Date
 
+    /// Date when the email account received its last email message. `nil` if no messages received.
+    var lastReceivedAt: Date?
+
+    /// The email folders associated with the email account.
+    var folders: [EmailFolderEntity]
 }

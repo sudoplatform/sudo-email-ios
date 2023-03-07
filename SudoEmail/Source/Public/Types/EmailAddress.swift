@@ -10,42 +10,78 @@ public struct EmailAddress: Equatable {
 
     // MARK: - Properties
 
+    /// Unique identifier of the email address.
     public let id: String
 
-    public let userId: String
+    /// Identifier of the user that owns the email address.
+    public let owner: String
 
-    public let sudoId: String
-
-    public let identityId: String
-
-    public let emailAddress: String
-
+    /// List of owner identifiers and issuers associated with this email address.
     public let owners: [Owner]
 
-    /// Email service timestamp to when the card entry was created.
-    public let created: Date
+    /// Unique identifier of the identity associated with the email address.
+    public let identityId: String
 
-    /// Email service timestamp to when the card entry was last updated.
-    public let updated: Date
+    /// Unique identifier of the key ring associated with the email address.
+    public let keyRingId: String
+
+    /// List of unique identifiers of the key ring associated with the email address.
+    public let keyIds: [String]
+
+    /// Address in format 'local-part@domain' of the email address.
+    public let emailAddress: String
+
+    /// List of email folders associated with this email address.
+    public let folders: [EmailFolder]
+
+    /// The total size, in bytes, of all email messages assigned to the email address.
+    public let size: Double
+
+    /// Version of this entity, increments on update.
+    public let version: Int
+
+    /// Email service timestamp to when the email address was created.
+    public let createdAt: Date
+
+    /// Email service timestamp to when the email address was last updated.
+    public let updatedAt: Date
+
+    /// Date when the email account received its last email message. `nil` if no messages received.
+    public let lastReceivedAt: Date?
+
+    /// An optional user defined alias name for the the email address.
+    public let alias: String?
 
     /// Initialize an instance of `EmailAddress`.
     public init(
         id: String,
-        userId: String,
-        sudoId: String,
-        identityId: String,
-        emailAddress: String,
+        owner: String,
         owners: [Owner],
-        created: Date,
-        updated: Date
+        identityId: String,
+        keyRingId: String,
+        keyIds: [String],
+        emailAddress: String,
+        folders: [EmailFolder],
+        size: Double,
+        version: Int,
+        createdAt: Date,
+        updatedAt: Date,
+        lastReceivedAt: Date?,
+        alias: String?
     ) {
         self.id = id
-        self.userId = userId
-        self.sudoId = sudoId
-        self.identityId = identityId
-        self.emailAddress = emailAddress
+        self.owner = owner
         self.owners = owners
-        self.created = created
-        self.updated = updated
+        self.identityId = identityId
+        self.keyRingId = keyRingId
+        self.keyIds = keyIds
+        self.emailAddress = emailAddress
+        self.folders = folders
+        self.size = size
+        self.version = version
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.lastReceivedAt = lastReceivedAt
+        self.alias = alias
     }
 }

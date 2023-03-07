@@ -15,243 +15,367 @@ struct SealedEmailMessageEntityTransformer {
     /// Utility for transforming email message state to `StateEntity`.
     let stateTransformer = EmailMessageStateEntityTransformer()
 
-    /// Transform the success result of `GetEmailMessageQuery` from the service to a `EmailMessageEntity`.
+    /// Utility for transforming owners to `OwnerTransformer`.
+    let ownerTransformer = OwnerEntityTransformer()
+
+    /// Transform the success result of `GetEmailMessageQuery` from the service to a `SealedEmailMessageEntity`.
     func transform(
-        _ graphQLMessage: GetEmailMessageQuery.Data.GetEmailMessage
+        _ graphQLMessage: GraphQL.GetEmailMessageQuery.Data.GetEmailMessage
     ) throws -> SealedEmailMessageEntity {
         /// Transform GraphQL properties.
         let id = graphQLMessage.id
-        let messageId = graphQLMessage.messageId
-        let userId = graphQLMessage.userId
-        let sudoId = graphQLMessage.sudoId
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
-        let keyId = graphQLMessage.keyId
-        let algorithm = graphQLMessage.algorithm
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
         let clientRefId = graphQLMessage.clientRefId
-        let created = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
-        let updated = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
         /// Sealed Attributes.
-        let from = graphQLMessage.from
-        let replyTo = graphQLMessage.replyTo
-        let to = graphQLMessage.to
-        let cc = graphQLMessage.cc
-        let bcc = graphQLMessage.bcc
-        let subject = graphQLMessage.subject
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
-            messageId: messageId,
-            userId: userId,
-            sudoId: sudoId,
+            owner: owner,
+            owners: owners,
             emailAddressId: emailAddressId,
             keyId: keyId,
             algorithm: algorithm,
-            clientRefId: clientRefId,
-            created: created,
-            updated: updated,
-            seen: seen,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
             direction: direction,
+            seen: seen,
             state: state,
-            from: from,
-            replyTo: replyTo,
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: subject
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
         )
     }
 
-    /// Transform the success result of `ListEmailMessageQuery` from the service to a `EmailMessageEntity`.
+    /// Transform the success result of `ListEmailMessagesForEmailAddressIdQuery` from the service to a `SealedEmailMessageEntity`.
     func transform(
-        _ graphQLMessage: ListEmailMessagesQuery.Data.ListEmailMessage.Item
+        _ graphQLMessage: GraphQL.ListEmailMessagesForEmailAddressIdQuery.Data.ListEmailMessagesForEmailAddressId.Item
     ) throws -> SealedEmailMessageEntity {
         /// Transform GraphQL properties.
         let id = graphQLMessage.id
-        let messageId = graphQLMessage.messageId
-        let userId = graphQLMessage.userId
-        let sudoId = graphQLMessage.sudoId
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
-        let keyId = graphQLMessage.keyId
-        let algorithm = graphQLMessage.algorithm
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
         let clientRefId = graphQLMessage.clientRefId
-        let created = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
-        let updated = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
         /// Sealed Attributes.
-        let from = graphQLMessage.from
-        let replyTo = graphQLMessage.replyTo
-        let to = graphQLMessage.to
-        let cc = graphQLMessage.cc
-        let bcc = graphQLMessage.bcc
-        let subject = graphQLMessage.subject
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
-            messageId: messageId,
-            userId: userId,
-            sudoId: sudoId,
+            owner: owner,
+            owners: owners,
             emailAddressId: emailAddressId,
             keyId: keyId,
             algorithm: algorithm,
-            clientRefId: clientRefId,
-            created: created,
-            updated: updated,
-            seen: seen,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
             direction: direction,
+            seen: seen,
             state: state,
-            from: from,
-            replyTo: replyTo,
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: subject
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
         )
     }
 
-    /// Transform the success result of `OnEmailMessageCreatedSubscription` from the service to a `EmailMessageEntity`.
+    /// Transform the success result of `ListEmailMessagesForEmailFolderIdQuery` from the service to a `SealedEmailMessageEntity`.
     func transform(
-        _ graphQLMessage: OnEmailMessageCreatedSubscription.Data.OnEmailMessageCreated
+        _ graphQLMessage: GraphQL.ListEmailMessagesForEmailFolderIdQuery.Data.ListEmailMessagesForEmailFolderId.Item
     ) throws -> SealedEmailMessageEntity {
         /// Transform GraphQL properties.
         let id = graphQLMessage.id
-        let messageId = graphQLMessage.messageId
-        let userId = graphQLMessage.userId
-        let sudoId = graphQLMessage.sudoId
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
-        let keyId = graphQLMessage.keyId
-        let algorithm = graphQLMessage.algorithm
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
         let clientRefId = graphQLMessage.clientRefId
-        let created = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
-        let updated = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
         /// Sealed Attributes.
-        let from = graphQLMessage.from
-        let replyTo = graphQLMessage.replyTo
-        let to = graphQLMessage.to
-        let cc = graphQLMessage.cc
-        let bcc = graphQLMessage.bcc
-        let subject = graphQLMessage.subject
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
-            messageId: messageId,
-            userId: userId,
-            sudoId: sudoId,
+            owner: owner,
+            owners: owners,
             emailAddressId: emailAddressId,
             keyId: keyId,
             algorithm: algorithm,
-            clientRefId: clientRefId,
-            created: created,
-            updated: updated,
-            seen: seen,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
             direction: direction,
+            seen: seen,
             state: state,
-            from: from,
-            replyTo: replyTo,
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: subject
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
         )
     }
 
-    /// Transform the success result of `OnEmailMessageCreatedWithDirectionSubscription` from the service to a `EmailMessageEntity`.
-    func transform(
-        _ graphQLMessage: OnEmailMessageCreatedWithDirectionSubscription.Data.OnEmailMessageCreated
-    ) throws -> SealedEmailMessageEntity {
-        /// Transform GraphQL properties.
-        let id = graphQLMessage.id
-        let messageId = graphQLMessage.messageId
-        let userId = graphQLMessage.userId
-        let sudoId = graphQLMessage.sudoId
-        let emailAddressId = graphQLMessage.emailAddressId
-        let keyId = graphQLMessage.keyId
-        let algorithm = graphQLMessage.algorithm
-        let clientRefId = graphQLMessage.clientRefId
-        let created = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
-        let updated = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
-        let seen = graphQLMessage.seen
-        let direction = try directionTransformer.transform(graphQLMessage.direction)
-        let state = try stateTransformer.transform(graphQLMessage.state)
-        /// Sealed Attributes.
-        let from = graphQLMessage.from
-        let replyTo = graphQLMessage.replyTo
-        let to = graphQLMessage.to
-        let cc = graphQLMessage.cc
-        let bcc = graphQLMessage.bcc
-        let subject = graphQLMessage.subject
-        return SealedEmailMessageEntity(
+    /// Transform a `SealedEmailMessageEntity` to a partial `EmailMessageEntity` to be used when unsealing fails
+    func transform(sealedEmailMessage: SealedEmailMessageEntity) -> PartialEmailMessageEntity {
+        let id = sealedEmailMessage.id
+        let owner = sealedEmailMessage.owner
+        let owners = sealedEmailMessage.owners
+        let emailAddressId = sealedEmailMessage.emailAddressId
+        let keyId = sealedEmailMessage.keyId
+        let folderId = sealedEmailMessage.folderId
+        let previousFolderId = sealedEmailMessage.previousFolderId
+        let clientRefId = sealedEmailMessage.clientRefId
+        let createdAt = sealedEmailMessage.createdAt
+        let updatedAt = sealedEmailMessage.updatedAt
+        let sortDate = sealedEmailMessage.sortDate
+        let seen = sealedEmailMessage.seen
+        let version = sealedEmailMessage.version
+        let size = sealedEmailMessage.size
+        let direction = sealedEmailMessage.direction
+        let state = sealedEmailMessage.state
+        return PartialEmailMessageEntity(
             id: id,
-            messageId: messageId,
-            userId: userId,
-            sudoId: sudoId,
+            owner: owner,
+            owners: owners,
             emailAddressId: emailAddressId,
             keyId: keyId,
-            algorithm: algorithm,
-            clientRefId: clientRefId,
-            created: created,
-            updated: updated,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
             seen: seen,
             direction: direction,
             state: state,
-            from: from,
-            replyTo: replyTo,
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: subject
+            clientRefId: clientRefId,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            version: version,
+            size: size
         )
     }
 
-    /// Transform the success result of `OnEmailMessageDeletedSubscription` from the service to a `EmailMessageEntity`.
+    /// Transform the success result of `OnEmailMessageCreatedSubscription` from the service to a `SealedEmailMessageEntity`.
     func transform(
-        _ graphQLMessage: OnEmailMessageDeletedSubscription.Data.OnEmailMessageDeleted
+        _ graphQLMessage: GraphQL.OnEmailMessageCreatedSubscription.Data.OnEmailMessageCreated
     ) throws -> SealedEmailMessageEntity {
         /// Transform GraphQL properties.
         let id = graphQLMessage.id
-        let messageId = graphQLMessage.messageId
-        let userId = graphQLMessage.userId
-        let sudoId = graphQLMessage.sudoId
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
-        let keyId = graphQLMessage.keyId
-        let algorithm = graphQLMessage.algorithm
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
         let clientRefId = graphQLMessage.clientRefId
-        let created = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
-        let updated = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
         /// Sealed Attributes.
-        let from = graphQLMessage.from
-        let replyTo = graphQLMessage.replyTo
-        let to = graphQLMessage.to
-        let cc = graphQLMessage.cc
-        let bcc = graphQLMessage.bcc
-        let subject = graphQLMessage.subject
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
-            messageId: messageId,
-            userId: userId,
-            sudoId: sudoId,
+            owner: owner,
+            owners: owners,
             emailAddressId: emailAddressId,
             keyId: keyId,
             algorithm: algorithm,
-            clientRefId: clientRefId,
-            created: created,
-            updated: updated,
-            seen: seen,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
             direction: direction,
+            seen: seen,
             state: state,
-            from: from,
-            replyTo: replyTo,
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: subject
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
         )
     }
+
+    /// Transform the success result of `OnEmailMessageCreatedWithDirectionSubscription` from the service to a `SealedEmailMessageEntity`.
+    func transform(
+        _ graphQLMessage: GraphQL.OnEmailMessageCreatedWithDirectionSubscription.Data.OnEmailMessageCreated
+    ) throws -> SealedEmailMessageEntity {
+        /// Transform GraphQL properties.
+        let id = graphQLMessage.id
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
+        let emailAddressId = graphQLMessage.emailAddressId
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
+        let clientRefId = graphQLMessage.clientRefId
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
+        let seen = graphQLMessage.seen
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
+        let direction = try directionTransformer.transform(graphQLMessage.direction)
+        let state = try stateTransformer.transform(graphQLMessage.state)
+        /// Sealed Attributes.
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
+        return SealedEmailMessageEntity(
+            id: id,
+            owner: owner,
+            owners: owners,
+            emailAddressId: emailAddressId,
+            keyId: keyId,
+            algorithm: algorithm,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
+            direction: direction,
+            seen: seen,
+            state: state,
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
+        )
+    }
+
+    /// Transform the success result of `OnEmailMessageDeletedSubscription` from the service to a `SealedEmailMessageEntity`.
+    func transform(
+        _ graphQLMessage: GraphQL.OnEmailMessageDeletedSubscription.Data.OnEmailMessageDeleted
+    ) throws -> SealedEmailMessageEntity {
+        /// Transform GraphQL properties.
+        let id = graphQLMessage.id
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
+        let emailAddressId = graphQLMessage.emailAddressId
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
+        let clientRefId = graphQLMessage.clientRefId
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
+        let seen = graphQLMessage.seen
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
+        let direction = try directionTransformer.transform(graphQLMessage.direction)
+        let state = try stateTransformer.transform(graphQLMessage.state)
+        /// Sealed Attributes.
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
+        return SealedEmailMessageEntity(
+            id: id,
+            owner: owner,
+            owners: owners,
+            emailAddressId: emailAddressId,
+            keyId: keyId,
+            algorithm: algorithm,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
+            direction: direction,
+            seen: seen,
+            state: state,
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
+        )
+    }
+
+    /// Transform the success result of `OnEmailMessageDeletedWithIdSubscription` from the service to a `SealedEmailMessageEntity`.
+    func transform(
+        _ graphQLMessage: GraphQL.OnEmailMessageDeletedWithIdSubscription.Data.OnEmailMessageDeleted
+    ) throws -> SealedEmailMessageEntity {
+        /// Transform GraphQL properties.
+        let id = graphQLMessage.id
+        let owner = graphQLMessage.owner
+        let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
+        let emailAddressId = graphQLMessage.emailAddressId
+        let keyId = graphQLMessage.rfc822Header.keyId
+        let algorithm = graphQLMessage.rfc822Header.algorithm
+        let folderId = graphQLMessage.folderId
+        let previousFolderId = graphQLMessage.previousFolderId
+        let clientRefId = graphQLMessage.clientRefId
+        let createdAt = Date(millisecondsSince1970: graphQLMessage.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
+        let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
+        let seen = graphQLMessage.seen
+        let version = graphQLMessage.version
+        let size = graphQLMessage.size
+        let direction = try directionTransformer.transform(graphQLMessage.direction)
+        let state = try stateTransformer.transform(graphQLMessage.state)
+        /// Sealed Attributes.
+        let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
+        return SealedEmailMessageEntity(
+            id: id,
+            owner: owner,
+            owners: owners,
+            emailAddressId: emailAddressId,
+            keyId: keyId,
+            algorithm: algorithm,
+            folderId: folderId,
+            previousFolderId: previousFolderId,
+            direction: direction,
+            seen: seen,
+            state: state,
+            clientRefId: clientRefId,
+            version: version,
+            sortDate: sortDate,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            size: size,
+            rfc822Header: rfc822Header
+        )
+    }
+
 }

@@ -6,17 +6,22 @@
 
 import Foundation
 import AWSAppSync
+import AWSS3
 
 /// Used to decode the file on disk. The config is stored in a nested JSON object `identityService`.
 struct FileConfig: Decodable {
     var identityService: IdentityServiceConfig
+    var emService: EmailServiceConfig
 }
 
 /// Configuration used to configure the client's S3 utility instance.
 struct IdentityServiceConfig: Decodable {
-    var region: AWSRegionType
     var poolId: String
     var identityPoolId: String
+}
+
+struct EmailServiceConfig: Decodable {
+    var region: String
     var bucket: String
     var transientBucket: String
 }
@@ -38,7 +43,7 @@ struct SudoEmailConfig: AWSAppSyncServiceConfigProvider {
 
     // MARK: - Lifecycle
 
-    /// Initialize an instance of `SudoVirtualCardsConfig`.
+    /// Initialize an instance of `SudoEmailConfig`.
     public init(
         endpoint: URL,
         region: AWSRegionType,

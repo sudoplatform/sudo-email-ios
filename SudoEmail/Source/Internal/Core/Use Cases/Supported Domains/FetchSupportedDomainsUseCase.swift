@@ -26,9 +26,9 @@ class FetchSupportedDomainsUseCase {
     // MARK: - Methods
 
     /// Execute the use case.
-    /// - Parameter completion: Returns a list of the supported domains from the email service.
-    func execute(completion: @escaping ClientCompletion<[DomainEntity]>) {
-        domainRepository.fetchSupportedDomains(completion: completion)
+    /// - Returns: A list of the supported domains from the email service.
+    func execute() async throws -> [DomainEntity] {
+        return try await domainRepository.fetchSupportedDomains()
     }
 
 }

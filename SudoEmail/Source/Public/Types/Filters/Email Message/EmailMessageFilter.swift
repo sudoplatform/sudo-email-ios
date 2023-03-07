@@ -8,13 +8,17 @@
 public indirect enum EmailMessageFilter {
     /// Filter rule for an `id` property.
     case id(StringFilter)
-    /// Filter rule for an `sudoId` property.
-    case sudoId(StringFilter)
-    /// Filter rule for an `emailAddressId` property.
-    case emailAddressId(StringFilter)
-    /// Filter rule for an `emailAddressId` property.
+    /// Filter rule for a `messageId` property.
+    case messageId(StringFilter)
+    /// Filter rule for an `algorithm` property.
+    case algorithm(StringFilter)
+    /// Filter rule for a `keyId` property
+    case keyId(StringFilter)
+    /// Filter rule for a `folderId` property
+    case folderId(StringFilter)
+    /// Filter rule for a `clientRefId` property.
     case clientRefId(StringFilter)
-    /// Filter rule for an `direction` property.
+    /// Filter rule for a `direction` property.
     case direction(EmailMessageDirectionFilter)
     /// Filter rule for an `seen` property.
     case seen(BoolFilter)

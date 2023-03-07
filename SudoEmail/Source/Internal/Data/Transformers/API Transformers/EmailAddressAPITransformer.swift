@@ -12,6 +12,9 @@ struct EmailAddressAPITransformer {
     /// Utility for transforming addresses to `Owner`.
     let ownerTransformer = OwnerAPITransformer()
 
+    /// Utility for transforming folders to/from `EmailFolderEntity`
+    let folderTransformer = EmailFolderEntityTransformer()
+
     func transform(_ entity: EmailAccountEntity?) -> EmailAddress? {
         guard let entity = entity else {
             return nil
@@ -24,22 +27,33 @@ struct EmailAddressAPITransformer {
     /// - Returns: Output result.
     func transform(_ entity: EmailAccountEntity) -> EmailAddress {
         let id = entity.id
-        let userId = entity.userId
-        let sudoId = entity.sudoId
-        let identityId = entity.identityId
-        let emailAddress = entity.emailAddress.address
+        let owner = entity.owner
         let owners = entity.owners.map(ownerTransformer.transform(_:))
-        let created = entity.created
-        let updated = entity.updated
+        let keyRingId = entity.keyRingId
+        let keyIds = entity.keyIds
+        let identityId = entity.identityId
+        let emailAddress = entity.emailAddress.emailAddress
+        let folders = entity.folders.map(folderTransformer.transform(_:))
+        let size = entity.size
+        let version = entity.version
+        let createdAt = entity.createdAt
+        let updatedAt = entity.updatedAt
+        let lastReceivedAt = entity.lastReceivedAt
         return EmailAddress(
             id: id,
-            userId: userId,
-            sudoId: sudoId,
-            identityId: identityId,
-            emailAddress: emailAddress,
+            owner: owner,
             owners: owners,
-            created: created,
-            updated: updated
+            identityId: identityId,
+            keyRingId: keyRingId,
+            keyIds: keyIds,
+            emailAddress: emailAddress,
+            folders: folders,
+            size: size,
+            version: version,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            lastReceivedAt: lastReceivedAt,
+            alias: entity.emailAddress.alias
         )
     }
 }

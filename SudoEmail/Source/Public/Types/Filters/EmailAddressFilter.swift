@@ -8,10 +8,10 @@
 public indirect enum EmailAddressFilter: Equatable {
     /// Filter rule for an `id` property.
     case id(StringFilter)
-    /// Filter rule for an `sudoId` property.
-    case sudoId(StringFilter)
     /// Filter rule for an `identityId` property.
     case identityId(StringFilter)
+    /// Filter rule for an `keyRingId` property.
+    case keyRingId(StringFilter)
     /// Filter rule for an `emailAddress` property.
     case emailAddress(StringFilter)
     /// Filter rule for negating a `EmailAddress` filter rule.

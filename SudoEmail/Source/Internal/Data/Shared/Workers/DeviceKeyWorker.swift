@@ -9,46 +9,38 @@ import SudoKeyManager
 import SudoLogging
 import SudoUser
 
-protocol DeviceKeyWorker: class {
+typealias KeyPair = (publicKey: KeyEntity, privateKey: KeyEntity)
+
+protocol DeviceKeyWorker: AnyObject {
 
     /// Generate a key pair on the device. Returns the freshly generated key pair.
     /// Throws: `SudoEmailError`.
     func generateKeyPair() throws -> KeyPair
 
-    /// Get the current key pair on the device. Returns `nil` if there is no current key pair.
-    /// Throws: `SudoEmailError`.
-    func getCurrentKeyPair() throws -> KeyPair?
+    /// Generate a new symmetric key
+    ///  Throws: `SudoKeyManagerError`.
+    func generateNewCurrentSymmetricKey() throws -> String
 
-    /// Unseal an integer property.
+    /// Get the id of the current symmetric key
+    ///  Throws: `SudoKeyManagerError`.
+    func getCurrentSymmetricKeyId() throws -> String?
+
+    /// Seal a string property.
     ///
-    /// - Parameter int: Base 64 encoded encrypted int value as a string to be decrypted.
-    /// - Parameter keyId: Key Id to be used to access the stored key and decrypt the data with.
-    /// - Parameter algorithm: Algorithm in plain text to use to decrypt the AES key.
-    /// - Throws:
-    ///     - `UnsealingError.dataDecodingFailed`:
-    ///         - If the input data cannot be encoded to a base 64 data object.
-    ///         - If The decrypted data cannot be decoded to a string.
-    ///         - If the unsealed object cannot be decoded to an `Int`.
-    ///     - `KeyManagerError` if the data cannot be decrypted.
-    func unsealInt(_ intString: String, withKeyId keyId: String, algorithm: String) throws -> Int
+    ///  - Parameter string: String to be encrypted.
+    ///  - Parameter keyId: Key Id to be used to access the stored key and encrypt the data.
+    func sealString(_ string: String, withKeyId keyId: String) throws -> String
 
-    /// Unseal an double property.
+    /// Seal a data payload.
     ///
-    /// - Parameter double: Base 64 encoded encrypted double value as a string to be decrypted.
-    /// - Parameter keyId: Key Id to be used to access the stored key and decrypt the data with.
-    /// - Parameter algorithm: Algorithm in plain text to use to decrypt the AES key.
-    /// - Throws:
-    ///     - `UnsealingError.dataDecodingFailed`:
-    ///         - If the input data cannot be encoded to a base 64 data object.
-    ///         - If The decrypted data cannot be decoded to a string.
-    ///         - If the unsealed object cannot be decoded to an `Double`.
-    ///     - `KeyManagerError` if the data cannot be decrypted.
-    func unsealDouble(_ doubleString: String, withKeyId keyId: String, algorithm: String) throws -> Double
+    ///  - Parameter string: String to be encrypted.
+    ///  - Parameter keyId: Key Id to be used to access the stored key and encrypt the data.
+    func sealString(_ payload: Data, withKeyId keyId: String) throws -> String
 
-    /// Unseal an string property.
+    /// Unseal a string property.
     ///
     /// - Parameter string: Base 64 encoded encrypted string value as a string to be decrypted.
-    /// - Parameter keyId: Key Id to be used to access the stored key and decrypt the data with.
+    /// - Parameter keyId: Key Id to be used to access the stored key and decrypt the data.
     /// - Parameter algorithm: Algorithm in plain text to use to decrypt the AES key.
     /// - Throws:
     ///     - `UnsealingError.dataDecodingFailed`:
@@ -57,18 +49,8 @@ protocol DeviceKeyWorker: class {
     ///     - `KeyManagerError` if the data cannot be decrypted.
     func unsealString(_ string: String, withKeyId keyId: String, algorithm: String) throws -> String
 
-    /// Unseal an date property.
-    ///
-    /// - Parameter date: Base 64 encoded encrypted date value as a string to be decrypted.
-    /// - Parameter keyId: Key Id to be used to access the stored key and decrypt the data with.
-    /// - Parameter algorithm: Algorithm in plain text to use to decrypt the AES key.
-    /// - Throws:
-    ///     - `UnsealingError.dataDecodingFailed`:
-    ///         - If the input data cannot be encoded to a base 64 data object.
-    ///         - If The decrypted data cannot be decoded to a string.
-    ///         - If the unsealed object cannot be decoded to an `Date`.
-    ///     - `KeyManagerError` if the data cannot be decrypted.
-    func unsealDate(_ dateString: String, withKeyId keyId: String, algorithm: String) throws -> Date
+    /// remove all cryptographic keys from the KeyManager
+    func removeAllKeys() throws
 
 }
 
@@ -78,14 +60,18 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     /// Default values used within `DefaultDeviceKeyWorker`.
     enum Defaults {
-        /// Key name for the current key id to access on the key manager.
-        static let currentKeyIdPointerName: String = "current"
+        /// Key name for the current key pair id to access on the key manager.
+        static let currentKeyPairIdPointerName: String = "current"
+        /// Key name for the current symmetric key id to access on the key manager.
+        static let currentSymmetricKeyIdPointerName: String = "email-symmetric-key"
         /// Tag name used for the key manager initialization.
         static let keyManagerKeyTag = "com.sudoplatform"
         /// Key ring service name used for the key manager initialization.
         static let keyRingServiceName = "sudo-email"
         /// Size of the AES symmetric key.
         static let aesKeySize = 256
+        /// algorithm used when creating/registering public keys.
+        static let algorithm = "RSAEncryptionOAEPAESCBC"
     }
 
     // MARK: - Properties
@@ -102,7 +88,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
     // MARK: - Lifecycle
 
     convenience init(keyNamespace: String, userClient: SudoUserClient, logger: Logger = .emailSDKLogger) {
-        let keyManager = SudoKeyManagerImpl(serviceName: Defaults.keyRingServiceName, keyTag: Defaults.keyManagerKeyTag, namespace: keyNamespace)
+        let keyManager = LegacySudoKeyManager(serviceName: Defaults.keyRingServiceName, keyTag: Defaults.keyManagerKeyTag, namespace: keyNamespace)
         self.init(keyManager: keyManager, userClient: userClient, logger: logger)
     }
 
@@ -123,10 +109,10 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             throw SudoEmailError.internalError(msg)
         }
         // Try to delete the existing password if it exists.
-        try keyManager.deletePassword(Defaults.currentKeyIdPointerName)
+        try keyManager.deletePassword(Defaults.currentKeyPairIdPointerName)
         try keyManager.generateKeyPair(keyPairId)
         do {
-            try keyManager.addPassword(keyPairIdDataEncoded, name: Defaults.currentKeyIdPointerName)
+            try keyManager.addPassword(keyPairIdDataEncoded, name: Defaults.currentKeyPairIdPointerName)
         } catch {
             // Adding the new key pair has failed, clean up and throw an error.
             let msg = "Unable to save new current key id pointer: \(keyPairId). Error: \(error.localizedDescription)"
@@ -147,7 +133,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         } catch {
             let msg = "Failed to get generated key pair: \(error.localizedDescription)"
             logger.error(msg)
-            try keyManager.deletePassword(Defaults.currentKeyIdPointerName)
+            try keyManager.deletePassword(Defaults.currentKeyPairIdPointerName)
             try keyManager.deleteKeyPair(keyPairId)
             throw SudoEmailError.internalError(msg)
         }
@@ -155,43 +141,62 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return keyPair
     }
 
-    func getCurrentKeyPair() throws -> KeyPair? {
-        let keyRingId = try getKeyRingId()
-        guard
-            let currentKeyIdData = try keyManager.getPassword(Defaults.currentKeyIdPointerName),
-            let currentKeyId = String(data: currentKeyIdData, encoding: .utf8),
-            let publicKey = try keyManager.getPublicKey(currentKeyId),
-            let privateKey = try keyManager.getPrivateKey(currentKeyId)
-        else {
+    func generateNewCurrentSymmetricKey() throws -> String {
+        let keyId = try keyManager.generateKeyId()
+        // We need to delete any old key id information before adding a new key.
+        try keyManager.deletePassword(Defaults.currentSymmetricKeyIdPointerName)
+        guard let keyIdDataEncoded = keyId.data(using: .utf8) else {
+            let msg = "Unable to encode key id on generation"
+            logger.error(msg)
+            throw SudoEmailError.internalError(msg)
+        }
+        do {
+            try keyManager.addPassword(
+                keyIdDataEncoded,
+                name: Defaults.currentSymmetricKeyIdPointerName
+            )
+        } catch {
+            // Adding the new symmetric key has failed, clean up and throw an error.
+            let msg = "Unable to save new current symmetric key id pointer: \(keyId). Error: \(error.localizedDescription)"
+            logger.error(msg)
+            try keyManager.deleteSymmetricKey(keyId)
+            throw SudoEmailError.internalError(msg)
+        }
+        try keyManager.generateSymmetricKey(keyId)
+        return keyId
+    }
+
+    func getCurrentSymmetricKeyId() throws -> String? {
+        guard let keyIdDataEncoded = try keyManager.getPassword(Defaults.currentSymmetricKeyIdPointerName) else {
             return nil
         }
-        let keyPair = createKeyPairWithKeyId(currentKeyId, keyRingId: keyRingId, publicKeyData: publicKey, privateKeyData: privateKey)
-        return keyPair
+        guard let keyId = String(bytes: keyIdDataEncoded, encoding: .utf8) else { return nil }
+        if try keyManager.getSymmetricKey(keyId) == nil {
+            return nil
+        }
+        return keyId
     }
 
-    func unsealInt(_ intString: String, withKeyId keyId: String, algorithm: String) throws -> Int {
-        let decrypted = try decrypt(intString, withKeyId: keyId, algorithm: algorithm)
-        guard let int = Int(decrypted) else {
-            throw SudoEmailError.internalError("Integer data encoding failed")
-        }
-        return int
+    func sealString(_ input: String, withKeyId keyId: String) throws -> String {
+        return try sealString(Data(input.utf8), withKeyId: keyId)
     }
 
-    func unsealDouble(_ doubleString: String, withKeyId keyId: String, algorithm: String) throws -> Double {
-        let decrypted = try decrypt(doubleString, withKeyId: keyId, algorithm: algorithm)
-        guard let double = Double(decrypted) else {
-            throw SudoEmailError.internalError("Double data encoding failed")
-        }
-        return double
+    func sealString(_ payload: Data, withKeyId keyId: String) throws -> String {
+        let cipherData = try keyManager.encryptWithSymmetricKey(keyId, data: payload)
+        let base64EncodedText = cipherData.base64EncodedString()
+        return base64EncodedText
     }
 
     func unsealString(_ string: String, withKeyId keyId: String, algorithm: String) throws -> String {
-        return try decrypt(string, withKeyId: keyId, algorithm: algorithm)
+        if let decodedAlgorithm = PublicKeyEncryptionAlgorithm(algorithm) {
+            return try decryptWithKeyPair(string, withKeyId: keyId, algorithm: decodedAlgorithm)
+        } else {
+            return try decryptWithSymmetricKey(string, withKeyId: keyId)
+        }
     }
 
-    func unsealDate(_ dateString: String, withKeyId keyId: String, algorithm: String) throws -> Date {
-        let double = try unsealDouble(dateString, withKeyId: keyId, algorithm: algorithm)
-        return Date(millisecondsSince1970: double)
+    func removeAllKeys() throws {
+        return try keyManager.removeAllKeys()
     }
 
     // MARK: - Helpers
@@ -230,10 +235,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
     ///         - If the input data cannot be encoded to a base 64 data object.
     ///         - If the decrypted data cannot be decoded to a string.
     ///     - `KeyManagerError` if the data cannot be decrypted.
-    func decrypt(_ input: String, withKeyId keyId: String, algorithm: String) throws -> String {
-        guard let decodedAlgorithm = PublicKeyEncryptionAlgorithm(algorithm) else {
-            throw SudoEmailError.internalError("Unsupported key algorithm: \(algorithm)")
-        }
+    func decryptWithKeyPair(_ input: String, withKeyId keyId: String, algorithm: PublicKeyEncryptionAlgorithm) throws -> String {
         guard let payload = Data(base64Encoded: input) else {
             throw SudoEmailError.internalError("Data is not base64")
         }
@@ -241,12 +243,28 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             throw SudoEmailError.internalError("Symmetric key missing from payload")
         }
         let aesEncrypted = payload.subdata(in: Range(uncheckedBounds: (0, Defaults.aesKeySize)))
-        let aesDecrypted = try keyManager.decryptWithPrivateKey(keyId, data: aesEncrypted, algorithm: decodedAlgorithm)
+        var aesDecrypted = Data()
+        do {
+            aesDecrypted = try keyManager.decryptWithPrivateKey(keyId, data: aesEncrypted, algorithm: algorithm)
+        } catch {
+            throw error
+        }
         let cipherData = payload.subdata(in: Range(uncheckedBounds: (Defaults.aesKeySize, payload.count)))
         let decrypted = try keyManager.decryptWithSymmetricKey(aesDecrypted, data: cipherData)
         guard let string = String(data: decrypted, encoding: .utf8) else {
             throw SudoEmailError.internalError("Data is not encoded in UTF8")
         }
         return string
+    }
+
+    func decryptWithSymmetricKey(_ input: String, withKeyId keyId: String) throws -> String {
+        guard let encryptedData = Data(base64Encoded: input) else {
+            throw SudoEmailError.internalError("Data is not base64")
+        }
+        let decryptedData = try keyManager.decryptWithSymmetricKey(keyId, data: encryptedData)
+        guard let decryptedString = String(data: decryptedData, encoding: .utf8) else {
+            throw SudoEmailError.internalError("Data is not encoded in UTF8")
+        }
+        return decryptedString
     }
 }

@@ -5,24 +5,31 @@
 //
 
 import Foundation
+import SudoLogging
 
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
 
     func generateProvisionEmailAccountUseCase(
-        ownershipProofRepository: OwnershipProofRepository,
-        keyRepository: KeyRepository,
-        emailAccountRepository: EmailAccountRepository
+        keyWorker: DeviceKeyWorker,
+        emailAccountRepository: EmailAccountRepository,
+        logger: Logger
     ) -> ProvisionEmailAccountUseCase {
         return ProvisionEmailAccountUseCase(
-            ownershipProofRepository: ownershipProofRepository,
-            keyRepository: keyRepository,
-            emailAccountRepository: emailAccountRepository
+            keyWorker: keyWorker,
+            emailAccountRepository: emailAccountRepository,
+            logger: logger
         )
     }
 
     func generateDeprovisionEmailAccountUseCase(emailAccountRepository: EmailAccountRepository) -> DeprovisionEmailAccountUseCase {
         return DeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
+    }
+
+    func generateUpdateEmailAccountMetadataUseCase(
+        emailAccountRepository: EmailAccountRepository
+    ) -> UpdateEmailAccountMetadataUseCase {
+        return UpdateEmailAccountMetadataUseCase(emailAccountRepository: emailAccountRepository)
     }
 
     func generateFetchSupportedDomainsUseCase(domainRepository: DomainRepository) -> FetchSupportedDomainsUseCase {
@@ -34,13 +41,47 @@ class UseCaseFactory {
     }
 
     func generateSendEmailMessageUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository
+        emailMessageRepository: EmailMessageRepository
     ) -> SendEmailMessageUseCase {
-        return SendEmailMessageUseCase(sealedEmailMessageRepository: sealedEmailMessageRepository)
+        return SendEmailMessageUseCase(emailMessageRepository: emailMessageRepository)
     }
 
-    func generateDeleteEmailMessageUseCase(sealedEmailMessageRepository: SealedEmailMessageRepository) -> DeleteEmailMessageUseCase {
-        return DeleteEmailMessageUseCase(sealedEmailMessageRepository: sealedEmailMessageRepository)
+    func generateDeleteEmailMessagesUseCase(emailMessageRepository: EmailMessageRepository) -> DeleteEmailMessagesUseCase {
+        return DeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+    }
+
+    func generateUpdateEmailMessagesUseCase(emailMessageRepository: EmailMessageRepository) -> UpdateEmailMessagesUseCase {
+        return UpdateEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+    }
+
+    func generateCreateDraftEmailMessageUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailAccountRepository: EmailAccountRepository
+    ) -> CreateDraftEmailMessageUseCase {
+        return CreateDraftEmailMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+    }
+
+    func generateUpdateDraftEmailMessageUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailAccountRepository: EmailAccountRepository
+    ) -> UpdateDraftEmailMessageUseCase {
+        return UpdateDraftEmailMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+    }
+
+    func generateDeleteDraftEmailMessagesUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailAccountRepository: EmailAccountRepository
+    ) -> DeleteDraftEmailMessagesUseCase {
+        return DeleteDraftEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
     }
 
     func generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: EmailAccountRepository) -> CheckEmailAddressAvailabilityUseCase {
@@ -63,77 +104,119 @@ class UseCaseFactory {
         return ListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
     }
 
+    func generateListEmailAccountsForSudoIdUseCase(
+        emailAccountRepository: EmailAccountRepository
+    ) -> ListEmailAccountsForSudoIdUseCase {
+        return ListEmailAccountsForSudoIdUseCase(emailAccountRepository: emailAccountRepository)
+    }
+
+    func generateListEmailFoldersForEmailAddressIdUseCase(
+        emailFolderRepository: EmailFolderRepository
+    ) -> ListEmailFoldersForEmailAddressIdUseCase {
+        return ListEmailFoldersForEmailAddressIdUseCase(emailFolderRepository: emailFolderRepository)
+    }
+
     func generateFetchEmailMessageUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
-        keyRepository: KeyRepository,
+        emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService
     ) -> FetchEmailMessageUseCase {
         return FetchEmailMessageUseCase(
-            sealedEmailMessageRepository: sealedEmailMessageRepository,
-            keyRepository: keyRepository,
+            emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
 
     func generateGetEmailMessageUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
-        keyRepository: KeyRepository,
+        emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService
     ) -> GetEmailMessageUseCase {
         return GetEmailMessageUseCase(
-            sealedEmailMessageRepository: sealedEmailMessageRepository,
-            keyRepository: keyRepository,
+            emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
 
-    func generateGetListEmailMessagesUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> GetListEmailMessagesUseCase {
-        return GetListEmailMessagesUseCase(sealedEmailMessageRepository: sealedEmailMessageRepository, emailMessageUnsealerService: emailMessageUnsealerService)
+    func generateListEmailMessagesForEmailAddressIdUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        sealedEmailMessageEntityTransformer: SealedEmailMessageEntityTransformer
+    ) -> ListEmailMessagesForEmailAddrIdUseCase {
+        return ListEmailMessagesForEmailAddrIdUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
+        )
     }
 
-    func generateFetchListEmailMessagesUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> FetchListEmailMessagesUseCase {
-        return FetchListEmailMessagesUseCase(
-            sealedEmailMessageRepository: sealedEmailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
+    func generateListEmailMessagesForEmailFolderIdUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        sealedEmailMessageEntityTransformer: SealedEmailMessageEntityTransformer
+    ) -> ListEmailMessagesForEmailFolderIdUseCase {
+        return ListEmailMessagesForEmailFolderIdUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
         )
     }
 
     func generateFetchEmailMessageRFC822DataUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
-        keyRepository: KeyRepository,
+        emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService
     ) -> FetchEmailMessageRFC822DataUseCase {
         return FetchEmailMessageRFC822DataUseCase(
-            sealedEmailMessageRepository: sealedEmailMessageRepository,
-            keyRepository: keyRepository,
+            emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
 
+    func generateGetDraftEmailMessageUseCase(
+        emailMessageRepository: EmailMessageRepository
+    ) -> GetDraftEmailMessageUseCase {
+        return GetDraftEmailMessageUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+    }
+
+    func generateListDraftEmailMessageMetadataUseCase(
+        emailMessageRepository: EmailMessageRepository
+    ) -> ListDraftEmailMessageMetadataUseCase {
+        return ListDraftEmailMessageMetadataUseCase(emailMessageRepository: emailMessageRepository)
+    }
+
+    func generateGetConfigurationDataUseCase(
+        emailConfigurationDataRepository: EmailConfigurationDataRepository
+    ) -> GetEmailConfigurationDataUseCase {
+        return GetEmailConfigurationDataUseCase(
+            emailConfigurationDataRepository: emailConfigurationDataRepository
+        )
+    }
+
     func generateSubscribeToEmailMessageCreatedUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
+        emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService
     ) -> SubscribeToEmailMessageCreatedUseCase {
         return SubscribeToEmailMessageCreatedUseCase(
-            sealedEmailMessageRepository: sealedEmailMessageRepository,
+            emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
 
     func generateSubscribeToEmailMessageDeletedUseCase(
-        sealedEmailMessageRepository: SealedEmailMessageRepository,
+        emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService
     ) -> SubscribeToEmailMessageDeletedUseCase {
         return SubscribeToEmailMessageDeletedUseCase(
-            sealedEmailMessageRepository: sealedEmailMessageRepository,
+            emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
 
+    func generateUnsubscribeAllUseCase(
+        emailMessageRepository: EmailMessageRepository
+    ) -> UnsubscribeAllUseCase {
+        return UnsubscribeAllUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+    }
 }

@@ -10,7 +10,10 @@ import Foundation
 struct EmailAddressEntityTransformer {
 
     /// Transform a `String` email formatted as `localPart@domain`.
-    func transform(_ address: String) throws -> EmailAddressEntity {
+    func transform(
+        _ address: String,
+        alias: String?
+    ) throws -> EmailAddressEntity {
         let rfc822parts = address.split(separator: "<").map(String.init)
         var displayName: String?
         var rfc822Address: String
@@ -28,6 +31,6 @@ struct EmailAddressEntityTransformer {
         guard parts.count == 2 else {
             throw SudoEmailError.internalError("Unsupported email address: \(address)")
         }
-        return EmailAddressEntity(localPart: parts[0], domain: parts[1], displayName: displayName)
+        return EmailAddressEntity(emailAddress: rfc822Address, displayName: displayName, alias: alias)
     }
 }

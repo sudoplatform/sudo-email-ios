@@ -30,12 +30,12 @@ struct EmailMessageFilterEntityTransformer {
             let idFilter = stringFilterTransformer.transform(idFilter)
             /// This is not a typo - `id` maps to `messageId`
             return .messageId(idFilter)
-        case let .sudoId(sudoIdFilter):
-            let sudoIdFilter = stringFilterTransformer.transform(sudoIdFilter)
-            return .sudoId(sudoIdFilter)
-        case let .emailAddressId(emailAddressIdFilter):
-            let emailAddressIdFilter = stringFilterTransformer.transform(emailAddressIdFilter)
-            return .emailAddressId(emailAddressIdFilter)
+        case let .messageId(idFilter):
+            let idFilter = stringFilterTransformer.transform(idFilter)
+            return .messageId(idFilter)
+        case let .algorithm(algorithmFilter):
+            let algorithmFilter = stringFilterTransformer.transform(algorithmFilter)
+            return .algorithm(algorithmFilter)
         case let .clientRefId(clientRefIdFilter):
             let clientRefIdFilter = stringFilterTransformer.transform(clientRefIdFilter)
             return .clientRefId(clientRefIdFilter)
@@ -48,6 +48,12 @@ struct EmailMessageFilterEntityTransformer {
         case let .seen(seenFilter):
             let seenFilter = boolFilterTransformer.transform(seenFilter)
             return .seen(seenFilter)
+        case let .keyId(keyIdFilter):
+            let keyIdFilter = stringFilterTransformer.transform(keyIdFilter)
+            return .keyId(keyIdFilter)
+        case let .folderId(folderIdFilter):
+            let folderIdFilter = stringFilterTransformer.transform(folderIdFilter)
+            return .folderId(folderIdFilter)
         case let .not(emailMessageFilter):
             let emailMessageFilter = transform(emailMessageFilter)
             return .not(emailMessageFilter)

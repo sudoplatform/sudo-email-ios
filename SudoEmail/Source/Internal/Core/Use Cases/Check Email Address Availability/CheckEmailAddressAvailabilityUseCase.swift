@@ -18,7 +18,7 @@ class CheckEmailAddressAvailabilityUseCase {
 
     // MARK: - Methods
 
-    func execute(withLocalParts localParts: [String], domains: [DomainEntity]?, completion: @escaping ClientCompletion<[EmailAddressEntity]>) {
-        emailAccountRepository.checkEmailAddressAvailabilityWithLocalParts(localParts, domains: domains, completion: completion)
+    func execute(withLocalParts localParts: [String], domains: [DomainEntity]?) async throws -> [EmailAddressEntity] {
+        return try await emailAccountRepository.checkEmailAddressAvailabilityWithLocalParts(localParts, domains: domains)
     }
 }

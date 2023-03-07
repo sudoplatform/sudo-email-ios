@@ -7,7 +7,7 @@
 /// Core entity representation of a email message unsealer service used in business logic.
 ///
 /// Used to unseal email messages that are received, typically from a sealed email message repository.
-protocol EmailMessageUnsealerService: class {
+protocol EmailMessageUnsealerService: AnyObject {
 
     /// Unseal an email message.
     /// - Parameter sealedEmailMessage: Sealed email message to be unsealed.

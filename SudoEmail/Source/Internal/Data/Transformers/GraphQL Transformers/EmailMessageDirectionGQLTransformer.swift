@@ -8,7 +8,7 @@
 struct EmailMessageDirectionGQLTransformer {
 
     /// Transform a `DirectionEntity` filter rule into a GraphQL `EmailMessageDirection` filter rule.
-    func transform(_ entity: DirectionEntity) -> EmailMessageDirection {
+    func transform(_ entity: DirectionEntity) -> GraphQL.EmailMessageDirection {
         switch entity {
         case .inbound:
             return .inbound

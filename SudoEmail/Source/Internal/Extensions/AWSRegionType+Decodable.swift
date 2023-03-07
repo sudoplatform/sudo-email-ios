@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSAppSync
+import AWSCore
 
 /// Disables Cyclomatic Dependency for `AWSRegionType` as the kit has no control over `AWSRegionType`.
 // swiftlint:disable cyclomatic_complexity
@@ -22,6 +22,7 @@ extension AWSRegionType {
         case "ap-northeast-2": self = .APNortheast2
         case "ap-southeast-1": self = .APSoutheast1
         case "ap-southeast-2": self = .APSoutheast2
+        case "ap-southeast-3": self = .APSoutheast3
         case "ca-central-1": self = .CACentral1
         case "cn-north-1": self = .CNNorth1
         case "cn-northwest-1": self = .CNNorthWest1
@@ -30,6 +31,7 @@ extension AWSRegionType {
         case "eu-west-2": self = .EUWest2
         case "eu-west-3": self = .EUWest3
         case "eu-north-1": self = .EUNorth1
+        case "me-central-1": self = .MECentral1
         case "me-south-1": self = .MESouth1
         case "sa-east-1": self = .SAEast1
         case "us-gov-east-1": self = .USGovEast1
@@ -78,6 +80,8 @@ extension AWSRegionType {
             return "eu-west-3"
         case .EUNorth1:
             return "eu-north-1"
+        case .MECentral1:
+            return "me-central-1"
         case .MESouth1:
             return "me-south-1"
         case .SAEast1:
@@ -90,6 +94,8 @@ extension AWSRegionType {
             return "af-south-1"
         case .EUSouth1:
             return "eu-south-1"
+        case .APSoutheast3:
+            return "ap-southeast-3"
         case .Unknown:
             fallthrough
         @unknown default:

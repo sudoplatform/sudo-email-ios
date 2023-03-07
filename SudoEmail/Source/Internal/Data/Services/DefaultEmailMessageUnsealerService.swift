@@ -21,34 +21,36 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
     func unsealEmailMessage(_ message: SealedEmailMessageEntity) throws -> EmailMessageEntity {
         let keyId = message.keyId
         let algorithm = message.algorithm
+
         do {
-            let from = try message.from.map { try unsealEmailAddress($0, withKeyId: keyId, algorithm: algorithm) }
-            let replyTo = try message.replyTo.map { try unsealEmailAddress($0, withKeyId: keyId, algorithm: algorithm) }
-            let to = try message.to.map { try unsealEmailAddress($0, withKeyId: message.keyId, algorithm: message.algorithm) }
-            let cc = try message.cc.map { try unsealEmailAddress($0, withKeyId: message.keyId, algorithm: message.algorithm) }
-            let bcc = try message.bcc.map { try unsealEmailAddress($0, withKeyId: message.keyId, algorithm: message.algorithm) }
-            let subject = try message.subject.map { try deviceKeyWorker.unsealString($0, withKeyId: keyId, algorithm: algorithm)}
-            return EmailMessageEntity(
+            let unsealedRFC822Header = try deviceKeyWorker.unsealString(message.rfc822Header, withKeyId: keyId, algorithm: algorithm)
+            let headers = try EmailRFC822HeaderCodec().decode(header: unsealedRFC822Header)
+            let emailMessageEntity = EmailMessageEntity(
                 id: message.id,
-                messageId: message.messageId,
-                userId: message.userId,
-                sudoId: message.sudoId,
+                owner: message.owner,
+                owners: message.owners,
                 emailAddressId: message.emailAddressId,
                 keyId: message.keyId,
-                algorithm: message.algorithm,
-                clientRefId: message.clientRefId,
-                created: message.created,
-                updated: message.updated,
+                folderId: message.folderId,
+                previousFolderId: message.previousFolderId,
                 seen: message.seen,
                 direction: message.direction,
                 state: message.state,
-                from: from,
-                replyTo: replyTo,
-                to: to,
-                cc: cc,
-                bcc: bcc,
-                subject: subject
+                clientRefId: message.clientRefId,
+                sortDate: message.sortDate,
+                createdAt: message.createdAt,
+                updatedAt: message.updatedAt,
+                from: headers.from.map { EmailAddressEntity(emailAddress: $0.emailAddress, displayName: $0.displayName) },
+                replyTo: headers.replyTo.map { EmailAddressEntity(emailAddress: $0.emailAddress, displayName: $0.displayName) },
+                to: headers.to.map { EmailAddressEntity(emailAddress: $0.emailAddress, displayName: $0.displayName) },
+                cc: headers.cc.map { EmailAddressEntity(emailAddress: $0.emailAddress, displayName: $0.displayName) },
+                bcc: headers.bcc.map { EmailAddressEntity(emailAddress: $0.emailAddress, displayName: $0.displayName) },
+                subject: headers.subject,
+                hasAttachments: headers.hasAttachments ?? false,
+                version: message.version,
+                size: message.size
             )
+            return emailMessageEntity
         } catch {
             throw SudoEmailError.internalError("Failed to unseal email message (ID: \(message.id), Key ID: \(keyId)")
         }
@@ -70,7 +72,7 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
     func unsealEmailAddress(_ sealedEmailAddress: String, withKeyId keyId: String, algorithm: String) throws -> EmailAddressEntity {
         let addressString = try deviceKeyWorker.unsealString(sealedEmailAddress, withKeyId: keyId, algorithm: algorithm)
         let transformer = EmailAddressEntityTransformer()
-        let address = try transformer.transform(addressString)
+        let address = try transformer.transform(addressString, alias: nil)
         return address
     }
 }

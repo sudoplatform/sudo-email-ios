@@ -5,8 +5,8 @@
 //
 
 import Foundation
-import SudoOperations
 import AWSAppSync
+import SudoApiClient
 
 /// Errors that occur in SudoEmail.
 public enum SudoEmailError: Error, Equatable, LocalizedError {
@@ -19,6 +19,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case notSignedIn
     /// Email message RFC822 is not available.
     case noEmailMessageRFC822Available
+    /// Device cryptographic key not found
+    case keyNotFound
 
     // MARK: - Service
 
@@ -37,32 +39,31 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     /// Email address (or id associated with address) supplied is unavailable.
     case emailAddressUnavailable
 
-    // MARK: - SudoPlatformError
+    // MARK: - Service
 
-    /**
-      * This section contains wrapped erros from `SudoPlatformError`.
-     */
-
-    case accountLockedError
+    case accountLocked
     case decodingError
     case environmentError
+    case fatalError(_ msg: String?)
     case identityInsufficient
     case identityNotVerified
-    case invalidTokenError
-    case insufficientEntitlementsError
+    case invalidToken
+    case insufficientEntitlements
     case internalError(_ cause: String?)
     case invalidArgument(_ msg: String?)
-    case noEntitlementsError
+    case limitExceeded
+    case noEntitlements
     case policyFailed
     case serviceError
     case unknownTimezone
+    case versionMismatch
 
     // MARK: - Lifecycle
 
     /// Initialize a `SudoEmailError` from a `GraphQLError`.
     ///
     /// If the GraphQLError is unsupported, `nil` will be returned instead.
-    init?(graphQLError error: GraphQLError) {
+    init?(graphQLError error: GraphQLError) { // swiftlint:disable:this cyclomatic_complexity
         guard let errorType = error["errorType"] as? String else {
             return nil
         }
@@ -81,46 +82,44 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             self = .emailAddressFormatValidationFailed
         case "sudoplatform.email.AddressUnavailable":
             self = .emailAddressUnavailable
+        case "sudoplatform.AccountLockedError":
+            self = .accountLocked
+        case "sudoplatform.DecodingError":
+            self = .decodingError
+        case "sudoplatform.EnvironmentError":
+            self = .environmentError
+        case "sudoplatform.IdentityVerificationInsufficientError":
+            self = .identityInsufficient
+        case "sudoplatform.IdentityVerificationNotVerifiedError":
+            self = .identityNotVerified
+        case "sudoplatform.InsufficientEntitlementsError":
+            self = .insufficientEntitlements
+        case "sudoplatform.InvalidArgumentError":
+            let msg = error.message.isEmpty ? nil : error.message
+            self = .invalidArgument(msg)
+        case "sudoplatform.InvalidTokenError":
+            self = .invalidToken
+        case "sudoplatform.LimitExceededError":
+            self = .limitExceeded
+        case "sudoplatform.NoEntitlementsError":
+            self = .noEntitlements
+        case "sudoplatform.PolicyFailed":
+            self = .policyFailed
+        case "sudoplatform.ServiceError":
+            self = .serviceError
+        case "sudoplatform.VersionMismatchError":
+            self = .versionMismatch
+        case "sudoplatform.UnknownTimezoneError":
+            self = .unknownTimezone
+
         default:
             return nil
         }
     }
 
-    /// Initialize a `SudoEmailError` from a `SudoPlatformError`.
-    init(platformError error: SudoPlatformError) {
-        switch error {
-        case .accountLockedError:
-            self = .accountLockedError
-        case .decodingError:
-            self = .decodingError
-        case .environmentError:
-            self = .environmentError
-        case .identityInsufficient:
-            self = .identityInsufficient
-        case .identityNotVerified:
-            self = .identityNotVerified
-        case .invalidTokenError:
-            self = .invalidTokenError
-        case .insufficientEntitlementsError:
-            self = .insufficientEntitlementsError
-        case let .internalError(cause):
-            self = .internalError(cause)
-        case let .invalidArgument(msg):
-            self = .invalidArgument(msg)
-        case .noEntitlementsError:
-            self = .noEntitlementsError
-        case .policyFailed:
-            self = .policyFailed
-        case .serviceError:
-            self = .serviceError
-        case .unknownTimezone:
-            self = .unknownTimezone
-        }
-    }
-
     public var errorDescription: String? {
         switch self {
-        case .accountLockedError:
+        case .accountLocked:
             return L10n.Email.Errors.accountLockedError
         case .addressNotFound:
             return L10n.Email.Errors.addressNotFound
@@ -140,7 +139,7 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return L10n.Email.Errors.identityInsufficient
         case .identityNotVerified:
             return L10n.Email.Errors.identityNotVerified
-        case .insufficientEntitlementsError:
+        case .insufficientEntitlements:
             return L10n.Email.Errors.insufficientEntitlementsError
         case let .internalError(cause):
             return cause ?? "Internal Error"
@@ -150,11 +149,15 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return L10n.Email.Errors.invalidConfig
         case .invalidEmailAddressDomain:
             return L10n.Email.Errors.invalidEmailAddressDomain
-        case .invalidTokenError:
+        case .invalidToken:
             return L10n.Email.Errors.invalidTokenError
+        case .keyNotFound:
+            return "Key not found"
+        case .limitExceeded:
+            return L10n.Email.Errors.limitExceededError
         case .noEmailMessageRFC822Available:
             return L10n.Email.Errors.noEmailMessageRFC822Available
-        case .noEntitlementsError:
+        case .noEntitlements:
             return L10n.Email.Errors.noEntitlementsError
         case .notSignedIn:
             return L10n.Email.Errors.notSignedIn
@@ -166,7 +169,36 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return L10n.Email.Errors.unauthorizedAddress
         case .unknownTimezone:
             return L10n.Email.Errors.unknownTimezone
+        case .versionMismatch:
+            return L10n.Email.Errors.versionMismatch
+        case let .fatalError(msg):
+            return msg ?? "Unexpected API operation error"
         }
     }
+}
 
+extension SudoEmailError {
+
+    struct Constants {
+        static let errorType = "errorType"
+    }
+
+    static func fromApiOperationError(error: Error) -> SudoEmailError {
+        switch error {
+        case ApiOperationError.accountLocked:
+            return .accountLocked
+        case ApiOperationError.notSignedIn:
+            return .notSignedIn
+        case ApiOperationError.limitExceeded:
+            return .limitExceeded
+        case ApiOperationError.insufficientEntitlements:
+            return .insufficientEntitlements
+        case ApiOperationError.serviceError:
+            return .serviceError
+        case ApiOperationError.versionMismatch:
+            return .versionMismatch
+        default:
+            return .fatalError("Unexpected API operation error: \(error)")
+        }
+    }
 }

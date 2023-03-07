@@ -13,61 +13,58 @@ struct SealedEmailMessageEntity {
     /// E.g. `\(messageId)-\(keyId)`
     var id: String
 
-    /// Unique identitfier of the message itself. All sealed copies of the message share this id.
-    var messageId: String
+    /// Identifier of the user that owns the email message.
+    var owner: String
 
-    /// Unique identifier of the user of the email message.
-    var userId: String
-
-    /// Unique identifier of the sudo of the email message.
-    var sudoId: String
+    /// List of identifiers of user/accounts associated with this email message.
+    var owners: [OwnerEntity]
 
     /// Email address identifier that is associated with the account of the email message.
     ///
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
 
-    /// Unique identifier associated with this entity for its key encryption/decryption.
+    /// Unique identifier of the associated decryption/encryption key.
     var keyId: String
 
-    /// Algorithm used to encrypt/decrypt this entity.
+    /// Algorithm used to decrypt/encrypt this entity.
     var algorithm: String
 
-    /// Unique client reference identifier.
-    var clientRefId: String?
+    /// Unique identifier of the email folder which the message resource is assigned to.
+    var folderId: String
 
-    /// Date timestamp when the email message was created on the service.
-    var created: Date
-
-    /// Date timestamp when the email message was last updated on the service.
-    var updated: Date
-
-    /// True if the user has seen the email message previously.
-    var seen: Bool
+    /// Unique identifier of the previous email folder which the message resource was assigned to, if any.
+    var previousFolderId: String?
 
     /// Direction of the email message.
     var direction: DirectionEntity
 
+    /// True if the user has seen the email message previously.
+    var seen: Bool
+
     /// State of the email message.
     var state: StateEntity
 
+    /// Unique client reference identifier.
+    var clientRefId: String?
+
+    /// Version of this entity, increments on update.
+    var version: Int
+
+    /// Date when the email message was processed by the service.
+    var sortDate: Date
+
+    /// Date timestamp when the email message was created on the service.
+    var createdAt: Date
+
+    /// Date timestamp when the email message was last updated on the service.
+    var updatedAt: Date
+
+    /// Size, in bytes, of this email message
+    var size: Double
+
     // MARK: - Properties: Sealed Attributes
 
-    /// SEALED - Array of from recipients of the email message.
-    var from: [String]
-
-    /// SEALED - Array of replyTo recipients of the email message.
-    var replyTo: [String]
-
-    /// SEALED - Array of to recipients of the email message.
-    var to: [String]
-
-    /// SEALED - Array of carbon copy recipients of the email message.
-    var cc: [String]
-
-    /// SEALED - Array of blind carbon copy recipients of the email message.
-    var bcc: [String]
-
-    /// SEALED - Subject header of the email message.
-    var subject: String?
+    /// SEALED - RFC 822 header data for the email message. Contains the recipients and subject matter.
+    var rfc822Header: String
 }

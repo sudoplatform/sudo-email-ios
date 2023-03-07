@@ -10,10 +10,8 @@ indirect enum EmailMessageFilterEntity: Equatable {
     case id(StringFilterEntity)
     /// Filter rule for an `messageId` property.
     case messageId(StringFilterEntity)
-    /// Filter rule for an `sudoId` property.
-    case sudoId(StringFilterEntity)
-    /// Filter rule for an `emailAddressId` property.
-    case emailAddressId(StringFilterEntity)
+    /// Filter rule for an `folderId` property.
+    case folderId(StringFilterEntity)
     /// Filter rule for an `algorithm` property.
     case algorithm(StringFilterEntity)
     /// Filter rule for an `keyId` property.

@@ -17,14 +17,14 @@ struct EmailMessageDirectionFilterInputGQLTransformer {
     // MARK: - Methods
 
     /// Transform a `EmailMessageDirectionFilterEntity` filter rule into a GraphQL `EmailMessageDirectionFilterInput` filter rule.
-    func transform(_ entity: EmailMessageDirectionFilterEntity) -> EmailMessageDirectionFilterInput {
+    func transform(_ entity: EmailMessageDirectionFilterEntity) -> GraphQL.EmailMessageDirectionFilterInput {
         switch entity {
         case let .equals(direction):
             let direction = directionTransformer.transform(direction)
-            return EmailMessageDirectionFilterInput(eq: direction)
+            return GraphQL.EmailMessageDirectionFilterInput(eq: direction)
         case let .notEquals(direction):
             let direction = directionTransformer.transform(direction)
-            return EmailMessageDirectionFilterInput(ne: direction)
+            return GraphQL.EmailMessageDirectionFilterInput(ne: direction)
 
         }
     }

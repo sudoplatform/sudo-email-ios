@@ -18,12 +18,12 @@ struct EmailAccountFilterEntityTransformer {
         case let .id(stringFilter):
             let filterEntity = stringFilterTransformer.transform(stringFilter)
             return .id(filterEntity)
-        case let .sudoId(stringFilter):
-            let filterEntity = stringFilterTransformer.transform(stringFilter)
-            return .sudoId(filterEntity)
         case let .identityId(stringFilter):
             let filterEntity = stringFilterTransformer.transform(stringFilter)
             return .identityId(filterEntity)
+        case let .keyRingId(stringFilter):
+            let filterEntity = stringFilterTransformer.transform(stringFilter)
+            return .keyRingId(filterEntity)
         case let .emailAddress(stringFilter):
             let filterEntity = stringFilterTransformer.transform(stringFilter)
             return .emailAddress(filterEntity)

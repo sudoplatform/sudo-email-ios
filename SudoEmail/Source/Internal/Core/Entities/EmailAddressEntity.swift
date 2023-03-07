@@ -11,30 +11,26 @@ struct EmailAddressEntity: Equatable {
 
     // MARK: - Properties
 
-    /// The local part of the email address. For example, `example@sudoplatform.com`, `example` is the local part.
-    var localPart: String
+    /// The fully structured email address (e.g. `example@sudoplatform.com`)
+    var emailAddress: String
 
-    /// The domain of the email address. For example, `example@sudoplatform.com`, `sudoplatform.com` is the domain.
-    var domain: String
-
-    /// The display name of the email address
+    /// The display name (or personal name) of the email address.
     var displayName: String?
 
-    /// Returns the fully structured email address.
-    var address: String {
-        return "\(localPart)@\(domain)"
-    }
+    /// An alias for the email address.
+    var alias: String?
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `EmailAddressEntity`.
     /// - Parameters:
-    ///   - localPart: Local part of the email address.
-    ///   - domain: Domain of the email address.
-    init(localPart: String, domain: String, displayName: String? = nil) {
-        self.localPart = localPart
-        self.domain = domain
+    ///   - emailAddress: Fully qualified email address of the form localPart@domain, eg, `example@sudoplatform.com`.
+    ///   - displayName: The display name (or personal name) of the email address.
+    ///   - alias: An alias for the email address.
+    init(emailAddress: String, displayName: String? = nil, alias: String? = nil) {
+        self.emailAddress = emailAddress
         self.displayName = displayName
+        self.alias = alias
     }
 
 }

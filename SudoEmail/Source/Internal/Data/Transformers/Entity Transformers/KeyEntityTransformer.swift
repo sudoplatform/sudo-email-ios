@@ -13,7 +13,7 @@ struct KeyEntityTransformer {
     /// - Parameter data: GraphQL data to transform.
     /// - Throws: `SudoEmailError`.
     /// - Returns: Public key entity.
-    func transformPublicKey(_ data: CreatePublicKeyForEmailMutation.Data) throws -> KeyEntity {
+    func transformPublicKey(_ data: GraphQL.CreatePublicKeyForEmailMutation.Data) throws -> KeyEntity {
         let gqlKey = data.createPublicKeyForEmail
         guard let keyData = Data(base64Encoded: gqlKey.publicKey) else {
             throw SudoEmailError.internalError("Public key string not base 64 encoded")
@@ -26,7 +26,7 @@ struct KeyEntityTransformer {
     /// - Parameter data: GraphQL data to transform.
     /// - Throws: `SudoEmailError`.
     /// - Returns: Public key entity.
-    func transformPublicKey(_ data: GetPublicKeyForEmailQuery.Data) throws -> KeyEntity? {
+    func transformPublicKey(_ data: GraphQL.GetPublicKeyForEmailQuery.Data) throws -> KeyEntity? {
         guard let gqlKey = data.getPublicKeyForEmail else {
             return nil
         }

@@ -8,12 +8,12 @@
 struct BooleanFilterInputGQLTransformer {
 
     /// Transform a `BoolFilterEntity` filter rule into a GraphQL `BooleanFilterInput` filter rule.
-    func transform(_ entity: BoolFilterEntity) -> BooleanFilterInput {
+    func transform(_ entity: BoolFilterEntity) -> GraphQL.BooleanFilterInput {
         switch entity {
         case let .equals(bool):
-            return BooleanFilterInput(eq: bool)
+            return GraphQL.BooleanFilterInput(eq: bool)
         case let .notEquals(bool):
-            return BooleanFilterInput(ne: bool)
+            return GraphQL.BooleanFilterInput(ne: bool)
         }
     }
 }

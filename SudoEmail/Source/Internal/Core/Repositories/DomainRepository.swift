@@ -7,14 +7,14 @@
 import Foundation
 
 /// Core entity representation of a domain repository used in business logic. Used to access supported domains.
-protocol DomainRepository: class {
+protocol DomainRepository: AnyObject {
 
     /// Get the supported domains. Gets the domains locally from the cache of the device.
     /// - Parameter completion: Returns an array of the supported domains, or failure on error.
-    func getSupportedDomains(completion: @escaping ClientCompletion<[DomainEntity]>)
+    func getSupportedDomains() async throws -> [DomainEntity]
 
     /// Get the supported domains. Fetches the domains remotely from the email service.
     /// - Parameter completion: Returns an array of the supported domains, or failure on error.
-    func fetchSupportedDomains(completion: @escaping ClientCompletion<[DomainEntity]>)
+    func fetchSupportedDomains() async throws -> [DomainEntity]
 
 }

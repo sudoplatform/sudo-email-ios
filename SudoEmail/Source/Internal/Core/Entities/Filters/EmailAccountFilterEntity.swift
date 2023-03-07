@@ -8,8 +8,6 @@
 indirect enum EmailAccountFilterEntity: Equatable {
     /// Filter rule for an id property.
     case id(StringFilterEntity)
-    /// Filter rule for an sudoId property.
-    case sudoId(StringFilterEntity)
     /// Filter rule for an identityId property.
     case identityId(StringFilterEntity)
     /// Filter rule for an keyRingId property.

@@ -6,253 +6,380 @@
 
 import Foundation
 import AWSAppSync
+import SudoApiClient
 import SudoLogging
-import SudoOperations
+
+/// Queue to handle the result events from AWS.
+private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-handler-queue")
 
 /// Data implementation of the core `EmailAccountRepository`.
 ///
 /// Allows manipulation of data on the email service, via AppSync GraphQL.
 class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
 
+    // MARK: - Supplementary
+
+    enum Defaults {
+        /// algorithm used when encrypting/decrypting with symmetric keys.
+        static let symmetricAlgorithm = "AES/CBC/PKCS7Padding"
+    }
+
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
-    var appSyncClient: AWSAppSyncClient
+    var appSyncClient: SudoApiClient
+
+    /// Cryptographic key worker for this device
+    var deviceKeyWorker: DeviceKeyWorker
 
     /// Used to log diagnostic and error information.
     var logger: Logger
 
-    /// Utility factory class to generate mutation and query operations.
-    var operationFactory = OperationFactory()
-
-    /// Operation queue for enqueuing asynchronous tasks.
-    var queue = PlatformOperationQueue()
-
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultEmailAccountRepository`.
-    init(appSyncClient: AWSAppSyncClient, logger: Logger = .emailSDKLogger) {
+    init(appSyncClient: SudoApiClient, deviceKeyWorker: DeviceKeyWorker, logger: Logger = .emailSDKLogger) {
         self.appSyncClient = appSyncClient
+        self.deviceKeyWorker = deviceKeyWorker
         self.logger = logger
     }
 
-    func reset() {
-        queue.cancelAllOperations()
+    func reset() throws {
+        try self.appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
     }
 
     // MARK: - EmailAccountRepository
 
     func checkEmailAddressAvailabilityWithLocalParts(
         _ localParts: [String],
-        domains: [DomainEntity]?,
-        completion: @escaping ClientCompletion<[EmailAddressEntity]>
-    ) {
+        domains: [DomainEntity]?
+    ) async throws -> [EmailAddressEntity] {
         // Code is generated as a double nil so this mitigates problems with that.
         var convertedDomains: [String]?? = Optional(nil)
         if let domains = domains {
             convertedDomains = domains.map { $0.name }
         }
-        let input = CheckEmailAddressAvailabilityInput(localParts: localParts, domains: convertedDomains)
-        let query = CheckEmailAddressAvailabilityQuery(input: input)
-        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: .remoteOnly, logger: logger)
-        let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
-            if let error = errors.first {
-                completion(.failure(error))
-                return
+        let input = GraphQL.CheckEmailAddressAvailabilityInput(domains: convertedDomains, localParts: localParts)
+        let query = GraphQL.CheckEmailAddressAvailabilityQuery(input: input)
+        let cachePolicy: AWSAppSync.CachePolicy = AWSAppSync.CachePolicy.fetchIgnoringCacheData
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: cachePolicy,
+            queue: dispatchQueue
+        )
+        guard let result = fetchResult?.data else {
+            if let error = fetchError {
+                switch error {
+                case ApiOperationError.graphQLError(let cause):
+                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                        throw SudoEmailError.internalError("Unexpected error: \(error)")
+                    }
+                    throw sudoEmailError
+                case ApiOperationError.invalidArgument:
+                    throw SudoEmailError.invalidArgument("")
+                case ApiOperationError.notSignedIn:
+                    throw SudoEmailError.notSignedIn
+                default:
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
             }
-            guard let result = operation.result else {
-                return
+            throw SudoEmailError.internalError("Unexpected error")
+        }
+        do {
+            let transformer = EmailAddressEntityTransformer()
+            let entities = try result.checkEmailAddressAvailability.addresses.map {
+                try transformer.transform($0, alias: nil)
             }
-            do {
-                let transformer = EmailAddressEntityTransformer()
-                let entities = try result.checkEmailAddressAvailability.addresses.map(transformer.transform(_:))
-                completion(.success(entities))
-            } catch {
-                completion(.failure(error))
-            }
-        })
-        operation.addObserver(completionObserver)
-        queue.addOperation(operation)
+            return entities
+        } catch {
+            logger.error("CheckEmailAddressAvailabilityQuery result transformation failed with \(error)")
+            throw error
+        }
     }
 
     func createWithEmailAddress(
         _ emailAddress: EmailAddressEntity,
         publicKey: KeyEntity,
-        // TODO: RENAME all occurrences of `ownershipProof` to `ownershipProofToken`.
-        ownershipProof: String,
-        completion: @escaping ClientCompletion<EmailAccountEntity>
-    ) {
-        let input = ProvisionEmailAddressInput(emailAddress: emailAddress.address, keyRingId: publicKey.keyRingId, ownershipProofTokens: [ownershipProof])
-        let mutation = ProvisionEmailAddressMutation(input: input)
-        let operation = operationFactory.generateMutationOperation(mutation: mutation, appSyncClient: appSyncClient, logger: logger)
-        let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
-            if let error = errors.first {
-                completion(.failure(error))
-                return
+        ownershipProofToken: String
+    ) async throws -> EmailAccountEntity {
+        let publicKeyData = publicKey.keyData.base64EncodedString()
+        let createPublicKeyInput = GraphQL.ProvisionEmailAddressPublicKeyInput(
+            algorithm: DefaultDeviceKeyWorker.Defaults.algorithm,
+            keyId: publicKey.keyId,
+            publicKey: publicKeyData
+        )
+        let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
+        (deviceKeyWorker.generateNewCurrentSymmetricKey())
+
+        var input: GraphQL.ProvisionEmailAddressInput
+        if let alias = emailAddress.alias {
+            let sealedAlias = try deviceKeyWorker.sealString(
+                alias,
+                withKeyId: symmetricKeyId
+            )
+            input = GraphQL.ProvisionEmailAddressInput(
+                alias: .init(
+                    algorithm: Defaults.symmetricAlgorithm,
+                    base64EncodedSealedData: sealedAlias,
+                    keyId: symmetricKeyId,
+                    plainTextType: "string"
+                ),
+                emailAddress: emailAddress.emailAddress,
+                key: createPublicKeyInput,
+                ownershipProofTokens: [ownershipProofToken]
+            )
+        } else {
+            input = GraphQL.ProvisionEmailAddressInput(
+                emailAddress: emailAddress.emailAddress,
+                key: createPublicKeyInput,
+                ownershipProofTokens: [ownershipProofToken]
+            )
+        }
+        let mutation = GraphQL.ProvisionEmailAddressMutation(input: input)
+        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        guard let result = performResult?.data else {
+            if let error = performError {
+                switch error {
+                case ApiOperationError.graphQLError(let cause):
+                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                        throw SudoEmailError.internalError("Unexpected error: \(error)")
+                    }
+                    throw sudoEmailError
+                case ApiOperationError.notSignedIn:
+                    throw SudoEmailError.notSignedIn
+                default:
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
             }
-            guard let result = operation.result else {
-                return
-            }
-            do {
-                let transformer = EmailAccountEntityTransformer()
-                let entity = try transformer.transform(result)
-                completion(.success(entity))
-            } catch {
-                completion(.failure(error))
-            }
-        })
-        operation.addObserver(completionObserver)
-        queue.addOperation(operation)
+            throw SudoEmailError.internalError("Unexpected error")
+        }
+        do {
+            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            let entity = try transformer.transform(result)
+            return entity
+        } catch {
+            logger.error("ProvisionEmailAddressMutation result transformation failed with \(error)")
+            throw error
+        }
     }
 
-    func deleteWithId(_ id: String, completion: @escaping ClientCompletion<EmailAccountEntity>) {
-        let input = DeprovisionEmailAddressInput(emailAddressId: id)
-        let mutation = DeprovisionEmailAddressMutation(input: input)
-        let operation = operationFactory.generateMutationOperation(mutation: mutation, appSyncClient: appSyncClient, logger: logger)
-        let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
-            if let error = errors.first {
-                completion(.failure(error))
-                return
+    func updateMetadata(id: String, values: UpdateEmailAddressMetadataValues) async throws -> String {
+        guard let symmetricKeyId = try deviceKeyWorker.getCurrentSymmetricKeyId() else {
+            throw SudoEmailError.keyNotFound
+        }
+
+        var updateEmailAddressMetadataInput = GraphQL.UpdateEmailAddressMetadataInput(
+            id: id,
+            values: .init()
+        )
+        if let alias = values.alias {
+            let sealedAlias = try deviceKeyWorker.sealString(
+                alias,
+                withKeyId: symmetricKeyId
+            )
+            updateEmailAddressMetadataInput.values.alias = .init(
+                algorithm: Defaults.symmetricAlgorithm,
+                base64EncodedSealedData: sealedAlias,
+                keyId: symmetricKeyId,
+                plainTextType: "string"
+            )
+        }
+        let mutation = GraphQL.UpdateEmailAddressMetadataMutation(input: updateEmailAddressMetadataInput)
+        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        guard let result = performResult?.data else {
+            if let error = performError {
+                switch error {
+                case ApiOperationError.graphQLError(let cause):
+                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                        throw SudoEmailError.internalError("Unexpected error: \(error)")
+                    }
+                    throw sudoEmailError
+                case ApiOperationError.notSignedIn:
+                    throw SudoEmailError.notSignedIn
+                default:
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
             }
-            guard let result = operation.result else {
-                return
-            }
-            do {
-                let transformer = EmailAccountEntityTransformer()
-                let entity = try transformer.transform(result)
-                completion(.success(entity))
-            } catch {
-                completion(.failure(error))
-            }
-        })
-        operation.addObserver(completionObserver)
-        queue.addOperation(operation)
+            throw SudoEmailError.internalError("Unexpected error")
+        }
+        return result.updateEmailAddressMetadata
     }
 
-    func getWithEmailAddressId(_ id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        let operation = constructGetEmailAddressQueryOperationWithEmailAddressId(id, cachePolicy: .cacheOnly, completion: completion)
-        queue.addOperation(operation)
+    func deleteWithId(_ id: String) async throws -> EmailAccountEntity {
+        let input = GraphQL.DeprovisionEmailAddressInput(emailAddressId: id)
+        let mutation = GraphQL.DeprovisionEmailAddressMutation(input: input)
+        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        guard let result = performResult?.data else {
+            if let error = performError {
+                switch error {
+                case ApiOperationError.graphQLError(let cause):
+                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                        throw SudoEmailError.internalError("Unexpected error: \(error)")
+                    }
+                    throw sudoEmailError
+                case ApiOperationError.notSignedIn:
+                    throw SudoEmailError.notSignedIn
+                default:
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
+            }
+            throw SudoEmailError.internalError("Unexpected error")
+        }
+        do {
+            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            let entity = try transformer.transform(result)
+            return entity
+        } catch {
+            logger.error("DeprovisionEmailAddressMutation result transformation failed with \(error)")
+            throw error
+        }
     }
 
-    func fetchWithEmailAddressId(_ id: String, completion: @escaping ClientCompletion<EmailAccountEntity?>) {
-        let operation = constructGetEmailAddressQueryOperationWithEmailAddressId(id, cachePolicy: .remoteOnly, completion: completion)
-        queue.addOperation(operation)
+    func getWithEmailAddressId(_ id: String) async throws -> EmailAccountEntity? {
+        let cachePolicy: CachePolicy = .cacheOnly
+        return try await getEmailAddressQueryWithEmailAddressId(id, cachePolicy: cachePolicy)
     }
 
-    func fetchListWithSudoId(
-        _ sudoId: String?,
-        filter: EmailAccountFilterEntity?,
+    func fetchWithEmailAddressId(_ id: String) async throws -> EmailAccountEntity? {
+        let cachePolicy: CachePolicy = .remoteOnly
+        return try await getEmailAddressQueryWithEmailAddressId(id, cachePolicy: cachePolicy)
+    }
+
+    func fetchList(
         limit: Int?,
-        nextToken: String?,
-        completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
-    ) {
-        let operation = constructListEmailAddressQueryOperationWithSudoId(
-            sudoId,
-            filter: filter,
+        nextToken: String?
+    ) async throws -> ListOutputEntity<EmailAccountEntity> {
+        let cachePolicy: CachePolicy = .remoteOnly
+        return try await listEmailAddressesQuery(
             limit: limit,
             nextToken: nextToken,
-            cachePolicy: .remoteOnly,
-            completion: completion
+            cachePolicy: cachePolicy
         )
-        queue.addOperation(operation)
     }
 
-    func listWithSudoId(
-        _ sudoId: String?,
-        filter: EmailAccountFilterEntity?,
+    func list(
         limit: Int?,
-        nextToken: String?,
-        completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
-    ) {
-        let operation = constructListEmailAddressQueryOperationWithSudoId(
-            sudoId,
-            filter: filter,
+        nextToken: String?
+    ) async throws -> ListOutputEntity<EmailAccountEntity> {
+        let cachePolicy: CachePolicy = .cacheOnly
+        return try await listEmailAddressesQuery(
             limit: limit,
             nextToken: nextToken,
-            cachePolicy: .cacheOnly,
-            completion: completion
+            cachePolicy: cachePolicy
         )
-        queue.addOperation(operation)
+    }
+
+    func listForSudoId(
+        sudoId: String,
+        cachePolicy: CachePolicy? = .remoteOnly,
+        limit: Int?,
+        nextToken: String?
+    ) async throws -> ListOutputEntity<EmailAccountEntity> {
+        let input = GraphQL.ListEmailAddressesForSudoIdInput(
+            limit: limit,
+            nextToken: nextToken,
+            sudoId: sudoId
+        )
+        let query = GraphQL.ListEmailAddressesForSudoIdQuery(input: input)
+        let cachePolicy = cachePolicy ?? .remoteOnly
+        let cachePolicyTransformer = CachePolicyAPITransformer()
+        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: queryCachePolicy,
+            queue: dispatchQueue
+        )
+        guard let result = fetchResult?.data else {
+            guard let error = fetchError else {
+                return ListOutputEntity(items: [], nextToken: nil)
+            }
+            throw SudoEmailError.internalError("\(error)")
+        }
+        do {
+            var emailAccountEntities: [EmailAccountEntity] = []
+            let emailAddresses = result.listEmailAddressesForSudoId.items
+            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            emailAccountEntities = try emailAddresses.map(transformer.transform(_:))
+            let nextToken = result.listEmailAddressesForSudoId.nextToken
+            return ListOutputEntity(items: emailAccountEntities, nextToken: nextToken)
+        } catch {
+            logger.error("ListEmailAddressesQuery result transformation failed with \(error)")
+            throw error
+        }
     }
 
     // MARK: - Helpers
 
-    func constructGetEmailAddressQueryOperationWithEmailAddressId(
+    func getEmailAddressQueryWithEmailAddressId(
         _ emailAddressId: String,
-        cachePolicy: CachePolicy,
-        completion: @escaping ClientCompletion<EmailAccountEntity?>
-    ) -> PlatformQueryOperation<GetEmailAddressQuery> {
-        let query = GetEmailAddressQuery(id: emailAddressId)
-        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
-        let completionObserver = PlatformBlockObserver(finishHandler: { [unowned operation] _, errors in
-            if let error = errors.first {
-                completion(.failure(error))
-                return
+        cachePolicy: CachePolicy
+    ) async throws -> EmailAccountEntity? {
+        let query = GraphQL.GetEmailAddressQuery(id: emailAddressId)
+        let cachePolicyTransformer = CachePolicyAPITransformer()
+        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: queryCachePolicy,
+            queue: dispatchQueue
+        )
+        guard let result = fetchResult?.data else {
+            guard let error = fetchError else {
+                return nil
             }
-            guard let graphQLResult = operation.result?.getEmailAddress else {
-                return completion(.success(nil))
+            throw SudoEmailError.internalError("\(error)")
+        }
+        do {
+            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            guard let emailAddress = result.getEmailAddress else {
+                return nil
             }
-            do {
-                let transformer = EmailAccountEntityTransformer()
-                let result = try transformer.transform(graphQLResult)
-                completion(.success(result))
-            } catch {
-                completion(.failure(error))
-            }
-        })
-        operation.addObserver(completionObserver)
-        return operation
+            let entity = try transformer.transform(emailAddress)
+            return entity
+        } catch {
+            logger.error("GetEmailAddressQuery result transformation failed with \(error)")
+            throw error
+        }
     }
 
-    /// Constructs a `ListEmailAddressesQuery` operation to perform the work to access the email accounts.
+    /// Performs a `ListEmailAddressesQuery` to access the email accounts.
     /// - Parameters:
-    ///   - filter: Filter rules to be applied to the list.
     ///   - limit: Limit of the results to return.
     ///   - nextToken: Next token to be used when accessing the next page of information.
     ///   - cachePolicy: Policy to be used to detemine whether to access from the service or the cache.
-    ///   - completion: Returns a list of results with a next token is there if more results to fetch, or error on failure.
-    /// - Returns: Constructed operation.
-    func constructListEmailAddressQueryOperationWithSudoId(
-        _ sudoId: String?,
-        filter: EmailAccountFilterEntity?,
+    /// - Returns: List of Email Accounts.
+    func listEmailAddressesQuery(
         limit: Int?,
         nextToken: String?,
-        cachePolicy: CachePolicy,
-        completion: @escaping ClientCompletion<ListOutputEntity<EmailAccountEntity>>
-    ) -> PlatformQueryOperation<ListEmailAddressesQuery> {
-        var inputFilter: EmailAddressFilterInput?
-        if let filter = filter {
-            let transformer = EmailAddressFilterInputGQLTransformer()
-            inputFilter = transformer.transform(filter)
-        }
-        let input = ListEmailAddressesInput(
-            sudoId: sudoId,
-            filter: inputFilter,
+        cachePolicy: CachePolicy
+    ) async throws -> ListOutputEntity<EmailAccountEntity> {
+        let input = GraphQL.ListEmailAddressesInput(
             limit: limit,
             nextToken: nextToken
         )
-        let query = ListEmailAddressesQuery(input: input)
-        let operation = operationFactory.generateQueryOperation(query: query, appSyncClient: appSyncClient, cachePolicy: cachePolicy, logger: logger)
-        let completionObserver = PlatformBlockObserver(finishHandler: { _, errors in
-            if let error = errors.first {
-                completion(.failure(error))
-                return
+        let query = GraphQL.ListEmailAddressesQuery(input: input)
+        let cachePolicyTransformer = CachePolicyAPITransformer()
+        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: queryCachePolicy,
+            queue: dispatchQueue
+        )
+        guard let result = fetchResult?.data else {
+            guard let error = fetchError else {
+                return ListOutputEntity(items: [], nextToken: nil)
             }
+            throw SudoEmailError.internalError("\(error)")
+        }
+        do {
             var emailAccountEntities: [EmailAccountEntity] = []
-            if let emailAddresses = operation.result?.listEmailAddresses.items {
-                let transformer = EmailAccountEntityTransformer()
-                do {
-                    emailAccountEntities = try emailAddresses.map(transformer.transform(_:))
-                } catch {
-                    completion(.failure(error))
-                    return
-                }
-            }
-            let nextToken = operation.result?.listEmailAddresses.nextToken
-            let output = ListOutputEntity(items: emailAccountEntities, nextToken: nextToken)
-            completion(.success(output))
-        })
-        operation.addObserver(completionObserver)
-        return operation
+            let emailAddresses = result.listEmailAddresses.items
+            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            emailAccountEntities = try emailAddresses.map(transformer.transform(_:))
+            let nextToken = result.listEmailAddresses.nextToken
+            return ListOutputEntity(items: emailAccountEntities, nextToken: nextToken)
+        } catch {
+            logger.error("ListEmailAddressesQuery result transformation failed with \(error)")
+            throw error
+        }
     }
 }

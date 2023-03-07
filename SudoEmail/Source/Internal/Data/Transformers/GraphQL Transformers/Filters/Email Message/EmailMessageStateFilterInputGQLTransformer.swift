@@ -17,20 +17,20 @@ struct EmailMessageStateFilterInputGQLTransformer {
     // MARK: - Methods
 
     /// Transform a `EmailMessageStateFilterEntity` filter rule into a GraphQL `EmailMessageStateFilterInput` filter rule.
-    func transform(_ entity: EmailMessageStateFilterEntity) -> EmailMessageStateFilterInput {
+    func transform(_ entity: EmailMessageStateFilterEntity) -> GraphQL.EmailMessageStateFilterInput {
         switch entity {
         case let .equals(state):
             let state = stateTransformer.transform(state)
-            return EmailMessageStateFilterInput(eq: state)
+            return GraphQL.EmailMessageStateFilterInput(eq: state)
         case let .notEquals(state):
             let state = stateTransformer.transform(state)
-            return EmailMessageStateFilterInput(ne: state)
+            return GraphQL.EmailMessageStateFilterInput(ne: state)
         case let .isIn(states):
             let states = states.map(stateTransformer.transform(_:))
-            return EmailMessageStateFilterInput(in: states)
+            return GraphQL.EmailMessageStateFilterInput(in: states)
         case let .isNotIn(states):
             let states = states.map(stateTransformer.transform(_:))
-            return EmailMessageStateFilterInput(notIn: states)
+            return GraphQL.EmailMessageStateFilterInput(notIn: states)
         }
     }
 }
