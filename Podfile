@@ -26,9 +26,9 @@ target 'SudoEmail' do
 
   target 'SudoEmailIntegrationTests' do
     podspec :name => 'SudoEmail'
-    pod 'SudoEntitlements', '~> 8.0'
+    pod 'SudoEntitlements', '~> 9.0'
     pod 'SudoEntitlementsAdmin', '~> 4.0'
-    pod 'SudoProfiles', '~> 16.0'
+    pod 'SudoProfiles', '~> 17.0'
   end
 
 end

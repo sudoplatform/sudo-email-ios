@@ -104,9 +104,11 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     // MARK: - SealedEmailMessageRepository
 
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> String {
-        guard let key = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
+        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
             throw SudoEmailError.notSignedIn
         }
+        let id = UUID().uuidString
+        let key = "\(keyPrefix)/\(id)"
         try await self.s3Worker.upload(
             data: data,
             contentType: sendContentType,
@@ -114,6 +116,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             key: key,
             metadata: nil
         )
+
         let s3Input = GraphQL.S3EmailObjectInput(bucket: self.transientBucket, key: key, region: self.region)
         let input = GraphQL.SendEmailMessageInput(emailAddressId: emailAccountId, message: s3Input)
         let mutation = GraphQL.SendEmailMessageMutation(input: input)
