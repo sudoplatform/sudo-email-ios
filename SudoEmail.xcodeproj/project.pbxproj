@@ -65,8 +65,6 @@
 		84288978249B229400D39E6C /* EmailMessageStateFilterEntityTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84288977249B229400D39E6C /* EmailMessageStateFilterEntityTransformerTests.swift */; };
 		8428897E249B319400D39E6C /* ListEmailMessagesIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8428897D249B319400D39E6C /* ListEmailMessagesIntegrationTests.swift */; };
 		843064E7233C34E30083874D /* Date+MillisecondsSinceEpoch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843064E6233C34E30083874D /* Date+MillisecondsSinceEpoch.swift */; };
-		84309D652464FE6E00F48ECC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84309D672464FE6E00F48ECC /* Localizable.strings */; };
-		84309D6C246528DD00F48ECC /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84309D6B246528DD00F48ECC /* Strings.swift */; };
 		84309D6E24652E5E00F48ECC /* Bundle+Static.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84309D6D24652E5E00F48ECC /* Bundle+Static.swift */; };
 		843678BF2325D45C00007E05 /* SudoLogger+Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843678BE2325D45C00007E05 /* SudoLogger+Email.swift */; };
 		8439546123FCB24500A52CE0 /* SudoEmailConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8439546023FCB24500A52CE0 /* SudoEmailConfig.swift */; };
@@ -324,7 +322,7 @@
 		95CE638529137BCC0027B290 /* DraftEmailMetadataEntityTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CE638429137BCC0027B290 /* DraftEmailMetadataEntityTransformerTests.swift */; };
 		95CE6387291382880027B290 /* ListDraftEmailMessageMetadataUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CE6386291382880027B290 /* ListDraftEmailMessageMetadataUseCaseTests.swift */; };
 		95CF99BA2891ED1600053C78 /* UpdateEmailMessagesIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CF99B92891ED1600053C78 /* UpdateEmailMessagesIntegrationTests.swift */; };
-		95CF99BC2892520200053C78 /* UpdateEmailMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CF99BB2892520200053C78 /* UpdateEmailMessagesTests.swift */; };
+		95CF99BC2892520230053C78 /* UpdateEmailMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CF99BB2892520230053C78 /* UpdateEmailMessagesTests.swift */; };
 		95CF99BE2892750800053C78 /* MockUpdateEmailMessagesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CF99BD2892750800053C78 /* MockUpdateEmailMessagesUseCase.swift */; };
 		95DEFF5D285310F40071363B /* ProvisionEmailAddressInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DEFF5C285310F40071363B /* ProvisionEmailAddressInput.swift */; };
 		95DEFF5F285699D60071363B /* CachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DEFF5E285699D60071363B /* CachePolicy.swift */; };
@@ -440,8 +438,6 @@
 		84288977249B229400D39E6C /* EmailMessageStateFilterEntityTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMessageStateFilterEntityTransformerTests.swift; sourceTree = "<group>"; };
 		8428897D249B319400D39E6C /* ListEmailMessagesIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailMessagesIntegrationTests.swift; sourceTree = "<group>"; };
 		843064E6233C34E30083874D /* Date+MillisecondsSinceEpoch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+MillisecondsSinceEpoch.swift"; sourceTree = "<group>"; };
-		84309D662464FE6E00F48ECC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		84309D6B246528DD00F48ECC /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		84309D6D24652E5E00F48ECC /* Bundle+Static.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Static.swift"; sourceTree = "<group>"; };
 		843678BE2325D45C00007E05 /* SudoLogger+Email.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SudoLogger+Email.swift"; sourceTree = "<group>"; };
 		8436827A2320D8A5005F6D34 /* SudoEmailIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SudoEmailIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -705,7 +701,7 @@
 		95CE638429137BCC0027B290 /* DraftEmailMetadataEntityTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftEmailMetadataEntityTransformerTests.swift; sourceTree = "<group>"; };
 		95CE6386291382880027B290 /* ListDraftEmailMessageMetadataUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDraftEmailMessageMetadataUseCaseTests.swift; sourceTree = "<group>"; };
 		95CF99B92891ED1600053C78 /* UpdateEmailMessagesIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMessagesIntegrationTests.swift; sourceTree = "<group>"; };
-		95CF99BB2892520200053C78 /* UpdateEmailMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMessagesTests.swift; sourceTree = "<group>"; };
+		95CF99BB2892520230053C78 /* UpdateEmailMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMessagesTests.swift; sourceTree = "<group>"; };
 		95CF99BD2892750800053C78 /* MockUpdateEmailMessagesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUpdateEmailMessagesUseCase.swift; sourceTree = "<group>"; };
 		95DEFF5C285310F40071363B /* ProvisionEmailAddressInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisionEmailAddressInput.swift; sourceTree = "<group>"; };
 		95DEFF5E285699D60071363B /* CachePolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachePolicy.swift; sourceTree = "<group>"; };
@@ -955,22 +951,6 @@
 			path = "Email Message";
 			sourceTree = "<group>";
 		};
-		84309D622464FE3400F48ECC /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				84309D672464FE6E00F48ECC /* Localizable.strings */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		84309D68246521D400F48ECC /* Swiftgen */ = {
-			isa = PBXGroup;
-			children = (
-				84309D6B246528DD00F48ECC /* Strings.swift */,
-			);
-			path = Swiftgen;
-			sourceTree = "<group>";
-		};
 		843678BD2325D44400007E05 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1169,7 +1149,6 @@
 		84783B2C231C916200CCBC27 /* SudoEmail */ = {
 			isa = PBXGroup;
 			children = (
-				84309D622464FE3400F48ECC /* Resources */,
 				84E89E962320D6B800AB34E3 /* Source */,
 				84783B2E231C916200CCBC27 /* Info.plist */,
 				84783B2D231C916200CCBC27 /* SudoEmail.h */,
@@ -1213,7 +1192,7 @@
 				848314EE24B81BA1004E89EA /* TestCase.swift */,
 				95CC4BF4292450BA008A6BF2 /* UnsubscribeAllTests.swift */,
 				9555BF6E28DADFB600D52C6B /* UpdateEmailAddressMetadataTests.swift */,
-				95CF99BB2892520200053C78 /* UpdateEmailMessagesTests.swift */,
+				95CF99BB2892520230053C78 /* UpdateEmailMessagesTests.swift */,
 			);
 			path = "DefaultSudoEmailClient Tests";
 			sourceTree = "<group>";
@@ -1811,7 +1790,6 @@
 				84E89E972320D6C000AB34E3 /* Internal */,
 				844D903A23345FAF00AD343B /* Platform */,
 				84E89E982320D6C700AB34E3 /* Public */,
-				84309D68246521D400F48ECC /* Swiftgen */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -2156,7 +2134,6 @@
 			files = (
 				848ADAAA231CD56E0013F196 /* Gemfile in Resources */,
 				848ADAAE231CD56E0013F196 /* Gemfile.lock in Resources */,
-				84309D652464FE6E00F48ECC /* Localizable.strings in Resources */,
 				848ADAAB231CD56E0013F196 /* Podfile in Resources */,
 				848ADAAF231CD56E0013F196 /* Podfile.lock in Resources */,
 				848ADAAD231CD56E0013F196 /* README.md in Resources */,
@@ -2510,7 +2487,6 @@
 				84B260D32490A62900E99401 /* StringFilterEntity.swift in Sources */,
 				84B260D72490A69800E99401 /* StringFilterEntityTransformer.swift in Sources */,
 				84B260E42490B73500E99401 /* StringFilterInputGQLTransformer.swift in Sources */,
-				84309D6C246528DD00F48ECC /* Strings.swift in Sources */,
 				849AF01C24A2BC2A005CFA2E /* SubscribeToEmailMessageCreatedUseCase.swift in Sources */,
 				84A455FE24B58705002DBF0D /* SubscribeToEmailMessageDeletedUseCase.swift in Sources */,
 				849AF01A24A1A5B8005CFA2E /* SubscriptionManager.swift in Sources */,
@@ -2676,7 +2652,7 @@
 				95E738692907963200DDD547 /* UpdateDraftEmailMessageUseCaseTests.swift in Sources */,
 				9555BF7428DD1BBB00D52C6B /* UpdateEmailAccountUseCaseTests.swift in Sources */,
 				9555BF6F28DADFB600D52C6B /* UpdateEmailAddressMetadataTests.swift in Sources */,
-				95CF99BC2892520200053C78 /* UpdateEmailMessagesTests.swift in Sources */,
+				95CF99BC2892520230053C78 /* UpdateEmailMessagesTests.swift in Sources */,
 				95C4883A2887A65200644A03 /* UpdateEmailMessagesUseCaseTests.swift in Sources */,
 				95C4883728876FFA00644A03 /* UpdateEmailMessagesValuesGQLTransformerTests.swift in Sources */,
 				84B25FE7248604BE00E99401 /* XCTestCase+Utility.swift in Sources */,
@@ -2718,14 +2694,6 @@
 				841E5CBD23418ABF004219B9 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		84309D672464FE6E00F48ECC /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				84309D662464FE6E00F48ECC /* en */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

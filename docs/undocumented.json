@@ -1,404 +1,404 @@
 {
   "warnings": [
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
       "line": 12,
       "symbol": "PlatformSubscriptionStatus.initialized",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
       "line": 13,
       "symbol": "PlatformSubscriptionStatus.connecting",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
       "line": 14,
       "symbol": "PlatformSubscriptionStatus.connected",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
       "line": 15,
       "symbol": "PlatformSubscriptionStatus.disconnected",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
       "line": 16,
       "symbol": "PlatformSubscriptionStatus.error(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 44,
       "symbol": "SudoEmailError.accountLocked",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 45,
       "symbol": "SudoEmailError.decodingError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 46,
       "symbol": "SudoEmailError.environmentError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 47,
       "symbol": "SudoEmailError.fatalError(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 48,
       "symbol": "SudoEmailError.identityInsufficient",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 49,
       "symbol": "SudoEmailError.identityNotVerified",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 50,
       "symbol": "SudoEmailError.invalidToken",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 51,
       "symbol": "SudoEmailError.insufficientEntitlements",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 52,
       "symbol": "SudoEmailError.internalError(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 53,
       "symbol": "SudoEmailError.invalidArgument(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 54,
       "symbol": "SudoEmailError.limitExceeded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 55,
       "symbol": "SudoEmailError.noEntitlements",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 56,
       "symbol": "SudoEmailError.policyFailed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 57,
       "symbol": "SudoEmailError.serviceError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 58,
       "symbol": "SudoEmailError.unknownTimezone",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 59,
       "symbol": "SudoEmailError.versionMismatch",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
       "line": 9,
       "symbol": "BatchOperationResultStatus",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
       "line": 15,
       "symbol": "BatchOperationPartialResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
       "line": 30,
       "symbol": "BatchOperationResult.BatchOperationPartialResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ConfigurationData.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ConfigurationData.swift",
       "line": 24,
       "symbol": "ConfigurationData.init(deleteEmailMessagesLimit:updateEmailMessagesLimit:emailMessageMaxInboundMessageSize:emailMessageMaxOutboundMessageSize:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DateRange.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DateRange.swift",
       "line": 9,
       "symbol": "DateRange",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DraftEmailMessage.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DraftEmailMessage.swift",
       "line": 21,
       "symbol": "DraftEmailMessage.init(id:updatedAt:rfc822Data:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DraftEmailMessageMetadata.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DraftEmailMessageMetadata.swift",
       "line": 18,
       "symbol": "DraftEmailMessageMetadata.init(id:updatedAt:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailAddress.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailAddress.swift",
       "line": 9,
       "symbol": "EmailAddress",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailFolder.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailFolder.swift",
       "line": 9,
       "symbol": "EmailFolder",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
       "line": 12,
       "symbol": "EmailMessage.EmailAddress",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
       "line": 95,
       "symbol": "EmailMessage.replyTo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CheckEmailAddressAvailabilityInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CheckEmailAddressAvailabilityInput.swift",
       "line": 23,
       "symbol": "CheckEmailAddressAvailabilityInput.init(localParts:domains:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CreateDraftEmailMessageInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CreateDraftEmailMessageInput.swift",
       "line": 20,
       "symbol": "CreateDraftEmailMessageInput.init(rfc822Data:senderEmailAddressId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/DeleteDraftEmailMessagesInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/DeleteDraftEmailMessagesInput.swift",
       "line": 19,
       "symbol": "DeleteDraftEmailMessagesInput.init(ids:emailAddressId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetDraftEmailMessageInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetDraftEmailMessageInput.swift",
       "line": 19,
       "symbol": "GetDraftEmailMessageInput.init(id:emailAddressId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetEmailAddressInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetEmailAddressInput.swift",
       "line": 18,
       "symbol": "GetEmailAddressInput.init(id:cachePolicy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetEmailMessageInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetEmailMessageInput.swift",
       "line": 18,
       "symbol": "GetEmailMessageInput.init(id:cachePolicy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetEmailMessageRfc822DataInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/GetEmailMessageRfc822DataInput.swift",
       "line": 18,
       "symbol": "GetEmailMessageRfc822DataInput.init(id:emailAddressId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailAddressesForSudoIdInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailAddressesForSudoIdInput.swift",
       "line": 23,
       "symbol": "ListEmailAddressesForSudoIdInput.init(sudoId:cachePolicy:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailAddressesInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailAddressesInput.swift",
       "line": 9,
       "symbol": "defaultEmailAddressesLimit",
       "symbol_kind": "source.lang.swift.decl.var.global",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailAddressesInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailAddressesInput.swift",
       "line": 23,
       "symbol": "ListEmailAddressesInput.init(cachePolicy:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailFoldersForEmailAddressIdInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailFoldersForEmailAddressIdInput.swift",
       "line": 24,
       "symbol": "ListEmailFoldersForEmailAddressIdInput.init(emailAddressId:cachePolicy:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailAddressIdInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailAddressIdInput.swift",
       "line": 9,
       "symbol": "defaultEmailMessageLimit",
       "symbol_kind": "source.lang.swift.decl.var.global",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailAddressIdInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailAddressIdInput.swift",
       "line": 32,
       "symbol": "ListEmailMessagesForEmailAddressInput.init(emailAddressId:cachePolicy:dateRange:sortOrder:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailFolderIdInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailFolderIdInput.swift",
       "line": 30,
       "symbol": "ListEmailMessagesForEmailFolderIdInput.init(emailFolderId:cachePolicy:dateRange:sortOrder:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ProvisionEmailAddressInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ProvisionEmailAddressInput.swift",
       "line": 22,
       "symbol": "ProvisionEmailAddressInput.init(emailAddress:ownershipProofToken:alias:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/SendEmailMessageInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/SendEmailMessageInput.swift",
       "line": 27,
       "symbol": "SendEmailMessageInput.init(rfc822Data:senderEmailAddressId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateDraftEmailMessageInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateDraftEmailMessageInput.swift",
       "line": 24,
       "symbol": "UpdateDraftEmailMessageInput.init(id:rfc822Data:senderEmailAddressId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailAddressMetadataInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailAddressMetadataInput.swift",
       "line": 15,
       "symbol": "UpdateEmailAddressMetadataValues.init(alias:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailAddressMetadataInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailAddressMetadataInput.swift",
       "line": 29,
       "symbol": "UpdateEmailAddressMetadataInput.init(id:values:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailMessagesInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailMessagesInput.swift",
       "line": 18,
       "symbol": "UpdateEmailMessagesValues.init(folderId:seen:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailMessagesInput.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateEmailMessagesInput.swift",
       "line": 33,
       "symbol": "UpdateEmailMessagesInput.init(ids:values:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ListAPIResult.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ListAPIResult.swift",
       "line": 9,
       "symbol": "PartialResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ListAPIResult.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ListAPIResult.swift",
       "line": 24,
       "symbol": "ListAPIResult.ListSuccessResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ListAPIResult.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ListAPIResult.swift",
       "line": 34,
       "symbol": "ListAPIResult.ListPartialResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/SortOrder.swift",
+      "file": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/SortOrder.swift",
       "line": 9,
       "symbol": "SortOrder",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/anonyome/builds/c2dfa4ea/0/platform/email/sudo-email-ios/sudo-email-ios-gh"
+  "source_directory": "/Users/gitlab-runner/builds/SAjxvZsv/0/platform/email/sudo-email-ios/sudo-email-ios-gh"
 }

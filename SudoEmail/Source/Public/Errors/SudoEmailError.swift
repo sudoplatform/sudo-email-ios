@@ -1,5 +1,5 @@
 //
-// Copyright © 2020 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -120,57 +120,57 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .accountLocked:
-            return L10n.Email.Errors.accountLockedError
+            return "Account is locked"
         case .addressNotFound:
-            return L10n.Email.Errors.addressNotFound
+            return "Email address could not be found"
         case .decodingError:
-            return L10n.Email.Errors.decodingError
+            return "A decoding error has occurred"
         case .emailAddressFormatValidationFailed:
-            return L10n.Email.Errors.emailAddressFormatValidationFailed
+            return "Input information relating to email address is invalid"
         case .emailAddressUnavailable:
-            return L10n.Email.Errors.emailAddressUnavailable
+            return "Email address (or id associated with address) supplied is unavailable"
         case .emailMessageNotFound:
-            return L10n.Email.Errors.emailMessageNotFound
+            return "Email message could not be found"
         case .entitlementExceeded:
-            return L10n.Email.Errors.entitlementExceeded
+            return "Entitlement exceeded"
         case .environmentError:
-            return L10n.Email.Errors.environmentError
+            return "An environment error has occurred"
         case .identityInsufficient:
-            return L10n.Email.Errors.identityInsufficient
+            return "Identity is insufficient"
         case .identityNotVerified:
-            return L10n.Email.Errors.identityNotVerified
+            return "Identity is not verified"
         case .insufficientEntitlements:
-            return L10n.Email.Errors.insufficientEntitlementsError
+            return "Insufficient entitlements for requested operation"
         case let .internalError(cause):
             return cause ?? "Internal Error"
         case let .invalidArgument(msg):
-            return msg ?? L10n.Email.Errors.invalidArgument
+            return msg ?? "An invalid argument has been provided"
         case .invalidConfig:
-            return L10n.Email.Errors.invalidConfig
+            return "There was an issue with the configuration file. Please check that a valid configuration is included in the bundle"
         case .invalidEmailAddressDomain:
-            return L10n.Email.Errors.invalidEmailAddressDomain
+            return "Email address domain is not supported"
         case .invalidToken:
-            return L10n.Email.Errors.invalidTokenError
+            return "An invalid token error has occurred"
         case .keyNotFound:
             return "Key not found"
         case .limitExceeded:
-            return L10n.Email.Errors.limitExceededError
+            return "API limit exceeded"
         case .noEmailMessageRFC822Available:
-            return L10n.Email.Errors.noEmailMessageRFC822Available
+            return "No RFC822 data is available for this message"
         case .noEntitlements:
-            return L10n.Email.Errors.noEntitlementsError
+            return "User has no entitlements associated with them"
         case .notSignedIn:
-            return L10n.Email.Errors.notSignedIn
+            return "Not signed in"
         case .policyFailed:
-            return L10n.Email.Errors.policyFailed
+            return "A policy has failed"
         case .serviceError:
-            return L10n.Email.Errors.serviceError
+            return "Service error has occurred"
         case .unauthorizedAddress:
-            return L10n.Email.Errors.unauthorizedAddress
+            return "Unauthorized access to email address"
         case .unknownTimezone:
-            return L10n.Email.Errors.unknownTimezone
+            return "Time zone is not known"
         case .versionMismatch:
-            return L10n.Email.Errors.versionMismatch
+            return "The version of the resource being updated does not match the current version"
         case let .fatalError(msg):
             return msg ?? "Unexpected API operation error"
         }
