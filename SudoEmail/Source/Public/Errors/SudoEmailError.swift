@@ -21,6 +21,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case noEmailMessageRFC822Available
     /// Device cryptographic key not found
     case keyNotFound
+    /// Indicates that the key archive imported was invalid.
+    case invalidKeyArchive
 
     // MARK: - Service
 
@@ -173,6 +175,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "The version of the resource being updated does not match the current version"
         case let .fatalError(msg):
             return msg ?? "Unexpected API operation error"
+        case .invalidKeyArchive:
+            return "The imported key archive is invalid"
         }
     }
 }

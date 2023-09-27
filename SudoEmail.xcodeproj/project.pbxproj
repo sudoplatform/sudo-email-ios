@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -303,6 +303,8 @@
 		95A1A79928BC930400AAC84B /* MockListEmailFoldersForEmailAddressIdUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A1A79828BC930400AAC84B /* MockListEmailFoldersForEmailAddressIdUseCase.swift */; };
 		95A1A79C28BD7B2100AAC84B /* ListEmailFoldersForEmailAddressIdUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A1A79B28BD7B2100AAC84B /* ListEmailFoldersForEmailAddressIdUseCaseTests.swift */; };
 		95A1A79E28BD825600AAC84B /* DefaultEmailFolderRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A1A79D28BD825600AAC84B /* DefaultEmailFolderRepositoryTests.swift */; };
+		95AEC1152AB187A000BEC70B /* ImportExportKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AEC1142AB187A000BEC70B /* ImportExportKeysTests.swift */; };
+		95AEC1172AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AEC1162AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift */; };
 		95B3DB5E28BDA335007084FE /* MockListEmailMessagesForEmailAddrIdUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84288955249B13A900D39E6C /* MockListEmailMessagesForEmailAddrIdUseCase.swift */; };
 		95B3DB6028BDC244007084FE /* ListEmailFoldersIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B3DB5F28BDC244007084FE /* ListEmailFoldersIntegrationTests.swift */; };
 		95BD978C28A4B12A00BE3A5D /* ListAPIResultTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BD978B28A4B12A00BE3A5D /* ListAPIResultTransformer.swift */; };
@@ -368,6 +370,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 84783B29231C916200CCBC27;
 			remoteInfo = PaymentsService;
+		};
+		95AEC1192AC272D200BEC70B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84783B21231C916200CCBC27 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 841E5CB023418ABC004219B9;
+			remoteInfo = TestApp;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -683,6 +692,9 @@
 		95A1A79828BC930400AAC84B /* MockListEmailFoldersForEmailAddressIdUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockListEmailFoldersForEmailAddressIdUseCase.swift; sourceTree = "<group>"; };
 		95A1A79B28BD7B2100AAC84B /* ListEmailFoldersForEmailAddressIdUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailFoldersForEmailAddressIdUseCaseTests.swift; sourceTree = "<group>"; };
 		95A1A79D28BD825600AAC84B /* DefaultEmailFolderRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEmailFolderRepositoryTests.swift; sourceTree = "<group>"; };
+		95AEC1142AB187A000BEC70B /* ImportExportKeysTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportKeysTests.swift; sourceTree = "<group>"; };
+		95AEC1162AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportKeysIntegrationTests.swift; sourceTree = "<group>"; };
+		95AEC1182AC25CC800BEC70B /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
 		95B3DB5F28BDC244007084FE /* ListEmailFoldersIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailFoldersIntegrationTests.swift; sourceTree = "<group>"; };
 		95BD978B28A4B12A00BE3A5D /* ListAPIResultTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAPIResultTransformer.swift; sourceTree = "<group>"; };
 		95C4883628876FFA00644A03 /* UpdateEmailMessagesValuesGQLTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMessagesValuesGQLTransformerTests.swift; sourceTree = "<group>"; };
@@ -799,6 +811,7 @@
 				841E5CBF23418ABF004219B9 /* Info.plist */,
 				841E5CBC23418ABF004219B9 /* LaunchScreen.storyboard */,
 				841E5CB723418ABD004219B9 /* Main.storyboard */,
+				95AEC1182AC25CC800BEC70B /* TestApp.entitlements */,
 				841E5CB523418ABD004219B9 /* ViewController.swift */,
 			);
 			path = TestApp;
@@ -1180,6 +1193,7 @@
 				8483150224B81DBB004E89EA /* GetEmailMessageRFC822DataWithIdTests.swift */,
 				8483150024B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift */,
 				848314FA24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift */,
+				95AEC1142AB187A000BEC70B /* ImportExportKeysTests.swift */,
 				848314F024B81C38004E89EA /* LifecycleTests.swift */,
 				848314FE24B81D80004E89EA /* ListEmailAddressesTests.swift */,
 				95A1A79628BC906700AAC84B /* ListEmailFoldersForEmailAddressIdTests.swift */,
@@ -1581,6 +1595,7 @@
 				842888F324984E0500D39E6C /* GetEmailMessageByIdIntegrationTests.swift */,
 				849AF011249C6F6A005CFA2E /* GetEmailMessageRFC822DataWithIdTests.swift */,
 				84B260682488C6CE00E99401 /* GetSupportedDomainsIntegrationTests.swift */,
+				95AEC1162AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift */,
 				84A6E19F249203040025F05A /* ListEmailAddressesIntegrationTests.swift */,
 				95B3DB5F28BDC244007084FE /* ListEmailFoldersIntegrationTests.swift */,
 				8428897D249B319400D39E6C /* ListEmailMessagesIntegrationTests.swift */,
@@ -2055,6 +2070,7 @@
 			);
 			dependencies = (
 				84783B36231C916200CCBC27 /* PBXTargetDependency */,
+				95AEC11A2AC272D200BEC70B /* PBXTargetDependency */,
 			);
 			name = SudoEmailTests;
 			productName = PaymentsServiceTests;
@@ -2067,8 +2083,9 @@
 		84783B21231C916200CCBC27 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1210;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "Anonyome Labs";
 				TargetAttributes = {
 					841E5CB023418ABC004219B9 = {
@@ -2086,6 +2103,7 @@
 					84783B32231C916200CCBC27 = {
 						CreatedOnToolsVersion = 10.2.1;
 						LastSwiftMigration = 1100;
+						TestTargetID = 841E5CB023418ABC004219B9;
 					};
 				};
 			};
@@ -2334,6 +2352,7 @@
 				842888F424984E0500D39E6C /* GetEmailMessageByIdIntegrationTests.swift in Sources */,
 				849AF012249C6F6A005CFA2E /* GetEmailMessageRFC822DataWithIdTests.swift in Sources */,
 				84B260692488C6CE00E99401 /* GetSupportedDomainsIntegrationTests.swift in Sources */,
+				95AEC1172AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift in Sources */,
 				84A6E1A0249203040025F05A /* ListEmailAddressesIntegrationTests.swift in Sources */,
 				95B3DB6028BDC244007084FE /* ListEmailFoldersIntegrationTests.swift in Sources */,
 				8428897E249B319400D39E6C /* ListEmailMessagesIntegrationTests.swift in Sources */,
@@ -2572,6 +2591,7 @@
 				84B2605E2488B26200E99401 /* GetSupportedDomainsUseCaseTests.swift in Sources */,
 				848314FB24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift in Sources */,
 				84A4561324B6C578002DBF0D /* GraphQLResultWorkerTests.swift in Sources */,
+				95AEC1152AB187A000BEC70B /* ImportExportKeysTests.swift in Sources */,
 				84B2601D24876DBE00E99401 /* KeyEntityTransformerTests.swift in Sources */,
 				848314F124B81C38004E89EA /* LifecycleTests.swift in Sources */,
 				95CE6387291382880027B290 /* ListDraftEmailMessageMetadataUseCaseTests.swift in Sources */,
@@ -2677,6 +2697,11 @@
 			target = 84783B29231C916200CCBC27 /* SudoEmail */;
 			targetProxy = 84783B35231C916200CCBC27 /* PBXContainerItemProxy */;
 		};
+		95AEC11A2AC272D200BEC70B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 841E5CB023418ABC004219B9 /* TestApp */;
+			targetProxy = 95AEC1192AC272D200BEC70B /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -2703,6 +2728,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TestApp/TestApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UU2W43R8JA;
 				INFOPLIST_FILE = TestApp/Info.plist;
@@ -2722,6 +2748,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TestApp/TestApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UU2W43R8JA;
 				INFOPLIST_FILE = TestApp/Info.plist;
@@ -3026,6 +3053,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = SudoEmail/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3034,6 +3062,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sudoplatform.sudoemail;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3056,6 +3086,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = SudoEmail/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3064,6 +3095,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sudoplatform.sudoemail;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3093,6 +3126,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestApp";
 			};
 			name = Debug;
 		};
@@ -3115,6 +3149,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestApp";
 			};
 			name = Release;
 		};

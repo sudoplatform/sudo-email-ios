@@ -132,6 +132,11 @@ public protocol SudoEmailClient: AnyObject {
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<String>
 
+    /// Imports cryptographic keys from a key archive.
+    ///
+    /// - Parameter archiveData: Key archive data to import the keys from.
+    func importKeys(archiveData: Data) throws
+
     // MARK: - Queries
 
     /// Check the availability of email address combinations.
@@ -244,6 +249,11 @@ public protocol SudoEmailClient: AnyObject {
 
     /// Get the configuration data for the email service.
     func getConfigurationData() async throws -> ConfigurationData
+
+    /// Export the cryptographic keys to a key archive.
+    ///
+    /// - Returns: Key archive data.
+    func exportKeys() throws -> Data
 
     // MARK: - Subscriptions
 

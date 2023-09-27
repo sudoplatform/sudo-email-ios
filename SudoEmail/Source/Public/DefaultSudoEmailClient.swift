@@ -105,7 +105,6 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailConfig = try Bundle.main.loadEmailConfig()
         let s3Region = emailConfig.region
         // Setup Repositories
-        // let keyRepository = DefaultKeyRepository(graphQLClient: graphQLClient, deviceKeyWorker: deviceKeyWorker)
         let emailAccountRepository = DefaultEmailAccountRepository(appSyncClient: graphQLClient, deviceKeyWorker: deviceKeyWorker)
         let emailFolderRepository = DefaultEmailFolderRepository(appSyncClient: graphQLClient)
         let awsS3Worker = try DefaultAWSS3Worker(userClient: userClient, awsS3WorkerKey: Constants.awsS3WorkerKey)
@@ -276,6 +275,17 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailAccountRepository: emailAccountRepository
         )
         return try await useCase.execute(withInput: input)
+    }
+
+    public func importKeys(archiveData: Data) throws {
+        if archiveData.isEmpty {
+            throw SudoEmailError.invalidArgument("")
+        }
+        try deviceKeyWorker.importKeys(archiveData: archiveData)
+    }
+
+    public func exportKeys() throws -> Data {
+        try deviceKeyWorker.exportKeys()
     }
 
     public func checkEmailAddressAvailability(withInput input: CheckEmailAddressAvailabilityInput) async throws -> [String] {

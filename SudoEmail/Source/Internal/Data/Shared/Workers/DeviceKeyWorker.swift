@@ -49,6 +49,16 @@ protocol DeviceKeyWorker: AnyObject {
     ///     - `KeyManagerError` if the data cannot be decrypted.
     func unsealString(_ string: String, withKeyId keyId: String, algorithm: String) throws -> String
 
+    /// Export the cryptographic keys to a key archive.
+    ///
+    /// - Returns: Key archive data.
+    func exportKeys() throws -> Data
+
+    /// Imports cryptographic keys from a key archive.
+    ///
+    /// - Parameter archiveData: Key archive data to import the keys from.
+    func importKeys(archiveData: Data) throws
+
     /// remove all cryptographic keys from the KeyManager
     func removeAllKeys() throws
 
@@ -87,7 +97,11 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     // MARK: - Lifecycle
 
-    convenience init(keyNamespace: String, userClient: SudoUserClient, logger: Logger = .emailSDKLogger) {
+    convenience init(
+        keyNamespace: String,
+        userClient: SudoUserClient,
+        logger: Logger = .emailSDKLogger
+    ) {
         let keyManager = LegacySudoKeyManager(serviceName: Defaults.keyRingServiceName, keyTag: Defaults.keyManagerKeyTag, namespace: keyNamespace)
         self.init(keyManager: keyManager, userClient: userClient, logger: logger)
     }
@@ -193,6 +207,25 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         } else {
             return try decryptWithSymmetricKey(string, withKeyId: keyId)
         }
+    }
+
+    func exportKeys() throws -> Data {
+        let archive = SecureKeyArchiveImpl(keyManager: self.keyManager, zip: true)
+        try archive.loadKeys()
+        return try archive.archive(nil)
+    }
+
+    func importKeys(archiveData: Data) throws {
+        try self.keyManager.removeAllKeys()
+        guard let archive = SecureKeyArchiveImpl(
+            archiveData: archiveData,
+            keyManager: self.keyManager,
+            zip: true
+        ) else {
+            throw SudoEmailError.invalidKeyArchive
+        }
+        try archive.unarchive(nil)
+        try archive.saveKeys()
     }
 
     func removeAllKeys() throws {
