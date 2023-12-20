@@ -78,8 +78,10 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         static let keyManagerKeyTag = "com.sudoplatform"
         /// Key ring service name used for the key manager initialization.
         static let keyRingServiceName = "sudo-email"
-        /// Size of the AES symmetric key.
+        /// Size of the AES symmetric key in bits.
         static let aesKeySize = 256
+        /// RSA block size in bytes.
+        static let rsaBlockSize = 256
         /// algorithm used when creating/registering public keys.
         static let algorithm = "RSAEncryptionOAEPAESCBC"
     }
@@ -211,6 +213,8 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     func exportKeys() throws -> Data {
         let archive = SecureKeyArchiveImpl(keyManager: self.keyManager, zip: true)
+        // exclude public keys to limit size of the archive
+        archive.excludedKeyTypes = [KeyType.publicKey.rawValue]
         try archive.loadKeys()
         return try archive.archive(nil)
     }
@@ -275,7 +279,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         guard payload.count > Defaults.aesKeySize else {
             throw SudoEmailError.internalError("Symmetric key missing from payload")
         }
-        let aesEncrypted = payload.subdata(in: Range(uncheckedBounds: (0, Defaults.aesKeySize)))
+        let aesEncrypted = payload.subdata(in: Range(uncheckedBounds: (0, Defaults.rsaBlockSize)))
         var aesDecrypted = Data()
         do {
             aesDecrypted = try keyManager.decryptWithPrivateKey(keyId, data: aesEncrypted, algorithm: algorithm)
