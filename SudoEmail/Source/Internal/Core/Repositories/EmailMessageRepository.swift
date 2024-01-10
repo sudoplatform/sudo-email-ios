@@ -84,8 +84,8 @@ protocol EmailMessageRepository: AnyObject {
     /// - Parameters:
     ///   - sealedId: Identifier of the email message to fetch.
     ///   - emailAddressId: Identifier of the email address that owns the sealed email message.
-    /// - Returns: The RFC822 Data for the emaio message.
-    func fetchEmailMessageRFC822Data(_ sealedId: String, emailAddressId: String) async throws -> Data?
+    /// - Returns: The RFC822 S3Object for the email message.
+    func fetchEmailMessageRFC822Data(_ sealedId: String, emailAddressId: String) async throws -> S3ObjectEntity?
 
     /// Get a saved draft email message.
     ///  - Parameters:

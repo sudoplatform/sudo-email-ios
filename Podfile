@@ -19,6 +19,7 @@ project 'SudoEmail', {
 target 'SudoEmail' do
   inherit! :search_paths
   podspec :name => 'SudoEmail'
+  pod 'GzipSwift'
 
   target 'SudoEmailTests' do
     podspec :name => 'SudoEmail'

@@ -348,15 +348,15 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         )
     }
 
-    func fetchEmailMessageRFC822Data(_ id: String, emailAddressId: String) async throws -> Data? {
+    func fetchEmailMessageRFC822Data(_ id: String, emailAddressId: String) async throws -> S3ObjectEntity? {
         guard let sealedEmailMessage = try await self.getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData) else {
             return nil
         }
         guard let s3Key = await getS3KeyForEmailMessageId(id, emailAddressId: emailAddressId, publicKeyId: sealedEmailMessage.keyId) else {
             throw SudoEmailError.notSignedIn
         }
-        let rfc822Data = try await self.s3Worker.download(bucket: emailBucket, key: s3Key)
-        return rfc822Data
+        let rfc822Object = try await self.s3Worker.getObject(bucket: emailBucket, key: s3Key)
+        return rfc822Object
     }
 
     func getDraft(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage? {

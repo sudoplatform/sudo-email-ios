@@ -3,6 +3,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
+import Gzip
 
 /// Core use case representation of a operation to fetch the RFC 6854 (supersedes RFC 822) data of the email message remotely.
 class FetchEmailMessageRFC822DataUseCase {
@@ -35,13 +36,32 @@ class FetchEmailMessageRFC822DataUseCase {
         guard let emailMessage = try await emailMessageRepository.fetchEmailMessageById(id) else {
             throw SudoEmailError.noEmailMessageRFC822Available
         }
-        guard let rfc822Data = try await self.emailMessageRepository.fetchEmailMessageRFC822Data(id, emailAddressId: emailAddressId) else {
+        guard let rfc822Object = try await self.emailMessageRepository.fetchEmailMessageRFC822Data(id, emailAddressId: emailAddressId) else {
             throw SudoEmailError.noEmailMessageRFC822Available
         }
-        return try self.emailMessageUnsealerService.unsealEmailMessageRFC822Data(
-            rfc822Data,
-            withKeyId: emailMessage.keyId,
-            algorithm: emailMessage.algorithm
-        )
+        let contentEncodingValues = (rfc822Object.contentEncoding?.split(separator: ",") ?? ["sudoplatform-crypto", "sudoplatform-binary-data"]).reversed()
+        var decodedData = rfc822Object.body
+        do {
+            for (encodingValue) in contentEncodingValues {
+                switch encodingValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+                    case "sudoplatform-compression":
+                        let base64Decoded = Data(base64Encoded: decodedData)
+                        decodedData = try (base64Decoded?.gunzipped())!
+                    case "sudoplatform-crypto":
+                        decodedData = try self.emailMessageUnsealerService.unsealEmailMessageRFC822Data(
+                            rfc822Object.body,
+                            withKeyId: emailMessage.keyId,
+                            algorithm: emailMessage.algorithm
+                        )
+                    case "sudoplatform-binary-data":
+                        break
+                    default:
+                        throw SudoEmailError.decodingError
+                }
+            }
+        } catch {
+            throw error
+        }
+        return decodedData
     }
 }

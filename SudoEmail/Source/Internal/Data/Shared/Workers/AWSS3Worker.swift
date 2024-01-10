@@ -30,6 +30,9 @@ struct S3ObjectEntity: Equatable {
 
     /// The metadata associated with the
     public var metadata: [String: String]?
+    
+    // The content encoding value for the data
+    public var contentEncoding: String?
 }
 
 /// S3 client wrapper protocol mainly used for providing an abstraction layer on top of
@@ -262,7 +265,8 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                 let s3ObjectEntity = S3ObjectEntity(
                     lastModified: lastModified,
                     body: body,
-                    metadata: task.result?.metadata
+                    metadata: task.result?.metadata,
+                    contentEncoding: task.result?.contentEncoding
                 )
                 continuation.resume(returning: s3ObjectEntity)
                 return nil
