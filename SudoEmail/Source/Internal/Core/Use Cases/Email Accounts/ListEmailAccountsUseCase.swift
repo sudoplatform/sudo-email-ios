@@ -11,7 +11,7 @@ class ListEmailAccountsUseCase {
 
     // MARK: - Properties
 
-    /// Domain repository to access the emaila ccounts.
+    /// Domain repository to access the email accounts.
     let emailAccountRepository: EmailAccountRepository
 
     // MARK: - Lifecycle

@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 6.2.0 Docs
+          SudoEmail 6.2.1 Docs
         </a>
         
       </p>
@@ -148,6 +148,9 @@
                 <a class="nav-group-task-link" href="../Structs/DraftEmailMessageMetadata.html">DraftEmailMessageMetadata</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailAddressPublicInfo.html">EmailAddressPublicInfo</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs.html#/s:9SudoEmail0B12FolderEntityV">EmailFolderEntity</a>
               </li>
               <li class="nav-group-task">
@@ -188,6 +191,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListOutput.html">ListOutput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LookupEmailAddressesPublicInfoInput.html">LookupEmailAddressesPublicInfoInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Owner.html">Owner</a>
@@ -1204,6 +1210,75 @@ API calls.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0aB6ClientP06lookupB19AddressesPublicInfo9withInputSayAA0b7AddressfG0VGAA06LookupbefgI0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/lookupEmailAddressesPublicInfo(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06lookupB19AddressesPublicInfo9withInputSayAA0b7AddressfG0VGAA06LookupbefgI0V_tYaKF">lookupEmailAddressesPublicInfo(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get a list of public info objects associated with the provided email addresses.</p>
+
+<p>If no email addresses or public keys can be found, an empty list will be returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">lookupEmailAddressesPublicInfo</span><span class="p">(</span><span class="nv">withInput</span><span class="p">:</span> <span class="kt"><a href="../Structs/LookupEmailAddressesPublicInfoInput.html">LookupEmailAddressesPublicInfoInput</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/EmailAddressPublicInfo.html">EmailAddressPublicInfo</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddresses</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A list of email address strings in format &lsquo;local-part@domain&rsquo;.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Determines how the data will be fetched. Default usage is <code>remoteOnly</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>An array of public information objects or an empty array if no email addresses or public keys can be found.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP04listb10FoldersForB9AddressId9withInputAA10ListOutputVyAA0B6FolderVGAA0kbefbghJ0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/listEmailFoldersForEmailAddressId(withInput:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP04listb10FoldersForB9AddressId9withInputAA10ListOutputVyAA0B6FolderVGAA0kbefbghJ0V_tYaKF">listEmailFoldersForEmailAddressId(withInput:<wbr>)</a>
@@ -1849,7 +1924,7 @@ Returns an empty list if no email messages can be found.</li>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-01-10)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-01-16)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

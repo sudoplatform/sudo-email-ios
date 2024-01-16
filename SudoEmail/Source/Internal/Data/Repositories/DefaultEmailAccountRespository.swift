@@ -308,6 +308,31 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         }
     }
 
+    func lookupPublicInfo(emailAddresses: [String], cachePolicy: CachePolicy? = .remoteOnly) async throws -> [EmailAddressPublicInfoEntity] {
+        let input = GraphQL.LookupEmailAddressesPublicInfoInput(emailAddresses: emailAddresses)
+        let query = GraphQL.LookupEmailAddressesPublicInfoQuery(input: input)
+        let cachePolicy = cachePolicy ?? .remoteOnly
+        let cachePolicyTransformer = CachePolicyAPITransformer()
+        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
+
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: queryCachePolicy,
+            queue: dispatchQueue
+        )
+        
+        guard let result = fetchResult?.data else {
+            guard let error = fetchError else {
+                return []
+            }
+
+            throw SudoEmailError.internalError("\(error)")
+        }
+
+        let transformer = EmailAddressPublicInfoEntityTransformer()
+        return transformer.transform(result)
+    }
+
     // MARK: - Helpers
 
     func getEmailAddressQueryWithEmailAddressId(

@@ -357,6 +357,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return transformer.transformEmailAccounts(emailAccounts)
     }
 
+    public func lookupEmailAddressesPublicInfo(withInput input: LookupEmailAddressesPublicInfoInput) async throws -> [EmailAddressPublicInfo] {
+        let useCase = useCaseFactory.generateLookupEmailAddressesPublicInfoUseCase(emailAccountRepository: emailAccountRepository)
+        let publicInfo = try await useCase.execute(emailAddresses: input.emailAddresses, cachePolicy: input.cachePolicy)
+        let transformer = EmailAddressPublicInfoAPITransformer()
+        return transformer.transform(publicInfo)
+    }
+
     public func listEmailFoldersForEmailAddressId(
         withInput input: ListEmailFoldersForEmailAddressIdInput
     ) async throws -> ListOutput<EmailFolder> {

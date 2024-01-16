@@ -323,6 +323,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/LookupEmailAddressesPublicInfoInput.swift",
+      "line": 18,
+      "symbol": "LookupEmailAddressesPublicInfoInput.init(emailAddresses:cachePolicy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ProvisionEmailAddressInput.swift",
       "line": 22,
       "symbol": "ProvisionEmailAddressInput.init(emailAddress:ownershipProofToken:alias:)",

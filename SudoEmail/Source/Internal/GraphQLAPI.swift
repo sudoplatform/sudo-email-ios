@@ -787,6 +787,23 @@ internal struct ListEmailAddressesForSudoIdInput: GraphQLMapConvertible {
   }
 }
 
+internal struct LookupEmailAddressesPublicInfoInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(emailAddresses: [String]) {
+    graphQLMap = ["emailAddresses": emailAddresses]
+  }
+
+  internal var emailAddresses: [String] {
+    get {
+      return graphQLMap["emailAddresses"] as! [String]
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddresses")
+    }
+  }
+}
+
 internal struct ListEmailFoldersForEmailAddressIdInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
@@ -4951,6 +4968,157 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
               set {
                 snapshot.updateValue(newValue, forKey: "issuer")
               }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+internal final class LookupEmailAddressesPublicInfoQuery: GraphQLQuery {
+  internal static let operationString =
+    "query LookupEmailAddressesPublicInfo($input: LookupEmailAddressesPublicInfoInput!) {\n  lookupEmailAddressesPublicInfo(input: $input) {\n    __typename\n    items {\n      __typename\n      ...EmailAddressPublicInfo\n    }\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(EmailAddressPublicInfo.fragmentString) }
+
+  internal var input: LookupEmailAddressesPublicInfoInput
+
+  internal init(input: LookupEmailAddressesPublicInfoInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Query"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("lookupEmailAddressesPublicInfo", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(LookupEmailAddressesPublicInfo.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(lookupEmailAddressesPublicInfo: LookupEmailAddressesPublicInfo) {
+      self.init(snapshot: ["__typename": "Query", "lookupEmailAddressesPublicInfo": lookupEmailAddressesPublicInfo.snapshot])
+    }
+
+    internal var lookupEmailAddressesPublicInfo: LookupEmailAddressesPublicInfo {
+      get {
+        return LookupEmailAddressesPublicInfo(snapshot: snapshot["lookupEmailAddressesPublicInfo"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "lookupEmailAddressesPublicInfo")
+      }
+    }
+
+    internal struct LookupEmailAddressesPublicInfo: GraphQLSelectionSet {
+      internal static let possibleTypes = ["LookupEmailAddressesPublicInfoResponse"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("items", type: .nonNull(.list(.nonNull(.object(Item.selections))))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(items: [Item]) {
+        self.init(snapshot: ["__typename": "LookupEmailAddressesPublicInfoResponse", "items": items.map { $0.snapshot }])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var items: [Item] {
+        get {
+          return (snapshot["items"] as! [Snapshot]).map { Item(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "items")
+        }
+      }
+
+      internal struct Item: GraphQLSelectionSet {
+        internal static let possibleTypes = ["EmailAddressPublicInfo"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
+          GraphQLField("publicKey", type: .nonNull(.scalar(String.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(emailAddress: String, publicKey: String) {
+          self.init(snapshot: ["__typename": "EmailAddressPublicInfo", "emailAddress": emailAddress, "publicKey": publicKey])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var emailAddress: String {
+          get {
+            return snapshot["emailAddress"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailAddress")
+          }
+        }
+
+        internal var publicKey: String {
+          get {
+            return snapshot["publicKey"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "publicKey")
+          }
+        }
+
+        internal var fragments: Fragments {
+          get {
+            return Fragments(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+
+        internal struct Fragments {
+          internal var snapshot: Snapshot
+
+          internal var emailAddressPublicInfo: EmailAddressPublicInfo {
+            get {
+              return EmailAddressPublicInfo(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
             }
           }
         }
@@ -10077,6 +10245,56 @@ internal struct EmailAddress: GraphQLFragment {
           snapshot.updateValue(newValue, forKey: "issuer")
         }
       }
+    }
+  }
+}
+
+internal struct EmailAddressPublicInfo: GraphQLFragment {
+  internal static let fragmentString =
+    "fragment EmailAddressPublicInfo on EmailAddressPublicInfo {\n  __typename\n  emailAddress\n  publicKey\n}"
+
+  internal static let possibleTypes = ["EmailAddressPublicInfo"]
+
+  internal static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
+    GraphQLField("publicKey", type: .nonNull(.scalar(String.self))),
+  ]
+
+  internal var snapshot: Snapshot
+
+  internal init(snapshot: Snapshot) {
+    self.snapshot = snapshot
+  }
+
+  internal init(emailAddress: String, publicKey: String) {
+    self.init(snapshot: ["__typename": "EmailAddressPublicInfo", "emailAddress": emailAddress, "publicKey": publicKey])
+  }
+
+  internal var __typename: String {
+    get {
+      return snapshot["__typename"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  internal var emailAddress: String {
+    get {
+      return snapshot["emailAddress"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "emailAddress")
+    }
+  }
+
+  internal var publicKey: String {
+    get {
+      return snapshot["publicKey"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "publicKey")
     }
   }
 }

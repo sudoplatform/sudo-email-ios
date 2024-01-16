@@ -182,6 +182,16 @@ public protocol SudoEmailClient: AnyObject {
         withInput input: ListEmailAddressesForSudoIdInput
     ) async throws -> ListOutput<EmailAddress>
 
+    /// Get a list of public info objects associated with the provided email addresses.
+    /// 
+    /// If no email addresses or public keys can be found, an empty list will be returned.
+    ///  - Parameters:
+    ///    - emailAddresses: A list of email address strings in format 'local-part@domain'.
+    ///    - cachePolicy: Determines how the data will be fetched. Default usage is `remoteOnly`.
+    ///  - Returns:
+    ///    - An array of public information objects or an empty array if no email addresses or public keys can be found.
+    func lookupEmailAddressesPublicInfo(withInput: LookupEmailAddressesPublicInfoInput) async throws -> [EmailAddressPublicInfo]
+
     /// Get a list of email folders associated with the email address identified by emailAddressId.
     ///  - Parameters:
     ///    - input: Parameters used to retrieve a list of email folders for an emailAddressId.

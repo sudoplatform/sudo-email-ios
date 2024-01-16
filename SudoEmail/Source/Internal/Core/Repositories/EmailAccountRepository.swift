@@ -90,4 +90,13 @@ protocol EmailAccountRepository: AnyObject {
         nextToken: String?
     ) async throws -> ListOutputEntity<EmailAccountEntity>
 
+    /// Retrieve a list email address public info objects for provided email addresses.
+    /// - Parameters:
+    ///   - emailAddresses: A list of email address strings in format 'local-part@domain'.
+    ///   - cachePolicy: Determines how the public info will be fetched. Default usage is `remoteOnly`.   
+    ///   - Returns: The list of public info objects found, or empty if no email addresses or public keys were found.
+    func lookupPublicInfo(
+        emailAddresses: [String],
+        cachePolicy: CachePolicy?
+    ) async throws -> [EmailAddressPublicInfoEntity]
 }

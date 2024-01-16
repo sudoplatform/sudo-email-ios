@@ -110,6 +110,12 @@ class UseCaseFactory {
         return ListEmailAccountsForSudoIdUseCase(emailAccountRepository: emailAccountRepository)
     }
 
+    func generateLookupEmailAddressesPublicInfoUseCase(
+        emailAccountRepository: EmailAccountRepository
+    ) -> LookupEmailAddressesPublicInfoUseCase {
+        return LookupEmailAddressesPublicInfoUseCase(emailAccountRepository: emailAccountRepository)
+    }
+
     func generateListEmailFoldersForEmailAddressIdUseCase(
         emailFolderRepository: EmailFolderRepository
     ) -> ListEmailFoldersForEmailAddressIdUseCase {
