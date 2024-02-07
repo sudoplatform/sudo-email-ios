@@ -6,6 +6,8 @@
 
 import Foundation
 import SudoLogging
+import SudoUser
+
 
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
@@ -114,6 +116,34 @@ class UseCaseFactory {
         emailAccountRepository: EmailAccountRepository
     ) -> LookupEmailAddressesPublicInfoUseCase {
         return LookupEmailAddressesPublicInfoUseCase(emailAccountRepository: emailAccountRepository)
+    }
+    
+    func generateBlockEmailAddressesUseCase(
+        blockedAddressRepository: BlockedAddressRepository,
+        userClient: SudoUserClient,
+        log: Logger
+    ) -> BlockEmailAddressesUseCase {
+        return BlockEmailAddressesUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
+    }
+    
+    func generateUnblockEmailAddressesUseCase(
+        blockedAddressRepository: BlockedAddressRepository,
+        userClient: SudoUserClient,
+        log: Logger
+    ) -> UnblockEmailAddressesUseCase {
+        return UnblockEmailAddressesUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
+    }
+    
+    func generateGetEmailAddressBlocklistUseCase(
+        blockedAddressRepository: BlockedAddressRepository,
+        userClient: SudoUserClient,
+        log: Logger
+    ) -> GetEmailAddressBlocklistUseCase {
+        return GetEmailAddressBlocklistUseCase(
+            blockedAddressRepository: blockedAddressRepository,
+            userClient: userClient,
+            log: log
+        )
     }
 
     func generateListEmailFoldersForEmailAddressIdUseCase(

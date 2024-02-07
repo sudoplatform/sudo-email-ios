@@ -264,6 +264,33 @@ public protocol SudoEmailClient: AnyObject {
     ///
     /// - Returns: Key archive data.
     func exportKeys() throws -> Data
+    
+    /// Blocks the addresses given from sending to the user
+    ///
+    ///  - Parameters:
+    ///    - addresses: Array of addresses to block as strings
+    ///  - Returns: The status of the blocking:
+    ///     Success - All addresses were succesfully blocked.
+    ///     Partial - Only a partial number of the addresses were blocked successfully. Includes a list of the
+    ///           addresses that failed and succeeded to be blocked.
+    ///     Failure - All addresses failed to be blocked.
+    func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String>
+    
+    /// Unblocks the addresses given from sending to the user
+    ///
+    ///  - Parameters:
+    ///    - addresses: Array of addresses to unblock as strings
+    ///  - Returns: The status of the unblocking:
+    ///     Success - All addresses were succesfully unblocked.
+    ///     Partial - Only a partial number of the addresses were unblocked successfully. Includes a list of the
+    ///           addresses that failed and succeeded to be unblocked.
+    ///     Failure - All addresses failed to be unblocked.
+    func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String>
+    
+    /// Get email address blocklist for logged in user
+    ///
+    /// - Returns: The list of blocked email addresses
+    func getEmailAddressBlocklist() async throws -> [String]
 
     // MARK: - Subscriptions
 

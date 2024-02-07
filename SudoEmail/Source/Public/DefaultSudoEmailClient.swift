@@ -22,6 +22,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     /// Used to make GraphQL requests to AWS. Injected into operations to delegate the calls.
     let graphQLClient: SudoApiClient
+    
+    let userClient: SudoUserClient
 
     /// Used to log diagnostic and error information.
     let logger: Logger
@@ -41,6 +43,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     let emailFolderRepository: EmailFolderRepository & Resetable
 
     let emailMessageRepository: EmailMessageRepository & Resetable
+    
+    let blockedAddressRepository: BlockedAddressRepository & Resetable
 
     let domainRepository: DomainRepository
 
@@ -51,6 +55,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailAccountRepository,
             emailFolderRepository,
             emailMessageRepository,
+            blockedAddressRepository,
             awsS3Worker
         ]
     }
@@ -118,6 +123,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             s3Worker: awsS3Worker,
             deviceKeyWorker: deviceKeyWorker
         )
+        let blockedAddressRepository = DefaultBlockedAddressRepository(appSyncClient: graphQLClient, keyWorker: deviceKeyWorker)
         let domainRepository = DefaultDomainRepsitory(appSyncClient: graphQLClient)
         let emailConfigurationDataRepository = DefaultEmailConfigurationDataRepository(
             appSyncClient: graphQLClient
@@ -135,7 +141,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailConfigurationDataRepository: emailConfigurationDataRepository,
             emailMessageUnsealerServiceService: emailMessageUnsealerServiceService,
             deviceKeyWorker: deviceKeyWorker,
-            awsS3Worker: awsS3Worker
+            awsS3Worker: awsS3Worker,
+            blockedAddressRepository: blockedAddressRepository
         )
     }
 
@@ -155,9 +162,11 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         emailMessageUnsealerServiceService: EmailMessageUnsealerService,
         deviceKeyWorker: DeviceKeyWorker,
         awsS3Worker: AWSS3Worker & Resetable,
-        logger: Logger = .emailSDKLogger
+        logger: Logger = .emailSDKLogger,
+        blockedAddressRepository: BlockedAddressRepository & Resetable
     ) {
         self.graphQLClient = graphQLClient
+        self.userClient = userClient
         self.logger = logger
         self.useCaseFactory = useCaseFactory
         self.emailAccountRepository = emailAccountRepository
@@ -168,6 +177,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.emailMessageUnsealerServiceService = emailMessageUnsealerServiceService
         self.deviceKeyWorker = deviceKeyWorker
         self.awsS3Worker = awsS3Worker
+        self.blockedAddressRepository = blockedAddressRepository
     }
 
     public func reset() throws {
@@ -362,6 +372,40 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let publicInfo = try await useCase.execute(emailAddresses: input.emailAddresses, cachePolicy: input.cachePolicy)
         let transformer = EmailAddressPublicInfoAPITransformer()
         return transformer.transform(publicInfo)
+    }
+    
+    
+    public func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String> {
+        self.logger.debug("blockEmailAddresses: \(addresses)")
+        let useCase = useCaseFactory.generateBlockEmailAddressesUseCase(
+            blockedAddressRepository: blockedAddressRepository,
+            userClient: userClient,
+            log: self.logger
+        )
+        let result = try await useCase.execute(addresses: addresses)
+        return result
+    }
+    
+    public func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String> {
+        self.logger.debug("unblockEmailAddresses: \(addresses)")
+        let useCase = useCaseFactory.generateUnblockEmailAddressesUseCase(
+            blockedAddressRepository: blockedAddressRepository,
+            userClient: userClient,
+            log: self.logger
+        )
+        let result = try await useCase.execute(addresses: addresses)
+        return result
+    }
+    
+    public func getEmailAddressBlocklist() async throws -> [String] {
+        self.logger.debug("getEmailAddressBlocklist init")
+        let useCase = useCaseFactory.generateGetEmailAddressBlocklistUseCase(
+            blockedAddressRepository: blockedAddressRepository,
+            userClient: userClient,
+            log: self.logger
+        )
+        let result = try await useCase.execute()
+        return result
     }
 
     public func listEmailFoldersForEmailAddressId(
