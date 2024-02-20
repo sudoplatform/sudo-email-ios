@@ -377,6 +377,10 @@
 		9F8673AC2B6C7BDB00B9950E /* DefaultBlockedAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8673AB2B6C7BDB00B9950E /* DefaultBlockedAddressRepository.swift */; };
 		9F8673AE2B6C962D00B9950E /* EmailAddressParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */; };
 		9F8673B02B6C9A1300B9950E /* StringHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8673AF2B6C9A1300B9950E /* StringHasher.swift */; };
+		9F949DDA2B8428D8009064FB /* EmailAddressBlocklistUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */; };
+		9F949DDC2B842A8A009064FB /* BlockedEmailAddressTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */; };
+		9F9E7F892B82B12900C5F823 /* UnsealedBlockedAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */; };
+		9F9E7F8B2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */; };
 		A7BCCF92625EFD21A51F6C9D /* Pods_SudoEmail_SudoEmailTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65BFD5441A621353BBBDAC77 /* Pods_SudoEmail_SudoEmailTests.framework */; };
 		AEAB2F8BE4C42ADFD875EC41 /* Pods_SudoEmail_SudoEmailIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C31064F99920C8A8E5EB0A /* Pods_SudoEmail_SudoEmailIntegrationTests.framework */; };
 /* End PBXBuildFile section */
@@ -798,6 +802,10 @@
 		9F8673AB2B6C7BDB00B9950E /* DefaultBlockedAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBlockedAddressRepository.swift; sourceTree = "<group>"; };
 		9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressParser.swift; sourceTree = "<group>"; };
 		9F8673AF2B6C9A1300B9950E /* StringHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringHasher.swift; sourceTree = "<group>"; };
+		9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressBlocklistUtil.swift; sourceTree = "<group>"; };
+		9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedEmailAddressTransformer.swift; sourceTree = "<group>"; };
+		9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsealedBlockedAddress.swift; sourceTree = "<group>"; };
+		9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesByHashedValueUseCase.swift; sourceTree = "<group>"; };
 		A0DDC572AAF1ACD6282DD8E3 /* Pods-SudoEmail-SudoEmailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests/Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4C09487DCA3BD3B510AF1A9 /* Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		B258871714E5602C1388E662 /* Pods-SudoEmail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail/Pods-SudoEmail.release.xcconfig"; sourceTree = "<group>"; };
@@ -1438,6 +1446,7 @@
 				8460A32B23D97655004AB5A9 /* Owner.swift */,
 				95DEFF742859A9800071363B /* SortOrder.swift */,
 				849AF01324A0877A005CFA2E /* SubscriptionToken.swift */,
+				9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1626,6 +1635,7 @@
 				84B260782489DECA00E99401 /* API Transformers */,
 				84B260772489DEBC00E99401 /* Entity Transformers */,
 				84B260E02490B6F000E99401 /* GraphQL Transformers */,
+				9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */,
 			);
 			path = Transformers;
 			sourceTree = "<group>";
@@ -1646,6 +1656,7 @@
 		84B2600E2487537F00E99401 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */,
 				9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */,
 				95388BF92849C85F004D971D /* EmailRFC822HeaderCodec.swift */,
 				849AF01524A08AE7005CFA2E /* EmailSubscriptionToken.swift */,
@@ -2095,6 +2106,7 @@
 			children = (
 				9F8673A92B6C776E00B9950E /* BlockEmailAddressesUseCase.swift */,
 				9F85E1CC2B7191B400C70AF1 /* GetEmailAddressBlocklistUseCase.swift */,
+				9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */,
 				9F372BAC2B709F1F009FD8CC /* UnblockEmailAddressesUseCase.swift */,
 			);
 			path = "Blocked Addresses";
@@ -2507,6 +2519,7 @@
 				95370EC628656CF500401050 /* AWSS3Worker.swift in Sources */,
 				956F5CE528A9AAB30059BD79 /* BatchOperationResult.swift in Sources */,
 				9F8673A72B6C766100B9950E /* BlockedAddressRepository.swift in Sources */,
+				9F949DDC2B842A8A009064FB /* BlockedEmailAddressTransformer.swift in Sources */,
 				9F8673AA2B6C776E00B9950E /* BlockEmailAddressesUseCase.swift in Sources */,
 				84288946249AFBE600D39E6C /* BooleanFilterInputGQLTransformer.swift in Sources */,
 				84288925249AE8DD00D39E6C /* BoolFilter.swift in Sources */,
@@ -2550,6 +2563,7 @@
 				84B25FC62484C39400E99401 /* EmailAccountRepository.swift in Sources */,
 				84467400247DF6ED0016FA56 /* EmailAddress.swift in Sources */,
 				84B2607C2489E01800E99401 /* EmailAddressAPITransformer.swift in Sources */,
+				9F949DDA2B8428D8009064FB /* EmailAddressBlocklistUtil.swift in Sources */,
 				84B25FBC2484B9A200E99401 /* EmailAddressEntity.swift in Sources */,
 				84B2601A24876C1A00E99401 /* EmailAddressEntityTransformer.swift in Sources */,
 				84B260CE2490A3C800E99401 /* EmailAddressFilter.swift in Sources */,
@@ -2656,7 +2670,9 @@
 				8439546123FCB24500A52CE0 /* SudoEmailConfig.swift in Sources */,
 				845AABC32383A42600E4A13C /* SudoEmailError.swift in Sources */,
 				843678BF2325D45C00007E05 /* SudoLogger+Email.swift in Sources */,
+				9F9E7F8B2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift in Sources */,
 				9F372BAD2B709F1F009FD8CC /* UnblockEmailAddressesUseCase.swift in Sources */,
+				9F9E7F892B82B12900C5F823 /* UnsealedBlockedAddress.swift in Sources */,
 				95CC4BF3292354A0008A6BF2 /* UnsubscribeAllUseCase.swift in Sources */,
 				95E738652907900F00DDD547 /* UpdateDraftEmailMessageInput.swift in Sources */,
 				95E738672907945F00DDD547 /* UpdateDraftEmailMessageUseCase.swift in Sources */,

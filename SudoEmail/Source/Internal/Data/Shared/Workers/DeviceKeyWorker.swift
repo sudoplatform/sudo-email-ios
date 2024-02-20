@@ -61,6 +61,9 @@ protocol DeviceKeyWorker: AnyObject {
 
     /// remove all cryptographic keys from the KeyManager
     func removeAllKeys() throws
+    
+    /// Checks if the key with the given id and type exists
+    func keyExists(keyId: String, keyType: KeyType) -> Bool
 
 }
 
@@ -303,5 +306,22 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             throw SudoEmailError.internalError("Data is not encoded in UTF8")
         }
         return decryptedString
+    }
+    
+    func keyExists(keyId: String, keyType: KeyType) -> Bool {
+        do {
+            switch (keyType) {
+                case KeyType.symmetricKey:
+                    let key = try keyManager.getSymmetricKey(keyId)
+                    return key != nil
+                case KeyType.publicKey:
+                    let key = try keyManager.getPublicKey(keyId)
+                    return key != nil
+                default:
+                    return false
+            }
+        } catch {
+            return false
+        }
     }
 }

@@ -18,15 +18,15 @@ protocol BlockedAddressRepository: AnyObject {
     
     /// Unblock the addresses for the given user
     /// - Parameters:
-    ///   - addresses: A list of addresses to unblock in the format `local-part@domain`
+    ///   - hashedAddresses: A list of hashed addresses to unblock
     ///   - owner: The user unblocking the addresses
     /// - Returns: BatchOperationResult with the results of the update
-    func unblockAddresses(addresses: [String], owner: String) async throws -> BatchOperationResult<String>
+    func unblockAddresses(hashedAddresses: [String], owner: String) async throws -> BatchOperationResult<String>
     
     /// Retrieve the email address blocklist for the given user
     ///
     /// - Parameters:
     ///  - owner: The user who owns the blocklist
     /// - Returns: List of blocked email addresses
-    func getEmailAddressBlocklist(owner: String) async throws -> [String]
+    func getEmailAddressBlocklist(owner: String) async throws -> [UnsealedBlockedAddress]
 }

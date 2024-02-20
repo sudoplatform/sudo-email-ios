@@ -405,6 +405,20 @@
       "symbol": "SortOrder",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/UnsealedBlockedAddress.swift",
+      "line": 15,
+      "symbol": "UnsealedBlockedAddress.UnsealedBlockedAddressStatus.completed",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/UnsealedBlockedAddress.swift",
+      "line": 16,
+      "symbol": "UnsealedBlockedAddress.UnsealedBlockedAddressStatus.failed(cause:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh"

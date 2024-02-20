@@ -7043,9 +7043,9 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
 
 internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
   internal static let operationString =
-    "query GetEmailAddressBlocklist($input: GetEmailAddressBlocklistInput!) {\n  getEmailAddressBlocklist(input: $input) {\n    __typename\n    sealedBlockedAddresses {\n      __typename\n      ...SealedAttribute\n    }\n  }\n}"
+    "query GetEmailAddressBlocklist($input: GetEmailAddressBlocklistInput!) {\n  getEmailAddressBlocklist(input: $input) {\n    __typename\n    ...GetEmailAddressBlocklistResponse\n  }\n}"
 
-  internal static var requestString: String { return operationString.appending(SealedAttribute.fragmentString) }
+  internal static var requestString: String { return operationString.appending(GetEmailAddressBlocklistResponse.fragmentString).appending(SealedAttribute.fragmentString) }
 
   internal var input: GetEmailAddressBlocklistInput
 
@@ -7088,7 +7088,8 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("sealedBlockedAddresses", type: .nonNull(.list(.nonNull(.object(SealedBlockedAddress.selections))))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("blockedAddresses", type: .nonNull(.list(.nonNull(.object(BlockedAddress.selections))))),
       ]
 
       internal var snapshot: Snapshot
@@ -7097,8 +7098,8 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(sealedBlockedAddresses: [SealedBlockedAddress]) {
-        self.init(snapshot: ["__typename": "GetEmailAddressBlocklistResponse", "sealedBlockedAddresses": sealedBlockedAddresses.map { $0.snapshot }])
+      internal init(blockedAddresses: [BlockedAddress]) {
+        self.init(snapshot: ["__typename": "GetEmailAddressBlocklistResponse", "blockedAddresses": blockedAddresses.map { $0.snapshot }])
       }
 
       internal var __typename: String {
@@ -7110,25 +7111,44 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
         }
       }
 
-      internal var sealedBlockedAddresses: [SealedBlockedAddress] {
+      internal var blockedAddresses: [BlockedAddress] {
         get {
-          return (snapshot["sealedBlockedAddresses"] as! [Snapshot]).map { SealedBlockedAddress(snapshot: $0) }
+          return (snapshot["blockedAddresses"] as! [Snapshot]).map { BlockedAddress(snapshot: $0) }
         }
         set {
-          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "sealedBlockedAddresses")
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "blockedAddresses")
         }
       }
 
-      internal struct SealedBlockedAddress: GraphQLSelectionSet {
-        internal static let possibleTypes = ["SealedAttribute"]
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var getEmailAddressBlocklistResponse: GetEmailAddressBlocklistResponse {
+          get {
+            return GetEmailAddressBlocklistResponse(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+      }
+
+      internal struct BlockedAddress: GraphQLSelectionSet {
+        internal static let possibleTypes = ["BlockedEmailAddress"]
 
         internal static let selections: [GraphQLSelection] = [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
-          GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
-          GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
-          GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sealedValue", type: .nonNull(.object(SealedValue.selections))),
+          GraphQLField("hashedBlockedValue", type: .nonNull(.scalar(String.self))),
         ]
 
         internal var snapshot: Snapshot
@@ -7137,8 +7157,8 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
-          self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+        internal init(sealedValue: SealedValue, hashedBlockedValue: String) {
+          self.init(snapshot: ["__typename": "BlockedEmailAddress", "sealedValue": sealedValue.snapshot, "hashedBlockedValue": hashedBlockedValue])
         }
 
         internal var __typename: String {
@@ -7150,60 +7170,110 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
           }
         }
 
-        internal var algorithm: String {
+        internal var sealedValue: SealedValue {
           get {
-            return snapshot["algorithm"]! as! String
+            return SealedValue(snapshot: snapshot["sealedValue"]! as! Snapshot)
           }
           set {
-            snapshot.updateValue(newValue, forKey: "algorithm")
+            snapshot.updateValue(newValue.snapshot, forKey: "sealedValue")
           }
         }
 
-        internal var keyId: String {
+        internal var hashedBlockedValue: String {
           get {
-            return snapshot["keyId"]! as! String
+            return snapshot["hashedBlockedValue"]! as! String
           }
           set {
-            snapshot.updateValue(newValue, forKey: "keyId")
+            snapshot.updateValue(newValue, forKey: "hashedBlockedValue")
           }
         }
 
-        internal var plainTextType: String {
-          get {
-            return snapshot["plainTextType"]! as! String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "plainTextType")
-          }
-        }
+        internal struct SealedValue: GraphQLSelectionSet {
+          internal static let possibleTypes = ["SealedAttribute"]
 
-        internal var base64EncodedSealedData: String {
-          get {
-            return snapshot["base64EncodedSealedData"]! as! String
-          }
-          set {
-            snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
-          }
-        }
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+            GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+            GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+            GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          ]
 
-        internal var fragments: Fragments {
-          get {
-            return Fragments(snapshot: snapshot)
-          }
-          set {
-            snapshot += newValue.snapshot
-          }
-        }
-
-        internal struct Fragments {
           internal var snapshot: Snapshot
 
-          internal var sealedAttribute: SealedAttribute {
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+            self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+          }
+
+          internal var __typename: String {
             get {
-              return SealedAttribute(snapshot: snapshot)
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var algorithm: String {
+            get {
+              return snapshot["algorithm"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "algorithm")
+            }
+          }
+
+          internal var keyId: String {
+            get {
+              return snapshot["keyId"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "keyId")
+            }
+          }
+
+          internal var plainTextType: String {
+            get {
+              return snapshot["plainTextType"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "plainTextType")
+            }
+          }
+
+          internal var base64EncodedSealedData: String {
+            get {
+              return snapshot["base64EncodedSealedData"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+            }
+          }
+
+          internal var fragments: Fragments {
+            get {
+              return Fragments(snapshot: snapshot)
             }
             set {
               snapshot += newValue.snapshot
+            }
+          }
+
+          internal struct Fragments {
+            internal var snapshot: Snapshot
+
+            internal var sealedAttribute: SealedAttribute {
+              get {
+                return SealedAttribute(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
             }
           }
         }
@@ -10307,6 +10377,183 @@ internal struct BlockAddressesResult: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "successAddresses")
+    }
+  }
+}
+
+internal struct GetEmailAddressBlocklistResponse: GraphQLFragment {
+  internal static let fragmentString =
+    "fragment GetEmailAddressBlocklistResponse on GetEmailAddressBlocklistResponse {\n  __typename\n  blockedAddresses {\n    __typename\n    sealedValue {\n      __typename\n      ...SealedAttribute\n    }\n    hashedBlockedValue\n  }\n}"
+
+  internal static let possibleTypes = ["GetEmailAddressBlocklistResponse"]
+
+  internal static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLField("blockedAddresses", type: .nonNull(.list(.nonNull(.object(BlockedAddress.selections))))),
+  ]
+
+  internal var snapshot: Snapshot
+
+  internal init(snapshot: Snapshot) {
+    self.snapshot = snapshot
+  }
+
+  internal init(blockedAddresses: [BlockedAddress]) {
+    self.init(snapshot: ["__typename": "GetEmailAddressBlocklistResponse", "blockedAddresses": blockedAddresses.map { $0.snapshot }])
+  }
+
+  internal var __typename: String {
+    get {
+      return snapshot["__typename"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  internal var blockedAddresses: [BlockedAddress] {
+    get {
+      return (snapshot["blockedAddresses"] as! [Snapshot]).map { BlockedAddress(snapshot: $0) }
+    }
+    set {
+      snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "blockedAddresses")
+    }
+  }
+
+  internal struct BlockedAddress: GraphQLSelectionSet {
+    internal static let possibleTypes = ["BlockedEmailAddress"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("sealedValue", type: .nonNull(.object(SealedValue.selections))),
+      GraphQLField("hashedBlockedValue", type: .nonNull(.scalar(String.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(sealedValue: SealedValue, hashedBlockedValue: String) {
+      self.init(snapshot: ["__typename": "BlockedEmailAddress", "sealedValue": sealedValue.snapshot, "hashedBlockedValue": hashedBlockedValue])
+    }
+
+    internal var __typename: String {
+      get {
+        return snapshot["__typename"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    internal var sealedValue: SealedValue {
+      get {
+        return SealedValue(snapshot: snapshot["sealedValue"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "sealedValue")
+      }
+    }
+
+    internal var hashedBlockedValue: String {
+      get {
+        return snapshot["hashedBlockedValue"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "hashedBlockedValue")
+      }
+    }
+
+    internal struct SealedValue: GraphQLSelectionSet {
+      internal static let possibleTypes = ["SealedAttribute"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+        GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+        self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var algorithm: String {
+        get {
+          return snapshot["algorithm"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "algorithm")
+        }
+      }
+
+      internal var keyId: String {
+        get {
+          return snapshot["keyId"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyId")
+        }
+      }
+
+      internal var plainTextType: String {
+        get {
+          return snapshot["plainTextType"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "plainTextType")
+        }
+      }
+
+      internal var base64EncodedSealedData: String {
+        get {
+          return snapshot["base64EncodedSealedData"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var sealedAttribute: SealedAttribute {
+          get {
+            return SealedAttribute(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+      }
     }
   }
 }

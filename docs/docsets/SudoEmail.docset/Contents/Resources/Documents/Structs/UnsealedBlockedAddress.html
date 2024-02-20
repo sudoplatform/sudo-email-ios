@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ListEmailMessagesForEmailFolderIdInput Structure Reference</title>
+    <title>UnsealedBlockedAddress Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ListEmailMessagesForEmailFolderIdInput" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/UnsealedBlockedAddress" class="dashAnchor"></a>
 
-    <a title="ListEmailMessagesForEmailFolderIdInput Structure Reference"></a>
+    <a title="UnsealedBlockedAddress Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">SudoEmail Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ListEmailMessagesForEmailFolderIdInput Structure Reference
+      UnsealedBlockedAddress Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -247,15 +247,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ListEmailMessagesForEmailFolderIdInput</h1>
+            <h1>UnsealedBlockedAddress</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListEmailMessagesForEmailFolderIdInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UnsealedBlockedAddress</span></code></pre>
 
                 </div>
               </div>
-            <p>input object for listing email messages for an email folder using <code><a href="../Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+            <p>Representation of an unsealed blocked email address in Platform SDK</p>
 
           </div>
         </section>
@@ -267,9 +267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG0SSvp"></a>
-                    <a name="//apple_ref/swift/Property/emailFolderId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG0SSvp">emailFolderId</a>
+                    <a name="/s:9SudoEmail22UnsealedBlockedAddressV0cdE6StatusO"></a>
+                    <a name="//apple_ref/swift/Enum/UnsealedBlockedAddressStatus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail22UnsealedBlockedAddressV0cdE6StatusO">UnsealedBlockedAddressStatus</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -277,14 +277,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The unique identifier of email folder to retrieve messages for.</p>
+                        <p>The state of the retreival and unsealing procedure of a particular blocked address
+If the status is &lsquo;Failed&rsquo; there will be an error indicating the cause.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">emailFolderId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">UnsealedBlockedAddressStatus</span></code></pre>
 
                         </div>
                       </div>
@@ -294,9 +295,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV11cachePolicyAA05CacheJ0OSgvp"></a>
-                    <a name="//apple_ref/swift/Property/cachePolicy" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV11cachePolicyAA05CacheJ0OSgvp">cachePolicy</a>
+                    <a name="/s:9SudoEmail22UnsealedBlockedAddressV06hashedD5ValueSSvp"></a>
+                    <a name="//apple_ref/swift/Property/hashedBlockedValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail22UnsealedBlockedAddressV06hashedD5ValueSSvp">hashedBlockedValue</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -304,14 +305,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Determines how the email address will be fetched. Default usage is <code>remoteOnly</code>.</p>
+                        <p>The hashed value of the blocked address. This can be used to unblock the address in the event the unsealing failed</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">hashedBlockedValue</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -321,9 +322,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9dateRangeAA04DateJ0VSgvp"></a>
-                    <a name="//apple_ref/swift/Property/dateRange" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9dateRangeAA04DateJ0VSgvp">dateRange</a>
+                    <a name="/s:9SudoEmail22UnsealedBlockedAddressV7addressSSvp"></a>
+                    <a name="//apple_ref/swift/Property/address" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail22UnsealedBlockedAddressV7addressSSvp">address</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -331,14 +332,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Email messages created within the date range inclusive will be fetched.</p>
+                        <p>The plaintext address that has been blocked</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">dateRange</span><span class="p">:</span> <span class="kt">DateRange</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">address</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -348,9 +349,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9sortOrderAA04SortJ0OSgvp"></a>
-                    <a name="//apple_ref/swift/Property/sortOrder" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9sortOrderAA04SortJ0OSgvp">sortOrder</a>
+                    <a name="/s:9SudoEmail22UnsealedBlockedAddressV6statusAC0cdE6StatusOvp"></a>
+                    <a name="//apple_ref/swift/Property/status" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail22UnsealedBlockedAddressV6statusAC0cdE6StatusOvp">status</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -358,68 +359,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The direction in which the email messages are sorted. Defaults to descending.</p>
+                        <p>The status of the retrieval and unsealing. If &lsquo;Failed&rsquo; the address property will likely be empty, but the hashed value will be available</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">sortOrder</span><span class="p">:</span> <span class="kt">SortOrder</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV5limitSiSgvp"></a>
-                    <a name="//apple_ref/swift/Property/limit" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV5limitSiSgvp">limit</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The number of items to return.  If omitted, the default of 10 will be used.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9nextTokenSSSgvp"></a>
-                    <a name="//apple_ref/swift/Property/nextToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9nextTokenSSSgvp">nextToken</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A pagination token generated by a previous call.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Structs/UnsealedBlockedAddress.html#/s:9SudoEmail22UnsealedBlockedAddressV0cdE6StatusO">UnsealedBlockedAddressStatus</a></span></code></pre>
 
                         </div>
                       </div>

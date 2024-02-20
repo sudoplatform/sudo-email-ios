@@ -48,6 +48,24 @@ class UnblockEmailAddressesUseCase {
             throw SudoEmailError.notSignedIn
         }
         
-        return try await self.blockedAddressRepository.unblockAddresses(addresses: addresses, owner: owner!)
+        if (addresses.isEmpty) {
+            self.log.error("At least one email address must be passed")
+            throw SudoEmailError.invalidArgument("At least one email address must be passed")
+        }
+        
+        var normalizedAddresses: [String] = []
+        var hashedAddresses: [String] = []
+        
+        try addresses.forEach { address in
+            let normalizedAddress = try EmailAddressParser.normalize(address: address)
+            if(normalizedAddresses.contains(normalizedAddress)) {
+                self.log.error("Duplicate email address found")
+                throw SudoEmailError.invalidArgument("Duplicate email address found. Please include each address only once")
+            }
+            normalizedAddresses.append(normalizedAddress)
+            try hashedAddresses.append(EmailAddressBlocklistUtil.generateAddressHash(plaintextAddress: normalizedAddress, ownerId: owner!))
+        }
+        
+        return try await self.blockedAddressRepository.unblockAddresses(hashedAddresses: hashedAddresses, owner: owner!)
     }
 }

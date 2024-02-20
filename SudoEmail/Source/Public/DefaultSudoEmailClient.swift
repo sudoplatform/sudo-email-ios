@@ -397,7 +397,18 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return result
     }
     
-    public func getEmailAddressBlocklist() async throws -> [String] {
+    public func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String> {
+        self.logger.debug("unblockEmailAddressesByHashedValue: \(hashedValues)")
+        let useCase = useCaseFactory.generateUnblockEmailAddressesByHashedValueUseCase(
+            blockedAddressRepository: blockedAddressRepository,
+            userClient: userClient,
+            log: self.logger
+        )
+        let result = try await useCase.execute(hashedValues: hashedValues)
+        return result
+    }
+    
+    public func getEmailAddressBlocklist() async throws -> [UnsealedBlockedAddress] {
         self.logger.debug("getEmailAddressBlocklist init")
         let useCase = useCaseFactory.generateGetEmailAddressBlocklistUseCase(
             blockedAddressRepository: blockedAddressRepository,

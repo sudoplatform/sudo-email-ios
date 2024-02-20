@@ -7,6 +7,7 @@
 import Foundation
 import SudoApiClient
 import SudoLogging
+import SudoKeyManager
 
 /// Queue to handle the result events from AWS.
 private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-handler-queue")
@@ -70,8 +71,8 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
                 throw SudoEmailError.invalidArgument("Duplicate email address found. Please include each address only once")
             }
             normalizedAddresses.append(normalizedAddress)
-            try hashedBlockedAddresses.append(StringHasher.hashString(stringToHash: "\(owner)|\(address)"))
-            try sealedBlockedValues.append(self.keyWorker.sealString(address, withKeyId: symmetricKeyId!))
+            try hashedBlockedAddresses.append(EmailAddressBlocklistUtil.generateAddressHash(plaintextAddress: normalizedAddress, ownerId: owner))
+            try sealedBlockedValues.append(self.keyWorker.sealString(normalizedAddress, withKeyId: symmetricKeyId!))
         }
         
         let blockedAddresses = addresses.enumerated().map { (index, address) in
@@ -130,27 +131,8 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
         }
     }
     
-    func unblockAddresses(addresses: [String], owner: String) async throws -> BatchOperationResult<String> {
-        self.logger.debug("unblockAddresses init: \(addresses) \(owner)")
-        if (addresses.isEmpty) {
-            self.logger.error("At least one email address must be passed")
-            throw SudoEmailError.invalidArgument("At least one email address must be passed")
-        }
-        
-        var normalizedAddresses: [String] = []
-        var hashedAddresses: [String] = []
-        
-        try addresses.forEach { address in
-            let normalizedAddress = try EmailAddressParser.normalize(address: address)
-            if(normalizedAddresses.contains(normalizedAddress)) {
-                self.logger.error("Duplicate email address found")
-                throw SudoEmailError.invalidArgument("Duplicate email address found. Please include each address only once")
-            }
-            normalizedAddresses.append(normalizedAddress)
-            try hashedAddresses.append(StringHasher.hashString(
-                stringToHash: "\(owner)|\(address)"
-            ))
-        }
+    func unblockAddresses(hashedAddresses: [String], owner: String) async throws -> BatchOperationResult<String> {
+        self.logger.debug("unblockAddresses init: \(hashedAddresses) \(owner)")
         
         let input = GraphQL.UnblockEmailAddressesInput(owner: owner, unblockedAddresses: hashedAddresses)
         
@@ -196,7 +178,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
         }
     }
     
-    func getEmailAddressBlocklist(owner: String) async throws -> [String] {
+    func getEmailAddressBlocklist(owner: String) async throws -> [UnsealedBlockedAddress] {
         let input = GraphQL.GetEmailAddressBlocklistInput(owner: owner)
         
         let query = GraphQL.GetEmailAddressBlocklistQuery(input: input)
@@ -227,27 +209,15 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
             throw SudoEmailError.internalError("Unexpected error")
         }
         
-        if (result.getEmailAddressBlocklist.sealedBlockedAddresses.isEmpty) {
+        if (result.getEmailAddressBlocklist.blockedAddresses.isEmpty) {
             return []
         }
         
-        do {
-            var unsealedBlockedAddresses: [String] = []
-            
-            try result.getEmailAddressBlocklist.sealedBlockedAddresses.forEach { sealedAddress in
-                unsealedBlockedAddresses.append(
-                    try self.keyWorker.unsealString(
-                        sealedAddress.base64EncodedSealedData,
-                        withKeyId: sealedAddress.keyId,
-                        algorithm: sealedAddress.algorithm
-                    )
-                )
-            }
-            
-            return unsealedBlockedAddresses
-        } catch {
-            logger.error("Unexpected error unsealing addresses \(error)")
-            throw error
-        }
+        var unsealedBlockedAddresses: [UnsealedBlockedAddress] = []
+        var transformer = BlockedEmailAddressTransformer(deviceKeyWorker: keyWorker)
+        unsealedBlockedAddresses = try result.getEmailAddressBlocklist.blockedAddresses.map(transformer.transform(_:))
+
+        
+        return unsealedBlockedAddresses
     }
 }

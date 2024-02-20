@@ -134,6 +134,14 @@ class UseCaseFactory {
         return UnblockEmailAddressesUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
     }
     
+    func generateUnblockEmailAddressesByHashedValueUseCase(
+        blockedAddressRepository: BlockedAddressRepository,
+        userClient: SudoUserClient,
+        log: Logger
+    ) -> UnblockEmailAddressesByHashedValueUseCase {
+        return UnblockEmailAddressesByHashedValueUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
+    }
+    
     func generateGetEmailAddressBlocklistUseCase(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,

@@ -8,8 +8,8 @@ import Foundation
 import SudoUser
 import SudoLogging
 
-/// Core use case representation of the operation to get an email address blocklist
-class GetEmailAddressBlocklistUseCase {
+/// Core use case representation of the operation to unblock email addresses for a user
+class UnblockEmailAddressesByHashedValueUseCase {
     
     // MARK: - Properties
     
@@ -23,22 +23,24 @@ class GetEmailAddressBlocklistUseCase {
     
     // MARK: - Lifecycle
     
-    /// Initialize and instance of `GetEmailAddressBlocklistUseCase`
+    /// Initialize an instance of `UnblockEmailAddressesUseCase`
     init(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,
         log: Logger
     ) {
         self.blockedAddressRepository = blockedAddressRepository
-        self.userClient = userClient
         self.log = log
+        self.userClient = userClient
     }
     
     // MARK: - Methods
     
-    /// Execute the use case
-    func execute() async throws -> [UnsealedBlockedAddress] {
-        self.log.debug("execute")
+    /// Execute the use case.
+    /// - Parameters:
+    ///   - hashedValues: A list of hashed addresses to unblock
+    func execute(hashedValues: [String]) async throws -> BatchOperationResult<String> {
+        self.log.debug("execute: \(hashedValues)")
         let owner = try self.userClient.getSubject()
         
         if (owner == nil) {
@@ -46,6 +48,11 @@ class GetEmailAddressBlocklistUseCase {
             throw SudoEmailError.notSignedIn
         }
         
-        return try await self.blockedAddressRepository.getEmailAddressBlocklist(owner: owner!)
+        if (hashedValues.isEmpty) {
+            self.log.error("At least one email address must be passed")
+            throw SudoEmailError.invalidArgument("At least one email address must be passed")
+        }
+        
+        return try await self.blockedAddressRepository.unblockAddresses(hashedAddresses: hashedValues, owner: owner!)
     }
 }
