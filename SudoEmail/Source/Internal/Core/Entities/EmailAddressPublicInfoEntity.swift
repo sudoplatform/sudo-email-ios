@@ -10,6 +10,9 @@ import Foundation
 struct EmailAddressPublicInfoEntity: Equatable {
     /// The email address in format 'local-part@domain'.
     let emailAddress: String
+    
+    /// Identifier associated with the public key.
+    let keyId: String
 
     /// The raw value of the public key for the email address.
     let publicKey: String

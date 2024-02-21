@@ -11,13 +11,17 @@ public struct EmailAddressPublicInfo: Equatable {
 
     /// The email address in format 'local-part@domain'.
     public let emailAddress: String
+    
+    /// Identifier associated with the public key.
+    public let keyId: String
 
     /// The raw value of the public key for the email address.
     public let publicKey: String
 
     /// Initialize an instance of `EmailAddressPublicInfo`.
-    public init(emailAddress: String, publicKey: String) {
+    public init(emailAddress: String, keyId: String, publicKey: String) {
         self.emailAddress = emailAddress
+        self.keyId = keyId
         self.publicKey = publicKey
     }
 

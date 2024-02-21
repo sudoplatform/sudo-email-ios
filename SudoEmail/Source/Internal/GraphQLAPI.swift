@@ -5479,6 +5479,7 @@ internal final class LookupEmailAddressesPublicInfoQuery: GraphQLQuery {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
+          GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
           GraphQLField("publicKey", type: .nonNull(.scalar(String.self))),
         ]
 
@@ -5488,8 +5489,8 @@ internal final class LookupEmailAddressesPublicInfoQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(emailAddress: String, publicKey: String) {
-          self.init(snapshot: ["__typename": "EmailAddressPublicInfo", "emailAddress": emailAddress, "publicKey": publicKey])
+        internal init(emailAddress: String, keyId: String, publicKey: String) {
+          self.init(snapshot: ["__typename": "EmailAddressPublicInfo", "emailAddress": emailAddress, "keyId": keyId, "publicKey": publicKey])
         }
 
         internal var __typename: String {
@@ -5507,6 +5508,15 @@ internal final class LookupEmailAddressesPublicInfoQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "emailAddress")
+          }
+        }
+
+        internal var keyId: String {
+          get {
+            return snapshot["keyId"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "keyId")
           }
         }
 
@@ -11394,13 +11404,14 @@ internal struct EmailAddress: GraphQLFragment {
 
 internal struct EmailAddressPublicInfo: GraphQLFragment {
   internal static let fragmentString =
-    "fragment EmailAddressPublicInfo on EmailAddressPublicInfo {\n  __typename\n  emailAddress\n  publicKey\n}"
+    "fragment EmailAddressPublicInfo on EmailAddressPublicInfo {\n  __typename\n  emailAddress\n  keyId\n  publicKey\n}"
 
   internal static let possibleTypes = ["EmailAddressPublicInfo"]
 
   internal static let selections: [GraphQLSelection] = [
     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
     GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
+    GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
     GraphQLField("publicKey", type: .nonNull(.scalar(String.self))),
   ]
 
@@ -11410,8 +11421,8 @@ internal struct EmailAddressPublicInfo: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(emailAddress: String, publicKey: String) {
-    self.init(snapshot: ["__typename": "EmailAddressPublicInfo", "emailAddress": emailAddress, "publicKey": publicKey])
+  internal init(emailAddress: String, keyId: String, publicKey: String) {
+    self.init(snapshot: ["__typename": "EmailAddressPublicInfo", "emailAddress": emailAddress, "keyId": keyId, "publicKey": publicKey])
   }
 
   internal var __typename: String {
@@ -11429,6 +11440,15 @@ internal struct EmailAddressPublicInfo: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "emailAddress")
+    }
+  }
+
+  internal var keyId: String {
+    get {
+      return snapshot["keyId"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "keyId")
     }
   }
 

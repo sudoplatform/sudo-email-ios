@@ -14,7 +14,7 @@ struct EmailAddressPublicInfoEntityTransformer {
     /// - Returns: A list of email address public info objects as entities.
     func transform(_ data: GraphQL.LookupEmailAddressesPublicInfoQuery.Data) -> [EmailAddressPublicInfoEntity] {
         return data.lookupEmailAddressesPublicInfo.items.map { item in
-            return EmailAddressPublicInfoEntity(emailAddress: item.emailAddress, publicKey: item.publicKey)
+            return EmailAddressPublicInfoEntity(emailAddress: item.emailAddress, keyId: item.keyId, publicKey: item.publicKey)
         }
     }
     
