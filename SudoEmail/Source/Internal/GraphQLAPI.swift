@@ -1214,29 +1214,11 @@ internal struct IntFilterInput: GraphQLMapConvertible {
   }
 }
 
-internal struct ListEmailMessagesForEmailAddressIdInput: GraphQLMapConvertible {
+internal struct ListEmailMessagesInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(dateRange: Optional<DateRangeInput?> = nil, emailAddressId: GraphQLID, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil) {
-    graphQLMap = ["dateRange": dateRange, "emailAddressId": emailAddressId, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder]
-  }
-
-  internal var dateRange: Optional<DateRangeInput?> {
-    get {
-      return graphQLMap["dateRange"] as! Optional<DateRangeInput?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "dateRange")
-    }
-  }
-
-  internal var emailAddressId: GraphQLID {
-    get {
-      return graphQLMap["emailAddressId"] as! GraphQLID
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
-    }
+  internal init(limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
+    graphQLMap = ["limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
   }
 
   internal var limit: Optional<Int?> {
@@ -1265,30 +1247,13 @@ internal struct ListEmailMessagesForEmailAddressIdInput: GraphQLMapConvertible {
       graphQLMap.updateValue(newValue, forKey: "sortOrder")
     }
   }
-}
 
-internal struct DateRangeInput: GraphQLMapConvertible {
-  internal var graphQLMap: GraphQLMap
-
-  internal init(endDateEpochMs: Double, startDateEpochMs: Double) {
-    graphQLMap = ["endDateEpochMs": endDateEpochMs, "startDateEpochMs": startDateEpochMs]
-  }
-
-  internal var endDateEpochMs: Double {
+  internal var specifiedDateRange: Optional<EmailMessageDateRangeInput?> {
     get {
-      return graphQLMap["endDateEpochMs"] as! Double
+      return graphQLMap["specifiedDateRange"] as! Optional<EmailMessageDateRangeInput?>
     }
     set {
-      graphQLMap.updateValue(newValue, forKey: "endDateEpochMs")
-    }
-  }
-
-  internal var startDateEpochMs: Double {
-    get {
-      return graphQLMap["startDateEpochMs"] as! Double
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "startDateEpochMs")
+      graphQLMap.updateValue(newValue, forKey: "specifiedDateRange")
     }
   }
 }
@@ -1326,20 +1291,116 @@ internal enum SortOrder: RawRepresentable, Equatable, JSONDecodable, JSONEncodab
   }
 }
 
+internal struct EmailMessageDateRangeInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(sortDateEpochMs: Optional<DateRangeInput?> = nil, updatedAtEpochMs: Optional<DateRangeInput?> = nil) {
+    graphQLMap = ["sortDateEpochMs": sortDateEpochMs, "updatedAtEpochMs": updatedAtEpochMs]
+  }
+
+  internal var sortDateEpochMs: Optional<DateRangeInput?> {
+    get {
+      return graphQLMap["sortDateEpochMs"] as! Optional<DateRangeInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sortDateEpochMs")
+    }
+  }
+
+  internal var updatedAtEpochMs: Optional<DateRangeInput?> {
+    get {
+      return graphQLMap["updatedAtEpochMs"] as! Optional<DateRangeInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "updatedAtEpochMs")
+    }
+  }
+}
+
+internal struct DateRangeInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(endDateEpochMs: Double, startDateEpochMs: Double) {
+    graphQLMap = ["endDateEpochMs": endDateEpochMs, "startDateEpochMs": startDateEpochMs]
+  }
+
+  internal var endDateEpochMs: Double {
+    get {
+      return graphQLMap["endDateEpochMs"] as! Double
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "endDateEpochMs")
+    }
+  }
+
+  internal var startDateEpochMs: Double {
+    get {
+      return graphQLMap["startDateEpochMs"] as! Double
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "startDateEpochMs")
+    }
+  }
+}
+
+internal struct ListEmailMessagesForEmailAddressIdInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(emailAddressId: GraphQLID, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
+    graphQLMap = ["emailAddressId": emailAddressId, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
+  }
+
+  internal var emailAddressId: GraphQLID {
+    get {
+      return graphQLMap["emailAddressId"] as! GraphQLID
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var limit: Optional<Int?> {
+    get {
+      return graphQLMap["limit"] as! Optional<Int?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "limit")
+    }
+  }
+
+  internal var nextToken: Optional<String?> {
+    get {
+      return graphQLMap["nextToken"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "nextToken")
+    }
+  }
+
+  internal var sortOrder: Optional<SortOrder?> {
+    get {
+      return graphQLMap["sortOrder"] as! Optional<SortOrder?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sortOrder")
+    }
+  }
+
+  internal var specifiedDateRange: Optional<EmailMessageDateRangeInput?> {
+    get {
+      return graphQLMap["specifiedDateRange"] as! Optional<EmailMessageDateRangeInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "specifiedDateRange")
+    }
+  }
+}
+
 internal struct ListEmailMessagesForEmailFolderIdInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(dateRange: Optional<DateRangeInput?> = nil, filter: Optional<EmailMessageFilterInput?> = nil, folderId: GraphQLID, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil) {
-    graphQLMap = ["dateRange": dateRange, "filter": filter, "folderId": folderId, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder]
-  }
-
-  internal var dateRange: Optional<DateRangeInput?> {
-    get {
-      return graphQLMap["dateRange"] as! Optional<DateRangeInput?>
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "dateRange")
-    }
+  internal init(filter: Optional<EmailMessageFilterInput?> = nil, folderId: GraphQLID, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
+    graphQLMap = ["filter": filter, "folderId": folderId, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
   }
 
   internal var filter: Optional<EmailMessageFilterInput?> {
@@ -1384,6 +1445,15 @@ internal struct ListEmailMessagesForEmailFolderIdInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "sortOrder")
+    }
+  }
+
+  internal var specifiedDateRange: Optional<EmailMessageDateRangeInput?> {
+    get {
+      return graphQLMap["specifiedDateRange"] as! Optional<EmailMessageDateRangeInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "specifiedDateRange")
     }
   }
 }
@@ -6214,6 +6284,421 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+          }
+        }
+      }
+    }
+  }
+}
+
+internal final class ListEmailMessagesQuery: GraphQLQuery {
+  internal static let operationString =
+    "query ListEmailMessages($input: ListEmailMessagesInput!) {\n  listEmailMessages(input: $input) {\n    __typename\n    items {\n      __typename\n      ...SealedEmailMessage\n    }\n    nextToken\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(SealedEmailMessage.fragmentString) }
+
+  internal var input: ListEmailMessagesInput
+
+  internal init(input: ListEmailMessagesInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Query"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("listEmailMessages", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(ListEmailMessage.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(listEmailMessages: ListEmailMessage) {
+      self.init(snapshot: ["__typename": "Query", "listEmailMessages": listEmailMessages.snapshot])
+    }
+
+    internal var listEmailMessages: ListEmailMessage {
+      get {
+        return ListEmailMessage(snapshot: snapshot["listEmailMessages"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "listEmailMessages")
+      }
+    }
+
+    internal struct ListEmailMessage: GraphQLSelectionSet {
+      internal static let possibleTypes = ["EmailMessageConnection"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("items", type: .nonNull(.list(.nonNull(.object(Item.selections))))),
+        GraphQLField("nextToken", type: .scalar(String.self)),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(items: [Item], nextToken: String? = nil) {
+        self.init(snapshot: ["__typename": "EmailMessageConnection", "items": items.map { $0.snapshot }, "nextToken": nextToken])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var items: [Item] {
+        get {
+          return (snapshot["items"] as! [Snapshot]).map { Item(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "items")
+        }
+      }
+
+      internal var nextToken: String? {
+        get {
+          return snapshot["nextToken"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "nextToken")
+        }
+      }
+
+      internal struct Item: GraphQLSelectionSet {
+        internal static let possibleTypes = ["SealedEmailMessage"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+          GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("sortDateEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("folderId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
+          GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
+          GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
+          GraphQLField("clientRefId", type: .scalar(String.self)),
+          GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
+          GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var id: GraphQLID {
+          get {
+            return snapshot["id"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        internal var owner: GraphQLID {
+          get {
+            return snapshot["owner"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "owner")
+          }
+        }
+
+        internal var owners: [Owner] {
+          get {
+            return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+          }
+        }
+
+        internal var emailAddressId: GraphQLID {
+          get {
+            return snapshot["emailAddressId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailAddressId")
+          }
+        }
+
+        internal var version: Int {
+          get {
+            return snapshot["version"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "version")
+          }
+        }
+
+        internal var createdAtEpochMs: Double {
+          get {
+            return snapshot["createdAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+          }
+        }
+
+        internal var updatedAtEpochMs: Double {
+          get {
+            return snapshot["updatedAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+          }
+        }
+
+        internal var sortDateEpochMs: Double {
+          get {
+            return snapshot["sortDateEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "sortDateEpochMs")
+          }
+        }
+
+        internal var folderId: GraphQLID {
+          get {
+            return snapshot["folderId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "folderId")
+          }
+        }
+
+        internal var previousFolderId: GraphQLID? {
+          get {
+            return snapshot["previousFolderId"] as? GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "previousFolderId")
+          }
+        }
+
+        internal var direction: EmailMessageDirection {
+          get {
+            return snapshot["direction"]! as! EmailMessageDirection
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "direction")
+          }
+        }
+
+        internal var seen: Bool {
+          get {
+            return snapshot["seen"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "seen")
+          }
+        }
+
+        internal var state: EmailMessageState {
+          get {
+            return snapshot["state"]! as! EmailMessageState
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "state")
+          }
+        }
+
+        internal var clientRefId: String? {
+          get {
+            return snapshot["clientRefId"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "clientRefId")
+          }
+        }
+
+        internal var rfc822Header: Rfc822Header {
+          get {
+            return Rfc822Header(snapshot: snapshot["rfc822Header"]! as! Snapshot)
+          }
+          set {
+            snapshot.updateValue(newValue.snapshot, forKey: "rfc822Header")
+          }
+        }
+
+        internal var size: Double {
+          get {
+            return snapshot["size"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "size")
+          }
+        }
+
+        internal var fragments: Fragments {
+          get {
+            return Fragments(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+
+        internal struct Fragments {
+          internal var snapshot: Snapshot
+
+          internal var sealedEmailMessage: SealedEmailMessage {
+            get {
+              return SealedEmailMessage(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+        }
+
+        internal struct Owner: GraphQLSelectionSet {
+          internal static let possibleTypes = ["Owner"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .nonNull(.scalar(String.self))),
+            GraphQLField("issuer", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(id: String, issuer: String) {
+            self.init(snapshot: ["__typename": "Owner", "id": id, "issuer": issuer])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var id: String {
+            get {
+              return snapshot["id"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          internal var issuer: String {
+            get {
+              return snapshot["issuer"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "issuer")
+            }
+          }
+        }
+
+        internal struct Rfc822Header: GraphQLSelectionSet {
+          internal static let possibleTypes = ["SealedAttribute"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+            GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+            GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+            GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+            self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var algorithm: String {
+            get {
+              return snapshot["algorithm"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "algorithm")
+            }
+          }
+
+          internal var keyId: String {
+            get {
+              return snapshot["keyId"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "keyId")
+            }
+          }
+
+          internal var plainTextType: String {
+            get {
+              return snapshot["plainTextType"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "plainTextType")
+            }
+          }
+
+          internal var base64EncodedSealedData: String {
+            get {
+              return snapshot["base64EncodedSealedData"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+            }
           }
         }
       }

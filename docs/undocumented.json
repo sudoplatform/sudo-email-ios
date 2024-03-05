@@ -225,6 +225,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessageDateRange.swift",
+      "line": 22,
+      "symbol": "EmailMessageDateRange.init(sortDate:updatedAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CheckEmailAddressAvailabilityInput.swift",
       "line": 23,
       "symbol": "CheckEmailAddressAvailabilityInput.init(localParts:domains:)",
@@ -311,14 +318,21 @@
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailAddressIdInput.swift",
       "line": 32,
-      "symbol": "ListEmailMessagesForEmailAddressInput.init(emailAddressId:cachePolicy:dateRange:sortOrder:limit:nextToken:)",
+      "symbol": "ListEmailMessagesForEmailAddressInput.init(emailAddressId:dateRange:cachePolicy:sortOrder:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailFolderIdInput.swift",
       "line": 30,
-      "symbol": "ListEmailMessagesForEmailFolderIdInput.init(emailFolderId:cachePolicy:dateRange:sortOrder:limit:nextToken:)",
+      "symbol": "ListEmailMessagesForEmailFolderIdInput.init(emailFolderId:dateRange:cachePolicy:sortOrder:limit:nextToken:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesInput.swift",
+      "line": 27,
+      "symbol": "ListEmailMessagesInput.init(dateRange:cachePolicy:sortOrder:limit:nextToken:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },

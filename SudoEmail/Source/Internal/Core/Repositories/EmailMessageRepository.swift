@@ -65,15 +65,22 @@ protocol EmailMessageRepository: AnyObject {
     ///   - id: Identifier of the email message to fetch.
     /// - Returns: on success, the sealed email message with the input identifier
     func fetchEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity?
+    
+    /// List all sealed email messages for the user.
+    /// - Parameters:
+    ///   - input: input parameters for the list email messages query
+    func listEmailMessages(
+        withInput input: ListEmailMessagesInput
+    ) async throws -> ListOutputEntity<SealedEmailMessageEntity>
 
-    /// List of sealed email messages for the specified email address ID.
+    /// List sealed email messages for the specified email address ID.
     /// - Parameters:
     ///   - input: input parameters, including emailAddressId, for the list email messages query
     func listEmailMessagesForEmailAddressId(
         withInput input: ListEmailMessagesForEmailAddressInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity>
 
-    /// List of sealed email messages for the specified email folder ID.
+    /// List sealed email messages for the specified email folder ID.
     /// - Parameters:
     ///   - input: input parameters, including emailFolderId, for the list email messages query
     func listEmailMessagesForEmailFolderId(

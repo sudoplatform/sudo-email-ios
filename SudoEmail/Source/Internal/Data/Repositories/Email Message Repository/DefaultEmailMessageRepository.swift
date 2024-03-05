@@ -271,16 +271,53 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     func fetchEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity? {
         return try await getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData)
     }
+    
+    func listEmailMessages(
+        withInput input: ListEmailMessagesInput
+    ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
+        let graphQLInput = GraphQL.ListEmailMessagesInput(
+            limit: input.limit,
+            nextToken: input.nextToken,
+            sortOrder: input.sortOrder?.toGraphQL(),
+            specifiedDateRange: input.dateRange?.toGraphQL()
+        )
+        let query = GraphQL.ListEmailMessagesQuery(input: graphQLInput)
+        let cachePolicy = input.cachePolicy ?? .remoteOnly
+        let cachePolicyTransformer = CachePolicyAPITransformer()
+        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
+        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+            query: query,
+            cachePolicy: queryCachePolicy
+        )
+        if let error = fetchError {
+            switch error {
+            case ApiOperationError.graphQLError(let cause):
+                guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
+                throw sudoEmailError
+            default:
+                throw SudoEmailError.fromApiOperationError(error: error)
+            }
+        }
+        let sealedEmailMessages = fetchResult?.data?.listEmailMessages.items ?? []
+        let transformer = SealedEmailMessageEntityTransformer()
+        let sealedEmailMessageEntities = try sealedEmailMessages.map(transformer.transform(_:))
+        return ListOutputEntity(
+            items: sealedEmailMessageEntities,
+            nextToken: fetchResult?.data?.listEmailMessages.nextToken
+        )
+    }
 
     func listEmailMessagesForEmailAddressId(
         withInput input: ListEmailMessagesForEmailAddressInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
         let graphQLInput = GraphQL.ListEmailMessagesForEmailAddressIdInput(
-            dateRange: input.dateRange?.toGraphQL(),
             emailAddressId: input.emailAddressId,
             limit: input.limit,
             nextToken: input.nextToken,
-            sortOrder: input.sortOrder?.toGraphQL()
+            sortOrder: input.sortOrder?.toGraphQL(),
+            specifiedDateRange: input.dateRange?.toGraphQL()
         )
         let query = GraphQL.ListEmailMessagesForEmailAddressIdQuery(input: graphQLInput)
         let cachePolicy = input.cachePolicy ?? .remoteOnly
@@ -314,11 +351,11 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         withInput input: ListEmailMessagesForEmailFolderIdInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
         let graphQLInput = GraphQL.ListEmailMessagesForEmailFolderIdInput(
-            dateRange: input.dateRange?.toGraphQL(),
             folderId: input.emailFolderId,
             limit: input.limit,
             nextToken: input.nextToken,
-            sortOrder: input.sortOrder?.toGraphQL()
+            sortOrder: input.sortOrder?.toGraphQL(),
+            specifiedDateRange: input.dateRange?.toGraphQL()
         )
         let query = GraphQL.ListEmailMessagesForEmailFolderIdQuery(input: graphQLInput)
         let cachePolicy = input.cachePolicy ?? .remoteOnly

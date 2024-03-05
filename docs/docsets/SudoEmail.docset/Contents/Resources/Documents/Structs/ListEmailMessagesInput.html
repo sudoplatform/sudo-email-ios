@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ProvisionEmailAddressInput Structure Reference</title>
+    <title>ListEmailMessagesInput Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ProvisionEmailAddressInput" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/ListEmailMessagesInput" class="dashAnchor"></a>
 
-    <a title="ProvisionEmailAddressInput Structure Reference"></a>
+    <a title="ListEmailMessagesInput Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">SudoEmail Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ProvisionEmailAddressInput Structure Reference
+      ListEmailMessagesInput Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -253,15 +253,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ProvisionEmailAddressInput</h1>
+            <h1>ListEmailMessagesInput</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ProvisionEmailAddressInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListEmailMessagesInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
-            <p>input object for Provisioning an email address using <code><a href="../Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+            <p>Input object for listing email messages using <code><a href="../Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
 
           </div>
         </section>
@@ -273,9 +273,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail09ProvisionB12AddressInputV05emailD0SSvp"></a>
-                    <a name="//apple_ref/swift/Property/emailAddress" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail09ProvisionB12AddressInputV05emailD0SSvp">emailAddress</a>
+                    <a name="/s:9SudoEmail04ListB13MessagesInputV9dateRangeAA0b11MessageDateG0VSgvp"></a>
+                    <a name="//apple_ref/swift/Property/dateRange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04ListB13MessagesInputV9dateRangeAA0b11MessageDateG0VSgvp">dateRange</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -283,14 +283,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The email address to provision, in the form <code>${localPart}@${domain}</code>.</p>
+                        <p>Email messages matching the specified date range inclusive will be fetched.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">emailAddress</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">dateRange</span><span class="p">:</span> <span class="kt"><a href="../Structs/EmailMessageDateRange.html">EmailMessageDateRange</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -300,9 +300,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail09ProvisionB12AddressInputV19ownershipProofTokenSSvp"></a>
-                    <a name="//apple_ref/swift/Property/ownershipProofToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail09ProvisionB12AddressInputV19ownershipProofTokenSSvp">ownershipProofToken</a>
+                    <a name="/s:9SudoEmail04ListB13MessagesInputV11cachePolicyAA05CacheG0OSgvp"></a>
+                    <a name="//apple_ref/swift/Property/cachePolicy" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04ListB13MessagesInputV11cachePolicyAA05CacheG0OSgvp">cachePolicy</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -310,15 +310,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The signed ownership proof of the Sudo to be associated with the provisioned email address.
- The ownership proof must contain an audience of &ldquo;sudoplatform&rdquo;.</p>
+                        <p>Determines how the email address will be fetched. Default usage is <code>remoteOnly</code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">ownershipProofToken</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -328,9 +327,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail09ProvisionB12AddressInputV5aliasSSSgvp"></a>
-                    <a name="//apple_ref/swift/Property/alias" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail09ProvisionB12AddressInputV5aliasSSSgvp">alias</a>
+                    <a name="/s:9SudoEmail04ListB13MessagesInputV9sortOrderAA04SortG0OSgvp"></a>
+                    <a name="//apple_ref/swift/Property/sortOrder" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04ListB13MessagesInputV9sortOrderAA04SortG0OSgvp">sortOrder</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -338,14 +337,68 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An alias for the email address.</p>
+                        <p>The direction in which the email messages are sorted. Defaults to descending.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">alias</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">sortOrder</span><span class="p">:</span> <span class="kt">SortOrder</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04ListB13MessagesInputV5limitSiSgvp"></a>
+                    <a name="//apple_ref/swift/Property/limit" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04ListB13MessagesInputV5limitSiSgvp">limit</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of items to return.  If omitted, the default of 10 will be used.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04ListB13MessagesInputV9nextTokenSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/nextToken" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04ListB13MessagesInputV9nextTokenSSSgvp">nextToken</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A pagination token generated by a previous call.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>

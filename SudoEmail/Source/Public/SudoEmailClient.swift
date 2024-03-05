@@ -210,6 +210,17 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Success: Email message associated with `id`, or `nil` if the email message cannot be found.
     ///   - Failure: `SudoEmailError`.
     func getEmailMessage(withInput input: GetEmailMessageInput) async throws -> EmailMessage?
+    
+    /// Get a list of all email messages for the user. If no email messages can be found, an empty list will be returned.
+    /// - Parameters:
+    ///   - input: Parameters used to retrieve a list of email messages.
+    /// - Returns:
+    ///   - A `ListAPIResult.ListSuccessResult` or a `ListAPIResult.ListPartialResult` result
+    ///     containing either a list of `EmailMessage`s or `PartialEmailMessage`s respectively.
+    ///     Returns an empty list if no email messages can be found.
+    func listEmailMessages(
+        withInput: ListEmailMessagesInput
+    ) async throws -> ListAPIResult<EmailMessage, PartialEmailMessage>
 
     /// Get a list of email messages for the provided email address. If no email messages can be found, an empty list will be returned.
     /// - Parameters:

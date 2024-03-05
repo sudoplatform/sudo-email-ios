@@ -1,18 +1,13 @@
 //
-// Copyright © 2022 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 import Foundation
 
-public let defaultEmailMessageLimit = 10
-
-/// input object for listing email messages for an email address using `SudoEmailClient`
-public struct ListEmailMessagesForEmailAddressInput: Equatable {
-
-    /// The unique identifier of email address to retrieve messages for.
-    public let emailAddressId: String
+/// Input object for listing email messages using `SudoEmailClient`
+public struct ListEmailMessagesInput: Equatable {
     
     /// Email messages matching the specified date range inclusive will be fetched.
     public let dateRange: EmailMessageDateRange?
@@ -30,14 +25,12 @@ public struct ListEmailMessagesForEmailAddressInput: Equatable {
     public let nextToken: String?
 
     public init(
-        emailAddressId: String,
         dateRange: EmailMessageDateRange? = nil,
         cachePolicy: CachePolicy? = .remoteOnly,
         sortOrder: SortOrder? = nil,
         limit: Int? = defaultEmailMessageLimit,
         nextToken: String? = nil
     ) {
-        self.emailAddressId = emailAddressId
         self.dateRange = dateRange
         self.cachePolicy = cachePolicy
         self.sortOrder = sortOrder

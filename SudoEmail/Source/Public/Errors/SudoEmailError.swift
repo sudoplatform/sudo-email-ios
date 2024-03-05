@@ -197,6 +197,8 @@ extension SudoEmailError {
             return .limitExceeded
         case ApiOperationError.insufficientEntitlements:
             return .insufficientEntitlements
+        case ApiOperationError.invalidArgument:
+            return .invalidArgument(nil)
         case ApiOperationError.serviceError:
             return .serviceError
         case ApiOperationError.versionMismatch:

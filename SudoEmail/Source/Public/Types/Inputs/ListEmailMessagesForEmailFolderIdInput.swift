@@ -11,12 +11,12 @@ public struct ListEmailMessagesForEmailFolderIdInput: Equatable {
 
     /// The unique identifier of email folder to retrieve messages for.
     public let emailFolderId: String
+    
+    /// Email messages matching the specified date range inclusive will be fetched.
+    public let dateRange: EmailMessageDateRange?
 
     /// Determines how the email address will be fetched. Default usage is `remoteOnly`.
     public let cachePolicy: CachePolicy?
-
-    /// Email messages created within the date range inclusive will be fetched.
-    public let dateRange: DateRange?
 
     /// The direction in which the email messages are sorted. Defaults to descending.
     public let sortOrder: SortOrder?
@@ -29,15 +29,15 @@ public struct ListEmailMessagesForEmailFolderIdInput: Equatable {
 
     public init(
         emailFolderId: String,
+        dateRange: EmailMessageDateRange? = nil,
         cachePolicy: CachePolicy? = .remoteOnly,
-        dateRange: DateRange? = nil,
         sortOrder: SortOrder? = nil,
         limit: Int? = defaultEmailMessageLimit,
         nextToken: String? = nil
     ) {
         self.emailFolderId = emailFolderId
-        self.cachePolicy = cachePolicy
         self.dateRange = dateRange
+        self.cachePolicy = cachePolicy
         self.sortOrder = sortOrder
         self.limit = limit
         self.nextToken = nextToken

@@ -179,6 +179,18 @@ class UseCaseFactory {
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
+    
+    func generateListEmailMessagesUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        sealedEmailMessageEntityTransformer: SealedEmailMessageEntityTransformer
+    ) -> ListEmailMessagesUseCase {
+        return ListEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
+        )
+    }
 
     func generateListEmailMessagesForEmailAddressIdUseCase(
         emailMessageRepository: EmailMessageRepository,

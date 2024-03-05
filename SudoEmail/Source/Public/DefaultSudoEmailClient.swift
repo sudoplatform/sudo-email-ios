@@ -451,6 +451,20 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let transformer = EmailMessageAPITransformer()
         return transformer.transform(emailMessageEntity)
     }
+    
+    public func listEmailMessages(
+        withInput input: ListEmailMessagesInput
+    ) async throws -> ListAPIResult<EmailMessage, PartialEmailMessage> {
+        let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
+        let useCase = useCaseFactory.generateListEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailMessageUnsealerService: emailMessageUnsealerServiceService,
+            sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
+        )
+        let messagesResult = try await useCase.execute(withInput: input)
+        let transformer = ListAPIResultTransformer()
+        return transformer.transformEmailMessages(messagesResult)
+    }
 
     public func listEmailMessagesForEmailAddressId(
         withInput input: ListEmailMessagesForEmailAddressInput

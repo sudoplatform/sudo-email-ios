@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ProvisionEmailAddressInput Structure Reference</title>
+    <title>EmailMessageDateRange Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ProvisionEmailAddressInput" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/EmailMessageDateRange" class="dashAnchor"></a>
 
-    <a title="ProvisionEmailAddressInput Structure Reference"></a>
+    <a title="EmailMessageDateRange Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">SudoEmail Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ProvisionEmailAddressInput Structure Reference
+      EmailMessageDateRange Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -253,15 +253,17 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ProvisionEmailAddressInput</h1>
+            <h1>EmailMessageDateRange</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ProvisionEmailAddressInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageDateRange</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
-            <p>input object for Provisioning an email address using <code><a href="../Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+            <p>Representation of an email message date range used in the Sudo Platform Email SDK.</p>
+
+<p>Note that both timestamps cannot be specified otherwise an <code>InvalidArgumentError</code> will occur.</p>
 
           </div>
         </section>
@@ -273,9 +275,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail09ProvisionB12AddressInputV05emailD0SSvp"></a>
-                    <a name="//apple_ref/swift/Property/emailAddress" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail09ProvisionB12AddressInputV05emailD0SSvp">emailAddress</a>
+                    <a name="/s:9SudoEmail0B16MessageDateRangeV04sortD0AA0dE0VSgvp"></a>
+                    <a name="//apple_ref/swift/Property/sortDate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0B16MessageDateRangeV04sortD0AA0dE0VSgvp">sortDate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -283,14 +285,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The email address to provision, in the form <code>${localPart}@${domain}</code>.</p>
+                        <p>The specification of the sortDate timestamp to perform the date range query on.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">emailAddress</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">sortDate</span><span class="p">:</span> <span class="kt">DateRange</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -300,9 +302,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail09ProvisionB12AddressInputV19ownershipProofTokenSSvp"></a>
-                    <a name="//apple_ref/swift/Property/ownershipProofToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail09ProvisionB12AddressInputV19ownershipProofTokenSSvp">ownershipProofToken</a>
+                    <a name="/s:9SudoEmail0B16MessageDateRangeV9updatedAtAA0dE0VSgvp"></a>
+                    <a name="//apple_ref/swift/Property/updatedAt" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0B16MessageDateRangeV9updatedAtAA0dE0VSgvp">updatedAt</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -310,42 +312,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The signed ownership proof of the Sudo to be associated with the provisioned email address.
- The ownership proof must contain an audience of &ldquo;sudoplatform&rdquo;.</p>
+                        <p>The specification of the updatedAt timestamp to perform the date range query on.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">ownershipProofToken</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9SudoEmail09ProvisionB12AddressInputV5aliasSSSgvp"></a>
-                    <a name="//apple_ref/swift/Property/alias" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail09ProvisionB12AddressInputV5aliasSSSgvp">alias</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An alias for the email address.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">alias</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">updatedAt</span><span class="p">:</span> <span class="kt">DateRange</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
