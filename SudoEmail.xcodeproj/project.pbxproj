@@ -362,6 +362,8 @@
 		95E738672907945F00DDD547 /* UpdateDraftEmailMessageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E738662907945F00DDD547 /* UpdateDraftEmailMessageUseCase.swift */; };
 		95E738692907963200DDD547 /* UpdateDraftEmailMessageUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E738682907963200DDD547 /* UpdateDraftEmailMessageUseCaseTests.swift */; };
 		95F0CC4B285007EF002ADB5D /* DataFactory+SESSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F0CC4A285007EF002ADB5D /* DataFactory+SESSimulator.swift */; };
+		9F12DE922B96C46000575E52 /* EmailAddressDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F12DE912B96C46000575E52 /* EmailAddressDetail.swift */; };
+		9F12DE942B96C48E00575E52 /* EmailAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F12DE932B96C48E00575E52 /* EmailAttachment.swift */; };
 		9F372B9F2B6CB6E8009FD8CC /* BlockEmailAddressesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372B9E2B6CB6E8009FD8CC /* BlockEmailAddressesUseCaseTests.swift */; };
 		9F372BA12B704C27009FD8CC /* DefaultBlockedAddressRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BA02B704C27009FD8CC /* DefaultBlockedAddressRepositoryTests.swift */; };
 		9F372BA32B706911009FD8CC /* EmailAddressParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BA22B706911009FD8CC /* EmailAddressParserTests.swift */; };
@@ -387,6 +389,9 @@
 		9F949DDC2B842A8A009064FB /* BlockedEmailAddressTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */; };
 		9F9E7F892B82B12900C5F823 /* UnsealedBlockedAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */; };
 		9F9E7F8B2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */; };
+		9F9EE43D2B96A07300BD3EC7 /* Rfc822MessageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageParser.swift */; };
+		9F9EE43F2B96A08E00BD3EC7 /* EncryptionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE43E2B96A08D00BD3EC7 /* EncryptionStatus.swift */; };
+		9F9EE4412B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift */; };
 		A7BCCF92625EFD21A51F6C9D /* Pods_SudoEmail_SudoEmailTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65BFD5441A621353BBBDAC77 /* Pods_SudoEmail_SudoEmailTests.framework */; };
 		AEAB2F8BE4C42ADFD875EC41 /* Pods_SudoEmail_SudoEmailIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C31064F99920C8A8E5EB0A /* Pods_SudoEmail_SudoEmailIntegrationTests.framework */; };
 /* End PBXBuildFile section */
@@ -793,6 +798,8 @@
 		95E738662907945F00DDD547 /* UpdateDraftEmailMessageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDraftEmailMessageUseCase.swift; sourceTree = "<group>"; };
 		95E738682907963200DDD547 /* UpdateDraftEmailMessageUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDraftEmailMessageUseCaseTests.swift; sourceTree = "<group>"; };
 		95F0CC4A285007EF002ADB5D /* DataFactory+SESSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFactory+SESSimulator.swift"; sourceTree = "<group>"; };
+		9F12DE912B96C46000575E52 /* EmailAddressDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressDetail.swift; sourceTree = "<group>"; };
+		9F12DE932B96C48E00575E52 /* EmailAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAttachment.swift; sourceTree = "<group>"; };
 		9F372B9E2B6CB6E8009FD8CC /* BlockEmailAddressesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockEmailAddressesUseCaseTests.swift; sourceTree = "<group>"; };
 		9F372BA02B704C27009FD8CC /* DefaultBlockedAddressRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBlockedAddressRepositoryTests.swift; sourceTree = "<group>"; };
 		9F372BA22B706911009FD8CC /* EmailAddressParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressParserTests.swift; sourceTree = "<group>"; };
@@ -818,6 +825,10 @@
 		9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedEmailAddressTransformer.swift; sourceTree = "<group>"; };
 		9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsealedBlockedAddress.swift; sourceTree = "<group>"; };
 		9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesByHashedValueUseCase.swift; sourceTree = "<group>"; };
+		9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageParser.swift; sourceTree = "<group>"; };
+		9F9EE43E2B96A08D00BD3EC7 /* EncryptionStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionStatus.swift; sourceTree = "<group>"; };
+		9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageParserTests.swift; sourceTree = "<group>"; };
+		9F9EE4422B96A11700BD3EC7 /* SudoEmail-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SudoEmail-Bridging-Header.h"; sourceTree = "<group>"; };
 		A0DDC572AAF1ACD6282DD8E3 /* Pods-SudoEmail-SudoEmailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests/Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4C09487DCA3BD3B510AF1A9 /* Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		B258871714E5602C1388E662 /* Pods-SudoEmail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail/Pods-SudoEmail.release.xcconfig"; sourceTree = "<group>"; };
@@ -1272,6 +1283,7 @@
 			children = (
 				84E89E962320D6B800AB34E3 /* Source */,
 				84783B2E231C916200CCBC27 /* Info.plist */,
+				9F9EE4422B96A11700BD3EC7 /* SudoEmail-Bridging-Header.h */,
 				84783B2D231C916200CCBC27 /* SudoEmail.h */,
 			);
 			path = SudoEmail;
@@ -1454,10 +1466,13 @@
 				956F1EDA28EE9765002E2E5A /* DraftEmailMessage.swift */,
 				956F1EDE28EEA0EA002E2E5A /* DraftEmailMessageMetadata.swift */,
 				844673FF247DF6ED0016FA56 /* EmailAddress.swift */,
+				9F12DE912B96C46000575E52 /* EmailAddressDetail.swift */,
 				51A456732B50C97A0097DFF6 /* EmailAddressPublicInfo.swift */,
+				9F12DE932B96C48E00575E52 /* EmailAttachment.swift */,
 				95A1A78728BC222100AAC84B /* EmailFolder.swift */,
 				845C4CD52372345E00AC8B99 /* EmailMessage.swift */,
 				0C4C09B12B91940200A82096 /* EmailMessageDateRange.swift */,
+				9F9EE43E2B96A08D00BD3EC7 /* EncryptionStatus.swift */,
 				95CD233128865995004C8793 /* ListAPIResult.swift */,
 				845C4CD92373C46800AC8B99 /* ListOutput.swift */,
 				8460A32B23D97655004AB5A9 /* Owner.swift */,
@@ -1677,6 +1692,7 @@
 				9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */,
 				95388BF92849C85F004D971D /* EmailRFC822HeaderCodec.swift */,
 				849AF01524A08AE7005CFA2E /* EmailSubscriptionToken.swift */,
+				9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageParser.swift */,
 				9F8673AF2B6C9A1300B9950E /* StringHasher.swift */,
 				849AF01924A1A5B8005CFA2E /* SubscriptionManager.swift */,
 				84B260302488783C00E99401 /* UseCaseFactory.swift */,
@@ -1969,6 +1985,7 @@
 			children = (
 				9F372BA22B706911009FD8CC /* EmailAddressParserTests.swift */,
 				84F6529C24A98475009EDD3A /* EmailSubscriptionTokenTests.swift */,
+				9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift */,
 				9F372BA42B706ADE009FD8CC /* StringHasherTests.swift */,
 				84F6529824A97210009EDD3A /* SubscriptionManagerTests.swift */,
 			);
@@ -2582,6 +2599,7 @@
 				84467400247DF6ED0016FA56 /* EmailAddress.swift in Sources */,
 				84B2607C2489E01800E99401 /* EmailAddressAPITransformer.swift in Sources */,
 				9F949DDA2B8428D8009064FB /* EmailAddressBlocklistUtil.swift in Sources */,
+				9F12DE922B96C46000575E52 /* EmailAddressDetail.swift in Sources */,
 				84B25FBC2484B9A200E99401 /* EmailAddressEntity.swift in Sources */,
 				84B2601A24876C1A00E99401 /* EmailAddressEntityTransformer.swift in Sources */,
 				84B260CE2490A3C800E99401 /* EmailAddressFilter.swift in Sources */,
@@ -2591,6 +2609,7 @@
 				51A456782B50DC7E0097DFF6 /* EmailAddressPublicInfoAPITransformer.swift in Sources */,
 				51A4566D2B50AD900097DFF6 /* EmailAddressPublicInfoEntity.swift in Sources */,
 				51A456722B50B44E0097DFF6 /* EmailAddressPublicInfoEntityTransformer.swift in Sources */,
+				9F12DE942B96C48E00575E52 /* EmailAttachment.swift in Sources */,
 				958DC12C291A0BBE003562C8 /* EmailConfigurationDataEntity.swift in Sources */,
 				958DC130291A1E8E003562C8 /* EmailConfigurationDataEntityTransformer.swift in Sources */,
 				958DC12A291A0A52003562C8 /* EmailConfigurationDataRepository.swift in Sources */,
@@ -2623,6 +2642,7 @@
 				8483151624B9A2E8004E89EA /* EmailMessageUnsealerService.swift in Sources */,
 				95388BFA2849C85F004D971D /* EmailRFC822HeaderCodec.swift in Sources */,
 				849AF01624A08AE7005CFA2E /* EmailSubscriptionToken.swift in Sources */,
+				9F9EE43F2B96A08E00BD3EC7 /* EncryptionStatus.swift in Sources */,
 				84F652A524A99E07009EDD3A /* FetchEmailAccountUseCase.swift in Sources */,
 				849AF00B249C4B21005CFA2E /* FetchEmailMessageRFC822DataUseCase.swift in Sources */,
 				842888E42497527400D39E6C /* FetchEmailMessageUseCase.swift in Sources */,
@@ -2673,6 +2693,7 @@
 				8407BD1D23E135B90018ABEA /* PublicKeyEncryptionAlgorithm+StringInitializable.swift in Sources */,
 				84B2602E2488745200E99401 /* Resetable.swift in Sources */,
 				8483151E24BC14E6004E89EA /* Result+ErrorMap.swift in Sources */,
+				9F9EE43D2B96A07300BD3EC7 /* Rfc822MessageParser.swift in Sources */,
 				8483151324B9A2A7004E89EA /* SealedEmailMessageEntity.swift in Sources */,
 				8483151B24BBC828004E89EA /* SealedEmailMessageEntityTransformer.swift in Sources */,
 				95DEFF632856D2160071363B /* SendEmailMessageInput.swift in Sources */,
@@ -2852,6 +2873,7 @@
 				848314F324B81CCD004E89EA /* ProvisionEmailAddressTests.swift in Sources */,
 				84B25FFB24861D7B00E99401 /* PublicKeyEncryptionAlgorithm+StringInitializableTests.swift in Sources */,
 				8483152024BC1514004E89EA /* Result+ErrorMapTests.swift in Sources */,
+				9F9EE4412B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift in Sources */,
 				842888DF2497439100D39E6C /* SealedEmailMessageEntityTransformerTests.swift in Sources */,
 				848314F724B81D2E004E89EA /* SendEmailMessageTests.swift in Sources */,
 				84B260A2248E00BA00E99401 /* SendEmailMessageUseCaseTests.swift in Sources */,
@@ -3156,6 +3178,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -3268,6 +3291,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "SudoEmail/SudoEmail-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3301,6 +3325,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "SudoEmail/SudoEmail-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3319,6 +3344,64 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"iconv\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"xml2\"",
+					"-l\"z\"",
+					"-framework",
+					"\"ASN1Swift\"",
+					"-framework",
+					"\"AWSAppSync\"",
+					"-framework",
+					"\"AWSAuthCore\"",
+					"-framework",
+					"\"AWSCognitoIdentityProvider\"",
+					"-framework",
+					"\"AWSCognitoIdentityProviderASF\"",
+					"-framework",
+					"\"AWSCore\"",
+					"-framework",
+					"\"AWSMobileClient\"",
+					"-framework",
+					"\"AWSS3\"",
+					"-framework",
+					"\"AppSyncRealTimeClient\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"Gzip\"",
+					"-framework",
+					"\"Reachability\"",
+					"-framework",
+					"\"SQLite\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Starscream\"",
+					"-framework",
+					"\"SudoApiClient\"",
+					"-framework",
+					"\"SudoConfigManager\"",
+					"-framework",
+					"\"SudoKeyManager\"",
+					"-framework",
+					"\"SudoLogging\"",
+					"-framework",
+					"\"SudoUser\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sudoplatform.SudoEmailTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3343,6 +3426,64 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"iconv\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"xml2\"",
+					"-l\"z\"",
+					"-framework",
+					"\"ASN1Swift\"",
+					"-framework",
+					"\"AWSAppSync\"",
+					"-framework",
+					"\"AWSAuthCore\"",
+					"-framework",
+					"\"AWSCognitoIdentityProvider\"",
+					"-framework",
+					"\"AWSCognitoIdentityProviderASF\"",
+					"-framework",
+					"\"AWSCore\"",
+					"-framework",
+					"\"AWSMobileClient\"",
+					"-framework",
+					"\"AWSS3\"",
+					"-framework",
+					"\"AppSyncRealTimeClient\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"Gzip\"",
+					"-framework",
+					"\"Reachability\"",
+					"-framework",
+					"\"SQLite\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Starscream\"",
+					"-framework",
+					"\"SudoApiClient\"",
+					"-framework",
+					"\"SudoConfigManager\"",
+					"-framework",
+					"\"SudoKeyManager\"",
+					"-framework",
+					"\"SudoLogging\"",
+					"-framework",
+					"\"SudoUser\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sudoplatform.SudoEmailTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

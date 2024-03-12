@@ -214,7 +214,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
         }
         
         var unsealedBlockedAddresses: [UnsealedBlockedAddress] = []
-        var transformer = BlockedEmailAddressTransformer(deviceKeyWorker: keyWorker)
+        let transformer = BlockedEmailAddressTransformer(deviceKeyWorker: keyWorker)
         unsealedBlockedAddresses = try result.getEmailAddressBlocklist.blockedAddresses.map(transformer.transform(_:))
 
         

@@ -204,6 +204,20 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailAddressDetail.swift",
+      "line": 9,
+      "symbol": "EmailAddressDetail",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailAttachment.swift",
+      "line": 9,
+      "symbol": "EmailAttachment",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailFolder.swift",
       "line": 9,
       "symbol": "EmailFolder",
@@ -229,6 +243,20 @@
       "line": 22,
       "symbol": "EmailMessageDateRange.init(sortDate:updatedAt:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EncryptionStatus.swift",
+      "line": 12,
+      "symbol": "EncryptionStatus.ENCRYPTED",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EncryptionStatus.swift",
+      "line": 14,
+      "symbol": "EncryptionStatus.UNENCRYPTED",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
