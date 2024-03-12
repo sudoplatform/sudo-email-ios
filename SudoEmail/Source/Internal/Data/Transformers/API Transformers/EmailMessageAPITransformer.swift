@@ -102,6 +102,7 @@ struct EmailMessageAPITransformer {
         let bcc = entity.bcc.map { emailAddressAPITransformer.transform($0) }
         let subject = entity.subject
         let hasAttachments = entity.hasAttachments
+        let encryptionStatus = entity.encryptionStatus
         return EmailMessage(
             id: id,
             clientRefId: clientRefid,
@@ -124,7 +125,8 @@ struct EmailMessageAPITransformer {
             cc: cc,
             bcc: bcc,
             subject: subject,
-            hasAttachments: hasAttachments
+            hasAttachments: hasAttachments,
+            encryptionStatus: encryptionStatus
         )
     }
 
@@ -146,6 +148,7 @@ struct EmailMessageAPITransformer {
         let state = stateTransformer.transform(entity.state)
         let version = entity.version
         let size = entity.size
+        let encryptionStatus = entity.encryptionStatus
         return PartialEmailMessage(
             id: id,
             clientRefId: clientRefid,
@@ -161,7 +164,8 @@ struct EmailMessageAPITransformer {
             direction: direction,
             state: state,
             version: version,
-            size: size
+            size: size,
+            encryptionStatus: encryptionStatus
         )
     }
 

@@ -62,6 +62,9 @@ struct SealedEmailMessageEntity {
 
     /// Size, in bytes, of this email message
     var size: Double
+    
+    /// The encryption status of the message
+    var encryptionStatus: EncryptionStatus
 
     // MARK: - Properties: Sealed Attributes
 

@@ -17,6 +17,9 @@ struct SealedEmailMessageEntityTransformer {
 
     /// Utility for transforming owners to `OwnerTransformer`.
     let ownerTransformer = OwnerEntityTransformer()
+    
+    /// Utility for transforming encryptionStatus
+    let encryptionStatusTransformer = EmailMessageEncryptionStatusEntityTransformer()
 
     /// Transform the success result of `GetEmailMessageQuery` from the service to a `SealedEmailMessageEntity`.
     func transform(
@@ -40,6 +43,7 @@ struct SealedEmailMessageEntityTransformer {
         let state = try stateTransformer.transform(graphQLMessage.state)
         let version = graphQLMessage.version
         let size = graphQLMessage.size
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -60,6 +64,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -86,6 +91,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -106,6 +112,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -132,6 +139,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -152,6 +160,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -178,6 +187,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -198,6 +208,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -220,6 +231,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = sealedEmailMessage.size
         let direction = sealedEmailMessage.direction
         let state = sealedEmailMessage.state
+        let encryptionStatus = sealedEmailMessage.encryptionStatus
         return PartialEmailMessageEntity(
             id: id,
             owner: owner,
@@ -236,7 +248,8 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             version: version,
-            size: size
+            size: size,
+            encryptionStatus: encryptionStatus
         )
     }
 
@@ -262,6 +275,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -282,6 +296,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -308,6 +323,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -328,6 +344,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -354,6 +371,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -374,6 +392,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }
@@ -400,6 +419,7 @@ struct SealedEmailMessageEntityTransformer {
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
+        let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.encryptionStatus)
         /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
@@ -420,6 +440,7 @@ struct SealedEmailMessageEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             size: size,
+            encryptionStatus: encryptionStatus,
             rfc822Header: rfc822Header
         )
     }

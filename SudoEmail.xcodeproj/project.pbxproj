@@ -392,6 +392,7 @@
 		9F9EE43D2B96A07300BD3EC7 /* Rfc822MessageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageParser.swift */; };
 		9F9EE43F2B96A08E00BD3EC7 /* EncryptionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE43E2B96A08D00BD3EC7 /* EncryptionStatus.swift */; };
 		9F9EE4412B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift */; };
+		9FD48DCC2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD48DCB2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift */; };
 		A7BCCF92625EFD21A51F6C9D /* Pods_SudoEmail_SudoEmailTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65BFD5441A621353BBBDAC77 /* Pods_SudoEmail_SudoEmailTests.framework */; };
 		AEAB2F8BE4C42ADFD875EC41 /* Pods_SudoEmail_SudoEmailIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C31064F99920C8A8E5EB0A /* Pods_SudoEmail_SudoEmailIntegrationTests.framework */; };
 /* End PBXBuildFile section */
@@ -829,6 +830,7 @@
 		9F9EE43E2B96A08D00BD3EC7 /* EncryptionStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionStatus.swift; sourceTree = "<group>"; };
 		9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageParserTests.swift; sourceTree = "<group>"; };
 		9F9EE4422B96A11700BD3EC7 /* SudoEmail-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SudoEmail-Bridging-Header.h"; sourceTree = "<group>"; };
+		9FD48DCB2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMessageEncryptionStatusEntityTransformer.swift; sourceTree = "<group>"; };
 		A0DDC572AAF1ACD6282DD8E3 /* Pods-SudoEmail-SudoEmailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests/Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4C09487DCA3BD3B510AF1A9 /* Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		B258871714E5602C1388E662 /* Pods-SudoEmail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail/Pods-SudoEmail.release.xcconfig"; sourceTree = "<group>"; };
@@ -1821,6 +1823,7 @@
 				958DC12F291A1E8E003562C8 /* EmailConfigurationDataEntityTransformer.swift */,
 				95388BF72846A5CA004D971D /* EmailFolderEntityTransformer.swift */,
 				84288951249B0BC900D39E6C /* EmailMessageDirectionEntityTransformer.swift */,
+				9FD48DCB2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift */,
 				84288953249B0BE500D39E6C /* EmailMessageStateEntityTransformer.swift */,
 				84B2600424862D5A00E99401 /* KeyEntityTransformer.swift */,
 				84B2602A2487841F00E99401 /* OwnerEntityTransformer.swift */,
@@ -2627,6 +2630,7 @@
 				84288938249AF17C00D39E6C /* EmailMessageDirectionFilterEntityTransformer.swift in Sources */,
 				8428894A249AFCFB00D39E6C /* EmailMessageDirectionFilterInputGQLTransformer.swift in Sources */,
 				84288944249AFB1200D39E6C /* EmailMessageDirectionGQLTransformer.swift in Sources */,
+				9FD48DCC2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift in Sources */,
 				844D99222496DCC100B942F2 /* EmailMessageEntity.swift in Sources */,
 				84288924249AE8DD00D39E6C /* EmailMessageFilter.swift in Sources */,
 				8428892D249AECB600D39E6C /* EmailMessageFilterEntity.swift in Sources */,

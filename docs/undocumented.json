@@ -233,7 +233,7 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
-      "line": 95,
+      "line": 98,
       "symbol": "EmailMessage.replyTo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"

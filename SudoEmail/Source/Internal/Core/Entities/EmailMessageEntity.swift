@@ -106,6 +106,8 @@ struct EmailMessageEntity: Equatable {
     /// The total size in bytes of this email message.
     var size: Double
 
+    /// The encryption status of the message
+    var encryptionStatus: EncryptionStatus
 }
 
 /// Core entity representation of an email message without unsealed attributes business rule. Depicts the meta data of an email message.
@@ -162,5 +164,8 @@ struct PartialEmailMessageEntity: Equatable {
 
     /// The total size in bytes of this email message.
     var size: Double
+    
+    /// The encryption status of the message
+    var encryptionStatus: EncryptionStatus
 
 }

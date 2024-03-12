@@ -85,6 +85,9 @@ public struct EmailMessage: Equatable {
     /// The size, in bytes, of the encrypted RFC822 data stored in the backend. This value is used to
     /// calculate the total storage used by an email address or user and used to enforce email storage related
     public var size: Double
+    
+    /// The encryption status of the message
+    var encryptionStatus: EncryptionStatus
 
     /// Version of this entity, increments on update.
     public var version: Int
@@ -132,7 +135,8 @@ public struct EmailMessage: Equatable {
         cc: [EmailMessage.EmailAddress],
         bcc: [EmailMessage.EmailAddress],
         subject: String?,
-        hasAttachments: Bool
+        hasAttachments: Bool,
+        encryptionStatus: EncryptionStatus
     ) {
         self.id = id
         self.clientRefId = clientRefId
@@ -156,6 +160,7 @@ public struct EmailMessage: Equatable {
         self.bcc = bcc
         self.subject = subject
         self.hasAttachments = hasAttachments
+        self.encryptionStatus = encryptionStatus
     }
 
 }
@@ -205,6 +210,9 @@ public struct PartialEmailMessage: Equatable {
     /// The size, in bytes, of the encrypted RFC822 data stored in the backend. This value is used to
     /// calculate the total storage used by an email address or user and used to enforce email storage related
     public var size: Double
+    
+    /// The encryption status of the message
+    var encryptionStatus: EncryptionStatus
 
     /// Version of this entity, increments on update.
     public var version: Int
@@ -225,7 +233,8 @@ public struct PartialEmailMessage: Equatable {
         direction: EmailMessage.Direction,
         state: EmailMessage.State,
         version: Int,
-        size: Double
+        size: Double,
+        encryptionStatus: EncryptionStatus
     ) {
         self.id = id
         self.clientRefId = clientRefId
@@ -242,5 +251,6 @@ public struct PartialEmailMessage: Equatable {
         self.state = state
         self.version = version
         self.size = size
+        self.encryptionStatus = encryptionStatus
     }
 }
