@@ -28,5 +28,5 @@ Pod::Spec.new do |spec|
   spec.dependency 'SudoLogging', '~> 1.0'
   spec.dependency 'SudoKeyManager', '~> 2.5'
   spec.dependency 'SudoApiClient', '~> 10.1.0'
-  spec.dependency 'mailcore2-ios', '~> 0.6.4'
+  spec.dependency 'MailCore', '~> 0.6.5'
 end

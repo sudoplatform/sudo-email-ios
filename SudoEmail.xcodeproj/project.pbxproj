@@ -829,7 +829,6 @@
 		9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageParser.swift; sourceTree = "<group>"; };
 		9F9EE43E2B96A08D00BD3EC7 /* EncryptionStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionStatus.swift; sourceTree = "<group>"; };
 		9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageParserTests.swift; sourceTree = "<group>"; };
-		9F9EE4422B96A11700BD3EC7 /* SudoEmail-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SudoEmail-Bridging-Header.h"; sourceTree = "<group>"; };
 		9FD48DCB2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMessageEncryptionStatusEntityTransformer.swift; sourceTree = "<group>"; };
 		A0DDC572AAF1ACD6282DD8E3 /* Pods-SudoEmail-SudoEmailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests/Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4C09487DCA3BD3B510AF1A9 /* Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1285,7 +1284,6 @@
 			children = (
 				84E89E962320D6B800AB34E3 /* Source */,
 				84783B2E231C916200CCBC27 /* Info.plist */,
-				9F9EE4422B96A11700BD3EC7 /* SudoEmail-Bridging-Header.h */,
 				84783B2D231C916200CCBC27 /* SudoEmail.h */,
 			);
 			path = SudoEmail;
@@ -3295,7 +3293,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "SudoEmail/SudoEmail-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3329,7 +3327,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "SudoEmail/SudoEmail-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
