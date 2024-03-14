@@ -1,5 +1,4 @@
 #
-source 'git@gitlab.tools.anonyome.com:anonyome/pod-repository.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, '15.0'

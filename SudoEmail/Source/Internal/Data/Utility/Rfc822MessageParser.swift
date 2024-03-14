@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import MailCore
 
 /// A class which handles the parsing of RFC822 compliant email messages in the Platform SDK
 class Rfc822MessageParser {
@@ -100,9 +99,9 @@ class Rfc822MessageParser {
         }
 
         message.attachments?.forEach({ attachment in
-            guard let mcoAttachment = MCOAttachment(data: Data(base64Encoded: attachment.data), filename: attachment.filename) else {
-                return
-            }
+            let mcoAttachment = MCOAttachment()
+            mcoAttachment.data = Data(base64Encoded: attachment.data)
+            mcoAttachment.filename = attachment.filename
             mcoAttachment.mimeType = attachment.mimetype
             mcoAttachment.isInlineAttachment = attachment.inlineAttachment
             mcoAttachment.contentID = attachment.contentId
@@ -110,9 +109,9 @@ class Rfc822MessageParser {
         })
         
         message.inlineAttachments?.forEach({ attachment in
-            guard let mcoAttachment = MCOAttachment(data: Data(base64Encoded: attachment.data), filename: attachment.filename) else {
-                return
-            }
+            let mcoAttachment = MCOAttachment()
+            mcoAttachment.data = Data(base64Encoded: attachment.data)
+            mcoAttachment.filename = attachment.filename
             mcoAttachment.mimeType = attachment.mimetype
             mcoAttachment.isInlineAttachment = attachment.inlineAttachment
             mcoAttachment.contentID = attachment.contentId
@@ -146,7 +145,7 @@ class Rfc822MessageParser {
         
         (parser?.attachments() as! [MCOAttachment]).forEach({a in
             let attachment = EmailAttachment(
-                filename: a.filename!,
+                filename: a.filename,
                 contentId: a.contentID,
                 mimetype: a.mimeType,
                 inlineAttachment: a.isInlineAttachment,
