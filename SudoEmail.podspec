@@ -10,6 +10,8 @@ Pod::Spec.new do |spec|
 
   spec.source                = { :git => 'https://github.com/sudoplatform/sudo-email-ios.git', :tag => "v#{spec.version}" }
   spec.source_files          = 'SudoEmail/**/*.swift'
+  spec.vendored_frameworks   = ['Frameworks/MailCore.framework']
+  spec.preserve_paths        = 'Frameworks/*.framework'
   spec.ios.deployment_target = '15.0'
   spec.requires_arc          = true
   spec.swift_version         = '5.0'
@@ -28,6 +30,9 @@ Pod::Spec.new do |spec|
   spec.dependency 'SudoLogging', '~> 1.0'
   spec.dependency 'SudoKeyManager', '~> 2.5'
   spec.dependency 'SudoApiClient', '~> 10.1.0'
-  spec.dependency 'mailcore2-ios', '~> 0.6.4'
-  spec.static_framework = true
+  
+  spec.xcconfig = {
+    'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/SudoEmail/Frameworks/"',
+    'OTHER_LDFLAGS'          => '"-ObjC"'
+  }
 end
