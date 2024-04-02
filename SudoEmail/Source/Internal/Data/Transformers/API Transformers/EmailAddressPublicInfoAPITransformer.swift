@@ -9,8 +9,7 @@ struct EmailAddressPublicInfoAPITransformer {
     func transform(_ data: EmailAddressPublicInfoEntity) -> EmailAddressPublicInfo {
         return EmailAddressPublicInfo(emailAddress: data.emailAddress, keyId: data.keyId, publicKey: data.publicKey)
     }
-
-    // TODO: test
+    
     /// Transform a list of entity type`EmailAddressPublicInfoEntit` to list of API type `EmailAddressPublicInfo`.
     /// - Parameter data: List of entities to be transformed.
     /// - Returns: List of email address public info API objects.

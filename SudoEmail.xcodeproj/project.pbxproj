@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,7 @@
 		0C4C09BA2B95323600A82096 /* ListEmailMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4C09B92B95323600A82096 /* ListEmailMessagesTests.swift */; };
 		0C4C09BC2B953EC000A82096 /* ListEmailMessagesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4C09BB2B953EC000A82096 /* ListEmailMessagesUseCaseTests.swift */; };
 		4D03B23A48F2EF7DD903EBA6 /* Pods_SudoEmail_TestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DB113335953E29020034B36 /* Pods_SudoEmail_TestApp.framework */; };
+		5106CFE22BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5106CFE12BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift */; };
 		51A4566D2B50AD900097DFF6 /* EmailAddressPublicInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4566C2B50AD900097DFF6 /* EmailAddressPublicInfoEntity.swift */; };
 		51A456702B50AEA80097DFF6 /* LookupEmailAddressesPublicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4566F2B50AEA80097DFF6 /* LookupEmailAddressesPublicInfoUseCase.swift */; };
 		51A456722B50B44E0097DFF6 /* EmailAddressPublicInfoEntityTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A456712B50B44E0097DFF6 /* EmailAddressPublicInfoEntityTransformer.swift */; };
@@ -463,9 +464,10 @@
 		0C4C09B72B95317200A82096 /* MockListEmailMessagesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockListEmailMessagesUseCase.swift; sourceTree = "<group>"; };
 		0C4C09B92B95323600A82096 /* ListEmailMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailMessagesTests.swift; sourceTree = "<group>"; };
 		0C4C09BB2B953EC000A82096 /* ListEmailMessagesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailMessagesUseCaseTests.swift; sourceTree = "<group>"; };
+		12E9D8FFFB00CA3F580733C4 /* Pods-SudoEmail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail/Pods-SudoEmail.debug.xcconfig"; sourceTree = "<group>"; };
 		19BC6CF4B757984BBEDF8E2D /* Pods-SudoEmail-SudoEmailIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
-		235A292C02F7ACC034E33CEA /* Pods-SudoEmail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail/Pods-SudoEmail.debug.xcconfig"; sourceTree = "<group>"; };
 		39426FF4CDEDEA69C2276DB5 /* Pods-SudoEmail-SudoEmailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests/Pods-SudoEmail-SudoEmailTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5106CFE12BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressPublicKeyIntegrationTests.swift; sourceTree = "<group>"; };
 		51A4566C2B50AD900097DFF6 /* EmailAddressPublicInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressPublicInfoEntity.swift; sourceTree = "<group>"; };
 		51A4566F2B50AEA80097DFF6 /* LookupEmailAddressesPublicInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupEmailAddressesPublicInfoUseCase.swift; sourceTree = "<group>"; };
 		51A456712B50B44E0097DFF6 /* EmailAddressPublicInfoEntityTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressPublicInfoEntityTransformer.swift; sourceTree = "<group>"; };
@@ -935,7 +937,7 @@
 				A18E80669458B70E47D5C898 /* Pods-SudoEmail-SudoEmailTests.release.xcconfig */,
 				70B1E03C0CF57ED77C8DD8FC /* Pods-SudoEmail-TestApp.debug.xcconfig */,
 				C428E74EA35EB0F3B1859A81 /* Pods-SudoEmail-TestApp.release.xcconfig */,
-				235A292C02F7ACC034E33CEA /* Pods-SudoEmail.debug.xcconfig */,
+				12E9D8FFFB00CA3F580733C4 /* Pods-SudoEmail.debug.xcconfig */,
 				5849D7AED1B94D8703795A07 /* Pods-SudoEmail.release.xcconfig */,
 			);
 			path = Pods;
@@ -1784,6 +1786,7 @@
 				848314E724B6D83A004E89EA /* DeleteEmailMessageIntegrationTests.swift */,
 				84B260752489D99C00E99401 /* DeprovisionEmailAddressIntegrationTests.swift */,
 				95E7385E2905F7D000DDD547 /* DraftEmailMessageIntegrationTests.swift */,
+				5106CFE12BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift */,
 				958DC13F291B53B0003562C8 /* GetConfigurationDataIntegrationTests.swift */,
 				84F652AE24A9B602009EDD3A /* GetEmailAddressByIdIntegrationTests.swift */,
 				842888F324984E0500D39E6C /* GetEmailMessageByIdIntegrationTests.swift */,
@@ -2619,6 +2622,7 @@
 				848314E824B6D83A004E89EA /* DeleteEmailMessageIntegrationTests.swift in Sources */,
 				84B260762489D99C00E99401 /* DeprovisionEmailAddressIntegrationTests.swift in Sources */,
 				95E7385F2905F7D000DDD547 /* DraftEmailMessageIntegrationTests.swift in Sources */,
+				5106CFE22BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift in Sources */,
 				958DC140291B53B0003562C8 /* GetConfigurationDataIntegrationTests.swift in Sources */,
 				84F652AF24A9B602009EDD3A /* GetEmailAddressByIdIntegrationTests.swift in Sources */,
 				842888F424984E0500D39E6C /* GetEmailMessageByIdIntegrationTests.swift in Sources */,
@@ -3394,7 +3398,7 @@
 		};
 		84783B3F231C916200CCBC27 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 235A292C02F7ACC034E33CEA /* Pods-SudoEmail.debug.xcconfig */;
+			baseConfigurationReference = 12E9D8FFFB00CA3F580733C4 /* Pods-SudoEmail.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";

@@ -373,8 +373,8 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ProvisionEmailAddressInput.swift",
-      "line": 22,
-      "symbol": "ProvisionEmailAddressInput.init(emailAddress:ownershipProofToken:alias:)",
+      "line": 25,
+      "symbol": "ProvisionEmailAddressInput.init(emailAddress:ownershipProofToken:alias:keyId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },

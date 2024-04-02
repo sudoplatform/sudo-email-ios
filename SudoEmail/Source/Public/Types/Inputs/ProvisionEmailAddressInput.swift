@@ -1,5 +1,5 @@
 //
-// Copyright © 2022 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -19,9 +19,13 @@ public struct ProvisionEmailAddressInput: Equatable {
     /// An alias for the email address.
     public let alias: String?
 
-    public init(emailAddress: String, ownershipProofToken: String, alias: String? = nil) {
+    /// Optional identifier of the Public Key to use to provision the email address.
+    public let keyId: String?
+
+    public init(emailAddress: String, ownershipProofToken: String, alias: String? = nil, keyId: String? = nil) {
         self.emailAddress = emailAddress
         self.ownershipProofToken = ownershipProofToken
         self.alias = alias
+        self.keyId = keyId
     }
 }

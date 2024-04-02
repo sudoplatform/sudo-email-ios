@@ -1,5 +1,5 @@
 //
-// Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -76,7 +76,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public convenience init(keyNamespace: String = "com.sudoplatform.email", userClient: SudoUserClient) throws {
         try self.init(config: nil, keyNamespace: keyNamespace, userClient: userClient)
     }
-
+    
     convenience init(
         config: SudoEmailConfig?,
         keyNamespace: String = "com.sudoplatform.email",
@@ -195,6 +195,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let provisionEmailAccountUseCase = useCaseFactory.generateProvisionEmailAccountUseCase(
             keyWorker: deviceKeyWorker,
             emailAccountRepository: emailAccountRepository,
+            keyId: input.keyId,
             logger: self.logger
         )
         let emailAddressransformer = EmailAddressEntityTransformer()

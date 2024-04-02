@@ -1,5 +1,5 @@
 //
-// Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,19 +25,24 @@ class ProvisionEmailAccountUseCase {
 
     // MARK: - Properties
 
+    /// Iidentifier of the Public Key to provision the email account with.
+    let keyId: String?
+
     /// Logs diagnostic and error information.
     let logger: Logger
 
     // MARK: - Lifecycle
-
+    
     /// Initialize an instance of the `ProvisionEmailAccount` use case.
     init(
         keyWorker: DeviceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
+        keyId: String? = nil,
         logger: Logger = .emailSDKLogger
     ) {
         self.keyWorker = keyWorker
         self.emailAccountRepository = emailAccountRepository
+        self.keyId = keyId
         self.logger = logger
     }
 
@@ -51,8 +56,12 @@ class ProvisionEmailAccountUseCase {
     func execute(emailAddress: EmailAddressEntity, ownershipProofToken: String) async throws -> EmailAccountEntity {
         let publicKey: KeyEntity
         do {
-            let keyPair = try keyWorker.generateKeyPair()
-            publicKey = keyPair.publicKey
+            if self.keyId != nil {
+                publicKey = try keyWorker.getPublicKeyWithId(keyId: self.keyId!)
+            } else {
+                let keyPair = try keyWorker.generateKeyPair()
+                publicKey = keyPair.publicKey
+            }
         } catch {
             throw SudoEmailError.internalError(error.localizedDescription)
         }

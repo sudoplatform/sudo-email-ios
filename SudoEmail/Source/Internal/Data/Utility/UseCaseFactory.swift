@@ -1,5 +1,5 @@
 //
-// Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -11,15 +11,16 @@ import SudoUser
 
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
-
     func generateProvisionEmailAccountUseCase(
         keyWorker: DeviceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
+        keyId: String? = nil,
         logger: Logger
     ) -> ProvisionEmailAccountUseCase {
         return ProvisionEmailAccountUseCase(
             keyWorker: keyWorker,
             emailAccountRepository: emailAccountRepository,
+            keyId: keyId,
             logger: logger
         )
     }

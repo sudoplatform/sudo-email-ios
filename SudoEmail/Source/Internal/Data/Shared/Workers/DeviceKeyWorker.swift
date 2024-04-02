@@ -1,5 +1,5 @@
 //
-// Copyright © 2023 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,6 +17,11 @@ protocol DeviceKeyWorker: AnyObject {
     /// Throws: `SudoEmailError`.
     func generateKeyPair() throws -> KeyPair
 
+    /// Returns the Public Key matching the key id if it exists.
+    ///  - Parameter keyId: Identifier of the Public Key to retrieve.
+    /// Throws: `SudoEmailError`.
+    func getPublicKeyWithId(keyId: String) throws -> KeyEntity
+    
     /// Generate a new symmetric key
     ///  Throws: `SudoKeyManagerError`.
     func generateNewCurrentSymmetricKey() throws -> String
@@ -127,6 +132,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             logger.error(msg)
             throw SudoEmailError.internalError(msg)
         }
+
         // Try to delete the existing password if it exists.
         try keyManager.deletePassword(Defaults.currentKeyPairIdPointerName)
         try keyManager.generateKeyPair(keyPairId)
@@ -139,6 +145,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             try keyManager.deleteKeyPair(keyPairId)
             throw SudoEmailError.internalError(msg)
         }
+
         let publicKey: Data
         let privateKey: Data
         do {
@@ -156,8 +163,28 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             try keyManager.deleteKeyPair(keyPairId)
             throw SudoEmailError.internalError(msg)
         }
+
         let keyPair = createKeyPairWithKeyId(keyPairId, keyRingId: keyRingId, publicKeyData: publicKey, privateKeyData: privateKey)
         return keyPair
+    }
+
+    func getPublicKeyWithId(keyId: String) throws -> KeyEntity {
+        let keyRingId = try getKeyRingId()
+        let publicKey: Data
+
+        do {
+            guard let pubKey = try keyManager.getPublicKey(keyId) else {
+                throw SudoEmailError.internalError("Unable to access public key from key manager")
+            }
+            publicKey = pubKey
+        } catch {
+            let msg = "Failed to get public key: \(error.localizedDescription)"
+            logger.error(msg)
+            throw SudoEmailError.internalError(msg)
+        }
+
+        let keyEntity = KeyEntity(type: .publicKey, keyId: keyId, keyRingId: keyRingId, keyData: publicKey)
+        return keyEntity
     }
 
     func generateNewCurrentSymmetricKey() throws -> String {
