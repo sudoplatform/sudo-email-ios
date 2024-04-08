@@ -87,7 +87,7 @@ public struct EmailMessage: Equatable {
     public var size: Double
     
     /// The encryption status of the message
-    var encryptionStatus: EncryptionStatus
+    public var encryptionStatus: EncryptionStatus
 
     /// Version of this entity, increments on update.
     public var version: Int
