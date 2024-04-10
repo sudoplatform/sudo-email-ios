@@ -63,6 +63,7 @@ public protocol SudoEmailClient: AnyObject {
     func updateEmailAddressMetadata(withInput input: UpdateEmailAddressMetadataInput) async throws -> String
 
     /// Send an email message using [RFC 6854] supersedes [RFC 822] (https://tools.ietf.org/html/rfc6854) data.
+    /// Email messages sent to in-network recipients (i.e. email addresses that exist within the Sudo Platform) will be sent end-to-end encrypted.
     /// - Parameters:
     ///   - input: Parameters used to send an email message
     /// - Returns:
@@ -70,7 +71,7 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> String
 
-    /// Delete the email messages identified by the list of ids..
+    /// Delete the email messages identified by the list of ids.
     /// - Parameters:
     ///   - ids: A list of one or more identifiers of the email messages to be deleted. There is a limit of
     ///   100 email message ids per API request. Exceeding this will cause an error to be thrown.
@@ -253,6 +254,14 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Success: Stored RFC 6854 email message data of the email message.
     ///   - Failure: `SudoEmailError.noEmailMessageRFC822Available` if the email message cannot be accessed/found.
     func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data
+
+    /// Get the body and attachment data of an `EmailMessage`
+    ///
+    /// - Parameters:
+    ///   - input: Parameters used to retrieve the data of the email message.
+    /// - Returns:
+    ///   - The data associated with the `EmailMessage` or null if the email message cannot be found.
+    func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody?
 
     /// Get a draft email message that has been saved previously.
     ///  - Parameters:

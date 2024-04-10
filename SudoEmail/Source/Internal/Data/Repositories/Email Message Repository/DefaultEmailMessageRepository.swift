@@ -24,6 +24,7 @@ struct DraftEmailMessageEncryptionMetadata: Equatable {
 /// Allows access and manipulation of email service via AppSync GraphQL and AWSS3.
 class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
+
     // MARK: - Supplementary
 
     enum Defaults {
@@ -103,24 +104,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
     // MARK: - SealedEmailMessageRepository
 
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> String {
-        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
-            throw SudoEmailError.notSignedIn
-        }
-        let id = UUID().uuidString
-        let key = "\(keyPrefix)/\(id)"
-        try await self.s3Worker.upload(
-            data: data,
-            contentType: sendContentType,
-            bucket: self.transientBucket,
-            key: key,
-            metadata: nil
-        )
-
-        let s3Input = GraphQL.S3EmailObjectInput(bucket: self.transientBucket, key: key, region: self.region)
-        let input = GraphQL.SendEmailMessageInput(emailAddressId: emailAccountId, message: s3Input)
-        let mutation = GraphQL.SendEmailMessageMutation(input: input)
-        if Task.isCancelled { return "cancelled" }
+    private func performSendEmailMessageMutation<Mutation: GraphQLMutation>(_ mutation: Mutation) async throws -> Mutation.Data {
         let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation)
         guard let result = performResult?.data else {
             if let error = performError {
@@ -138,7 +122,86 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             }
             throw SudoEmailError.internalError("Unexpected error")
         }
+        return result
+    }
+    
+
+    // Sends an out-of-network email message.
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> String {
+        // Confirm user is signed in
+        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
+            throw SudoEmailError.notSignedIn
+        }
+
+        // Upload message data
+        let id = UUID().uuidString
+        let key = "\(keyPrefix)/\(id)"
+        try await self.s3Worker.upload(
+            data: data,
+            contentType: sendContentType,
+            bucket: self.transientBucket,
+            key: key,
+            metadata: nil
+        )
+        let s3EmailObjectInput = GraphQL.S3EmailObjectInput(
+            bucket: self.transientBucket,
+            key: key,
+            region: self.region
+        )
+
+        // Perform `SendEmailMessage` mutation (out-of-network)
+        let input = GraphQL.SendEmailMessageInput(
+            emailAddressId: emailAccountId,
+            message: s3EmailObjectInput
+        )
+        let mutation = GraphQL.SendEmailMessageMutation(input: input)
+        let result = try await performSendEmailMessageMutation(mutation)
+
         return result.sendEmailMessage
+    }
+
+    // Sends an in-network email message with E2E encryption.
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> String {
+        // Confirm user is signed in
+        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
+            throw SudoEmailError.notSignedIn
+        }
+
+        // Upload message data
+        let id = UUID().uuidString
+        let key = "\(keyPrefix)/\(id)"
+        try await self.s3Worker.upload(
+            data: data,
+            contentType: sendContentType,
+            bucket: self.transientBucket,
+            key: key,
+            metadata: nil
+        )
+        let s3EmailObjectInput = GraphQL.S3EmailObjectInput(
+            bucket: self.transientBucket,
+            key: key,
+            region: self.region
+        )
+
+        // Perform `SendEncryptedEmailMessage` mutation (in-network)
+        let rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
+            bcc: emailMessageHeader.bcc,
+            cc: emailMessageHeader.cc,
+            from: emailMessageHeader.from,
+            hasAttachments: hasAttachments,
+            replyTo: emailMessageHeader.replyTo,
+            subject: emailMessageHeader.subject,
+            to: emailMessageHeader.to
+        )
+        let input = GraphQL.SendEncryptedEmailMessageInput(
+            emailAddressId: emailAccountId,
+            message: s3EmailObjectInput,
+            rfc822Header: rfc822HeaderInput
+        )
+        let mutation = GraphQL.SendEncryptedEmailMessageMutation(input: input)
+        let result = try await performSendEmailMessageMutation(mutation)
+
+        return result.sendEncryptedEmailMessage
     }
 
     func deleteEmailMessages(withIds ids: [String]) async throws -> [String] {

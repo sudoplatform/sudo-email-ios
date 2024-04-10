@@ -64,6 +64,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     let emailMessageUnsealerServiceService: EmailMessageUnsealerService
 
+    let emailCryptoService: EmailCryptoService
+
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultSudoEmailClient`. It uses configuration parameters defined in `sudoplatformconfig.json` file located in the app
@@ -130,6 +132,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         )
         // Setup Services
         let emailMessageUnsealerServiceService = DefaultEmailMessageUnsealerService(deviceKeyWorker: deviceKeyWorker)
+        let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: deviceKeyWorker)
         self.init(
             keyNamespace: keyNamespace,
             graphQLClient: graphQLClient,
@@ -140,6 +143,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             domainRepository: domainRepository,
             emailConfigurationDataRepository: emailConfigurationDataRepository,
             emailMessageUnsealerServiceService: emailMessageUnsealerServiceService,
+            emailCryptoService: emailCryptoService,
             deviceKeyWorker: deviceKeyWorker,
             awsS3Worker: awsS3Worker,
             blockedAddressRepository: blockedAddressRepository
@@ -160,6 +164,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         domainRepository: DomainRepository,
         emailConfigurationDataRepository: EmailConfigurationDataRepository,
         emailMessageUnsealerServiceService: EmailMessageUnsealerService,
+        emailCryptoService: EmailCryptoService,
         deviceKeyWorker: DeviceKeyWorker,
         awsS3Worker: AWSS3Worker & Resetable,
         logger: Logger = .emailSDKLogger,
@@ -175,6 +180,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.domainRepository = domainRepository
         self.emailConfigurationDataRepository = emailConfigurationDataRepository
         self.emailMessageUnsealerServiceService = emailMessageUnsealerServiceService
+        self.emailCryptoService = emailCryptoService
         self.deviceKeyWorker = deviceKeyWorker
         self.awsS3Worker = awsS3Worker
         self.blockedAddressRepository = blockedAddressRepository
@@ -229,9 +235,11 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> String {
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
-            emailMessageRepository: emailMessageRepository
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository,
+            emailCryptoService: emailCryptoService
         )
-        let emailMessageId = try await useCase.execute(withRFC822Data: input.rfc822Data, emailAccountId: input.senderEmailAddressId)
+        let emailMessageId = try await useCase.execute(withInput: input)
         return emailMessageId
     }
 
@@ -501,6 +509,15 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailMessageUnsealerService: emailMessageUnsealerServiceService
         )
         return try await useCase.execute(withMessageId: input.id, emailAddressId: input.emailAddressId)
+    }
+
+    public func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
+        let useCase = useCaseFactory.generateGetEmailMessageWithBodyUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailMessageUnsealerService: emailMessageUnsealerServiceService,
+            emailCryptoService: emailCryptoService
+        )
+        return try await useCase.execute(withInput: input)
     }
 
     public func getDraftEmailMessage(

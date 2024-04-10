@@ -13,18 +13,42 @@ typealias KeyPair = (publicKey: KeyEntity, privateKey: KeyEntity)
 
 protocol DeviceKeyWorker: AnyObject {
 
+    /// Creates random data of size specified by `size` input.
+    ///
+    /// - Parameter size: Number of bytes used to create the random data.
+    /// - Returns: The random data.
+    /// - Throws: `KeyManagerError`.
+    func createRandomData(_ size: Int) throws -> Data
+
     /// Generate a key pair on the device. Returns the freshly generated key pair.
     /// Throws: `SudoEmailError`.
     func generateKeyPair() throws -> KeyPair
 
-    /// Returns the Public Key matching the key id if it exists.
-    ///  - Parameter keyId: Identifier of the Public Key to retrieve.
-    /// Throws: `SudoEmailError`.
-    func getPublicKeyWithId(keyId: String) throws -> KeyEntity
+    /// Get the Public Key matching the key id if it exists.
+    ///
+    /// - Parameter keyId: Identifier of the Public Key to retrieve.
+    /// - Returns: The Public Key `KeyEntity` matching the provided key id, or nil
+    /// - Throws: `SudoEmailError`.
+    func getPublicKeyWithId(keyId: String) throws -> KeyEntity?
     
     /// Generate a new symmetric key
     ///  Throws: `SudoKeyManagerError`.
     func generateNewCurrentSymmetricKey() throws -> String
+
+    /// Generate a random symmetric key which is not persisted in the iOS Keychain.
+    ///
+    /// - Returns: The generated random symmetric key data.
+    /// - Throws:
+    ///     - `KeyManagerError`
+    ///     - `SudoEmailError`
+    func generateRandomSymmetricKey() throws -> Data
+
+    /// Get the symmetric key matching the key id if it exists.
+    ///
+    /// - Parameter keyId: Key id to be used to access the stored symmetric key.
+    /// - Returns: The Symmetric Key matching the key id, or nil if no symmetric key is found.
+    /// - Throws: `SudoKeyManagerError`
+    func getSymmetricKey(keyId: String) throws -> String?
 
     /// Get the id of the current symmetric key
     ///  Throws: `SudoKeyManagerError`.
@@ -54,6 +78,41 @@ protocol DeviceKeyWorker: AnyObject {
     ///     - `KeyManagerError` if the data cannot be decrypted.
     func unsealString(_ string: String, withKeyId keyId: String, algorithm: String) throws -> String
 
+    /// Encrypts the given data with the specified key pair id.
+    ///
+    /// - Parameter keyId: Key Id to be used to access the stored key and encrypt the data.
+    /// - Parameter data: The data to encrypt.
+    /// - Parameter algorithm: Algorithm in plain text to use to encrypt.
+    /// - Returns: The encrypted data.
+    /// - Throws: `KeyManagerError` if the data cannot be encrypted.
+    func encryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data
+
+    /// Decrypt the provided data using the keyId.
+    ///
+    /// - Parameter keyId: Key Id to be used to access the stored key and decrypt the data with.
+    /// - Parameter data: The data to be decrypted.
+    /// - Parameter algorithm: Algorithm in plain text to use to decrypt.
+    /// - Throws: `KeyManagerError` if the data cannot be decrypted.
+    func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data
+
+    /// Encrypt the data using the Symmetric Key data.
+    ///
+    /// - Parameter symmetricKey: The Symmetric Key data to use to decrypt the data with.
+    /// - Parameter data: The data to be decrypted.
+    /// - Parameter initVector: The initialization vector.
+    /// - Returns: The encrypted data.
+    /// - Throws: `KeyManagerError` if the data cannot be encrypted.
+    func encryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data?) throws -> Data
+
+    /// Decrypt the provided data using Symmetric Key data.
+    ///
+    /// - Parameter symmetricKey: The Symmetric Key data to use to decrypt the data with.
+    /// - Parameter data: The data to be decrypted.
+    /// - Parameter initVector: The initialization vector.
+    /// - Returns: The decrypted data.
+    /// - Throws: `KeyManagerError` if the data cannot be decrypted.
+    func decryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data?) throws -> Data
+
     /// Export the cryptographic keys to a key archive.
     ///
     /// - Returns: Key archive data.
@@ -67,7 +126,11 @@ protocol DeviceKeyWorker: AnyObject {
     /// remove all cryptographic keys from the KeyManager
     func removeAllKeys() throws
     
-    /// Checks if the key with the given id and type exists
+    /// Checks if the key with the given id and type exists.
+    ///
+    /// - Parameter keyId: Key identifier to use to check existence of key.
+    /// - Parameter keyType: Type of the key to check existence of.
+    /// - Returns: True if key exists, otherwise false.
     func keyExists(keyId: String, keyType: KeyType) -> Bool
 
 }
@@ -124,6 +187,10 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     // MARK: - DeviceKeyWorker
 
+    func createRandomData(_ size: Int) throws -> Data {
+        return try keyManager.createRandomData(size)
+    }
+
     func generateKeyPair() throws -> KeyPair {
         let keyRingId = try getKeyRingId()
         let keyPairId = try keyManager.generateKeyId()
@@ -168,13 +235,13 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return keyPair
     }
 
-    func getPublicKeyWithId(keyId: String) throws -> KeyEntity {
+    func getPublicKeyWithId(keyId: String) throws -> KeyEntity? {
         let keyRingId = try getKeyRingId()
         let publicKey: Data
 
         do {
             guard let pubKey = try keyManager.getPublicKey(keyId) else {
-                throw SudoEmailError.internalError("Unable to access public key from key manager")
+                return nil
             }
             publicKey = pubKey
         } catch {
@@ -212,6 +279,40 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return keyId
     }
 
+    func generateRandomSymmetricKey() throws -> Data {
+        let keyId = try keyManager.generateKeyId()
+        try keyManager.generateSymmetricKey(keyId)
+
+        guard let symmetricKey = try keyManager.getSymmetricKey(keyId) else {
+            let msg = "Unable to generate random symmetric key"
+            logger.error(msg)
+            throw SudoEmailError.internalError(msg)
+        }
+        return symmetricKey
+    }
+
+    func getSymmetricKey(keyId: String) throws -> String? {
+        var symmetricKey: String
+
+        do {
+            guard let symmetricKeyData = try keyManager.getSymmetricKey(keyId) else {
+                return nil
+            }
+            guard let symmetricKeyDataDecoded = String(data: symmetricKeyData, encoding: .utf8) else {
+                let msg = "Unable to decode symmetric key data"
+                logger.error(msg)
+                throw SudoEmailError.internalError(msg)
+            }
+            symmetricKey = symmetricKeyDataDecoded
+        } catch {
+            let msg = "Unable to get symmetric key with id: \(keyId). Error: \(error.localizedDescription)"
+            logger.error(msg)
+            throw SudoEmailError.internalError(msg)
+        }
+
+        return symmetricKey
+    }
+
     func getCurrentSymmetricKeyId() throws -> String? {
         guard let keyIdDataEncoded = try keyManager.getPassword(Defaults.currentSymmetricKeyIdPointerName) else {
             return nil
@@ -238,6 +339,30 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
             return try decryptWithKeyPair(string, withKeyId: keyId, algorithm: decodedAlgorithm)
         } else {
             return try decryptWithSymmetricKey(string, withKeyId: keyId)
+        }
+    }
+
+    func encryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+        return try keyManager.encryptWithPublicKey(keyId, data: data, algorithm: algorithm)
+    }
+
+    func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+        return try keyManager.decryptWithPrivateKey(keyId, data: data, algorithm: algorithm)
+    }
+
+    func encryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
+        if let iv = initVector {
+            return try keyManager.encryptWithSymmetricKey(symmetricKey, data: data, iv: iv)
+        } else {
+            return try keyManager.encryptWithSymmetricKey(symmetricKey, data: data)
+        }
+    }
+
+    func decryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
+        if let iv = initVector {
+            return try keyManager.decryptWithSymmetricKey(symmetricKey, data: data, iv: iv)
+        } else {
+            return try keyManager.decryptWithSymmetricKey(symmetricKey, data: data)
         }
     }
 
@@ -334,7 +459,7 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
         }
         return decryptedString
     }
-    
+
     func keyExists(keyId: String, keyType: KeyType) -> Bool {
         do {
             switch (keyType) {
@@ -343,6 +468,9 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
                     return key != nil
                 case KeyType.publicKey:
                     let key = try keyManager.getPublicKey(keyId)
+                    return key != nil
+                case KeyType.privateKey:
+                    let key = try keyManager.getPrivateKey(keyId)
                     return key != nil
                 default:
                     return false

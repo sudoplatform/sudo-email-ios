@@ -23,6 +23,10 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case keyNotFound
     /// Indicates that the key archive imported was invalid.
     case invalidKeyArchive
+    /// No key attachments were found on message body.
+    case keyAttachmentsNotFound
+    /// No body attachment was found on message body.
+    case bodyAttachmentNotFound
 
     // MARK: - Service
 
@@ -125,6 +129,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "Account is locked"
         case .addressNotFound:
             return "Email address could not be found"
+        case .bodyAttachmentNotFound:
+            return "Body attachments could not be found"
         case .decodingError:
             return "A decoding error has occurred"
         case .emailAddressFormatValidationFailed:
@@ -153,6 +159,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "Email address domain is not supported"
         case .invalidToken:
             return "An invalid token error has occurred"
+        case .keyAttachmentsNotFound:
+            return "Key attachments could not be found"
         case .keyNotFound:
             return "Key not found"
         case .limitExceeded:

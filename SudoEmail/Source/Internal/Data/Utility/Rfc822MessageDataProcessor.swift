@@ -8,7 +8,7 @@ import Foundation
 import MailCore
 
 /// A class which handles the parsing of RFC822 compliant email messages in the Platform SDK
-class Rfc822MessageParser {
+class Rfc822MessageDataProcessor {
     struct EmailMessageDetails {
         var from: [EmailAddressDetail]
         var to: [EmailAddressDetail]?
@@ -30,10 +30,15 @@ class Rfc822MessageParser {
     
     static let ENCODED_WORD_REGEX_PATTERN = "(?:=\\?([\\w-]+)\\?([A-Z])\\?([a-zA-Z0-9+\\/=_]*)\\?=)"
     
-    // MARK: - Rfc822MessageParser
+    // MARK: - Rfc822MessageDataProcessor
     
-    static func encodeToRfc822Data(message: EmailMessageDetails) throws -> Data {
-        let resultStr = try Rfc822MessageParser.encodeToRfc822Str(message: message)
+    
+    /// Encodes the given email into RFC822 compliant data
+    /// - Parameters:
+    ///   - message: The email to be encoded
+    /// - Returns: The encoded email as RFC822 data
+    static func encodeToInternetMessageData(message: EmailMessageDetails) throws -> Data {
+        let resultStr = try Rfc822MessageDataProcessor.encodeToInternetMessageDataStr(message: message)
         return resultStr.data(using: .utf8)!
     }
     
@@ -41,7 +46,7 @@ class Rfc822MessageParser {
     /// - Parameters:
     ///   - message: The email to be encoded
     /// - Returns: The encoded email as a string
-    static func encodeToRfc822Str(message: EmailMessageDetails) throws -> String {
+    static func encodeToInternetMessageDataStr(message: EmailMessageDetails) throws -> String {
         let builder = MCOMessageBuilder()
         
         builder.header.from = MCOAddress(
@@ -125,10 +130,10 @@ class Rfc822MessageParser {
             throw SudoEmailError.internalError("No data encoded")
         }
 
-        return try Rfc822MessageParser.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
+        return try Rfc822MessageDataProcessor.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
     }
-    
-    static func decodeRfc822Data(input: String) throws -> EmailMessageDetails {
+
+    static func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
         let parser = MCOMessageParser(data: input.data(using: .utf8))
         
         if(parser == nil) {
@@ -247,7 +252,7 @@ class Rfc822MessageParser {
                     )
                     break
                 case "Q": //Q-Encoded
-                    let decoded = try Rfc822MessageParser.decodeQEncoding(
+                    let decoded = try Rfc822MessageDataProcessor.decodeQEncoding(
                         encodedString: String(value)
                     )
                     processed = processed.replacingOccurrences(of: group, with: decoded)

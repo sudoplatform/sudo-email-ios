@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          SudoEmail 8.3.1 Docs
+          SudoEmail 9.0.0 Docs
         </a>
         
       </p>
@@ -80,6 +80,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/EmailAddressFilter.html">EmailAddressFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums.html#/s:9SudoEmail0B18CryptoServiceErrorO">EmailCryptoServiceError</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/EmailMessageDirectionFilter.html">EmailMessageDirectionFilter</a>
@@ -169,6 +172,9 @@
                 <a class="nav-group-task-link" href="Structs/EmailMessageDateRange.html">EmailMessageDateRange</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmailMessageWithBody.html">EmailMessageWithBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/GetDraftEmailMessageInput.html">GetDraftEmailMessageInput</a>
               </li>
               <li class="nav-group-task">
@@ -179,6 +185,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/GetEmailMessageRfc822DataInput.html">GetEmailMessageRfc822DataInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/GetEmailMessageWithBodyInput.html">GetEmailMessageWithBodyInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/InternetMessageFormatHeader.html">InternetMessageFormatHeader</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListEmailAddressesForSudoIdInput.html">ListEmailAddressesForSudoIdInput</a>
@@ -494,6 +506,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0B15MessageWithBodyV"></a>
+                    <a name="//apple_ref/swift/Struct/EmailMessageWithBody" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0B15MessageWithBodyV">EmailMessageWithBody</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Representation of an email message with body attachments used in the Sudo Platform Email SDK.</p>
+
+                        <a href="Structs/EmailMessageWithBody.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageWithBody</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail05CheckB24AddressAvailabilityInputV"></a>
                     <a name="//apple_ref/swift/Struct/CheckEmailAddressAvailabilityInput" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail05CheckB24AddressAvailabilityInputV">CheckEmailAddressAvailabilityInput</a>
@@ -681,6 +721,34 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GetEmailMessageRfc822DataInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail03GetB20MessageWithBodyInputV"></a>
+                    <a name="//apple_ref/swift/Struct/GetEmailMessageWithBodyInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail03GetB20MessageWithBodyInputV">GetEmailMessageWithBodyInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object containing an email message identifier and email address identifier used to retrieve the email message data.</p>
+
+                        <a href="Structs/GetEmailMessageWithBodyInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GetEmailMessageWithBodyInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -924,7 +992,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>input object for sending an email message using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+                        <p>Input object containing information required to send an email message.</p>
 
                         <a href="Structs/SendEmailMessageInput.html" class="slightly-smaller">See more</a>
                       </div>
@@ -1082,6 +1150,48 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail27InternetMessageFormatHeaderV"></a>
+                    <a name="//apple_ref/swift/Struct/InternetMessageFormatHeader" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail27InternetMessageFormatHeaderV">InternetMessageFormatHeader</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Representation of the email headers formatted under the RFC-6854 (supersedes RFC 822) standard.
+Some further rules (beyond RFC 6854) must also be applied to the data:</p>
+
+<ul>
+<li>At least one recipient must exist (to, cc, bcc).</li>
+<li>For all email addresses:
+
+<ul>
+<li>Total length (including both local part and domain) must not exceed 256 characters.</li>
+<li>Local part must not exceed more than 64 characters.</li>
+<li>Input domain parts (domain separated by <code>.</code>) must not exceed 63 characters.</li>
+<li>Address must match standard email address pattern:
+<code>^[a-zA-Z0-9](\.?[-_a-zA-Z0-9])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$</code>.</li>
+</ul></li>
+</ul>
+
+                        <a href="Structs/InternetMessageFormatHeader.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">InternetMessageFormatHeader</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail10ListOutputV"></a>
                     <a name="//apple_ref/swift/Struct/ListOutput" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail10ListOutputV">ListOutput</a>
@@ -1204,7 +1314,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-04-08)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-04-11)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

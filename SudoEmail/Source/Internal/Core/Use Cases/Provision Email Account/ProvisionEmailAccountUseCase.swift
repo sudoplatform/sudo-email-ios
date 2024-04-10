@@ -54,10 +54,13 @@ class ProvisionEmailAccountUseCase {
     ///   - sudoId: Identifier of the sudo to provision the email account to.
     /// - Returns: A newly created email account.
     func execute(emailAddress: EmailAddressEntity, ownershipProofToken: String) async throws -> EmailAccountEntity {
-        let publicKey: KeyEntity
+        var publicKey: KeyEntity
         do {
-            if self.keyId != nil {
-                publicKey = try keyWorker.getPublicKeyWithId(keyId: self.keyId!)
+            if let keyId = self.keyId {
+                guard let pubKey = try keyWorker.getPublicKeyWithId(keyId: keyId) else {
+                    throw SudoEmailError.keyNotFound
+                }
+                publicKey = pubKey
             } else {
                 let keyPair = try keyWorker.generateKeyPair()
                 publicKey = keyPair.publicKey

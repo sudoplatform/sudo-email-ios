@@ -535,6 +535,121 @@ internal struct S3EmailObjectInput: GraphQLMapConvertible {
   }
 }
 
+internal struct SendEncryptedEmailMessageInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(clientRefId: Optional<String?> = nil, emailAddressId: GraphQLID, message: S3EmailObjectInput, rfc822Header: Rfc822HeaderInput) {
+    graphQLMap = ["clientRefId": clientRefId, "emailAddressId": emailAddressId, "message": message, "rfc822Header": rfc822Header]
+  }
+
+  internal var clientRefId: Optional<String?> {
+    get {
+      return graphQLMap["clientRefId"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "clientRefId")
+    }
+  }
+
+  internal var emailAddressId: GraphQLID {
+    get {
+      return graphQLMap["emailAddressId"] as! GraphQLID
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var message: S3EmailObjectInput {
+    get {
+      return graphQLMap["message"] as! S3EmailObjectInput
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "message")
+    }
+  }
+
+  internal var rfc822Header: Rfc822HeaderInput {
+    get {
+      return graphQLMap["rfc822Header"] as! Rfc822HeaderInput
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "rfc822Header")
+    }
+  }
+}
+
+internal struct Rfc822HeaderInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(bcc: [String], cc: [String], from: String, hasAttachments: Optional<Bool?> = nil, replyTo: [String], subject: Optional<String?> = nil, to: [String]) {
+    graphQLMap = ["bcc": bcc, "cc": cc, "from": from, "hasAttachments": hasAttachments, "replyTo": replyTo, "subject": subject, "to": to]
+  }
+
+  internal var bcc: [String] {
+    get {
+      return graphQLMap["bcc"] as! [String]
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "bcc")
+    }
+  }
+
+  internal var cc: [String] {
+    get {
+      return graphQLMap["cc"] as! [String]
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "cc")
+    }
+  }
+
+  internal var from: String {
+    get {
+      return graphQLMap["from"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "from")
+    }
+  }
+
+  internal var hasAttachments: Optional<Bool?> {
+    get {
+      return graphQLMap["hasAttachments"] as! Optional<Bool?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "hasAttachments")
+    }
+  }
+
+  internal var replyTo: [String] {
+    get {
+      return graphQLMap["replyTo"] as! [String]
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "replyTo")
+    }
+  }
+
+  internal var subject: Optional<String?> {
+    get {
+      return graphQLMap["subject"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "subject")
+    }
+  }
+
+  internal var to: [String] {
+    get {
+      return graphQLMap["to"] as! [String]
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "to")
+    }
+  }
+}
+
 internal struct UpdateEmailMessagesInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
@@ -2790,6 +2905,48 @@ internal final class SendEmailMessageMutation: GraphQLMutation {
       }
       set {
         snapshot.updateValue(newValue, forKey: "sendEmailMessage")
+      }
+    }
+  }
+}
+
+internal final class SendEncryptedEmailMessageMutation: GraphQLMutation {
+  internal static let operationString =
+    "mutation SendEncryptedEmailMessage($input: SendEncryptedEmailMessageInput!) {\n  sendEncryptedEmailMessage(input: $input)\n}"
+
+  internal var input: SendEncryptedEmailMessageInput
+
+  internal init(input: SendEncryptedEmailMessageInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Mutation"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("sendEncryptedEmailMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.scalar(GraphQLID.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(sendEncryptedEmailMessage: GraphQLID) {
+      self.init(snapshot: ["__typename": "Mutation", "sendEncryptedEmailMessage": sendEncryptedEmailMessage])
+    }
+
+    internal var sendEncryptedEmailMessage: GraphQLID {
+      get {
+        return snapshot["sendEncryptedEmailMessage"]! as! GraphQLID
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "sendEncryptedEmailMessage")
       }
     }
   }
