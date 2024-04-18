@@ -65,6 +65,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     let emailMessageUnsealerServiceService: EmailMessageUnsealerService
 
     let emailCryptoService: EmailCryptoService
+    
+    let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
     // MARK: - Lifecycle
 
@@ -133,6 +135,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         // Setup Services
         let emailMessageUnsealerServiceService = DefaultEmailMessageUnsealerService(deviceKeyWorker: deviceKeyWorker)
         let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: deviceKeyWorker)
+        let rfc822MessageDataProcessor = Rfc822MessageDataProcessor()
         self.init(
             keyNamespace: keyNamespace,
             graphQLClient: graphQLClient,
@@ -146,7 +149,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailCryptoService: emailCryptoService,
             deviceKeyWorker: deviceKeyWorker,
             awsS3Worker: awsS3Worker,
-            blockedAddressRepository: blockedAddressRepository
+            blockedAddressRepository: blockedAddressRepository,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
     }
 
@@ -168,7 +172,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         deviceKeyWorker: DeviceKeyWorker,
         awsS3Worker: AWSS3Worker & Resetable,
         logger: Logger = .emailSDKLogger,
-        blockedAddressRepository: BlockedAddressRepository & Resetable
+        blockedAddressRepository: BlockedAddressRepository & Resetable,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) {
         self.graphQLClient = graphQLClient
         self.userClient = userClient
@@ -184,6 +189,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.deviceKeyWorker = deviceKeyWorker
         self.awsS3Worker = awsS3Worker
         self.blockedAddressRepository = blockedAddressRepository
+        self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
     }
 
     public func reset() throws {
@@ -237,7 +243,9 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository,
-            emailCryptoService: emailCryptoService
+            emailCryptoService: emailCryptoService,
+            emailConfigDataRepository: emailConfigurationDataRepository,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
         let emailMessageId = try await useCase.execute(withInput: input)
         return emailMessageId
@@ -515,7 +523,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let useCase = useCaseFactory.generateGetEmailMessageWithBodyUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerServiceService,
-            emailCryptoService: emailCryptoService
+            emailCryptoService: emailCryptoService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
         return try await useCase.execute(withInput: input)
     }

@@ -7,6 +7,13 @@
 import Foundation
 import MailCore
 
+
+let EMAIL_HEADER_NAME_ENCRYPTION = "X-Sudoplatform-Encryption"
+let PLATFORM_ENCRYPTION = "sudoplatform"
+let CANNED_TEXT_BODY = "Encrypted message attached"
+
+let ENCODED_WORD_REGEX_PATTERN = "(?:=\\?([\\w-]+)\\?([A-Z])\\?([a-zA-Z0-9+\\/=_]*)\\?=)"
+
 /// A class which handles the parsing of RFC822 compliant email messages in the Platform SDK
 class Rfc822MessageDataProcessor {
     struct EmailMessageDetails {
@@ -22,14 +29,6 @@ class Rfc822MessageDataProcessor {
         var encryptionStatus: EncryptionStatus = EncryptionStatus.UNENCRYPTED
     }
     
-    // MARK: - Properties
-    
-    static let EMAIL_HEADER_NAME_ENCRYPTION = "X-Sudoplatform-Encryption"
-    static let PLATFORM_ENCRYPTION = "sudoplatform"
-    static let CANNED_TEXT_BODY = "Encrypted message attached"
-    
-    static let ENCODED_WORD_REGEX_PATTERN = "(?:=\\?([\\w-]+)\\?([A-Z])\\?([a-zA-Z0-9+\\/=_]*)\\?=)"
-    
     // MARK: - Rfc822MessageDataProcessor
     
     
@@ -37,8 +36,8 @@ class Rfc822MessageDataProcessor {
     /// - Parameters:
     ///   - message: The email to be encoded
     /// - Returns: The encoded email as RFC822 data
-    static func encodeToInternetMessageData(message: EmailMessageDetails) throws -> Data {
-        let resultStr = try Rfc822MessageDataProcessor.encodeToInternetMessageDataStr(message: message)
+    func encodeToInternetMessageData(message: EmailMessageDetails) throws -> Data {
+        let resultStr = try self.encodeToInternetMessageDataStr(message: message)
         return resultStr.data(using: .utf8)!
     }
     
@@ -46,7 +45,7 @@ class Rfc822MessageDataProcessor {
     /// - Parameters:
     ///   - message: The email to be encoded
     /// - Returns: The encoded email as a string
-    static func encodeToInternetMessageDataStr(message: EmailMessageDetails) throws -> String {
+    func encodeToInternetMessageDataStr(message: EmailMessageDetails) throws -> String {
         let builder = MCOMessageBuilder()
         
         builder.header.from = MCOAddress(
@@ -130,10 +129,10 @@ class Rfc822MessageDataProcessor {
             throw SudoEmailError.internalError("No data encoded")
         }
 
-        return try Rfc822MessageDataProcessor.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
+        return try self.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
     }
 
-    static func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
+    func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
         let parser = MCOMessageParser(data: input.data(using: .utf8))
         
         if(parser == nil) {
@@ -209,7 +208,7 @@ class Rfc822MessageDataProcessor {
     /// - Parameters:
     ///   - input: The string value of the RFC822 encoded message as output from MailCore2
     /// - Returns: The string value with any Encoded-Words decoded
-    private static func decodeEncodedWords(input: String) throws -> String {
+    private func decodeEncodedWords(input: String) throws -> String {
         var processed = input
         let regex = try NSRegularExpression(
             pattern: ENCODED_WORD_REGEX_PATTERN
@@ -252,7 +251,7 @@ class Rfc822MessageDataProcessor {
                     )
                     break
                 case "Q": //Q-Encoded
-                    let decoded = try Rfc822MessageDataProcessor.decodeQEncoding(
+                    let decoded = try self.decodeQEncoding(
                         encodedString: String(value)
                     )
                     processed = processed.replacingOccurrences(of: group, with: decoded)
@@ -269,7 +268,7 @@ class Rfc822MessageDataProcessor {
     
     /// This decodes Q-Encoded values such as `=F0=9F=A4=94` which
     /// decodes to 🤔
-    private static func decodeQEncoding(encodedString: String) throws -> String {
+    private func decodeQEncoding(encodedString: String) throws -> String {
         var decodedString = ""
         // Remove underscores that replace spaces. Will add them back later
         let components = encodedString.components(separatedBy: "_")

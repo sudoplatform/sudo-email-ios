@@ -27,6 +27,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case keyAttachmentsNotFound
     /// No body attachment was found on message body.
     case bodyAttachmentNotFound
+    /// Email message size exceeds configured maximum
+    case messageSizeLimitExceeded(_ msg: String?)
 
     // MARK: - Service
 
@@ -185,6 +187,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return msg ?? "Unexpected API operation error"
         case .invalidKeyArchive:
             return "The imported key archive is invalid"
+        case let .messageSizeLimitExceeded(msg):
+            return msg ?? "Email message size exceeded"
         }
     }
 }

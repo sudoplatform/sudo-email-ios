@@ -46,9 +46,17 @@ class UseCaseFactory {
     func generateSendEmailMessageUseCase(
         emailMessageRepository: EmailMessageRepository,
         emailAccountRepository: EmailAccountRepository,
-        emailCryptoService: EmailCryptoService
+        emailCryptoService: EmailCryptoService,
+        emailConfigDataRepository: EmailConfigurationDataRepository,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) -> SendEmailMessageUseCase {
-        return SendEmailMessageUseCase(emailMessageRepository: emailMessageRepository, emailAccountRepository: emailAccountRepository, emailCryptoService: emailCryptoService)
+        return SendEmailMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository,
+            emailCryptoService: emailCryptoService,
+            emailConfigDataRepository: emailConfigDataRepository,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
+        )
     }
 
     func generateDeleteEmailMessagesUseCase(emailMessageRepository: EmailMessageRepository) -> DeleteEmailMessagesUseCase {
@@ -232,12 +240,14 @@ class UseCaseFactory {
     func generateGetEmailMessageWithBodyUseCase(
         emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService,
-        emailCryptoService: EmailCryptoService
+        emailCryptoService: EmailCryptoService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) -> GetEmailMessageWithBodyUseCase {
         return GetEmailMessageWithBodyUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService,
-            emailCryptoService: emailCryptoService
+            emailCryptoService: emailCryptoService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
     }
 

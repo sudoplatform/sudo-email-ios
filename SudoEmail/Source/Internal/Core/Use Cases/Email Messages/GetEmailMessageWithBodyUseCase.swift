@@ -14,6 +14,8 @@ class GetEmailMessageWithBodyUseCase {
     let emailMessageUnsealerService: EmailMessageUnsealerService
 
     let emailCryptoService: EmailCryptoService
+    
+    let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
     // MARK: - Lifecycle
 
@@ -21,11 +23,13 @@ class GetEmailMessageWithBodyUseCase {
     init(
         emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService,
-        emailCryptoService: EmailCryptoService
+        emailCryptoService: EmailCryptoService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) {
         self.emailMessageRepository = emailMessageRepository
         self.emailMessageUnsealerService = emailMessageUnsealerService
         self.emailCryptoService = emailCryptoService
+        self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
     }
 
     // MARK: - Methods
@@ -73,7 +77,7 @@ class GetEmailMessageWithBodyUseCase {
             guard let decodedDataStr = String(data: decodedData, encoding: .utf8) else {
                 throw SudoEmailError.decodingError
             }
-            var parsedMessage = try Rfc822MessageDataProcessor.decodeInternetMessageData(input: decodedDataStr)
+            var parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: decodedDataStr)
 
             if emailMessage.encryptionStatus == EncryptionStatus.ENCRYPTED {
                 let keyExchangeAttachmentTypeValues = SecureEmailAttachmentType.KEY_EXCHANGE.getValues()
@@ -107,7 +111,7 @@ class GetEmailMessageWithBodyUseCase {
                 guard let unencryptedMessageStr = String(data: unencryptedMessageData, encoding: .utf8) else {
                     throw SudoEmailError.decodingError
                 }
-                parsedMessage = try Rfc822MessageDataProcessor.decodeInternetMessageData(input: unencryptedMessageStr)
+                parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: unencryptedMessageStr)
             }
 
             return EmailMessageWithBody(

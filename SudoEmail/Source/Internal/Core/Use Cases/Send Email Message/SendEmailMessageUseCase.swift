@@ -19,6 +19,11 @@ class SendEmailMessageUseCase {
 
     /// Email Crypto Service used to send email messages with E2E encryption.
     let emailCryptoService: EmailCryptoService
+    
+    /// Email Configuration Data Repository used to get runtime configurations.
+    let emailConfigDataRepository: EmailConfigurationDataRepository
+    
+    let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
     /// Logs diagnostic and error information.
     var logger: Logger
@@ -26,10 +31,19 @@ class SendEmailMessageUseCase {
     // MARK: - Lifecycle
 
     /// Initialize an instance of `SendEmailMessageUseCase`.
-    init(emailMessageRepository: EmailMessageRepository, emailAccountRepository: EmailAccountRepository, emailCryptoService: EmailCryptoService, logger: Logger = .emailSDKLogger) {
+    init(
+        emailMessageRepository: EmailMessageRepository,
+        emailAccountRepository: EmailAccountRepository,
+        emailCryptoService: EmailCryptoService,
+        emailConfigDataRepository: EmailConfigurationDataRepository,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
+        logger: Logger = .emailSDKLogger
+    ) {
         self.emailMessageRepository = emailMessageRepository
         self.emailAccountRepository = emailAccountRepository
         self.emailCryptoService = emailCryptoService
+        self.emailConfigDataRepository = emailConfigDataRepository
+        self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
         self.logger = logger
     }
 
@@ -64,7 +78,7 @@ class SendEmailMessageUseCase {
                 inlineAttachments: inlineAttachments,
                 encryptionStatus: encryptionStatus
             )
-            return try Rfc822MessageDataProcessor.encodeToInternetMessageData(message: rfc822DataProperties)
+            return try rfc822MessageDataProcessor.encodeToInternetMessageData(message: rfc822DataProperties)
         }
 
         let isInNetworkAddresses = allRecipients.allSatisfy { recipient in
@@ -72,6 +86,8 @@ class SendEmailMessageUseCase {
                 info.emailAddress == recipient
             }
         }
+        
+        let config = try await emailConfigDataRepository.getConfigurationData()
 
         if isInNetworkAddresses {
             // Process encrypted email message
@@ -85,6 +101,11 @@ class SendEmailMessageUseCase {
             // Encode the RFC 822 data with the secureAttachments
             let encryptedRfc822Data = try buildMessageData(attachments: secureAttachments, encryptionStatus: encryptionStatus)
 
+            if (encryptedRfc822Data.count > config.emailMessageMaxOutboundMessageSize) {
+                logger.error("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes. Message size: \(encryptedRfc822Data.count)")
+                throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes")
+            }
+
             return try await emailMessageRepository.sendEmailMessage(
                 withRFC822Data: encryptedRfc822Data,
                 emailAccountId: senderEmailAddressId,
@@ -95,6 +116,11 @@ class SendEmailMessageUseCase {
             // Process non-encrypted email message
             let encryptionStatus = EncryptionStatus.UNENCRYPTED
             let rfc822Data = try buildMessageData(attachments: attachments, encryptionStatus: encryptionStatus)
+            
+            if (rfc822Data.count > config.emailMessageMaxOutboundMessageSize) {
+                logger.error("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
+                throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes")
+            }
 
             return try await emailMessageRepository.sendEmailMessage(
                 withRFC822Data: rfc822Data,

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -391,6 +391,7 @@
 		9F372BAF2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BAE2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift */; };
 		9F372BB12B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */; };
 		9F372BB32B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */; };
+		9F6CA8442BCF613100FFC871 /* MockRfc822MessageDataProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6CA8432BCF613100FFC871 /* MockRfc822MessageDataProcessor.swift */; };
 		9F7ADB602B6CB0E700532663 /* MockBlockedAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7ADB5F2B6CB0E700532663 /* MockBlockedAddressRepository.swift */; };
 		9F85E1CD2B7191B400C70AF1 /* GetEmailAddressBlocklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F85E1CC2B7191B400C70AF1 /* GetEmailAddressBlocklistUseCase.swift */; };
 		9F85E1CF2B71966500C70AF1 /* MockGetEmailAddressBlocklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F85E1CE2B71966500C70AF1 /* MockGetEmailAddressBlocklistUseCase.swift */; };
@@ -871,6 +872,7 @@
 		9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesUseCaseTests.swift; sourceTree = "<group>"; };
 		9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesTests.swift; sourceTree = "<group>"; };
 		9F4B49DA79855B984059C2EB /* Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
+		9F6CA8432BCF613100FFC871 /* MockRfc822MessageDataProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRfc822MessageDataProcessor.swift; sourceTree = "<group>"; };
 		9F7ADB5F2B6CB0E700532663 /* MockBlockedAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBlockedAddressRepository.swift; sourceTree = "<group>"; };
 		9F85E1CC2B7191B400C70AF1 /* GetEmailAddressBlocklistUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEmailAddressBlocklistUseCase.swift; sourceTree = "<group>"; };
 		9F85E1CE2B71966500C70AF1 /* MockGetEmailAddressBlocklistUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGetEmailAddressBlocklistUseCase.swift; sourceTree = "<group>"; };
@@ -1048,6 +1050,7 @@
 				844D99342497301300B942F2 /* MockEmailMessageUnsealerService.swift */,
 				84269C48233C4EC300BF13D6 /* MockGraphQL.swift */,
 				8409EC7523D51FAD00553022 /* MockKeyManager.swift */,
+				9F6CA8432BCF613100FFC871 /* MockRfc822MessageDataProcessor.swift */,
 				84F6529A24A972C7009EDD3A /* MockSubscriptionManager.swift */,
 				849AF01F24A2CF65005CFA2E /* MockSubscriptionToken.swift */,
 				84B2603424887A6300E99401 /* MockUseCaseFactory.swift */,
@@ -3032,6 +3035,7 @@
 				0C4C09B82B95317200A82096 /* MockListEmailMessagesUseCase.swift in Sources */,
 				51A4567A2B51139D0097DFF6 /* MockLookupEmailAddressesPublicInfoUseCase.swift in Sources */,
 				84B2603724887ADB00E99401 /* MockProvisionEmailAccountUseCase.swift in Sources */,
+				9F6CA8442BCF613100FFC871 /* MockRfc822MessageDataProcessor.swift in Sources */,
 				84B260B4248F250900E99401 /* MockSendEmailMessageUseCase.swift in Sources */,
 				849AF01E24A2CE80005CFA2E /* MockSubscribeToEmailMessageCreatedUseCase.swift in Sources */,
 				84A4561524B6C9F1002DBF0D /* MockSubscribeToEmailMessageDeletedUseCase.swift in Sources */,
