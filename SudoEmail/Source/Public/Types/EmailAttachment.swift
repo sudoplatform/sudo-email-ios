@@ -11,19 +11,19 @@ public struct EmailAttachment: Hashable, Equatable {
     // MARK: - Properties
 
     /// The name of the email attachment file.
-    var filename: String
+    public let filename: String
     
     /// Identifier used to identify an attachment within an email body.
-    var contentId: String?
+    public let contentId: String?
     
     /// The type of content that is attached.
-    var mimetype: String
+    public let mimetype: String
     
     /// Flag indicating whether this is an inline attachment or not.
-    var inlineAttachment: Bool
+    public let inlineAttachment: Bool
     
     /// The email attachment data as a base64 encoded string.
-    var data: String
+    public let data: String
 
     /// Instantiate an instance of `EmailAttachment`.
     public init(filename: String, contentId: String? = nil, mimetype: String, inlineAttachment: Bool, data: String) {
