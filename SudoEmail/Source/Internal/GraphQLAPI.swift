@@ -1938,6 +1938,7 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
         GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
         GraphQLField("alias", type: .object(Alias.selections)),
         GraphQLField("folders", type: .nonNull(.list(.nonNull(.object(Folder.selections))))),
       ]
@@ -1948,8 +1949,8 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil, folders: [Folder]) {
-        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil, folders: [Folder]) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
       }
 
       internal var __typename: String {
@@ -2066,6 +2067,15 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "size")
+        }
+      }
+
+      internal var numberOfEmailMessages: Int {
+        get {
+          return snapshot["numberOfEmailMessages"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
         }
       }
 
@@ -2525,6 +2535,7 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
         GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
         GraphQLField("alias", type: .object(Alias.selections)),
       ]
 
@@ -2534,8 +2545,8 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil) {
-        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }])
       }
 
       internal var __typename: String {
@@ -2652,6 +2663,15 @@ internal final class DeprovisionEmailAddressMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "size")
+        }
+      }
+
+      internal var numberOfEmailMessages: Int {
+        get {
+          return snapshot["numberOfEmailMessages"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
         }
       }
 
@@ -3857,6 +3877,7 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
         GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
         GraphQLField("alias", type: .object(Alias.selections)),
         GraphQLField("folders", type: .nonNull(.list(.nonNull(.object(Folder.selections))))),
       ]
@@ -3867,8 +3888,8 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil, folders: [Folder]) {
-        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil, folders: [Folder]) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
       }
 
       internal var __typename: String {
@@ -3985,6 +4006,15 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "size")
+        }
+      }
+
+      internal var numberOfEmailMessages: Int {
+        get {
+          return snapshot["numberOfEmailMessages"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
         }
       }
 
@@ -4491,6 +4521,7 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
           GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
           GraphQLField("alias", type: .object(Alias.selections)),
           GraphQLField("folders", type: .nonNull(.list(.nonNull(.object(Folder.selections))))),
         ]
@@ -4501,8 +4532,8 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil, folders: [Folder]) {
-          self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil, folders: [Folder]) {
+          self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
         }
 
         internal var __typename: String {
@@ -4619,6 +4650,15 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "size")
+          }
+        }
+
+        internal var numberOfEmailMessages: Int {
+          get {
+            return snapshot["numberOfEmailMessages"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
           }
         }
 
@@ -5126,6 +5166,7 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
           GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
           GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
           GraphQLField("alias", type: .object(Alias.selections)),
           GraphQLField("folders", type: .nonNull(.list(.nonNull(.object(Folder.selections))))),
         ]
@@ -5136,8 +5177,8 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil, folders: [Folder]) {
-          self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil, folders: [Folder]) {
+          self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
         }
 
         internal var __typename: String {
@@ -5254,6 +5295,15 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "size")
+          }
+        }
+
+        internal var numberOfEmailMessages: Int {
+          get {
+            return snapshot["numberOfEmailMessages"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
           }
         }
 
@@ -8796,6 +8846,7 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
         GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
         GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
         GraphQLField("alias", type: .object(Alias.selections)),
         GraphQLField("folders", type: .nonNull(.list(.nonNull(.object(Folder.selections))))),
       ]
@@ -8806,8 +8857,8 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil, folders: [Folder]) {
-        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil, folders: [Folder]) {
+        self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
       }
 
       internal var __typename: String {
@@ -8924,6 +8975,15 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "size")
+        }
+      }
+
+      internal var numberOfEmailMessages: Int {
+        get {
+          return snapshot["numberOfEmailMessages"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
         }
       }
 
@@ -11325,7 +11385,7 @@ internal struct GetEmailAddressBlocklistResponse: GraphQLFragment {
 
 internal struct EmailAddressWithoutFolders: GraphQLFragment {
   internal static let fragmentString =
-    "fragment EmailAddressWithoutFolders on EmailAddress {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  identityId\n  keyRingId\n  keyIds\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  lastReceivedAtEpochMs\n  emailAddress\n  size\n  alias {\n    __typename\n    ...SealedAttribute\n  }\n}"
+    "fragment EmailAddressWithoutFolders on EmailAddress {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  identityId\n  keyRingId\n  keyIds\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  lastReceivedAtEpochMs\n  emailAddress\n  size\n  numberOfEmailMessages\n  alias {\n    __typename\n    ...SealedAttribute\n  }\n}"
 
   internal static let possibleTypes = ["EmailAddress"]
 
@@ -11343,6 +11403,7 @@ internal struct EmailAddressWithoutFolders: GraphQLFragment {
     GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
     GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
     GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+    GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
     GraphQLField("alias", type: .object(Alias.selections)),
   ]
 
@@ -11352,8 +11413,8 @@ internal struct EmailAddressWithoutFolders: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil) {
-    self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }])
+  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil) {
+    self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }])
   }
 
   internal var __typename: String {
@@ -11470,6 +11531,15 @@ internal struct EmailAddressWithoutFolders: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "size")
+    }
+  }
+
+  internal var numberOfEmailMessages: Int {
+    get {
+      return snapshot["numberOfEmailMessages"]! as! Int
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
     }
   }
 
@@ -11641,6 +11711,7 @@ internal struct EmailAddress: GraphQLFragment {
     GraphQLField("lastReceivedAtEpochMs", type: .scalar(Double.self)),
     GraphQLField("emailAddress", type: .nonNull(.scalar(String.self))),
     GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+    GraphQLField("numberOfEmailMessages", type: .nonNull(.scalar(Int.self))),
     GraphQLField("alias", type: .object(Alias.selections)),
     GraphQLField("folders", type: .nonNull(.list(.nonNull(.object(Folder.selections))))),
   ]
@@ -11651,8 +11722,8 @@ internal struct EmailAddress: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, alias: Alias? = nil, folders: [Folder]) {
-    self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
+  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, keyRingId: GraphQLID, keyIds: [String], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, lastReceivedAtEpochMs: Double? = nil, emailAddress: String, size: Double, numberOfEmailMessages: Int, alias: Alias? = nil, folders: [Folder]) {
+    self.init(snapshot: ["__typename": "EmailAddress", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "keyRingId": keyRingId, "keyIds": keyIds, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "lastReceivedAtEpochMs": lastReceivedAtEpochMs, "emailAddress": emailAddress, "size": size, "numberOfEmailMessages": numberOfEmailMessages, "alias": alias.flatMap { $0.snapshot }, "folders": folders.map { $0.snapshot }])
   }
 
   internal var __typename: String {
@@ -11769,6 +11840,15 @@ internal struct EmailAddress: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "size")
+    }
+  }
+
+  internal var numberOfEmailMessages: Int {
+    get {
+      return snapshot["numberOfEmailMessages"]! as! Int
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "numberOfEmailMessages")
     }
   }
 

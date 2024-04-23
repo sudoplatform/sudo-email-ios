@@ -33,6 +33,9 @@ struct EmailAccountEntity: Equatable {
     /// The total size in bytes of all email messages assigned to the email account.
     var size: Double
 
+    /// The total number of email messages assigned to the email account
+    var numberOfEmailMessages: Int
+
     /// Version of this entity, increments on update.
     var version: Int
 

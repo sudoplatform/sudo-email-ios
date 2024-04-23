@@ -37,6 +37,9 @@ public struct EmailAddress: Equatable {
     /// The total size, in bytes, of all email messages assigned to the email address.
     public let size: Double
 
+    /// The total number of email messages assigned to the email address.
+    public let numberOfEmailMessages: Int
+
     /// Version of this entity, increments on update.
     public let version: Int
 
@@ -63,6 +66,7 @@ public struct EmailAddress: Equatable {
         emailAddress: String,
         folders: [EmailFolder],
         size: Double,
+        numberOfEmailMessages: Int,
         version: Int,
         createdAt: Date,
         updatedAt: Date,
@@ -78,6 +82,7 @@ public struct EmailAddress: Equatable {
         self.emailAddress = emailAddress
         self.folders = folders
         self.size = size
+        self.numberOfEmailMessages = numberOfEmailMessages
         self.version = version
         self.createdAt = createdAt
         self.updatedAt = updatedAt

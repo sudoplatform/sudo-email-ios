@@ -35,6 +35,7 @@ struct EmailAddressAPITransformer {
         let emailAddress = entity.emailAddress.emailAddress
         let folders = entity.folders.map(folderTransformer.transform(_:))
         let size = entity.size
+        let numberOfEmailMessages = entity.numberOfEmailMessages
         let version = entity.version
         let createdAt = entity.createdAt
         let updatedAt = entity.updatedAt
@@ -49,6 +50,7 @@ struct EmailAddressAPITransformer {
             emailAddress: emailAddress,
             folders: folders,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,

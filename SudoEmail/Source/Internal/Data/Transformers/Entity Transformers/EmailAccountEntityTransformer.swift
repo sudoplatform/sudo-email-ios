@@ -46,6 +46,7 @@ struct EmailAccountEntityTransformer {
             alias: unsealedAlias
         )
         let size = graphQLEmail.size
+        let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
         let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
@@ -62,6 +63,7 @@ struct EmailAccountEntityTransformer {
             keyIds: keyIds,
             emailAddress: emailAddress,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -92,6 +94,7 @@ struct EmailAccountEntityTransformer {
             alias: unsealedAlias
         )
         let size = graphQLEmail.size
+        let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
@@ -107,6 +110,7 @@ struct EmailAccountEntityTransformer {
             keyIds: keyIds,
             emailAddress: emailAddress,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -136,6 +140,7 @@ struct EmailAccountEntityTransformer {
             alias: unsealedAlias
         )
         let size = graphQLEmail.size
+        let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
         let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
@@ -152,6 +157,7 @@ struct EmailAccountEntityTransformer {
             keyIds: keyIds,
             emailAddress: emailAddress,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -181,6 +187,7 @@ struct EmailAccountEntityTransformer {
             alias: unsealedAlias
         )
         let size = graphQLEmail.size
+        let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
         let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
@@ -195,6 +202,7 @@ struct EmailAccountEntityTransformer {
             keyIds: keyIds,
             emailAddress: emailAddress,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -226,6 +234,7 @@ struct EmailAccountEntityTransformer {
             alias: unsealedAlias
         )
         let size = graphQLEmail.size
+        let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
         let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
@@ -240,6 +249,7 @@ struct EmailAccountEntityTransformer {
             keyIds: keyIds,
             emailAddress: emailAddress,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -259,6 +269,7 @@ struct EmailAccountEntityTransformer {
         let emailAddress = emailAccountEntity.emailAddress.emailAddress
         let folders = emailAccountEntity.folders.map(folderTransformer.transform(_:))
         let size = emailAccountEntity.size
+        let numberOfEmailMessages = emailAccountEntity.numberOfEmailMessages
         let version = emailAccountEntity.version
         let createdAt = emailAccountEntity.createdAt
         let updatedAt = emailAccountEntity.updatedAt
@@ -273,6 +284,7 @@ struct EmailAccountEntityTransformer {
             emailAddress: emailAddress,
             folders: folders,
             size: size,
+            numberOfEmailMessages: numberOfEmailMessages,
             version: version,
             createdAt: createdAt,
             updatedAt: updatedAt,
