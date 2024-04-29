@@ -250,6 +250,42 @@ class UseCaseFactory {
             rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
     }
+    
+    func generateListDraftEmailMessagesUseCase(
+        emailAccountRepository: EmailAccountRepository,
+        emailMessageRepository: EmailMessageRepository
+    ) -> ListDraftEmailMessagesUseCase {
+        return ListDraftEmailMessagesUseCase(
+            emailAccountRepository: emailAccountRepository,
+            emailMessageRepository: emailMessageRepository
+        )
+    }
+    
+    func generateListDraftEmailMessagesForEmailAddressIdUseCase(
+        emailMessageRepository: EmailMessageRepository
+    ) -> ListDraftEmailMessagesForEmailAddressIdUseCase {
+        return ListDraftEmailMessagesForEmailAddressIdUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+    }
+    
+    func generateListDraftEmailMessageMetadataUseCase(
+        emailAccountRepository: EmailAccountRepository,
+        emailMessageRepository: EmailMessageRepository
+    ) -> ListDraftEmailMessageMetadataUseCase {
+        return ListDraftEmailMessageMetadataUseCase(
+            emailAccountRepository: emailAccountRepository,
+            emailMessageRepository: emailMessageRepository
+        )
+    }
+    
+    func generateListDraftEmailMessageMetadataForEmailAddressIdUseCase(
+        emailMessageRepository: EmailMessageRepository
+    ) -> ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
+        return ListDraftEmailMessageMetadataForEmailAddressIdUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+    }
 
     func generateGetDraftEmailMessageUseCase(
         emailMessageRepository: EmailMessageRepository
@@ -257,12 +293,6 @@ class UseCaseFactory {
         return GetDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository
         )
-    }
-
-    func generateListDraftEmailMessageMetadataUseCase(
-        emailMessageRepository: EmailMessageRepository
-    ) -> ListDraftEmailMessageMetadataUseCase {
-        return ListDraftEmailMessageMetadataUseCase(emailMessageRepository: emailMessageRepository)
     }
 
     func generateGetConfigurationDataUseCase(

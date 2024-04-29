@@ -116,12 +116,12 @@ protocol EmailMessageRepository: AnyObject {
     ///  - Returns: true if the draft email message exists, false otherwise.
     func draftExists(id: String, emailAddressId: String) async throws -> Bool
 
-    /// List draft email message metadata
+    /// List draft email message metadata for the specified email address identifier.
     ///  - Parameters:
-    ///    - emailAddressId: Identifier of the email address that owns the draft email messages.
+    ///    - emailAddressId: Identifier of the email address associated with the draft email messages.
     ///  - Returns:
     ///    - A list of draft email message metadata. Will be empty if no draft messages found.
-    func listDraftsMetadata(emailAddressId: String) async throws -> [DraftEmailMessageMetadataEntity]
+    func listDraftsMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadataEntity]
 
     /// Subscribe to all sealed email messages created events.
     /// - Parameter direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be

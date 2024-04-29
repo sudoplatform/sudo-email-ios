@@ -20,16 +20,26 @@ public struct ConfigurationData: Equatable {
 
     /// The maximum allowed size of an outbound email message.
     public var emailMessageMaxOutboundMessageSize: Int
+    
+    /// The maximum number of recipients for an out-of-network email message.
+    public var emailMessageRecipientsLimit: Int
+    
+    /// The maximum number of recipients for an in-network encrypted email message.
+    public var encryptedEmailMessageRecipientsLimit: Int
 
     public init(
         deleteEmailMessagesLimit: Int,
         updateEmailMessagesLimit: Int,
         emailMessageMaxInboundMessageSize: Int,
-        emailMessageMaxOutboundMessageSize: Int
+        emailMessageMaxOutboundMessageSize: Int,
+        emailMessageRecipientsLimit: Int,
+        encryptedEmailMessageRecipientsLimit: Int
     ) {
         self.deleteEmailMessagesLimit = deleteEmailMessagesLimit
         self.updateEmailMessagesLimit = updateEmailMessagesLimit
         self.emailMessageMaxInboundMessageSize = emailMessageMaxInboundMessageSize
         self.emailMessageMaxOutboundMessageSize = emailMessageMaxOutboundMessageSize
+        self.emailMessageRecipientsLimit = emailMessageRecipientsLimit
+        self.encryptedEmailMessageRecipientsLimit = encryptedEmailMessageRecipientsLimit
     }
 }

@@ -17,7 +17,9 @@ struct EmailConfigurationDataEntityTransformer {
             deleteEmailMessagesLimit: graphQLConfigurationData.deleteEmailMessagesLimit,
             updateEmailMessagesLimit: graphQLConfigurationData.updateEmailMessagesLimit,
             emailMessageMaxInboundMessageSize: graphQLConfigurationData.emailMessageMaxInboundMessageSize,
-            emailMessageMaxOutboundMessageSize: graphQLConfigurationData.emailMessageMaxOutboundMessageSize
+            emailMessageMaxOutboundMessageSize: graphQLConfigurationData.emailMessageMaxOutboundMessageSize,
+            emailMessageRecipientsLimit: graphQLConfigurationData.emailMessageRecipientsLimit,
+            encryptedEmailMessageRecipientsLimit: graphQLConfigurationData.encryptedEmailMessageRecipientsLimit
         )
     }
 
@@ -27,7 +29,9 @@ struct EmailConfigurationDataEntityTransformer {
             deleteEmailMessagesLimit: emailConfigurationDataEntity.deleteEmailMessagesLimit,
             updateEmailMessagesLimit: emailConfigurationDataEntity.updateEmailMessagesLimit,
             emailMessageMaxInboundMessageSize: emailConfigurationDataEntity.emailMessageMaxInboundMessageSize,
-            emailMessageMaxOutboundMessageSize: emailConfigurationDataEntity.emailMessageMaxOutboundMessageSize
+            emailMessageMaxOutboundMessageSize: emailConfigurationDataEntity.emailMessageMaxOutboundMessageSize,
+            emailMessageRecipientsLimit: emailConfigurationDataEntity.emailMessageRecipientsLimit,
+            encryptedEmailMessageRecipientsLimit: emailConfigurationDataEntity.encryptedEmailMessageRecipientsLimit
         )
     }
 }

@@ -35,7 +35,7 @@ class DeleteDraftEmailMessagesUseCase {
             return BatchOperationResult<String>.success
         }
 
-        if input.ids.count > 10 {
+        if input.ids.count > deleteDraftsRequestLimit {
             throw SudoEmailError.limitExceeded
         }
 

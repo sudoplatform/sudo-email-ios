@@ -32,6 +32,10 @@ class CreateDraftEmailMessageUseCase {
             senderEmailAddressId: input.senderEmailAddressId,
             id: nil
         )
-        return DraftEmailMessageMetadata(id: metadata.id, updatedAt: metadata.updatedAt)
+        return DraftEmailMessageMetadata(
+            id: metadata.id,
+            emailAddressId: metadata.emailAddressId,
+            updatedAt: metadata.updatedAt
+        )
     }
 }

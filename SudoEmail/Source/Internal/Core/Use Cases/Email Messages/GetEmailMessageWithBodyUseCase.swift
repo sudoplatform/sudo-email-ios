@@ -88,7 +88,9 @@ class GetEmailMessageWithBodyUseCase {
                 parsedMessage.attachments?.forEach({ attachment in
                     let contentId = attachment.contentId ?? ""
                     let mimetype = attachment.mimetype
-                    let isKeyExchangeType = contentId.contains(keyExchangeAttachmentTypeValues.contentId) && mimetype.contains(keyExchangeAttachmentTypeValues.mimeType)
+                    let isKeyExchangeType = (contentId.contains(keyExchangeAttachmentTypeValues.contentId) ||
+                                             // Work around spelling error in legacy apps
+                                             contentId.contains("securekeyexhangedata@sudomail.com")) && mimetype.contains(keyExchangeAttachmentTypeValues.mimeType)
                     if isKeyExchangeType {
                         keyAttachments.insert(attachment)
                     } else {

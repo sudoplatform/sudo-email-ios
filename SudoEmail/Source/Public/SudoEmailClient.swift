@@ -17,6 +17,9 @@ public typealias SudoSubscriptionStatusChangeHandler = (PlatformSubscriptionStat
 /// Maximum number of items that can be deleted per request.
 public let deleteRequestLimit = 100
 
+/// Maximum number of draft messages that can be deleted per request.
+public let deleteDraftsRequestLimit = 10
+
 /// Client used to interface with the Sudo Email Platform service.
 ///
 /// It is recommended to code to this interface, rather than the implementation class (`DefaultSudoEmailClient`) as
@@ -262,6 +265,34 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - The data associated with the `EmailMessage` or null if the email message cannot be found.
     func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody?
+    
+    /// Lists the metadata and content of all draft email messages for the user.
+    ///
+    /// - Returns:
+    ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
+    func listDraftEmailMessages() async throws -> [DraftEmailMessage]
+    
+    /// Lists the metadata and content of all draft email messages for the specified email address identifier.
+    ///
+    /// - Parameters:
+    ///   - emailAddressId: The identifier of the email address associated with the draft email messages.
+    /// - Returns:
+    ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
+    func listDraftEmailMessagesForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessage]
+    
+    /// Lists the metadata of all draft messages for the user.
+    ///
+    /// - Returns:
+    ///   - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
+    func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata]
+    
+    /// Lists the metadata of all draft messages for the user.
+    ///
+    /// - Parameters:
+    ///   - emailAddressId: The identifier of the email address associated with the draft email messages.
+    /// - Returns:
+    ///   - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
+    func listDraftEmailMessageMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadata]
 
     /// Get a draft email message that has been saved previously.
     ///  - Parameters:
@@ -269,13 +300,6 @@ public protocol SudoEmailClient: AnyObject {
     ///  - Returns:
     ///    - The draft email message identified by id or undefined if not found.
     func getDraftEmailMessage(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage?
-
-    /// Get the list of draft email message metadata for the specified email address.
-    ///  - Parameters:
-    ///   - emailAddressId: The identifier of the email address associated with the draft email messages.
-    ///  - Returns:
-    ///    - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
-    func listDraftEmailMessageMetadata(emailAddressId: String) async throws -> [DraftEmailMessageMetadata]
 
     /// Get the configuration data for the email service.
     func getConfigurationData() async throws -> ConfigurationData

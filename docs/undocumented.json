@@ -219,8 +219,8 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/ConfigurationData.swift",
-      "line": 24,
-      "symbol": "ConfigurationData.init(deleteEmailMessagesLimit:updateEmailMessagesLimit:emailMessageMaxInboundMessageSize:emailMessageMaxOutboundMessageSize:)",
+      "line": 30,
+      "symbol": "ConfigurationData.init(deleteEmailMessagesLimit:updateEmailMessagesLimit:emailMessageMaxInboundMessageSize:emailMessageMaxOutboundMessageSize:emailMessageRecipientsLimit:encryptedEmailMessageRecipientsLimit:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
@@ -233,15 +233,15 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DraftEmailMessage.swift",
-      "line": 21,
-      "symbol": "DraftEmailMessage.init(id:updatedAt:rfc822Data:)",
+      "line": 24,
+      "symbol": "DraftEmailMessage.init(id:emailAddressId:updatedAt:rfc822Data:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/DraftEmailMessageMetadata.swift",
-      "line": 18,
-      "symbol": "DraftEmailMessageMetadata.init(id:updatedAt:)",
+      "line": 21,
+      "symbol": "DraftEmailMessageMetadata.init(id:emailAddressId:updatedAt:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },

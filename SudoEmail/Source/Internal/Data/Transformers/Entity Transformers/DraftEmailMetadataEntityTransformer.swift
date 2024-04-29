@@ -10,7 +10,7 @@ import AWSS3
 /// Utility class to transform data received from AWSS3 to the Core/Entity level of the SDK.
 struct DraftEmailMetadataEntityTransformer {
 
-    func transform(awsS3Object: AWSS3Object, s3KeyPrefix: String) throws -> DraftEmailMessageMetadataEntity {
+    func transform(awsS3Object: AWSS3Object, s3KeyPrefix: String, emailAddressId: String) throws -> DraftEmailMessageMetadataEntity {
         guard let key = awsS3Object.key else {
             throw SudoEmailError.internalError("draft email message has no id")
         }
@@ -19,6 +19,7 @@ struct DraftEmailMetadataEntityTransformer {
         }
         return DraftEmailMessageMetadataEntity(
             id: key.replacingOccurrences(of: s3KeyPrefix, with: ""),
+            emailAddressId: emailAddressId,
             updatedAt: updatedAt
         )
     }
@@ -26,6 +27,7 @@ struct DraftEmailMetadataEntityTransformer {
     func transform(_ entity: DraftEmailMessageMetadataEntity) -> DraftEmailMessageMetadata {
         return DraftEmailMessageMetadata(
             id: entity.id,
+            emailAddressId: entity.emailAddressId,
             updatedAt: entity.updatedAt
         )
     }

@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 11.0.0 Docs
+          SudoEmail 12.0.0 Docs
         </a>
         
       </p>
@@ -58,6 +58,9 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Global%20Variables.html">Global Variables</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Global%20Variables.html#/s:9SudoEmail24deleteDraftsRequestLimitSivp">deleteDraftsRequestLimit</a>
+              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Global%20Variables.html#/s:9SudoEmail18deleteRequestLimitSivp">deleteRequestLimit</a>
               </li>
@@ -1723,6 +1726,188 @@ Returns an empty list if no email messages can be found.</li>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0aB6ClientP09listDraftB8MessagesSayAA0eB7MessageVGyYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listDraftEmailMessages()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP09listDraftB8MessagesSayAA0eB7MessageVGyYaKF">listDraftEmailMessages()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Lists the metadata and content of all draft email messages for the user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listDraftEmailMessages</span><span class="p">()</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DraftEmailMessage.html">DraftEmailMessage</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>An array of draft email messages or an empty array if no matching draft email messages can be found.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP09listDraftb11MessagesForB9AddressId05emailhI0SayAA0eB7MessageVGSS_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listDraftEmailMessagesForEmailAddressId(emailAddressId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP09listDraftb11MessagesForB9AddressId05emailhI0SayAA0eB7MessageVGSS_tYaKF">listDraftEmailMessagesForEmailAddressId(emailAddressId:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Lists the metadata and content of all draft email messages for the specified email address identifier.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listDraftEmailMessagesForEmailAddressId</span><span class="p">(</span><span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DraftEmailMessage.html">DraftEmailMessage</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddressId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the email address associated with the draft email messages.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>An array of draft email messages or an empty array if no matching draft email messages can be found.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP09listDraftB15MessageMetadataSayAA0ebfG0VGyYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listDraftEmailMessageMetadata()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP09listDraftB15MessageMetadataSayAA0ebfG0VGyYaKF">listDraftEmailMessageMetadata()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Lists the metadata of all draft messages for the user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listDraftEmailMessageMetadata</span><span class="p">()</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DraftEmailMessageMetadata.html">DraftEmailMessageMetadata</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>An array of draft email message metadata or an empty array if no matching draft email messages can be found.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP09listDraftb18MessageMetadataForB9AddressId05emailiJ0SayAA0ebfG0VGSS_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listDraftEmailMessageMetadataForEmailAddressId(emailAddressId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP09listDraftb18MessageMetadataForB9AddressId05emailiJ0SayAA0ebfG0VGSS_tYaKF">listDraftEmailMessageMetadataForEmailAddressId(emailAddressId:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Lists the metadata of all draft messages for the user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listDraftEmailMessageMetadataForEmailAddressId</span><span class="p">(</span><span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DraftEmailMessageMetadata.html">DraftEmailMessageMetadata</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddressId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the email address associated with the draft email messages.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>An array of draft email message metadata or an empty array if no matching draft email messages can be found.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP08getDraftB7Message9withInputAA0ebF0VSgAA03GetebfH0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/getDraftEmailMessage(withInput:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP08getDraftB7Message9withInputAA0ebF0VSgAA03GetebfH0V_tYaKF">getDraftEmailMessage(withInput:<wbr>)</a>
@@ -1770,42 +1955,6 @@ Returns an empty list if no email messages can be found.</li>
                         <h4>Return Value</h4>
                         <p><ul>
 <li>The draft email message identified by id or undefined if not found.</li>
-</ul></p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9SudoEmail0aB6ClientP09listDraftB15MessageMetadata14emailAddressIdSayAA0ebfG0VGSS_tYaKF"></a>
-                    <a name="//apple_ref/swift/Method/listDraftEmailMessageMetadata(emailAddressId:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP09listDraftB15MessageMetadata14emailAddressIdSayAA0ebfG0VGSS_tYaKF">listDraftEmailMessageMetadata(emailAddressId:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Asynchronous
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Get the list of draft email message metadata for the specified email address.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listDraftEmailMessageMetadata</span><span class="p">(</span><span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DraftEmailMessageMetadata.html">DraftEmailMessageMetadata</a></span><span class="p">]</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><ul>
-<li>An array of draft email message metadata or an empty array if no matching draft email messages can be found.</li>
 </ul></p>
                       </div>
                     </section>
@@ -2271,7 +2420,7 @@ Failure - All addresses failed to be unblocked.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-04-23)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-04-29)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

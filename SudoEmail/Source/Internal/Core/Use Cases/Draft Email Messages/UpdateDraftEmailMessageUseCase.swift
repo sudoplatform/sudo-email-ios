@@ -43,6 +43,10 @@ class UpdateDraftEmailMessageUseCase {
             senderEmailAddressId: input.senderEmailAddressId,
             id: input.id
         )
-        return DraftEmailMessageMetadata(id: metadata.id, updatedAt: metadata.updatedAt)
+        return DraftEmailMessageMetadata(
+            id: metadata.id,
+            emailAddressId: metadata.emailAddressId,
+            updatedAt: metadata.updatedAt
+        )
     }
 }

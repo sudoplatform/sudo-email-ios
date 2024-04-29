@@ -528,6 +528,36 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         )
         return try await useCase.execute(withInput: input)
     }
+    
+    public func listDraftEmailMessages() async throws -> [DraftEmailMessage] {
+        let useCase = useCaseFactory.generateListDraftEmailMessagesUseCase(
+            emailAccountRepository: emailAccountRepository,
+            emailMessageRepository: emailMessageRepository
+        )
+        return try await useCase.execute()
+    }
+    
+    public func listDraftEmailMessagesForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessage] {
+        let useCase = useCaseFactory.generateListDraftEmailMessagesForEmailAddressIdUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+        return try await useCase.execute(emailAddressId: emailAddressId)
+    }
+    
+    public func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata] {
+        let useCase = useCaseFactory.generateListDraftEmailMessageMetadataUseCase(
+            emailAccountRepository: emailAccountRepository,
+            emailMessageRepository: emailMessageRepository
+        )
+        return try await useCase.execute()
+    }
+    
+    public func listDraftEmailMessageMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadata] {
+        let useCase = useCaseFactory.generateListDraftEmailMessageMetadataForEmailAddressIdUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+        return try await useCase.execute(emailAddressId: emailAddressId)
+    }
 
     public func getDraftEmailMessage(
         withInput input: GetDraftEmailMessageInput
@@ -536,15 +566,6 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailMessageRepository: emailMessageRepository
         )
         return try await useCase.execute(withInput: input)
-    }
-
-    public func listDraftEmailMessageMetadata(
-        emailAddressId: String
-    ) async throws -> [DraftEmailMessageMetadata] {
-        let useCase = useCaseFactory.generateListDraftEmailMessageMetadataUseCase(
-            emailMessageRepository: emailMessageRepository
-        )
-        return try await useCase.execute(emailAddressId: emailAddressId)
     }
 
     public func getConfigurationData() async throws -> ConfigurationData {
