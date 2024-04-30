@@ -2890,7 +2890,9 @@ internal final class UpdateEmailAddressMetadataMutation: GraphQLMutation {
 
 internal final class SendEmailMessageMutation: GraphQLMutation {
   internal static let operationString =
-    "mutation SendEmailMessage($input: SendEmailMessageInput!) {\n  sendEmailMessage(input: $input)\n}"
+    "mutation SendEmailMessage($input: SendEmailMessageInput!) {\n  sendEmailMessageV2(input: $input) {\n    __typename\n    ...SendEmailMessageResult\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(SendEmailMessageResult.fragmentString) }
 
   internal var input: SendEmailMessageInput
 
@@ -2906,7 +2908,7 @@ internal final class SendEmailMessageMutation: GraphQLMutation {
     internal static let possibleTypes = ["Mutation"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("sendEmailMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.scalar(GraphQLID.self))),
+      GraphQLField("sendEmailMessageV2", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(SendEmailMessageV2.selections))),
     ]
 
     internal var snapshot: Snapshot
@@ -2915,16 +2917,86 @@ internal final class SendEmailMessageMutation: GraphQLMutation {
       self.snapshot = snapshot
     }
 
-    internal init(sendEmailMessage: GraphQLID) {
-      self.init(snapshot: ["__typename": "Mutation", "sendEmailMessage": sendEmailMessage])
+    internal init(sendEmailMessageV2: SendEmailMessageV2) {
+      self.init(snapshot: ["__typename": "Mutation", "sendEmailMessageV2": sendEmailMessageV2.snapshot])
     }
 
-    internal var sendEmailMessage: GraphQLID {
+    internal var sendEmailMessageV2: SendEmailMessageV2 {
       get {
-        return snapshot["sendEmailMessage"]! as! GraphQLID
+        return SendEmailMessageV2(snapshot: snapshot["sendEmailMessageV2"]! as! Snapshot)
       }
       set {
-        snapshot.updateValue(newValue, forKey: "sendEmailMessage")
+        snapshot.updateValue(newValue.snapshot, forKey: "sendEmailMessageV2")
+      }
+    }
+
+    internal struct SendEmailMessageV2: GraphQLSelectionSet {
+      internal static let possibleTypes = ["SendEmailMessageResult"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(id: GraphQLID, createdAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "SendEmailMessageResult", "id": id, "createdAtEpochMs": createdAtEpochMs])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var id: GraphQLID {
+        get {
+          return snapshot["id"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      internal var createdAtEpochMs: Double {
+        get {
+          return snapshot["createdAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var sendEmailMessageResult: SendEmailMessageResult {
+          get {
+            return SendEmailMessageResult(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
       }
     }
   }
@@ -2932,7 +3004,9 @@ internal final class SendEmailMessageMutation: GraphQLMutation {
 
 internal final class SendEncryptedEmailMessageMutation: GraphQLMutation {
   internal static let operationString =
-    "mutation SendEncryptedEmailMessage($input: SendEncryptedEmailMessageInput!) {\n  sendEncryptedEmailMessage(input: $input)\n}"
+    "mutation SendEncryptedEmailMessage($input: SendEncryptedEmailMessageInput!) {\n  sendEncryptedEmailMessage(input: $input) {\n    __typename\n    ...SendEmailMessageResult\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(SendEmailMessageResult.fragmentString) }
 
   internal var input: SendEncryptedEmailMessageInput
 
@@ -2948,7 +3022,7 @@ internal final class SendEncryptedEmailMessageMutation: GraphQLMutation {
     internal static let possibleTypes = ["Mutation"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("sendEncryptedEmailMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.scalar(GraphQLID.self))),
+      GraphQLField("sendEncryptedEmailMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(SendEncryptedEmailMessage.selections))),
     ]
 
     internal var snapshot: Snapshot
@@ -2957,16 +3031,86 @@ internal final class SendEncryptedEmailMessageMutation: GraphQLMutation {
       self.snapshot = snapshot
     }
 
-    internal init(sendEncryptedEmailMessage: GraphQLID) {
-      self.init(snapshot: ["__typename": "Mutation", "sendEncryptedEmailMessage": sendEncryptedEmailMessage])
+    internal init(sendEncryptedEmailMessage: SendEncryptedEmailMessage) {
+      self.init(snapshot: ["__typename": "Mutation", "sendEncryptedEmailMessage": sendEncryptedEmailMessage.snapshot])
     }
 
-    internal var sendEncryptedEmailMessage: GraphQLID {
+    internal var sendEncryptedEmailMessage: SendEncryptedEmailMessage {
       get {
-        return snapshot["sendEncryptedEmailMessage"]! as! GraphQLID
+        return SendEncryptedEmailMessage(snapshot: snapshot["sendEncryptedEmailMessage"]! as! Snapshot)
       }
       set {
-        snapshot.updateValue(newValue, forKey: "sendEncryptedEmailMessage")
+        snapshot.updateValue(newValue.snapshot, forKey: "sendEncryptedEmailMessage")
+      }
+    }
+
+    internal struct SendEncryptedEmailMessage: GraphQLSelectionSet {
+      internal static let possibleTypes = ["SendEmailMessageResult"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(id: GraphQLID, createdAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "SendEmailMessageResult", "id": id, "createdAtEpochMs": createdAtEpochMs])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var id: GraphQLID {
+        get {
+          return snapshot["id"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      internal var createdAtEpochMs: Double {
+        get {
+          return snapshot["createdAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var sendEmailMessageResult: SendEmailMessageResult {
+          get {
+            return SendEmailMessageResult(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
       }
     }
   }
@@ -13354,6 +13498,56 @@ internal struct SealedEmailMessage: GraphQLFragment {
       set {
         snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
       }
+    }
+  }
+}
+
+internal struct SendEmailMessageResult: GraphQLFragment {
+  internal static let fragmentString =
+    "fragment SendEmailMessageResult on SendEmailMessageResult {\n  __typename\n  id\n  createdAtEpochMs\n}"
+
+  internal static let possibleTypes = ["SendEmailMessageResult"]
+
+  internal static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+    GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+  ]
+
+  internal var snapshot: Snapshot
+
+  internal init(snapshot: Snapshot) {
+    self.snapshot = snapshot
+  }
+
+  internal init(id: GraphQLID, createdAtEpochMs: Double) {
+    self.init(snapshot: ["__typename": "SendEmailMessageResult", "id": id, "createdAtEpochMs": createdAtEpochMs])
+  }
+
+  internal var __typename: String {
+    get {
+      return snapshot["__typename"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  internal var id: GraphQLID {
+    get {
+      return snapshot["id"]! as! GraphQLID
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  internal var createdAtEpochMs: Double {
+    get {
+      return snapshot["createdAtEpochMs"]! as! Double
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
     }
   }
 }

@@ -127,7 +127,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     
 
     // Sends an out-of-network email message.
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> String {
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
         guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
             throw SudoEmailError.notSignedIn
@@ -157,11 +157,11 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         let mutation = GraphQL.SendEmailMessageMutation(input: input)
         let result = try await performSendEmailMessageMutation(mutation)
 
-        return result.sendEmailMessage
+        return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
     // Sends an in-network email message with E2E encryption.
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> String {
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
         guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
             throw SudoEmailError.notSignedIn
@@ -201,7 +201,10 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         let mutation = GraphQL.SendEncryptedEmailMessageMutation(input: input)
         let result = try await performSendEmailMessageMutation(mutation)
 
-        return result.sendEncryptedEmailMessage
+        return SendEmailMessageResult(
+            id: result.sendEncryptedEmailMessage.id,
+            createdAt: Date(millisecondsSince1970: result.sendEncryptedEmailMessage.createdAtEpochMs)
+        )
     }
 
     func deleteEmailMessages(withIds ids: [String]) async throws -> [String] {

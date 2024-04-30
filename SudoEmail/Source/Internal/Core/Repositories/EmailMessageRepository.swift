@@ -13,8 +13,8 @@ protocol EmailMessageRepository: AnyObject {
     /// - Parameters:
     ///   - data: RFC 6854 (supersedes RFC 822) data to be sent representing the email message.
     ///   - emailAccountId: Identifier of the email account to send the email message from. The user must own this account.
-    /// - Returns: Identifier of the email message that was sent.
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> String
+    /// - Returns: SendEmailMessageResult
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult
 
     /// Send an end-to-end encrypted email message (if possible).
     /// - Parameters:
@@ -22,8 +22,8 @@ protocol EmailMessageRepository: AnyObject {
     ///   - emailAccountId: Identifier of the email account to send the email message from. The user must own this account.
     ///   - emailMessageHeader: Message headers used for E2E encryption.
     ///   - hasAttachments: Indicates whether or not the encrypted data contains email attachments.
-    /// - Returns: Identifier of the email message that was sent.
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> String
+    /// - Returns: SendEmailMessageResult
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> SendEmailMessageResult
 
     /// Delete an email message.
     /// - Parameters:

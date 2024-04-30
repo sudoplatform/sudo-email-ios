@@ -52,8 +52,8 @@ class SendEmailMessageUseCase {
     /// Executes the use case.
     /// - Parameters:
     ///   - input: Input parameters used to send email message.
-    /// - Returns: The identifier of the email message on success.
-    func execute(withInput input: SendEmailMessageInput) async throws -> String {
+    /// - Returns: SendEmailMessageResult
+    func execute(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
         let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments) =
             (input.senderEmailAddressId, input.emailMessageHeader, input.body, input.attachments, input.inlineAttachments)
 

@@ -239,7 +239,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return emailAccountId
     }
 
-    public func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> String {
+    public func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository,
@@ -247,8 +247,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailConfigDataRepository: emailConfigurationDataRepository,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
-        let emailMessageId = try await useCase.execute(withInput: input)
-        return emailMessageId
+        return try await useCase.execute(withInput: input)
     }
 
     public func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String> {

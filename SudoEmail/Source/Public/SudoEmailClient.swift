@@ -70,9 +70,9 @@ public protocol SudoEmailClient: AnyObject {
     /// - Parameters:
     ///   - input: Parameters used to send an email message
     /// - Returns:
-    ///   - Success: Identifier of the email message that is being sent.
+    ///   - Success: SendEmailMessageResult
     ///   - Failure: `SudoEmailError`.
-    func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> String
+    func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
 
     /// Delete the email messages identified by the list of ids.
     /// - Parameters:
