@@ -14,4 +14,15 @@ public struct SendEmailMessageResult {
     
     /// The timestamp of when the email message was created
     public var createdAt: Date
+
+    /// Initializes an instance of `SendEmailMessageResult`.
+    ///
+    /// - Parameters:
+    ///   - id: The unique identifier of the email message.
+    ///   - createdAt: The timestamp of when the email message was created,
+    public init(id: String, createdAt: Date) {
+        self.id = id
+        self.createdAt = createdAt
+    }
+
 }
