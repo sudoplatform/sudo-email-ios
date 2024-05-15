@@ -71,9 +71,12 @@ struct SealedKeyEntity: Encodable, Equatable, Hashable {
     
     // MARK: - Methods
 
-    /// Encode the current `SealedKeyEntity` instance into JSON data.
-    public func toJson() throws -> Data {
-        return try JSONEncoder().encode(self)
+    /// Encode the current `SealedKeyEntity` instance into a JSON string.
+    public func toJson() throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let jsonData = try encoder.encode(self)
+        return String(data: jsonData, encoding: .utf8)!
     }
 
 }
@@ -108,16 +111,13 @@ struct SealedKeyComponentsEntity: Decodable {
 
     // MARK: - Methods
 
-    /// Decode a `SealedKeyComponentsEntity` instance from the JSON data.
-    static func fromJson(_ jsonData: Data) throws -> SealedKeyComponentsEntity {
-        return try JSONDecoder().decode(SealedKeyComponentsEntity.self, from: jsonData)
-    }
-
-    /// Decode a `SealedKeyComponentsEntity` instance from the base64-encoded JSON string.
+    /// Decode a `SealedKeyComponentsEntity` instance from the JSON string.
     static func fromJson(_ jsonString: String) throws -> SealedKeyComponentsEntity {
-        guard let jsonData = Data(base64Encoded: jsonString) else {
-            throw EmailCryptoServiceError.decodingError("Failed to decode JSON string")
+        do {
+            let jsonData = Data(jsonString.utf8)
+            return try JSONDecoder().decode(SealedKeyComponentsEntity.self, from: jsonData)
+        } catch {
+            throw EmailCryptoServiceError.decodingError("Failed to decode JSON string: \(error.localizedDescription)")
         }
-        return try fromJson(jsonData)
     }
 }

@@ -171,29 +171,23 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                 updateExpression?.setValue(draftMetadata.algorithm, forRequestHeader: RequestHeaderNames.algorithm)
                 updateExpression?.setValue(draftMetadata.keyId, forRequestHeader: RequestHeaderNames.keyId)
             }
-            try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) in
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 awsS3Worker.uploadData(
                     data,
                     bucket: bucket,
                     key: key,
                     contentType: contentType,
                     expression: updateExpression,
-                    completionHandler: { (_, error) -> Void in
+                    completionHandler: { task, error in
                         if let error = error {
                             continuation.resume(throwing: AWSS3WorkerError.serviceError(cause: error))
                             return
                         } else {
-                            continuation.resume()
-                            return
+                            continuation.resume(returning: ())
                         }
                     }
                 )
-                .continueWith { (task) -> AnyObject? in if let error = task.error {
-                        continuation.resume(throwing: error)
-                    }
-                    return nil
-                }
-            })
+            }
         } catch {
             throw error
         }

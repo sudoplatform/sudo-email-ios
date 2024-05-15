@@ -38,7 +38,7 @@ class Rfc822MessageDataProcessor {
     /// - Returns: The encoded email as RFC822 data
     func encodeToInternetMessageData(message: EmailMessageDetails) throws -> Data {
         let resultStr = try self.encodeToInternetMessageDataStr(message: message)
-        return resultStr.data(using: .utf8)!
+        return Data(resultStr.utf8)
     }
     
     /// Encodes the given email into an RFC822 compliant string
@@ -92,39 +92,21 @@ class Rfc822MessageDataProcessor {
         builder.header.subject = message.subject
         var body = message.body
         
-        if(message.encryptionStatus == EncryptionStatus.ENCRYPTED) {
+        if message.encryptionStatus == EncryptionStatus.ENCRYPTED {
             body = CANNED_TEXT_BODY
             builder.header.setExtraHeaderValue(PLATFORM_ENCRYPTION, forName: EMAIL_HEADER_NAME_ENCRYPTION)
         }
-        
-        if(message.inlineAttachments?.count ?? 0 > 0) {
+
+        if message.inlineAttachments?.count ?? 0 > 0 {
             builder.htmlBody = body
         } else {
             builder.textBody = body
         }
 
-        message.attachments?.forEach({ attachment in
-            guard let mcoAttachment = MCOAttachment(data: Data(base64Encoded: attachment.data), filename: attachment.filename) else {
-                return
-            }
-            mcoAttachment.mimeType = attachment.mimetype
-            mcoAttachment.isInlineAttachment = attachment.inlineAttachment
-            mcoAttachment.contentID = attachment.contentId
-            builder.addAttachment(mcoAttachment)
+        try message.attachments?.forEach({ builder.addAttachment(try formatAttachment($0)) })
 
-        })
-        
-        message.inlineAttachments?.forEach({ attachment in
-            guard let mcoAttachment = MCOAttachment(data: Data(base64Encoded: attachment.data), filename: attachment.filename) else {
-                return
-            }
-            mcoAttachment.mimeType = attachment.mimetype
-            mcoAttachment.isInlineAttachment = attachment.inlineAttachment
-            mcoAttachment.contentID = attachment.contentId
-            builder.addAttachment(mcoAttachment)
+        try message.inlineAttachments?.forEach({ builder.addAttachment(try formatAttachment($0)) })
 
-        })
-        
         guard let data = builder.data() else {
             throw SudoEmailError.internalError("No data encoded")
         }
@@ -132,9 +114,21 @@ class Rfc822MessageDataProcessor {
         return try self.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
     }
 
+    /// Generates a MailCore-formatted attachment from a given `EmailAttachment`.
+    private func formatAttachment(_ attachment: EmailAttachment) throws -> MCOAttachment {
+        let attachmentData = Data(base64Encoded: attachment.data) ?? Data(attachment.data.utf8)
+        guard let mcoAttachment = MCOAttachment(data: attachmentData, filename: attachment.filename) else {
+            throw SudoEmailError.internalError("Failed to build attachment")
+        }
+        mcoAttachment.mimeType = attachment.mimetype
+        mcoAttachment.isInlineAttachment = attachment.inlineAttachment
+        mcoAttachment.contentID = attachment.contentId
+
+        return mcoAttachment
+    }
+
     func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
         let parser = MCOMessageParser(data: input.data(using: .utf8))
-        
         if(parser == nil) {
             throw SudoEmailError.decodingError
         }
@@ -150,7 +144,7 @@ class Rfc822MessageDataProcessor {
         var attachments: [EmailAttachment] = []
         var inlineAttachments: [EmailAttachment] = []
         
-        (parser?.attachments() as! [MCOAttachment]).forEach({a in
+        (parser?.attachments() as! [MCOAttachment]).forEach({ a in
             let attachment = EmailAttachment(
                 filename: a.filename,
                 contentId: a.contentID,

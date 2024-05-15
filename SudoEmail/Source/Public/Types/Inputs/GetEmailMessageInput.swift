@@ -9,7 +9,7 @@ import Foundation
 /// input object for getting an email message using `SudoEmailClient`
 public struct GetEmailMessageInput: Equatable {
 
-    /// The unique identifier of email message to retrieve,.
+    /// The unique identifier of email message to retrieve.
     public let id: String
 
     /// Determines how the email address will be fetched. Default usage is `remoteOnly`.

@@ -90,16 +90,26 @@ class SendEmailMessageUseCase {
         let config = try await emailConfigDataRepository.getConfigurationData()
 
         if isInNetworkAddresses {
-            // Process encrypted email message
-            let encryptionStatus = EncryptionStatus.ENCRYPTED
-            let rfc822Data = try buildMessageData(attachments: attachments, encryptionStatus: encryptionStatus)
+            /** Process encrypted email message **/
+
+            // Generate unencrypted RFC822 email data
+            let rfc822Data = try buildMessageData(
+                attachments: attachments,
+                encryptionStatus: EncryptionStatus.UNENCRYPTED
+            )
+
+            // For each recipient, encrypt the rfc822 with the recipient's key id
+            // and store the encrypted payload as an attachment
             let keyIds = Set(emailAddressesPublicInfo.map { $0.keyId })
             let encryptedEmailMessage = try emailCryptoService.encrypt(data: rfc822Data, keyIds: keyIds)
             let secureAttachments = encryptedEmailMessage.toList()
             let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
 
             // Encode the RFC 822 data with the secureAttachments
-            let encryptedRfc822Data = try buildMessageData(attachments: secureAttachments, encryptionStatus: encryptionStatus)
+            let encryptedRfc822Data = try buildMessageData(
+                attachments: secureAttachments,
+                encryptionStatus: EncryptionStatus.ENCRYPTED
+            )
 
             if (encryptedRfc822Data.count > config.emailMessageMaxOutboundMessageSize) {
                 logger.error("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes. Message size: \(encryptedRfc822Data.count)")
@@ -113,10 +123,14 @@ class SendEmailMessageUseCase {
                 hasAttachments: hasAttachments
             )
         } else {
-            // Process non-encrypted email message
-            let encryptionStatus = EncryptionStatus.UNENCRYPTED
-            let rfc822Data = try buildMessageData(attachments: attachments, encryptionStatus: encryptionStatus)
-            
+            /** Process non-encrypted email message **/
+
+            // Generate unencrypted RFC822 email data
+            let rfc822Data = try buildMessageData(
+                attachments: attachments,
+                encryptionStatus: EncryptionStatus.UNENCRYPTED
+            )
+
             if (rfc822Data.count > config.emailMessageMaxOutboundMessageSize) {
                 logger.error("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
                 throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes")

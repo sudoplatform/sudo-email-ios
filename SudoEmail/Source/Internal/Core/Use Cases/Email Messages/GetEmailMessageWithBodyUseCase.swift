@@ -5,6 +5,11 @@
 //
 import Gzip
 
+/** Content encoding values for email message data. */
+let CRYPTO_CONTENT_ENCODING: String = "sudoplatform-crypto"
+let BINARY_DATA_CONTENT_ENCODING: String = "sudoplatform-binary-data"
+let COMPRESSION_CONTENT_ENCODING: String = "sudoplatform-compression"
+
 class GetEmailMessageWithBodyUseCase {
 
     // MARK: - Properties
@@ -49,22 +54,22 @@ class GetEmailMessageWithBodyUseCase {
         }
 
         do {
-            let contentEncodingValues = (rfc822Object.contentEncoding?.split(separator: ",") ?? ["sudoplatform-crypto", "sudoplatform-binary-data"])
+            let contentEncodingValues = (rfc822Object.contentEncoding?.split(separator: ",") ?? ["\(CRYPTO_CONTENT_ENCODING)", "\(BINARY_DATA_CONTENT_ENCODING)"])
                 .reversed()
             var decodedData = rfc822Object.body
             do {
                 for (encodingValue) in contentEncodingValues {
                     switch encodingValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
-                        case "sudoplatform-compression":
+                        case COMPRESSION_CONTENT_ENCODING:
                             let base64Decoded = Data(base64Encoded: decodedData)
                             decodedData = try (base64Decoded?.gunzipped())!
-                        case "sudoplatform-crypto":
+                        case CRYPTO_CONTENT_ENCODING:
                             decodedData = try self.emailMessageUnsealerService.unsealEmailMessageRFC822Data(
                                 rfc822Object.body,
                                 withKeyId: emailMessage.keyId,
                                 algorithm: emailMessage.algorithm
                             )
-                        case "sudoplatform-binary-data":
+                        case BINARY_DATA_CONTENT_ENCODING:
                             break
                         default:
                             throw SudoEmailError.decodingError
@@ -74,27 +79,25 @@ class GetEmailMessageWithBodyUseCase {
                 throw error
             }
 
-            guard let decodedDataStr = String(data: decodedData, encoding: .utf8) else {
+            guard let internetMessageData = String(data: decodedData, encoding: .utf8) else {
                 throw SudoEmailError.decodingError
             }
-            var parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: decodedDataStr)
+            var parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: internetMessageData)
 
             if emailMessage.encryptionStatus == EncryptionStatus.ENCRYPTED {
-                let keyExchangeAttachmentTypeValues = SecureEmailAttachmentType.KEY_EXCHANGE.getValues()
-                let bodyAttachmentTypeValues = SecureEmailAttachmentType.BODY.getValues()
                 var keyAttachments: Set<EmailAttachment> = []
                 var bodyAttachment: EmailAttachment? = nil
 
                 parsedMessage.attachments?.forEach({ attachment in
                     let contentId = attachment.contentId ?? ""
                     let mimetype = attachment.mimetype
-                    let isKeyExchangeType = (contentId.contains(keyExchangeAttachmentTypeValues.contentId) ||
+                    let isKeyExchangeType = (contentId.contains(SecureEmailAttachmentType.KEY_EXCHANGE.contentId()) ||
                                              // Work around spelling error in legacy apps
-                                             contentId.contains("securekeyexhangedata@sudomail.com")) && mimetype.contains(keyExchangeAttachmentTypeValues.mimeType)
+                                             contentId.contains("securekeyexhangedata@sudomail.com")) && mimetype.contains(SecureEmailAttachmentType.KEY_EXCHANGE.mimeType())
                     if isKeyExchangeType {
                         keyAttachments.insert(attachment)
                     } else {
-                        let isBodyType = contentId.contains(bodyAttachmentTypeValues.contentId) && mimetype.contains(bodyAttachmentTypeValues.mimeType)
+                        let isBodyType = contentId.contains(SecureEmailAttachmentType.BODY.contentId()) && mimetype.contains(SecureEmailAttachmentType.BODY.mimeType())
                         if isBodyType {
                             bodyAttachment = attachment
                         }

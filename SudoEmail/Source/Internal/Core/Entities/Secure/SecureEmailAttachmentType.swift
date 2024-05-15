@@ -26,7 +26,7 @@ enum SecureEmailAttachmentType {
         contentId: "securebody@sudomail.com"
     )
 
-    func getValues() -> (fileName: String, mimeType: String, contentId: String) {
+    private func getValues() -> (fileName: String, mimeType: String, contentId: String) {
         switch self {
         case .keyExchange(let fileName, let mimeType, let contentId):
             return (fileName, mimeType, contentId)
@@ -34,4 +34,10 @@ enum SecureEmailAttachmentType {
             return (fileName, mimeType, contentId)
         }
     }
+
+    func fileName() -> String { self.getValues().fileName }
+
+    func mimeType() -> String { self.getValues().mimeType }
+
+    func contentId() -> String { self.getValues().contentId }
 }

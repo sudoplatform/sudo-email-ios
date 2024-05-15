@@ -35,9 +35,11 @@ class DefaultEmailCryptoService: EmailCryptoService {
     // MARK: - Methods
 
     func encrypt(data: Data, keyIds: Set<String>) throws -> SecurePackageEntity {
-        guard let data = (data.isEmpty ? nil : data),
-              let keyIds = (keyIds.isEmpty ? nil : keyIds) else {
-            throw EmailCryptoServiceError.invalidArgumentError()
+        guard let data = data.isEmpty ? nil : data else {
+            throw EmailCryptoServiceError.invalidArgumentError("Empty data")
+        }
+        guard let keyIds = keyIds.isEmpty ? nil : keyIds else {
+            throw EmailCryptoServiceError.invalidArgumentError("Empty key ids")
         }
 
         do {
@@ -82,20 +84,25 @@ class DefaultEmailCryptoService: EmailCryptoService {
     }
 
     func decrypt(securePackage: SecurePackageEntity) throws -> Data {
-        guard let bodyAttachmentData = (securePackage.bodyAttachment.data.isEmpty ? nil : securePackage.bodyAttachment.data),
-              let keyAttachments = (securePackage.keyAttachments.isEmpty ? nil : securePackage.keyAttachments) else {
-            throw EmailCryptoServiceError.invalidArgumentError()
+        guard let bodyAttachmentBase64Data = securePackage.bodyAttachment.data.isEmpty ? nil : securePackage.bodyAttachment.data else {
+            throw EmailCryptoServiceError.invalidArgumentError("Empty data in secure package body attachment")
+        }
+        guard let keyAttachments = securePackage.keyAttachments.isEmpty ? nil : securePackage.keyAttachments else {
+            throw EmailCryptoServiceError.invalidArgumentError("Empty key attachments in secure package")
         }
 
         do {
+            let bodyAttachmentData = try decodeBase64String(bodyAttachmentBase64Data)
             let secureBodyData = try SecureDataEntity.fromJson(bodyAttachmentData)
 
             // Iterate through the set of keyAttachments and search for the key belonging to the current recipient.
             var keyComponents: SealedKeyComponentsEntity? = nil
             try keyAttachments.forEach({ key in
                 if !key.data.isEmpty {
+                    // Decode base64 attachment data
+                    let keyData = try decodeBase64String(key.data)
                     // Parse the key and pluck the publicKeyId
-                    let sealedKeyComponents = try SealedKeyComponentsEntity.fromJson(key.data)
+                    let sealedKeyComponents = try SealedKeyComponentsEntity.fromJson(keyData)
                     // Check if the private key pair exists based on the publicKeyId
                     if deviceKeyWorker.keyExists(keyId: sealedKeyComponents.publicKeyId, keyType: KeyType.privateKey) {
                         // Found the right key
@@ -125,9 +132,24 @@ class DefaultEmailCryptoService: EmailCryptoService {
         }
     }
 
-    private func buildEmailAttachment(data: Data, attachmentType: SecureEmailAttachmentType, attachmentNumber: Int = -1) -> EmailAttachment {
-        let attachmentFileName = attachmentType.getValues().fileName
-        let fileName = attachmentNumber >= 0 ? "\(attachmentFileName) \(attachmentNumber)" : attachmentFileName
-        return EmailAttachment(filename: fileName, mimetype: attachmentType.getValues().mimeType, inlineAttachment: false, data: data.base64EncodedString())
+    private func decodeBase64String(_ base64String: String) throws -> String {
+        if let data = Data(base64Encoded: base64String),
+           let decodedString = String(data: data, encoding: .utf8) {
+            return decodedString
+        } else {
+            throw EmailCryptoServiceError.decodingError("Failed to decode base64 string in secure package")
+        }
+    }
+
+    private func buildEmailAttachment(data: String, attachmentType: SecureEmailAttachmentType, attachmentNumber: Int = -1) -> EmailAttachment {
+        let attachmentFileName = attachmentType.fileName()
+        let filename = attachmentNumber >= 0 ? "\(attachmentFileName) \(attachmentNumber)" : attachmentFileName
+        return EmailAttachment(
+            filename: filename,
+            contentId: attachmentType.contentId(),
+            mimetype: attachmentType.mimeType(),
+            inlineAttachment: false,
+            data: data
+        )
     }
 }

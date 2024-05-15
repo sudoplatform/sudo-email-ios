@@ -51,24 +51,18 @@ struct SecureDataEntity: Codable {
 
     // MARK: - Methods
 
-    /// Encode the current `SecureDataEntity` instance into JSON data.
-    public func toJson() throws -> Data {
-        return try JSONEncoder().encode(self)
+    /// Encode the current `SecureDataEntity` instance into a JSON string.
+    public func toJson() throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let jsonData = try encoder.encode(self)
+        return String(data: jsonData, encoding: .utf8)!
     }
 
-    /// Decode a `SecureDataEntity` entity from the JSON data.
-    static func fromJson(_ jsonData: Data? = nil) throws -> SecureDataEntity {
-        if let jsonData = jsonData {
-            return try JSONDecoder().decode(SecureDataEntity.self, from: jsonData)
-        } else {
-            throw EmailCryptoServiceError.decodingError("Failed to decode JSON string")
-        }
-    }
-
-    /// Decode a `SecureDataEntity` instance from the base64-encoded JSON string.
+    /// Decode a `SecureDataEntity` entity from the JSON string.
     static func fromJson(_ jsonString: String) throws -> SecureDataEntity {
-        let jsonData = Data(base64Encoded: jsonString)
-        return try fromJson(jsonData)
+        let jsonData = Data(jsonString.utf8)
+        return try JSONDecoder().decode(SecureDataEntity.self, from: jsonData)
     }
 
 }
