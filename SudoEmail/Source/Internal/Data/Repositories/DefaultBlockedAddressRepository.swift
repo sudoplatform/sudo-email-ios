@@ -46,7 +46,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
     
     // MARK: - BlockedAddressRepository
     
-    func blockAddresses(addresses: [String], owner: String) async throws -> BatchOperationResult<String> {
+    func blockAddresses(addresses: [String], owner: String) async throws -> BatchOperationResult<String, String> {
         self.logger.debug("blockAddresses init: \(owner), \(addresses)")
         if (addresses.isEmpty) {
             self.logger.error("At least one email address must be passed")
@@ -114,24 +114,25 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
             throw SudoEmailError.internalError("Unexpected error")
         }
         
-        switch result.blockEmailAddresses.status {
-        case .success:
-            return BatchOperationResult<String>.success
-        case .failed:
-            return BatchOperationResult<String>.failure
-        case .partial:
-            let partialResult = BatchOperationResult.BatchOperationPartialResult(
-                successItems: result.blockEmailAddresses.successAddresses ?? [],
-                failureItems: result.blockEmailAddresses.failedAddresses ?? []
-            )
-            return BatchOperationResult<String>.partial(partialResult)
-        case .unknown:
-            self.logger.error("Unknown status returned by BlockEmailAddresses mutation")
-            throw SudoEmailError.internalError("Unknown status returned by BlockEmailAddresses mutation")
+        var status: BatchOperationResultStatus
+        if(result.blockEmailAddresses.status == .failed) {
+            status = .failure
+        } else if (result.blockEmailAddresses.status == .partial) {
+            status = .partial
+        } else if (result.blockEmailAddresses.status == .success) {
+            status = .success
+        } else {
+            self.logger.error("Unknown status returned by BlockEmailAddresses mutation \(result.blockEmailAddresses.status)")
+            throw SudoEmailError.internalError("Unknown status returned by BlockEmailAddresses mutation \(result.blockEmailAddresses.status)")
         }
+        return BatchOperationResult<String, String>(
+            status: status,
+            successItems: result.blockEmailAddresses.successAddresses,
+            failureItems: result.blockEmailAddresses.failedAddresses
+        )
     }
     
-    func unblockAddresses(hashedAddresses: [String], owner: String) async throws -> BatchOperationResult<String> {
+    func unblockAddresses(hashedAddresses: [String], owner: String) async throws -> BatchOperationResult<String, String> {
         self.logger.debug("unblockAddresses init: \(hashedAddresses) \(owner)")
         
         let input = GraphQL.UnblockEmailAddressesInput(owner: owner, unblockedAddresses: hashedAddresses)
@@ -161,21 +162,22 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
             throw SudoEmailError.internalError("Unexpected error")
         }
         
-        switch result.unblockEmailAddresses.status {
-        case .success:
-            return BatchOperationResult<String>.success
-        case .failed:
-            return BatchOperationResult<String>.failure
-        case.partial:
-            let partialResult = BatchOperationResult.BatchOperationPartialResult(
-                successItems: result.unblockEmailAddresses.successAddresses ?? [],
-                failureItems: result.unblockEmailAddresses.failedAddresses ?? []
-            )
-            return BatchOperationResult<String>.partial(partialResult)
-        case .unknown:
-            self.logger.error("Unknown status returned by UnblockEmailAddresses mutation")
-            throw SudoEmailError.internalError("Unknown status returned by UnblockEmailAddresses mutation")
+        var status: BatchOperationResultStatus
+        if(result.unblockEmailAddresses.status == .failed) {
+            status = .failure
+        } else if (result.unblockEmailAddresses.status == .partial) {
+            status = .partial
+        } else if (result.unblockEmailAddresses.status == .success) {
+            status = .success
+        } else {
+            self.logger.error("Unknown status returned by UnblockEmailAddresses mutation \(result.unblockEmailAddresses.status)")
+            throw SudoEmailError.internalError("Unknown status returned by UnblockEmailAddresses mutation \(result.unblockEmailAddresses.status)")
         }
+        return BatchOperationResult<String, String>(
+            status: status,
+            successItems: result.unblockEmailAddresses.successAddresses,
+            failureItems: result.unblockEmailAddresses.failedAddresses
+        )
     }
     
     func getEmailAddressBlocklist(owner: String) async throws -> [UnsealedBlockedAddress] {

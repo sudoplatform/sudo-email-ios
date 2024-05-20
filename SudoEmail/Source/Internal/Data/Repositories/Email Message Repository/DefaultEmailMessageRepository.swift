@@ -236,7 +236,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
     }
 
-    func updateEmailMessages(withInput input: UpdateEmailMessagesInput) async throws -> BatchOperationResult<String> {
+    func updateEmailMessages(
+        withInput input: UpdateEmailMessagesInput
+    ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
         let transformer = UpdateEmailMessagesValuesGQLTransformer()
         let input = GraphQL.UpdateEmailMessagesInput(
             messageIds: input.ids,
@@ -259,20 +261,19 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             guard let result = performResult?.data else {
                 throw SudoEmailError.internalError("Missing data from API call")
             }
-            switch result.updateEmailMessages.status {
-            case .success:
-                return BatchOperationResult<String>.success
-            case .failed:
-                return BatchOperationResult<String>.failure
-            case .partial:
-                let partialResult = BatchOperationResult.BatchOperationPartialResult(
-                    successItems: result.updateEmailMessages.successMessageIds ?? [],
-                    failureItems: result.updateEmailMessages.failedMessageIds
-                    ?? [])
-                return BatchOperationResult<String>.partial(partialResult)
-            case .unknown:
-                throw SudoEmailError.internalError("Unknown status returned by UpdateEmailMessages mutation")
-            }
+            return BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>(
+                status: try UpdateEmailMessagesStatusApiTransformer().transform(result.updateEmailMessagesV2.status),
+                successItems: result.updateEmailMessagesV2.successMessages?.map {
+                    UpdatedEmailMessageSuccess(
+                        id: $0.id,
+                        createdAt: Date(millisecondsSince1970: $0.createdAtEpochMs),
+                        updatedAt: Date(millisecondsSince1970: $0.updatedAtEpochMs)
+                    )
+                },
+                failureItems: result.updateEmailMessagesV2.failedMessages?.map {
+                    EmailMessageOperationFailureResult(id: $0.id, errorType: $0.errorType)
+                }
+            )
         } catch let error as ApiOperationError {
             throw SudoEmailError.fromApiOperationError(error: error)
         }

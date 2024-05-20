@@ -27,19 +27,23 @@ class DeleteDraftEmailMessagesUseCase {
 
     // MARK: - Methods
 
-    func execute(withInput input: DeleteDraftEmailMessagesInput) async throws -> BatchOperationResult<String> {
+    func execute(
+        withInput input: DeleteDraftEmailMessagesInput
+    ) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
         guard (try await emailAccountRepository.fetchWithEmailAddressId(input.emailAddressId)) != nil else {
             throw SudoEmailError.addressNotFound
         }
         if input.ids.isEmpty {
-            return BatchOperationResult<String>.success
+            return BatchOperationResult<String, EmailMessageOperationFailureResult>(
+                status: BatchOperationResultStatus.success
+            )
         }
 
-        if input.ids.count > deleteDraftsRequestLimit {
-            throw SudoEmailError.limitExceeded
-        }
+//        if input.ids.count > deleteDraftsRequestLimit {
+//            throw SudoEmailError.limitExceeded
+//        }
 
-        var deleteFailures: [String] = []
+        var deleteFailures: [EmailMessageOperationFailureResult] = []
         var deleteSuccesses: [String] = []
         let emailAddressId = input.emailAddressId
         for id in input.ids {
@@ -48,19 +52,18 @@ class DeleteDraftEmailMessagesUseCase {
                 deleteSuccesses.append(deletedDraft)
             } catch {
                 logger.error("Failed to delete draft \(id) with \(error)")
-                deleteFailures.append(id)
+                deleteFailures.append(EmailMessageOperationFailureResult(id: id, errorType: error.localizedDescription))
             }
         }
-        if deleteSuccesses.count == input.ids.count {
-            return BatchOperationResult<String>.success
+        
+        let status: BatchOperationResultStatus
+        if (deleteSuccesses.count == input.ids.count) {
+            status = BatchOperationResultStatus.success
+        } else if deleteFailures.count == input.ids.count {
+            status = BatchOperationResultStatus.failure
+        } else {
+            status = BatchOperationResultStatus.partial
         }
-        if deleteFailures.count == input.ids.count {
-            return BatchOperationResult<String>.failure
-        }
-        let deletePartial = BatchOperationResult<String>.BatchOperationPartialResult(
-            successItems: deleteSuccesses,
-            failureItems: deleteFailures
-        )
-        return BatchOperationResult<String>.partial(deletePartial)
+        return BatchOperationResult(status: status, successItems: deleteSuccesses, failureItems: deleteFailures)
     }
 }

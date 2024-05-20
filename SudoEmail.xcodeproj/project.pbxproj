@@ -411,6 +411,8 @@
 		9F8673AC2B6C7BDB00B9950E /* DefaultBlockedAddressRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8673AB2B6C7BDB00B9950E /* DefaultBlockedAddressRepository.swift */; };
 		9F8673AE2B6C962D00B9950E /* EmailAddressParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */; };
 		9F8673B02B6C9A1300B9950E /* StringHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8673AF2B6C9A1300B9950E /* StringHasher.swift */; };
+		9F92A0282BF56FBC000C0CBD /* UpdatedEmailMessageResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92A0272BF56FBC000C0CBD /* UpdatedEmailMessageResult.swift */; };
+		9F92A02A2BF5764F000C0CBD /* UpdateEmailMessagesStatusApiTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92A0292BF5764F000C0CBD /* UpdateEmailMessagesStatusApiTransformer.swift */; };
 		9F949DDA2B8428D8009064FB /* EmailAddressBlocklistUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */; };
 		9F949DDC2B842A8A009064FB /* BlockedEmailAddressTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */; };
 		9F9E7F892B82B12900C5F823 /* UnsealedBlockedAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */; };
@@ -902,6 +904,8 @@
 		9F8673AB2B6C7BDB00B9950E /* DefaultBlockedAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBlockedAddressRepository.swift; sourceTree = "<group>"; };
 		9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressParser.swift; sourceTree = "<group>"; };
 		9F8673AF2B6C9A1300B9950E /* StringHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringHasher.swift; sourceTree = "<group>"; };
+		9F92A0272BF56FBC000C0CBD /* UpdatedEmailMessageResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedEmailMessageResult.swift; sourceTree = "<group>"; };
+		9F92A0292BF5764F000C0CBD /* UpdateEmailMessagesStatusApiTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMessagesStatusApiTransformer.swift; sourceTree = "<group>"; };
 		9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressBlocklistUtil.swift; sourceTree = "<group>"; };
 		9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedEmailAddressTransformer.swift; sourceTree = "<group>"; };
 		9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsealedBlockedAddress.swift; sourceTree = "<group>"; };
@@ -1615,6 +1619,7 @@
 				95DEFF742859A9800071363B /* SortOrder.swift */,
 				849AF01324A0877A005CFA2E /* SubscriptionToken.swift */,
 				9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */,
+				9F92A0272BF56FBC000C0CBD /* UpdatedEmailMessageResult.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1980,6 +1985,7 @@
 				95BD978B28A4B12A00BE3A5D /* ListAPIResultTransformer.swift */,
 				84A6E1872491AD740025F05A /* ListOutputAPITransformer.swift */,
 				84B2607D2489E06500E99401 /* OwnerAPITransformer.swift */,
+				9F92A0292BF5764F000C0CBD /* UpdateEmailMessagesStatusApiTransformer.swift */,
 			);
 			path = "API Transformers";
 			sourceTree = "<group>";
@@ -2926,11 +2932,13 @@
 				9F372BAD2B709F1F009FD8CC /* UnblockEmailAddressesUseCase.swift in Sources */,
 				9F9E7F892B82B12900C5F823 /* UnsealedBlockedAddress.swift in Sources */,
 				95CC4BF3292354A0008A6BF2 /* UnsubscribeAllUseCase.swift in Sources */,
+				9F92A0282BF56FBC000C0CBD /* UpdatedEmailMessageResult.swift in Sources */,
 				95E738652907900F00DDD547 /* UpdateDraftEmailMessageInput.swift in Sources */,
 				95E738672907945F00DDD547 /* UpdateDraftEmailMessageUseCase.swift in Sources */,
 				9555BF6D28DAC05600D52C6B /* UpdateEmailAccountMetaDataUseCase.swift in Sources */,
 				9555BF6A28DABB9100D52C6B /* UpdateEmailAddressMetadataInput.swift in Sources */,
 				95CD233028863D56004C8793 /* UpdateEmailMessagesInput.swift in Sources */,
+				9F92A02A2BF5764F000C0CBD /* UpdateEmailMessagesStatusApiTransformer.swift in Sources */,
 				95CD233528866499004C8793 /* UpdateEmailMessagesUseCase.swift in Sources */,
 				95CD233728866A9F004C8793 /* UpdateEmailMessagesValuesGQLTransformer.swift in Sources */,
 				84B260312488783C00E99401 /* UseCaseFactory.swift in Sources */,

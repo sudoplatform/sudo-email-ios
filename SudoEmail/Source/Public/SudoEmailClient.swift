@@ -83,7 +83,7 @@ public protocol SudoEmailClient: AnyObject {
     ///    Partial - Only a partial amount of messages succeeded to delete. Includes a list of the
     ///              identifiers of the email messages that failed and succeeded to delete.
     ///    Failure - All email messages failed to delete.
-    func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String>
+    func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String, String>
 
     /// Delete an email message.
     /// - Parameters:
@@ -96,12 +96,17 @@ public protocol SudoEmailClient: AnyObject {
     /// Update the email messages identified by a list of ids.
     ///  - Parameters:
     ///    - input: Input parameters used to update a list of email messages
-    ///  - Returns: The status of the updates:
-    ///     Success - All email messages succeeded to update.
-    ///     Partial - Only a partial number of messages succeeded to update. Includes a list of the
+    ///  - Returns: The results of the updates:
+    ///       - status:
+    ///         - Success - All email messages succeeded to update.
+    ///         - Partial - Only a partial number of messages succeeded to update. Includes a list of the
     ///           identifiers of the email messages that failed and succeeded to update.
-    ///    Failure - All email messages failed to update.
-    func updateEmailMessages(withInput input: UpdateEmailMessagesInput) async throws -> BatchOperationResult<String>
+    ///         - Failure - All email messages failed to update.
+    ///       - successItems - A list of the id, createdAt and updatedAt of each message that successfully updated
+    ///       - failureItems - A list of the id, and errorType of each message that failed to be updated
+    func updateEmailMessages(
+        withInput input: UpdateEmailMessagesInput
+    ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>
 
     /// Create a draft email message in RFC 6854 (supersedes RFC 822)(https://tools.ietf.org/html/rfc6854) format.
     ///  - Parameters:
@@ -122,7 +127,6 @@ public protocol SudoEmailClient: AnyObject {
     ) async throws -> DraftEmailMessageMetadata
 
     /// Delete the draft email messages identified by the list of ids.
-    /// Draft email messages can only be deleted in batches of 10. Anything greater will throw a LimitExceededError.
     /// Any draft email message ids that do not exist will be marked as success.
     /// Any emailAddressId that is not owned or does not exist, will throw an error.
     ///  - Parameters:
@@ -134,7 +138,7 @@ public protocol SudoEmailClient: AnyObject {
     ///     Failure - All draft email messages failed to delete.
     func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
-    ) async throws -> BatchOperationResult<String>
+    ) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult>
 
     /// Imports cryptographic keys from a key archive.
     ///
@@ -318,7 +322,7 @@ public protocol SudoEmailClient: AnyObject {
     ///     Partial - Only a partial number of the addresses were blocked successfully. Includes a list of the
     ///           addresses that failed and succeeded to be blocked.
     ///     Failure - All addresses failed to be blocked.
-    func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String>
+    func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String>
     
     /// Unblocks the addresses given from sending to the user
     ///
@@ -329,7 +333,7 @@ public protocol SudoEmailClient: AnyObject {
     ///     Partial - Only a partial number of the addresses were unblocked successfully. Includes a list of the
     ///           addresses that failed and succeeded to be unblocked.
     ///     Failure - All addresses failed to be unblocked.
-    func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String>
+    func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String>
     
     /// Unblocks the hashed addresses given from sending to the user
     ///
@@ -340,7 +344,7 @@ public protocol SudoEmailClient: AnyObject {
     ///     Partial - Only a partial number of the addresses were unblocked successfully. Includes a list of the
     ///           addresses that failed and succeeded to be unblocked.
     ///     Failure - All addresses failed to be unblocked.
-    func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String>
+    func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String, String>
     
     /// Get email address blocklist for logged in user
     ///

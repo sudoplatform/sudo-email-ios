@@ -39,7 +39,7 @@ class UnblockEmailAddressesUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///   - addresses: A list of addresses to block in format `local-part@domain`.
-    func execute(addresses: [String]) async throws -> BatchOperationResult<String> {
+    func execute(addresses: [String]) async throws -> BatchOperationResult<String, String> {
         self.log.debug("execute: \(addresses)")
         let owner = try self.userClient.getSubject()
         

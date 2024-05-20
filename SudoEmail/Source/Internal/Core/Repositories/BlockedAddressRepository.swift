@@ -14,14 +14,14 @@ protocol BlockedAddressRepository: AnyObject {
     ///  - addresses: A list of addresses to block in the format `local-part@domain`
     ///  - owner: The user blocking the addresses
     /// - Returns: BatchOperationResult with the results of the update
-    func blockAddresses(addresses: [String], owner: String) async throws -> BatchOperationResult<String>
+    func blockAddresses(addresses: [String], owner: String) async throws -> BatchOperationResult<String, String>
     
     /// Unblock the addresses for the given user
     /// - Parameters:
     ///   - hashedAddresses: A list of hashed addresses to unblock
     ///   - owner: The user unblocking the addresses
     /// - Returns: BatchOperationResult with the results of the update
-    func unblockAddresses(hashedAddresses: [String], owner: String) async throws -> BatchOperationResult<String>
+    func unblockAddresses(hashedAddresses: [String], owner: String) async throws -> BatchOperationResult<String, String>
     
     /// Retrieve the email address blocklist for the given user
     ///

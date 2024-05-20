@@ -3118,7 +3118,7 @@ internal final class SendEncryptedEmailMessageMutation: GraphQLMutation {
 
 internal final class UpdateEmailMessagesMutation: GraphQLMutation {
   internal static let operationString =
-    "mutation UpdateEmailMessages($input: UpdateEmailMessagesInput!) {\n  updateEmailMessages(input: $input) {\n    __typename\n    ...UpdateEmailMessagesResult\n  }\n}"
+    "mutation UpdateEmailMessages($input: UpdateEmailMessagesInput!) {\n  updateEmailMessagesV2(input: $input) {\n    __typename\n    ...UpdateEmailMessagesResult\n  }\n}"
 
   internal static var requestString: String { return operationString.appending(UpdateEmailMessagesResult.fragmentString) }
 
@@ -3136,7 +3136,7 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
     internal static let possibleTypes = ["Mutation"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("updateEmailMessages", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(UpdateEmailMessage.selections))),
+      GraphQLField("updateEmailMessagesV2", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(UpdateEmailMessagesV2.selections))),
     ]
 
     internal var snapshot: Snapshot
@@ -3145,28 +3145,28 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
       self.snapshot = snapshot
     }
 
-    internal init(updateEmailMessages: UpdateEmailMessage) {
-      self.init(snapshot: ["__typename": "Mutation", "updateEmailMessages": updateEmailMessages.snapshot])
+    internal init(updateEmailMessagesV2: UpdateEmailMessagesV2) {
+      self.init(snapshot: ["__typename": "Mutation", "updateEmailMessagesV2": updateEmailMessagesV2.snapshot])
     }
 
-    internal var updateEmailMessages: UpdateEmailMessage {
+    internal var updateEmailMessagesV2: UpdateEmailMessagesV2 {
       get {
-        return UpdateEmailMessage(snapshot: snapshot["updateEmailMessages"]! as! Snapshot)
+        return UpdateEmailMessagesV2(snapshot: snapshot["updateEmailMessagesV2"]! as! Snapshot)
       }
       set {
-        snapshot.updateValue(newValue.snapshot, forKey: "updateEmailMessages")
+        snapshot.updateValue(newValue.snapshot, forKey: "updateEmailMessagesV2")
       }
     }
 
-    internal struct UpdateEmailMessage: GraphQLSelectionSet {
-      internal static let possibleTypes = ["UpdateEmailMessagesResult"]
+    internal struct UpdateEmailMessagesV2: GraphQLSelectionSet {
+      internal static let possibleTypes = ["UpdateEmailMessagesV2Result"]
 
       internal static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("status", type: .nonNull(.scalar(UpdateEmailMessagesStatus.self))),
-        GraphQLField("successMessageIds", type: .list(.nonNull(.scalar(GraphQLID.self)))),
-        GraphQLField("failedMessageIds", type: .list(.nonNull(.scalar(GraphQLID.self)))),
+        GraphQLField("failedMessages", type: .list(.nonNull(.object(FailedMessage.selections)))),
+        GraphQLField("successMessages", type: .list(.nonNull(.object(SuccessMessage.selections)))),
       ]
 
       internal var snapshot: Snapshot
@@ -3175,8 +3175,8 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(status: UpdateEmailMessagesStatus, successMessageIds: [GraphQLID]? = nil, failedMessageIds: [GraphQLID]? = nil) {
-        self.init(snapshot: ["__typename": "UpdateEmailMessagesResult", "status": status, "successMessageIds": successMessageIds, "failedMessageIds": failedMessageIds])
+      internal init(status: UpdateEmailMessagesStatus, failedMessages: [FailedMessage]? = nil, successMessages: [SuccessMessage]? = nil) {
+        self.init(snapshot: ["__typename": "UpdateEmailMessagesV2Result", "status": status, "failedMessages": failedMessages.flatMap { $0.map { $0.snapshot } }, "successMessages": successMessages.flatMap { $0.map { $0.snapshot } }])
       }
 
       internal var __typename: String {
@@ -3197,21 +3197,21 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
         }
       }
 
-      internal var successMessageIds: [GraphQLID]? {
+      internal var failedMessages: [FailedMessage]? {
         get {
-          return snapshot["successMessageIds"] as? [GraphQLID]
+          return (snapshot["failedMessages"] as? [Snapshot]).flatMap { $0.map { FailedMessage(snapshot: $0) } }
         }
         set {
-          snapshot.updateValue(newValue, forKey: "successMessageIds")
+          snapshot.updateValue(newValue.flatMap { $0.map { $0.snapshot } }, forKey: "failedMessages")
         }
       }
 
-      internal var failedMessageIds: [GraphQLID]? {
+      internal var successMessages: [SuccessMessage]? {
         get {
-          return snapshot["failedMessageIds"] as? [GraphQLID]
+          return (snapshot["successMessages"] as? [Snapshot]).flatMap { $0.map { SuccessMessage(snapshot: $0) } }
         }
         set {
-          snapshot.updateValue(newValue, forKey: "failedMessageIds")
+          snapshot.updateValue(newValue.flatMap { $0.map { $0.snapshot } }, forKey: "successMessages")
         }
       }
 
@@ -3233,6 +3233,110 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
           }
           set {
             snapshot += newValue.snapshot
+          }
+        }
+      }
+
+      internal struct FailedMessage: GraphQLSelectionSet {
+        internal static let possibleTypes = ["EmailMessageOperationFailureResult"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("errorType", type: .nonNull(.scalar(String.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(id: GraphQLID, errorType: String) {
+          self.init(snapshot: ["__typename": "EmailMessageOperationFailureResult", "id": id, "errorType": errorType])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var id: GraphQLID {
+          get {
+            return snapshot["id"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        internal var errorType: String {
+          get {
+            return snapshot["errorType"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "errorType")
+          }
+        }
+      }
+
+      internal struct SuccessMessage: GraphQLSelectionSet {
+        internal static let possibleTypes = ["UpdatedEmailMessageSuccess"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(id: GraphQLID, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+          self.init(snapshot: ["__typename": "UpdatedEmailMessageSuccess", "id": id, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var id: GraphQLID {
+          get {
+            return snapshot["id"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        internal var createdAtEpochMs: Double {
+          get {
+            return snapshot["createdAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+          }
+        }
+
+        internal var updatedAtEpochMs: Double {
+          get {
+            return snapshot["updatedAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
           }
         }
       }
@@ -13554,15 +13658,15 @@ internal struct SendEmailMessageResult: GraphQLFragment {
 
 internal struct UpdateEmailMessagesResult: GraphQLFragment {
   internal static let fragmentString =
-    "fragment UpdateEmailMessagesResult on UpdateEmailMessagesResult {\n  __typename\n  status\n  successMessageIds\n  failedMessageIds\n}"
+    "fragment UpdateEmailMessagesResult on UpdateEmailMessagesV2Result {\n  __typename\n  status\n  failedMessages {\n    __typename\n    id\n    errorType\n  }\n  successMessages {\n    __typename\n    id\n    createdAtEpochMs\n    updatedAtEpochMs\n  }\n}"
 
-  internal static let possibleTypes = ["UpdateEmailMessagesResult"]
+  internal static let possibleTypes = ["UpdateEmailMessagesV2Result"]
 
   internal static let selections: [GraphQLSelection] = [
     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
     GraphQLField("status", type: .nonNull(.scalar(UpdateEmailMessagesStatus.self))),
-    GraphQLField("successMessageIds", type: .list(.nonNull(.scalar(GraphQLID.self)))),
-    GraphQLField("failedMessageIds", type: .list(.nonNull(.scalar(GraphQLID.self)))),
+    GraphQLField("failedMessages", type: .list(.nonNull(.object(FailedMessage.selections)))),
+    GraphQLField("successMessages", type: .list(.nonNull(.object(SuccessMessage.selections)))),
   ]
 
   internal var snapshot: Snapshot
@@ -13571,8 +13675,8 @@ internal struct UpdateEmailMessagesResult: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(status: UpdateEmailMessagesStatus, successMessageIds: [GraphQLID]? = nil, failedMessageIds: [GraphQLID]? = nil) {
-    self.init(snapshot: ["__typename": "UpdateEmailMessagesResult", "status": status, "successMessageIds": successMessageIds, "failedMessageIds": failedMessageIds])
+  internal init(status: UpdateEmailMessagesStatus, failedMessages: [FailedMessage]? = nil, successMessages: [SuccessMessage]? = nil) {
+    self.init(snapshot: ["__typename": "UpdateEmailMessagesV2Result", "status": status, "failedMessages": failedMessages.flatMap { $0.map { $0.snapshot } }, "successMessages": successMessages.flatMap { $0.map { $0.snapshot } }])
   }
 
   internal var __typename: String {
@@ -13593,21 +13697,125 @@ internal struct UpdateEmailMessagesResult: GraphQLFragment {
     }
   }
 
-  internal var successMessageIds: [GraphQLID]? {
+  internal var failedMessages: [FailedMessage]? {
     get {
-      return snapshot["successMessageIds"] as? [GraphQLID]
+      return (snapshot["failedMessages"] as? [Snapshot]).flatMap { $0.map { FailedMessage(snapshot: $0) } }
     }
     set {
-      snapshot.updateValue(newValue, forKey: "successMessageIds")
+      snapshot.updateValue(newValue.flatMap { $0.map { $0.snapshot } }, forKey: "failedMessages")
     }
   }
 
-  internal var failedMessageIds: [GraphQLID]? {
+  internal var successMessages: [SuccessMessage]? {
     get {
-      return snapshot["failedMessageIds"] as? [GraphQLID]
+      return (snapshot["successMessages"] as? [Snapshot]).flatMap { $0.map { SuccessMessage(snapshot: $0) } }
     }
     set {
-      snapshot.updateValue(newValue, forKey: "failedMessageIds")
+      snapshot.updateValue(newValue.flatMap { $0.map { $0.snapshot } }, forKey: "successMessages")
+    }
+  }
+
+  internal struct FailedMessage: GraphQLSelectionSet {
+    internal static let possibleTypes = ["EmailMessageOperationFailureResult"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+      GraphQLField("errorType", type: .nonNull(.scalar(String.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(id: GraphQLID, errorType: String) {
+      self.init(snapshot: ["__typename": "EmailMessageOperationFailureResult", "id": id, "errorType": errorType])
+    }
+
+    internal var __typename: String {
+      get {
+        return snapshot["__typename"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    internal var id: GraphQLID {
+      get {
+        return snapshot["id"]! as! GraphQLID
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "id")
+      }
+    }
+
+    internal var errorType: String {
+      get {
+        return snapshot["errorType"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "errorType")
+      }
+    }
+  }
+
+  internal struct SuccessMessage: GraphQLSelectionSet {
+    internal static let possibleTypes = ["UpdatedEmailMessageSuccess"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+      GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+      GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(id: GraphQLID, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+      self.init(snapshot: ["__typename": "UpdatedEmailMessageSuccess", "id": id, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+    }
+
+    internal var __typename: String {
+      get {
+        return snapshot["__typename"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    internal var id: GraphQLID {
+      get {
+        return snapshot["id"]! as! GraphQLID
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "id")
+      }
+    }
+
+    internal var createdAtEpochMs: Double {
+      get {
+        return snapshot["createdAtEpochMs"]! as! Double
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+      }
+    }
+
+    internal var updatedAtEpochMs: Double {
+      get {
+        return snapshot["updatedAtEpochMs"]! as! Double
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+      }
     }
   }
 }

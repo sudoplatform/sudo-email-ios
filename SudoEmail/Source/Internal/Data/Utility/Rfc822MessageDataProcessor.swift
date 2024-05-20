@@ -150,7 +150,7 @@ class Rfc822MessageDataProcessor {
                 contentId: a.contentID,
                 mimetype: a.mimeType,
                 inlineAttachment: a.isInlineAttachment,
-                data: a.data.base64EncodedString()
+                data: String(data: a.data, encoding: .utf8)!
             )
             if (attachment.inlineAttachment) {
                 inlineAttachments.append(attachment)

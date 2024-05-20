@@ -49,7 +49,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
             // Encrypt the input data using the symmetric key with an AES/CBC/PKCS7Padding cipher
             let initVector = try deviceKeyWorker.createRandomData(Constants.IV_SIZE)
             let encryptedBodyData = try deviceKeyWorker.encryptWithSymmetricKey(symmetricKey, data: data, initVector: initVector)
-            let secureBodyData = SecureDataEntity(encryptedData: encryptedBodyData, initVectorData: initVector)
+            let secureBodyData = SecureDataEntity(encryptedData: encryptedBodyData, initVectorKeyID: initVector)
             let serializedBodyData = try secureBodyData.toJson()
 
             // Build an email attachment of the secure email body data
@@ -84,23 +84,27 @@ class DefaultEmailCryptoService: EmailCryptoService {
     }
 
     func decrypt(securePackage: SecurePackageEntity) throws -> Data {
-        guard let bodyAttachmentBase64Data = securePackage.bodyAttachment.data.isEmpty ? nil : securePackage.bodyAttachment.data else {
-            throw EmailCryptoServiceError.invalidArgumentError("Empty data in secure package body attachment")
-        }
-        guard let keyAttachments = securePackage.keyAttachments.isEmpty ? nil : securePackage.keyAttachments else {
-            throw EmailCryptoServiceError.invalidArgumentError("Empty key attachments in secure package")
+        guard var bodyAttachmentData = (securePackage.bodyAttachment.data.isEmpty ? nil : securePackage.bodyAttachment.data),
+              let keyAttachments = (securePackage.keyAttachments.isEmpty ? nil : securePackage.keyAttachments) else {
+            throw EmailCryptoServiceError.invalidArgumentError()
         }
 
         do {
-            let bodyAttachmentData = try decodeBase64String(bodyAttachmentBase64Data)
+            if (securePackage.bodyAttachment.contentId == SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID) {
+                // Legacy system base64 encodes this data, so decode it here
+                bodyAttachmentData = try decodeBase64String(bodyAttachmentData)
+            }
             let secureBodyData = try SecureDataEntity.fromJson(bodyAttachmentData)
 
             // Iterate through the set of keyAttachments and search for the key belonging to the current recipient.
             var keyComponents: SealedKeyComponentsEntity? = nil
             try keyAttachments.forEach({ key in
                 if !key.data.isEmpty {
-                    // Decode base64 attachment data
-                    let keyData = try decodeBase64String(key.data)
+                    var keyData = key.data
+                    if(key.contentId == SecureEmailAttachmentType.LEGACY_KEY_EXCHANGE_CONTENT_ID) {
+                        // Legacy system base64 encodes this data, so decode it here
+                        keyData = try decodeBase64String(keyData)
+                    }
                     // Parse the key and pluck the publicKeyId
                     let sealedKeyComponents = try SealedKeyComponentsEntity.fromJson(keyData)
                     // Check if the private key pair exists based on the publicKeyId
@@ -123,7 +127,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
 
             return try deviceKeyWorker.decryptWithSymmetricKey(symmetricKeyData,
                 data: secureBodyData.encryptedData,
-                initVector: secureBodyData.initVectorData
+                initVector: secureBodyData.initVectorKeyID
             )
         } catch {
             let msg = "\(Constants.DECRYPTION_ERROR_MSG): \(error.localizedDescription)"

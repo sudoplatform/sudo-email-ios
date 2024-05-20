@@ -39,7 +39,7 @@ class UnblockEmailAddressesByHashedValueUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///   - hashedValues: A list of hashed addresses to unblock
-    func execute(hashedValues: [String]) async throws -> BatchOperationResult<String> {
+    func execute(hashedValues: [String]) async throws -> BatchOperationResult<String, String> {
         self.log.debug("execute: \(hashedValues)")
         let owner = try self.userClient.getSubject()
         

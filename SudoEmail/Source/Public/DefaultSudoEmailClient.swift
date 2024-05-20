@@ -250,7 +250,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return try await useCase.execute(withInput: input)
     }
 
-    public func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String> {
+    public func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String, String> {
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
         return try await useCase.execute(withIds: ids)
     }
@@ -258,7 +258,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func deleteEmailMessage(withId id: String) async throws -> String? {
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
         let result = try await useCase.execute(withIds: [id])
-        switch result {
+        switch result.status {
         case .success:
             return id
         default:
@@ -268,7 +268,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func updateEmailMessages(
         withInput input: UpdateEmailMessagesInput
-    ) async throws -> BatchOperationResult<String> {
+    ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
         let useCase = useCaseFactory.generateUpdateEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
         return try await useCase.execute(withInput: input)
     }
@@ -295,7 +295,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
-    ) async throws -> BatchOperationResult<String> {
+    ) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
         let useCase = useCaseFactory.generateDeleteDraftEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository
@@ -391,7 +391,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
     
     
-    public func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String> {
+    public func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String> {
         self.logger.debug("blockEmailAddresses: \(addresses)")
         let useCase = useCaseFactory.generateBlockEmailAddressesUseCase(
             blockedAddressRepository: blockedAddressRepository,
@@ -402,7 +402,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return result
     }
     
-    public func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String> {
+    public func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String> {
         self.logger.debug("unblockEmailAddresses: \(addresses)")
         let useCase = useCaseFactory.generateUnblockEmailAddressesUseCase(
             blockedAddressRepository: blockedAddressRepository,
@@ -413,7 +413,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return result
     }
     
-    public func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String> {
+    public func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String, String> {
         self.logger.debug("unblockEmailAddressesByHashedValue: \(hashedValues)")
         let useCase = useCaseFactory.generateUnblockEmailAddressesByHashedValueUseCase(
             blockedAddressRepository: blockedAddressRepository,

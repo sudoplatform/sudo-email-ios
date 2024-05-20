@@ -12,36 +12,36 @@ public enum BatchOperationResultStatus {
     case failure
 }
 
-public struct BatchOperationPartialResult<P> {
-    public var partial: P
-    public var error: Error
+/// Result type of an API that returns multiple records. Supports partial results.
+public struct BatchOperationResult<S,F> {
 
-    public init(partial: P, error: Error) {
-        self.partial = partial
-        self.error = error
+    // MARK: - Supplementary
+    public var status: BatchOperationResultStatus
+    
+    public var successItems: [S]?
+    
+    public var failureItems: [F]?
+    
+    public init(status: BatchOperationResultStatus, successItems: [S]? = nil, failureItems: [F]? = nil) {
+        self.status = status
+        self.successItems = successItems
+        self.failureItems = failureItems
     }
 }
 
-/// Result type of an API that returns multiple records. Supports partial results.
-public enum BatchOperationResult<T> {
+/// Representation of the result of an unsuccessful operation performed on an email message
+public struct EmailMessageOperationFailureResult: Equatable {
+    
+    /// The unique identifier of the message
+    public var id: String
+    
+    /// Description of the cause of the failure
+    public var errorType: String
+    
+    // MARK: - Conformance: Equatable
 
-    // MARK: - Supplementary
-
-    public struct BatchOperationPartialResult {
-        public var status = BatchOperationResultStatus.partial
-        public var successItems: [T]
-        public var failureItems: [T]
-
-        public init (successItems: [T], failureItems: [T]) {
-            self.successItems = successItems
-            self.failureItems = failureItems
-        }
+    public static func == (lhs: EmailMessageOperationFailureResult, rhs: EmailMessageOperationFailureResult) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.errorType == rhs.errorType
     }
-
-    /// Result is successful
-    case success
-    /// Result is partial, returning a list of mixed success and partial results.
-    case partial(BatchOperationPartialResult)
-    /// Result is failed
-    case failure
 }

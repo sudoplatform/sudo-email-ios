@@ -29,21 +29,20 @@ class DeleteEmailMessagesUseCase {
     ///       - partial: Only some of the email messages deleted successfully. Includes a list of the
     ///               identifiers of the email messages that failed and succeeded to update.
     ///       - failed: All email messages failed to delete.
-    func execute(withIds ids: [String]) async throws -> BatchOperationResult<String> {
+    func execute(withIds ids: [String]) async throws -> BatchOperationResult<String, String> {
         if ids.isEmpty {
             throw SudoEmailError.invalidArgument("Attempt to delete empty list of email messages")
         }
         let failureIds = try await emailMessageRepository.deleteEmailMessages(withIds: ids)
+        let status: BatchOperationResultStatus
         if failureIds.isEmpty {
-            return BatchOperationResult<String>.success
+            status = BatchOperationResultStatus.success
         } else if failureIds.count == ids.count {
-            return BatchOperationResult<String>.failure
+            status = BatchOperationResultStatus.failure
         } else {
-            let successIds = ids.filter { !failureIds.contains($0) }
-            return BatchOperationResult<String>.partial(BatchOperationResult<String>.BatchOperationPartialResult(
-                successItems: successIds,
-                failureItems: failureIds
-            ))
+            status = BatchOperationResultStatus.partial
         }
+        let successIds = ids.filter { !failureIds.contains($0) }
+        return BatchOperationResult(status: status, successItems: successIds, failureItems: failureIds)
     }
 }

@@ -13,17 +13,22 @@ enum SecureEmailAttachmentType {
     case keyExchange(fileName: String, mimeType: String, contentId: String)
 
     case body(fileName: String, mimeType: String, contentId: String)
+    
+    static let LEGACY_KEY_EXCHANGE_MIME_TYPE = "application/x-sudomail-key"
+    static let LEGACY_KEY_EXCHANGE_CONTENT_ID = "securekeyexhangedata@sudomail.com" // Intentional mispelling of 'exchange' to match legacy system
+    static let LEGACY_BODY_MIME_TYPE = "application/x-sudomail-body"
+    static let LEGACY_BODY_CONTENT_ID = "securebody@sudomail.com"
 
     static let KEY_EXCHANGE = SecureEmailAttachmentType.keyExchange(
         fileName: "Secure Data",
-        mimeType: "application/x-sudomail-key",
-        contentId: "securekeyexchangedata@sudomail.com"
+        mimeType: "application/x-sudoplatform-key",
+        contentId: "securekeyexchangedata@sudoplatform.com"
     )
 
     static let BODY = SecureEmailAttachmentType.body(
         fileName: "Secure Email",
-        mimeType: "application/x-sudomail-body",
-        contentId: "securebody@sudomail.com"
+        mimeType: "application/x-sudoplatform-body",
+        contentId: "securebody@sudoplatform.com"
     )
 
     private func getValues() -> (fileName: String, mimeType: String, contentId: String) {

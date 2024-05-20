@@ -25,7 +25,9 @@ class UpdateEmailMessagesUseCase {
     /// - Parameters:
     ///   - input: List of unique Identifiers of the email messages to be updated and the values to update.
     /// - Returns: Result of the update, either success, failed, or partial.
-    func execute(withInput input: UpdateEmailMessagesInput) async throws -> BatchOperationResult<String> {
+    func execute(
+        withInput input: UpdateEmailMessagesInput
+    ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
         return try await emailMessageRepository.updateEmailMessages(withInput: input)
     }
 }

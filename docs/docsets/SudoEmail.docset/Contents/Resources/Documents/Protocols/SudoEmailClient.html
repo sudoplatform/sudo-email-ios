@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 13.0.2 Docs
+          SudoEmail 14.0.0 Docs
         </a>
         
       </p>
@@ -71,9 +71,6 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/AWSS3WorkerError.html">AWSS3WorkerError</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/BatchOperationResult.html">BatchOperationResult</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/BoolFilter.html">BoolFilter</a>
@@ -139,6 +136,9 @@
                 <a class="nav-group-task-link" href="../Structs/AnyError.html">AnyError</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/CheckEmailAddressAvailabilityInput.html">CheckEmailAddressAvailabilityInput</a>
               </li>
               <li class="nav-group-task">
@@ -173,6 +173,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/EmailMessageDateRange.html">EmailMessageDateRange</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/EmailMessageWithBody.html">EmailMessageWithBody</a>
@@ -254,6 +257,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UpdateEmailMessagesValues.html">UpdateEmailMessagesValues</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs.html#/s:9SudoEmail07UpdatedB14MessageSuccessV">UpdatedEmailMessageSuccess</a>
               </li>
             </ul>
           </li>
@@ -555,9 +561,9 @@ Email messages sent to in-network recipients (i.e. email addresses that exist wi
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultOySSGSaySSG_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultVyS2SGSaySSG_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/deleteEmailMessages(withIds:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultOySSGSaySSG_tYaKF">deleteEmailMessages(withIds:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultVyS2SGSaySSG_tYaKF">deleteEmailMessages(withIds:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -575,7 +581,7 @@ Email messages sent to in-network recipients (i.e. email addresses that exist wi
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deleteEmailMessages</span><span class="p">(</span><span class="n">withIds</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deleteEmailMessages</span><span class="p">(</span><span class="n">withIds</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -669,9 +675,9 @@ Failure - All email messages failed to delete.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP06updateB8Messages9withInputAA20BatchOperationResultOySSGAA06UpdatebeG0V_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP06updateB8Messages9withInputAA20BatchOperationResultVyAA07UpdatedB14MessageSuccessVAA0bli7FailureJ0VGAA06UpdatebeG0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/updateEmailMessages(withInput:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06updateB8Messages9withInputAA20BatchOperationResultOySSGAA06UpdatebeG0V_tYaKF">updateEmailMessages(withInput:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06updateB8Messages9withInputAA20BatchOperationResultVyAA07UpdatedB14MessageSuccessVAA0bli7FailureJ0VGAA06UpdatebeG0V_tYaKF">updateEmailMessages(withInput:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -689,7 +695,9 @@ Failure - All email messages failed to delete.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">updateEmailMessages</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/UpdateEmailMessagesInput.html">UpdateEmailMessagesInput</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">updateEmailMessages</span><span class="p">(</span>
+    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/UpdateEmailMessagesInput.html">UpdateEmailMessagesInput</a></span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs.html#/s:9SudoEmail07UpdatedB14MessageSuccessV">UpdatedEmailMessageSuccess</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -714,11 +722,20 @@ Failure - All email messages failed to delete.</p>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>The status of the updates:
-Success - All email messages succeeded to update.
-Partial - Only a partial number of messages succeeded to update. Includes a list of the
-      identifiers of the email messages that failed and succeeded to update.
-Failure - All email messages failed to update.</p>
+                        <p>The results of the updates:
+
+<ul>
+<li>status:
+
+<ul>
+<li>Success - All email messages succeeded to update.</li>
+<li>Partial - Only a partial number of messages succeeded to update. Includes a list of the
+identifiers of the email messages that failed and succeeded to update.</li>
+<li>Failure - All email messages failed to update.</li>
+</ul></li>
+<li>successItems - A list of the id, createdAt and updatedAt of each message that successfully updated</li>
+<li>failureItems - A list of the id, and errorType of each message that failed to be updated</li>
+</ul></p>
                       </div>
                     </section>
                   </div>
@@ -840,9 +857,9 @@ Failure - All email messages failed to update.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultOySSGAA06DeleteebfH0V_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultVySSAA0b7Messagej7FailureK0VGAA06DeleteebfH0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/deleteDraftEmailMessages(withInput:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultOySSGAA06DeleteebfH0V_tYaKF">deleteDraftEmailMessages(withInput:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultVySSAA0b7Messagej7FailureK0VGAA06DeleteebfH0V_tYaKF">deleteDraftEmailMessages(withInput:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -854,7 +871,6 @@ Failure - All email messages failed to update.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Delete the draft email messages identified by the list of ids.
-Draft email messages can only be deleted in batches of 10. Anything greater will throw a LimitExceededError.
 Any draft email message ids that do not exist will be marked as success.
 Any emailAddressId that is not owned or does not exist, will throw an error.</p>
 
@@ -865,7 +881,7 @@ Any emailAddressId that is not owned or does not exist, will throw an error.</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deleteDraftEmailMessages</span><span class="p">(</span>
     <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/DeleteDraftEmailMessagesInput.html">DeleteDraftEmailMessagesInput</a></span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -2027,9 +2043,9 @@ Returns an empty list if no email messages can be found.</li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP05blockB9Addresses9addressesAA20BatchOperationResultOySSGSaySSG_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP05blockB9Addresses9addressesAA20BatchOperationResultVyS2SGSaySSG_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/blockEmailAddresses(addresses:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP05blockB9Addresses9addressesAA20BatchOperationResultOySSGSaySSG_tYaKF">blockEmailAddresses(addresses:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP05blockB9Addresses9addressesAA20BatchOperationResultVyS2SGSaySSG_tYaKF">blockEmailAddresses(addresses:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -2047,7 +2063,7 @@ Returns an empty list if no email messages can be found.</li>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">blockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">blockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -2084,9 +2100,9 @@ Failure - All addresses failed to be blocked.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP07unblockB9Addresses9addressesAA20BatchOperationResultOySSGSaySSG_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP07unblockB9Addresses9addressesAA20BatchOperationResultVyS2SGSaySSG_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/unblockEmailAddresses(addresses:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP07unblockB9Addresses9addressesAA20BatchOperationResultOySSGSaySSG_tYaKF">unblockEmailAddresses(addresses:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP07unblockB9Addresses9addressesAA20BatchOperationResultVyS2SGSaySSG_tYaKF">unblockEmailAddresses(addresses:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -2104,7 +2120,7 @@ Failure - All addresses failed to be blocked.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">unblockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">unblockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -2141,9 +2157,9 @@ Failure - All addresses failed to be unblocked.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP07unblockB22AddressesByHashedValue12hashedValuesAA20BatchOperationResultOySSGSaySSG_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP07unblockB22AddressesByHashedValue12hashedValuesAA20BatchOperationResultVyS2SGSaySSG_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/unblockEmailAddressesByHashedValue(hashedValues:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP07unblockB22AddressesByHashedValue12hashedValuesAA20BatchOperationResultOySSGSaySSG_tYaKF">unblockEmailAddressesByHashedValue(hashedValues:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP07unblockB22AddressesByHashedValue12hashedValuesAA20BatchOperationResultVyS2SGSaySSG_tYaKF">unblockEmailAddressesByHashedValue(hashedValues:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -2161,7 +2177,7 @@ Failure - All addresses failed to be unblocked.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">unblockEmailAddressesByHashedValue</span><span class="p">(</span><span class="nv">hashedValues</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">unblockEmailAddressesByHashedValue</span><span class="p">(</span><span class="nv">hashedValues</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -2423,7 +2439,7 @@ Failure - All addresses failed to be unblocked.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-05-15)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-05-20)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

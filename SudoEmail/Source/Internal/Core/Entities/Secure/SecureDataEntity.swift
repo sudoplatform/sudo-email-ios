@@ -11,42 +11,42 @@ struct SecureDataEntity: Codable {
     let encryptedData: Data
 
     /// The initialization vector.
-    let initVectorData: Data
+    let initVectorKeyID: Data
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `SecureData`.
     /// - Parameters:
     ///   - encryptedData: The secure encrypted data.
-    ///   - initVectorData: The initialization vector.
-    init(encryptedData: Data, initVectorData: Data) {
+    ///   - initVectorKeyId: The initialization vector.
+    init(encryptedData: Data, initVectorKeyID: Data) {
         self.encryptedData = encryptedData
-        self.initVectorData = initVectorData
+        self.initVectorKeyID = initVectorKeyID
     }
 
     // MARK: - Conformance: Codable
 
     private enum CodingKeys: String, CodingKey {
-        case encryptedData, initVectorData
+        case encryptedData, initVectorKeyID
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(encryptedData.base64EncodedString(), forKey: .encryptedData)
-        try container.encode(initVectorData.base64EncodedString(), forKey: .initVectorData)
+        try container.encode(initVectorKeyID.base64EncodedString(), forKey: .initVectorKeyID)
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let decodedEncryptedDataBase64 = try values.decode(String.self, forKey: .encryptedData)
-        let decodedInitVectorDataBase64 = try values.decode(String.self, forKey: .initVectorData)
+        let decodedInitVectorKeyIDBase64 = try values.decode(String.self, forKey: .initVectorKeyID)
 
         guard let decodedEncryptedData = Data(base64Encoded: decodedEncryptedDataBase64),
-              let decodedInitVectorData = Data(base64Encoded: decodedInitVectorDataBase64) else {
+              let decodedInitVectorKeyID = Data(base64Encoded: decodedInitVectorKeyIDBase64) else {
             throw SudoEmailError.internalError("Failed to decode SecureData from JSON data")
         }
         encryptedData = decodedEncryptedData
-        initVectorData = decodedInitVectorData
+        initVectorKeyID = decodedInitVectorKeyID
     }
 
     // MARK: - Methods

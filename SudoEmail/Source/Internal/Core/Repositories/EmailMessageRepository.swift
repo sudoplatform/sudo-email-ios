@@ -39,7 +39,9 @@ protocol EmailMessageRepository: AnyObject {
     ///       - partial: Only some of the email messages updated successfully. Includes a list of the
     ///               identifiers of the email messages that failed and succeeded to update.
     ///       - failed: All email messages failed to update.
-    func updateEmailMessages(withInput input: UpdateEmailMessagesInput) async throws -> BatchOperationResult<String>
+    func updateEmailMessages(
+        withInput input: UpdateEmailMessagesInput
+    ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>
 
     /// Save a draft email message
     ///  - Parameters:
