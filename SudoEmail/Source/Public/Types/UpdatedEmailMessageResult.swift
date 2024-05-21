@@ -8,9 +8,13 @@ import Foundation
 
 /// The result of a successfull email message update
 public struct UpdatedEmailMessageSuccess {
-    let id: String
     
-    let createdAt: Date
+    /// The unique identifier of the email message
+    public let id: String
     
-    let updatedAt: Date
+    /// The date the message was created
+    public let createdAt: Date
+    
+    /// The date the message was updated
+    public let updatedAt: Date
 }
