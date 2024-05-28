@@ -143,14 +143,17 @@ class Rfc822MessageDataProcessor {
         var body = parser?.plainTextBodyRendering()
         var attachments: [EmailAttachment] = []
         var inlineAttachments: [EmailAttachment] = []
-        
+
         (parser?.attachments() as! [MCOAttachment]).forEach({ a in
+            // MailCore automatically encodes base64 data when parsing a message, so we encode the data here
+            // to protect the inner-contents from being unwrapped.
+            let data = a.data.base64EncodedString()
             let attachment = EmailAttachment(
                 filename: a.filename,
                 contentId: a.contentID,
                 mimetype: a.mimeType,
                 inlineAttachment: a.isInlineAttachment,
-                data: String(data: a.data, encoding: .utf8)!
+                data: data
             )
             if (attachment.inlineAttachment) {
                 inlineAttachments.append(attachment)

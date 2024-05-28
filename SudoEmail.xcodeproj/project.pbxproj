@@ -29,6 +29,7 @@
 		510F5D2C2BBD9CBA0096FD10 /* SecureDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D2B2BBD9CBA0096FD10 /* SecureDataEntity.swift */; };
 		510F5D2E2BBE6AF00096FD10 /* SealedKeyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D2D2BBE6AF00096FD10 /* SealedKeyEntity.swift */; };
 		510F5D312BBF6E7B0096FD10 /* SealedKeyEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D302BBF6E7B0096FD10 /* SealedKeyEntityTests.swift */; };
+		517845662BF7259600268489 /* DataFactory+Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517845652BF7259600268489 /* DataFactory+Core.swift */; };
 		51A06DAE2BBFA7090002B1F3 /* SecureDataEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A06DAD2BBFA7090002B1F3 /* SecureDataEntityTests.swift */; };
 		51A06DB02BBFAC2C0002B1F3 /* SecureEmailAttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A06DAF2BBFAC2C0002B1F3 /* SecureEmailAttachmentType.swift */; };
 		51A06DB22BBFB11D0002B1F3 /* DefaultEmailCryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A06DB12BBFB11D0002B1F3 /* DefaultEmailCryptoService.swift */; };
@@ -509,6 +510,7 @@
 		510F5D2B2BBD9CBA0096FD10 /* SecureDataEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureDataEntity.swift; sourceTree = "<group>"; };
 		510F5D2D2BBE6AF00096FD10 /* SealedKeyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SealedKeyEntity.swift; sourceTree = "<group>"; };
 		510F5D302BBF6E7B0096FD10 /* SealedKeyEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SealedKeyEntityTests.swift; sourceTree = "<group>"; };
+		517845652BF7259600268489 /* DataFactory+Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFactory+Core.swift"; sourceTree = "<group>"; };
 		51A06DAD2BBFA7090002B1F3 /* SecureDataEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureDataEntityTests.swift; sourceTree = "<group>"; };
 		51A06DAF2BBFAC2C0002B1F3 /* SecureEmailAttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEmailAttachmentType.swift; sourceTree = "<group>"; };
 		51A06DB12BBFB11D0002B1F3 /* DefaultEmailCryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEmailCryptoService.swift; sourceTree = "<group>"; };
@@ -1910,6 +1912,7 @@
 		84B2604524888BA500E99401 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				517845652BF7259600268489 /* DataFactory+Core.swift */,
 				95F0CC4A285007EF002ADB5D /* DataFactory+SESSimulator.swift */,
 				84770ACF24CEA60F00FC8C8D /* DataFactory+TestUtility.swift */,
 				84770ACD24CEA5FC00FC8C8D /* DataFactoryNamespace.swift */,
@@ -2716,6 +2719,7 @@
 			files = (
 				9F372BAB2B708071009FD8CC /* BlockEmailAddressesIntegrationTests.swift in Sources */,
 				848B918324DB9BEC00E4CE50 /* CheckEmailAddressAvailabilityIntegrationTests.swift in Sources */,
+				517845662BF7259600268489 /* DataFactory+Core.swift in Sources */,
 				95F0CC4B285007EF002ADB5D /* DataFactory+SESSimulator.swift in Sources */,
 				84770AD024CEA60F00FC8C8D /* DataFactory+TestUtility.swift in Sources */,
 				84770ACE24CEA5FC00FC8C8D /* DataFactoryNamespace.swift in Sources */,
