@@ -429,6 +429,7 @@
 		9FF181FC2BB4D716000EF217 /* SudoEmail.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 84783B2A231C916200CCBC27 /* SudoEmail.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9FF182002BB4D72A000EF217 /* MailCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FD648362BB13282004329C7 /* MailCore.framework */; };
 		9FF182012BB4D72A000EF217 /* MailCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9FD648362BB13282004329C7 /* MailCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9FFABE272C06CB2D006A3932 /* InteropIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFABE262C06CB2D006A3932 /* InteropIntegrationTests.swift */; };
 		D632B6CB4FB078191B296690 /* Pods_SudoEmail_SudoEmailIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384E49BF9668F6C5828076A2 /* Pods_SudoEmail_SudoEmailIntegrationTests.framework */; };
 		DC5F647DF98608C323589D2A /* Pods_SudoEmail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B7A9CDD473178F447B5C634 /* Pods_SudoEmail.framework */; };
 /* End PBXBuildFile section */
@@ -925,6 +926,7 @@
 		9FF182092BB4D7AA000EF217 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9FF1820A2BB4D7AA000EF217 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9FF1820B2BB4D7AA000EF217 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9FFABE262C06CB2D006A3932 /* InteropIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteropIntegrationTests.swift; sourceTree = "<group>"; };
 		AEEE3190CBC32598AE42E072 /* Pods-SudoEmail-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-TestApp/Pods-SudoEmail-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E73031002DBB24648453F2C4 /* Pods_SudoEmail_SudoEmailTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SudoEmail_SudoEmailTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC564FD579A840F6E71A9133 /* Pods_SudoEmail_TestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SudoEmail_TestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1867,6 +1869,7 @@
 			isa = PBXGroup;
 			children = (
 				84B2603B2488889000E99401 /* SudoEmailClient */,
+				9FFABE262C06CB2D006A3932 /* InteropIntegrationTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -2734,6 +2737,7 @@
 				51A06DC72BC633A80002B1F3 /* GetEmailMessageWithBodyIntegrationTests.swift in Sources */,
 				84B260692488C6CE00E99401 /* GetSupportedDomainsIntegrationTests.swift in Sources */,
 				95AEC1172AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift in Sources */,
+				9FFABE272C06CB2D006A3932 /* InteropIntegrationTests.swift in Sources */,
 				84A6E1A0249203040025F05A /* ListEmailAddressesIntegrationTests.swift in Sources */,
 				95B3DB6028BDC244007084FE /* ListEmailFoldersIntegrationTests.swift in Sources */,
 				8428897E249B319400D39E6C /* ListEmailMessagesIntegrationTests.swift in Sources */,

@@ -38,4 +38,4 @@ html/*
 Documentation/*
 
 .idea/
-
+.env

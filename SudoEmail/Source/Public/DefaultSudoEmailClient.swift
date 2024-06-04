@@ -241,8 +241,9 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
-            emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository,
+            emailMessageRepository: emailMessageRepository,
+            emailDomainRepository: domainRepository,
             emailCryptoService: emailCryptoService,
             emailConfigDataRepository: emailConfigurationDataRepository,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor

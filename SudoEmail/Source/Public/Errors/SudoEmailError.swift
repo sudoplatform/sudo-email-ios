@@ -27,8 +27,10 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case keyAttachmentsNotFound
     /// No body attachment was found on message body.
     case bodyAttachmentNotFound
-    /// Email message size exceeds configured maximum
+    /// Email message size exceeds configured maximum.
     case messageSizeLimitExceeded(_ msg: String?)
+    /// In network recipient email address not found.
+    case inNetworkAddressNotFound(_ msg: String?)
 
     // MARK: - Service
 
@@ -46,6 +48,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case emailAddressFormatValidationFailed
     /// Email address (or id associated with address) supplied is unavailable.
     case emailAddressUnavailable
+    /// Contents of an email message is of an invalid format.
+    case invalidEmailContents
 
     // MARK: - Service
 
@@ -90,6 +94,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             self = .emailAddressFormatValidationFailed
         case "sudoplatform.email.AddressUnavailable":
             self = .emailAddressUnavailable
+        case "sudoplatform.email.InvalidEmailContents":
+            self = .invalidEmailContents
         case "sudoplatform.AccountLockedError":
             self = .accountLocked
         case "sudoplatform.DecodingError":
@@ -139,6 +145,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "Input information relating to email address is invalid"
         case .emailAddressUnavailable:
             return "Email address (or id associated with address) supplied is unavailable"
+        case .invalidEmailContents:
+            return "Invalid email message contents"
         case .emailMessageNotFound:
             return "Email message could not be found"
         case .entitlementExceeded:
@@ -189,6 +197,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "The imported key archive is invalid"
         case let .messageSizeLimitExceeded(msg):
             return msg ?? "Email message size exceeded"
+        case let .inNetworkAddressNotFound(msg):
+            return msg ?? "At least one email address does not exist in network"
         }
     }
 }

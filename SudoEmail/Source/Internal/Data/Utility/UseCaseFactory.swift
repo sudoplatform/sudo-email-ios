@@ -44,15 +44,17 @@ class UseCaseFactory {
     }
 
     func generateSendEmailMessageUseCase(
-        emailMessageRepository: EmailMessageRepository,
         emailAccountRepository: EmailAccountRepository,
+        emailMessageRepository: EmailMessageRepository,
+        emailDomainRepository: DomainRepository,
         emailCryptoService: EmailCryptoService,
         emailConfigDataRepository: EmailConfigurationDataRepository,
         rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) -> SendEmailMessageUseCase {
         return SendEmailMessageUseCase(
-            emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository,
+            emailMessageRepository: emailMessageRepository,
+            emailDomainRepository: emailDomainRepository,
             emailCryptoService: emailCryptoService,
             emailConfigDataRepository: emailConfigDataRepository,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor
