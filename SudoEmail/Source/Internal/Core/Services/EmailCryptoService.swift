@@ -20,10 +20,10 @@ protocol EmailCryptoService: AnyObject {
     /// Encrypt email data that can be decrypted by all the recipients.
     ///
     /// - Parameter data: The body of the email that should be encrypted.
-    /// - Parameter keyIds: Set of key ids for each recipient that must be able to decrypt the message.
+    /// - Parameter keys: Set of keys for each recipient that must be able to decrypt the message.
     /// - Returns: The encrypted body and a sealed key for each recipient.
     /// - Throws: `EmailCryptoServiceException` when the encryption operation fails.
-    func encrypt(data: Data, keyIds: Set<String>) throws -> SecurePackageEntity
+    func encrypt(data: Data, keys: Set<KeyEntity>) throws -> SecurePackageEntity
 
     /// Decrypt email data using the key belonging to the current recipient.
     ///

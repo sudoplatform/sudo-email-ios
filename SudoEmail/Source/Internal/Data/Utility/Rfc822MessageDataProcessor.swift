@@ -149,7 +149,7 @@ class Rfc822MessageDataProcessor {
             // to protect the inner-contents from being unwrapped.
             let data = a.data.base64EncodedString()
             let attachment = EmailAttachment(
-                filename: a.filename,
+                filename: a.filename!,
                 contentId: a.contentID,
                 mimetype: a.mimeType,
                 inlineAttachment: a.isInlineAttachment,

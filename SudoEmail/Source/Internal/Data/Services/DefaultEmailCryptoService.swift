@@ -34,12 +34,12 @@ class DefaultEmailCryptoService: EmailCryptoService {
 
     // MARK: - Methods
 
-    func encrypt(data: Data, keyIds: Set<String>) throws -> SecurePackageEntity {
+    func encrypt(data: Data, keys: Set<KeyEntity>) throws -> SecurePackageEntity {
         guard let data = data.isEmpty ? nil : data else {
             throw EmailCryptoServiceError.invalidArgumentError("Empty data")
         }
-        guard let keyIds = keyIds.isEmpty ? nil : keyIds else {
-            throw EmailCryptoServiceError.invalidArgumentError("Empty key ids")
+        guard let keys = keys.isEmpty ? nil : keys else {
+            throw EmailCryptoServiceError.invalidArgumentError("Empty key list")
         }
 
         do {
@@ -57,10 +57,12 @@ class DefaultEmailCryptoService: EmailCryptoService {
 
             // Iterate through each public key for each recipient and encrypt the symmetric key with the public key
             var secureKeyAttachments: Set<EmailAttachment> = []
-            for (index, keyId) in keyIds.enumerated() {
+            for (index, key) in keys.enumerated() {
+                let keyId = key.keyId
+                let publicKey = key.keyData
                 var sealedKey = SealedKeyEntity(publicKeyId: keyId, symmetricKey: symmetricKey)
-                let encryptedKeySealedKey = try deviceKeyWorker.encryptWithKeyPairId(
-                    keyId,
+                let encryptedKeySealedKey = try deviceKeyWorker.encryptWithPublicKey(
+                    publicKey,
                     data: sealedKey.symmetricKey,
                     algorithm: sealedKey.algorithm
                 )

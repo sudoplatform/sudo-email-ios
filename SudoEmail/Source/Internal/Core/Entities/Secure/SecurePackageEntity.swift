@@ -8,9 +8,9 @@
 struct SecurePackageEntity {
 
     /// Set of email attachments representing the keys to decrypt the secure email body.
-    let keyAttachments: Set<EmailAttachment>
+    public let keyAttachments: Set<EmailAttachment>
     /// List of email attachments representing the secure email body.
-    let bodyAttachment: EmailAttachment
+    public let bodyAttachment: EmailAttachment
 
     /// Get the values of `keyAttachments` and `bodyAttachment` as a list.
     ///

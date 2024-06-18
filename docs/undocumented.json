@@ -185,13 +185,20 @@
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 70,
-      "symbol": "SudoEmailError.unknownTimezone",
+      "symbol": "SudoEmailError.serviceQuotaExceeded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
       "line": 71,
+      "symbol": "SudoEmailError.unknownTimezone",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/s4pLexCBv/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Errors/SudoEmailError.swift",
+      "line": 72,
       "symbol": "SudoEmailError.versionMismatch",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"

@@ -95,6 +95,15 @@ protocol DeviceKeyWorker: AnyObject {
     /// - Throws: `KeyManagerError` if the data cannot be decrypted.
     func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data
 
+    /// Encrypt the data using the specificed Public Key.
+    ///
+    /// - Parameter publicKey: Public Key data used to encrypt the data.
+    /// - Parameter data: The data to encrypt.
+    /// - Parameter algorithm: Algorithm in plain text to use to encrypt.
+    /// - Returns: The encrypted data.
+    /// - Throws: `KeyManagerError` if the data cannot be encrypted.
+    func encryptWithPublicKey(_ publicKey: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data
+
     /// Encrypt the data using the Symmetric Key data.
     ///
     /// - Parameter symmetricKey: The Symmetric Key data to use to decrypt the data with.
@@ -348,6 +357,10 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
         return try keyManager.decryptWithPrivateKey(keyId, data: data, algorithm: algorithm)
+    }
+
+    func encryptWithPublicKey(_ publicKey: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+        return try keyManager.encryptWithPublicKey(publicKey, data: data, algorithm: algorithm)
     }
 
     func encryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {

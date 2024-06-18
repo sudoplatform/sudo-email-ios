@@ -67,6 +67,7 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case noEntitlements
     case policyFailed
     case serviceError
+    case serviceQuotaExceeded
     case unknownTimezone
     case versionMismatch
 
@@ -121,6 +122,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             self = .policyFailed
         case "sudoplatform.ServiceError":
             self = .serviceError
+        case "sudoplatform.ServiceQuotaExceededError":
+            self = .serviceQuotaExceeded
         case "sudoplatform.VersionMismatchError":
             self = .versionMismatch
         case "sudoplatform.UnknownTimezoneError":
@@ -185,6 +188,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "A policy has failed"
         case .serviceError:
             return "Service error has occurred"
+        case .serviceQuotaExceeded:
+            return "Daily message quota limit exceeded"
         case .unauthorizedAddress:
             return "Unauthorized access to email address"
         case .unknownTimezone:
