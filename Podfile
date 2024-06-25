@@ -1,6 +1,5 @@
 #
 source 'https://github.com/CocoaPods/Specs.git'
-source 'https://gitlab.tools.anonyome.com/anonyome/pod-repository'
 
 platform :ios, '15.0'
 
@@ -20,7 +19,6 @@ project 'SudoEmail', {
 target 'SudoEmail' do
   inherit! :search_paths
   podspec :name => 'SudoEmail'
-  pod 'AnonyomeMailCore2', '~> 0.6.4'
   pod 'GzipSwift'
 
   target 'SudoEmailTests' do

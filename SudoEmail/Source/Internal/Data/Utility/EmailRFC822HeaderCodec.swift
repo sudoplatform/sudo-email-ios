@@ -19,6 +19,8 @@ struct Rfc822Header: Decodable {
     var replyTo: [EmailAddressDisplay]
     var subject: String?
     var hasAttachments: Bool?
+    /// Will be sent in formate: 1970-01-01T00:00:00.000Z
+    var date: Date?
 }
 
 class EmailRFC822HeaderCodec {
@@ -28,7 +30,13 @@ class EmailRFC822HeaderCodec {
             throw SudoEmailError.internalError("invalid rfc822Header format \(header)")
         }
         do {
-            return try JSONDecoder().decode(Rfc822Header.self, from: headerData)
+            let decoder = JSONDecoder()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
+            decoder.dateDecodingStrategy = .formatted(formatter)
+            return try decoder.decode(Rfc822Header.self, from: headerData)
         } catch {
             throw SudoEmailError.internalError("invalid rfc822Header format \(header)")
         }

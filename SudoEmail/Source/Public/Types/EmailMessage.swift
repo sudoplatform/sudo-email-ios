@@ -111,6 +111,9 @@ public struct EmailMessage: Equatable {
 
     /// True if the email message includes one or more attachments.
     public var hasAttachments: Bool
+    
+    /// Date timestamp of when the message was sent
+    public var date: Date?
 
     /// Initialize an instance of `EmailMessage`.
     public init(
@@ -136,7 +139,8 @@ public struct EmailMessage: Equatable {
         bcc: [EmailMessage.EmailAddress],
         subject: String?,
         hasAttachments: Bool,
-        encryptionStatus: EncryptionStatus
+        encryptionStatus: EncryptionStatus,
+        date: Date?
     ) {
         self.id = id
         self.clientRefId = clientRefId
@@ -161,6 +165,7 @@ public struct EmailMessage: Equatable {
         self.subject = subject
         self.hasAttachments = hasAttachments
         self.encryptionStatus = encryptionStatus
+        self.date = date
     }
 
 }
@@ -216,6 +221,9 @@ public struct PartialEmailMessage: Equatable {
 
     /// Version of this entity, increments on update.
     public var version: Int
+    
+    /// Date timestamp of when the message was sent
+    public var date: Date?
 
     /// Initialize an instance of `EmailMessage`.
     public init(
@@ -234,7 +242,8 @@ public struct PartialEmailMessage: Equatable {
         state: EmailMessage.State,
         version: Int,
         size: Double,
-        encryptionStatus: EncryptionStatus
+        encryptionStatus: EncryptionStatus,
+        date: Date?
     ) {
         self.id = id
         self.clientRefId = clientRefId
@@ -252,5 +261,6 @@ public struct PartialEmailMessage: Equatable {
         self.version = version
         self.size = size
         self.encryptionStatus = encryptionStatus
+        self.date = date
     }
 }

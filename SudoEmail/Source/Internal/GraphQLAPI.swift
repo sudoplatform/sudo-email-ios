@@ -582,8 +582,8 @@ internal struct SendEncryptedEmailMessageInput: GraphQLMapConvertible {
 internal struct Rfc822HeaderInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(bcc: [String], cc: [String], from: String, hasAttachments: Optional<Bool?> = nil, replyTo: [String], subject: Optional<String?> = nil, to: [String]) {
-    graphQLMap = ["bcc": bcc, "cc": cc, "from": from, "hasAttachments": hasAttachments, "replyTo": replyTo, "subject": subject, "to": to]
+  internal init(bcc: [String], cc: [String], dateEpochMs: Optional<Double?> = nil, from: String, hasAttachments: Optional<Bool?> = nil, replyTo: [String], subject: Optional<String?> = nil, to: [String]) {
+    graphQLMap = ["bcc": bcc, "cc": cc, "dateEpochMs": dateEpochMs, "from": from, "hasAttachments": hasAttachments, "replyTo": replyTo, "subject": subject, "to": to]
   }
 
   internal var bcc: [String] {
@@ -601,6 +601,15 @@ internal struct Rfc822HeaderInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "cc")
+    }
+  }
+
+  internal var dateEpochMs: Optional<Double?> {
+    get {
+      return graphQLMap["dateEpochMs"] as! Optional<Double?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "dateEpochMs")
     }
   }
 
@@ -3238,7 +3247,7 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
       }
 
       internal struct FailedMessage: GraphQLSelectionSet {
-        internal static let possibleTypes = ["EmailMessageOperationFailureResult"]
+        internal static let possibleTypes = ["UpdatedEmailMessageFailure"]
 
         internal static let selections: [GraphQLSelection] = [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
@@ -3253,7 +3262,7 @@ internal final class UpdateEmailMessagesMutation: GraphQLMutation {
         }
 
         internal init(id: GraphQLID, errorType: String) {
-          self.init(snapshot: ["__typename": "EmailMessageOperationFailureResult", "id": id, "errorType": errorType])
+          self.init(snapshot: ["__typename": "UpdatedEmailMessageFailure", "id": id, "errorType": errorType])
         }
 
         internal var __typename: String {
@@ -13716,7 +13725,7 @@ internal struct UpdateEmailMessagesResult: GraphQLFragment {
   }
 
   internal struct FailedMessage: GraphQLSelectionSet {
-    internal static let possibleTypes = ["EmailMessageOperationFailureResult"]
+    internal static let possibleTypes = ["UpdatedEmailMessageFailure"]
 
     internal static let selections: [GraphQLSelection] = [
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
@@ -13731,7 +13740,7 @@ internal struct UpdateEmailMessagesResult: GraphQLFragment {
     }
 
     internal init(id: GraphQLID, errorType: String) {
-      self.init(snapshot: ["__typename": "EmailMessageOperationFailureResult", "id": id, "errorType": errorType])
+      self.init(snapshot: ["__typename": "UpdatedEmailMessageFailure", "id": id, "errorType": errorType])
     }
 
     internal var __typename: String {

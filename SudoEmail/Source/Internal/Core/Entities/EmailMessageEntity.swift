@@ -108,6 +108,9 @@ struct EmailMessageEntity: Equatable {
 
     /// The encryption status of the message
     var encryptionStatus: EncryptionStatus
+    
+    /// Date timestamp of when the message was sent
+    public var date: Date?
 }
 
 /// Core entity representation of an email message without unsealed attributes business rule. Depicts the meta data of an email message.
@@ -167,5 +170,8 @@ struct PartialEmailMessageEntity: Equatable {
     
     /// The encryption status of the message
     var encryptionStatus: EncryptionStatus
+    
+    /// Date timestamp of when the message was sent
+    public var date: Date?
 
 }

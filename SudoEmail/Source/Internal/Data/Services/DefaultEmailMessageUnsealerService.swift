@@ -49,7 +49,8 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
                 hasAttachments: headers.hasAttachments ?? false,
                 version: message.version,
                 size: message.size,
-                encryptionStatus: message.encryptionStatus
+                encryptionStatus: message.encryptionStatus,
+                date: headers.date
             )
             return emailMessageEntity
         } catch {
