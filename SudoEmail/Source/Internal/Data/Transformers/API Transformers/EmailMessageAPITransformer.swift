@@ -48,8 +48,8 @@ struct EmailMessageAPITransformer {
     /// Utility class to transform email message address entities from the core level to output results of the SDK
     struct EmailAddressAPITransformer {
         /// Transform an email message address entity into an email message address result of the SDK.
-        func transform(_ emailAddressEntity: EmailAddressEntity) -> EmailMessage.EmailAddress {
-            return EmailMessage.EmailAddress(address: emailAddressEntity.emailAddress, displayName: emailAddressEntity.displayName)
+        func transform(_ emailAddressEntity: EmailAddressEntity) -> EmailAddressAndName {
+            return EmailAddressAndName(address: emailAddressEntity.emailAddress, displayName: emailAddressEntity.displayName)
         }
     }
 

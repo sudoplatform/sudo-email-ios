@@ -18,7 +18,7 @@ class ProvisionEmailAccountUseCase {
     // MARK: - Properties: Repositories
 
     /// Key pair repository to access the public key for the user's account.
-    let keyWorker: DeviceKeyWorker
+    let keyWorker: ServiceKeyWorker
 
     /// Email account repository to create the email account.
     let emailAccountRepository: EmailAccountRepository
@@ -35,7 +35,7 @@ class ProvisionEmailAccountUseCase {
     
     /// Initialize an instance of the `ProvisionEmailAccount` use case.
     init(
-        keyWorker: DeviceKeyWorker,
+        keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
         keyId: String? = nil,
         logger: Logger = .emailSDKLogger

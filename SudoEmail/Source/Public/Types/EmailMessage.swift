@@ -9,15 +9,7 @@ import Foundation
 /// Representation of a email message object associated with a email message in Platform SDK.
 public struct EmailMessage: Equatable {
 
-    public struct EmailAddress: Equatable {
-        public var address: String
-        public var displayName: String?
-
-        public init(address: String, displayName: String? = nil) {
-            self.address = address
-            self.displayName = displayName
-        }
-    }
+    public typealias EmailAddress = EmailAddressAndName
 
     /// Direction of an email message.
     public enum Direction: Equatable {
@@ -93,18 +85,18 @@ public struct EmailMessage: Equatable {
     public var version: Int
 
     /// Array of from email addresses, eg the authors, of the email message.
-    public var from: [EmailMessage.EmailAddress]
+    public var from: [EmailAddressAndName]
 
-    public var replyTo: [EmailMessage.EmailAddress]
+    public var replyTo: [EmailAddressAndName]
 
     /// Array of to recipients of the email message.
-    public var to: [EmailMessage.EmailAddress]
+    public var to: [EmailAddressAndName]
 
     /// Array of carbon copy recipients of the email message.
-    public var cc: [EmailMessage.EmailAddress]
+    public var cc: [EmailAddressAndName]
 
     /// Array of blind carbon copy recipients of the email message.
-    public var bcc: [EmailMessage.EmailAddress]
+    public var bcc: [EmailAddressAndName]
 
     /// Subject header of the email message.
     public var subject: String?
@@ -132,11 +124,11 @@ public struct EmailMessage: Equatable {
         state: State,
         version: Int,
         size: Double,
-        from: [EmailMessage.EmailAddress],
-        replyTo: [EmailMessage.EmailAddress],
-        to: [EmailMessage.EmailAddress],
-        cc: [EmailMessage.EmailAddress],
-        bcc: [EmailMessage.EmailAddress],
+        from: [EmailAddressAndName],
+        replyTo: [EmailAddressAndName],
+        to: [EmailAddressAndName],
+        cc: [EmailAddressAndName],
+        bcc: [EmailAddressAndName],
         subject: String?,
         hasAttachments: Bool,
         encryptionStatus: EncryptionStatus,

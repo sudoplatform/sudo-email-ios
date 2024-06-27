@@ -7,9 +7,6 @@
 import Foundation
 import SudoKeyManager
 import SudoLogging
-import SudoUser
-
-typealias KeyPair = (publicKey: KeyEntity, privateKey: KeyEntity)
 
 protocol DeviceKeyWorker: AnyObject {
 
@@ -20,17 +17,6 @@ protocol DeviceKeyWorker: AnyObject {
     /// - Throws: `KeyManagerError`.
     func createRandomData(_ size: Int) throws -> Data
 
-    /// Generate a key pair on the device. Returns the freshly generated key pair.
-    /// Throws: `SudoEmailError`.
-    func generateKeyPair() throws -> KeyPair
-
-    /// Get the Public Key matching the key id if it exists.
-    ///
-    /// - Parameter keyId: Identifier of the Public Key to retrieve.
-    /// - Returns: The Public Key `KeyEntity` matching the provided key id, or nil
-    /// - Throws: `SudoEmailError`.
-    func getPublicKeyWithId(keyId: String) throws -> KeyEntity?
-    
     /// Generate a new symmetric key
     ///  Throws: `SudoKeyManagerError`.
     func generateNewCurrentSymmetricKey() throws -> String
@@ -95,7 +81,7 @@ protocol DeviceKeyWorker: AnyObject {
     /// - Throws: `KeyManagerError` if the data cannot be decrypted.
     func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data
 
-    /// Encrypt the data using the specificed Public Key.
+    /// Encrypt the data using the specified Public Key.
     ///
     /// - Parameter publicKey: Public Key data used to encrypt the data.
     /// - Parameter data: The data to encrypt.
@@ -144,7 +130,7 @@ protocol DeviceKeyWorker: AnyObject {
 
 }
 
-class DefaultDeviceKeyWorker: DeviceKeyWorker {
+internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     // MARK: - Supplementary
 
@@ -171,9 +157,6 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
     /// Key manager for access and manipulation of keys on the local device.
     var keyManager: SudoKeyManager
 
-    /// User client for getting the subject (owner identifier) of the user for key ring id.
-    var userClient: SudoUserClient
-
     /// Used to log diagnostic and error information.
     var logger: Logger
 
@@ -181,16 +164,14 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     convenience init(
         keyNamespace: String,
-        userClient: SudoUserClient,
         logger: Logger = .emailSDKLogger
     ) {
         let keyManager = LegacySudoKeyManager(serviceName: Defaults.keyRingServiceName, keyTag: Defaults.keyManagerKeyTag, namespace: keyNamespace)
-        self.init(keyManager: keyManager, userClient: userClient, logger: logger)
+        self.init(keyManager: keyManager, logger: logger)
     }
 
-    init(keyManager: SudoKeyManager, userClient: SudoUserClient, logger: Logger) {
+    init(keyManager: SudoKeyManager, logger: Logger) {
         self.keyManager = keyManager
-        self.userClient = userClient
         self.logger = logger
     }
 
@@ -198,69 +179,6 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     func createRandomData(_ size: Int) throws -> Data {
         return try keyManager.createRandomData(size)
-    }
-
-    func generateKeyPair() throws -> KeyPair {
-        let keyRingId = try getKeyRingId()
-        let keyPairId = try keyManager.generateKeyId()
-        guard let keyPairIdDataEncoded = keyPairId.data(using: .utf8) else {
-            let msg = "Unable to encode key pair id on generation"
-            logger.error(msg)
-            throw SudoEmailError.internalError(msg)
-        }
-
-        // Try to delete the existing password if it exists.
-        try keyManager.deletePassword(Defaults.currentKeyPairIdPointerName)
-        try keyManager.generateKeyPair(keyPairId)
-        do {
-            try keyManager.addPassword(keyPairIdDataEncoded, name: Defaults.currentKeyPairIdPointerName)
-        } catch {
-            // Adding the new key pair has failed, clean up and throw an error.
-            let msg = "Unable to save new current key id pointer: \(keyPairId). Error: \(error.localizedDescription)"
-            logger.error(msg)
-            try keyManager.deleteKeyPair(keyPairId)
-            throw SudoEmailError.internalError(msg)
-        }
-
-        let publicKey: Data
-        let privateKey: Data
-        do {
-            guard let pubKey = try keyManager.getPublicKey(keyPairId),
-                let privKey = try keyManager.getPrivateKey(keyPairId)
-            else {
-                throw SudoEmailError.internalError("Unable to access key pair from key manager")
-            }
-            publicKey = pubKey
-            privateKey = privKey
-        } catch {
-            let msg = "Failed to get generated key pair: \(error.localizedDescription)"
-            logger.error(msg)
-            try keyManager.deletePassword(Defaults.currentKeyPairIdPointerName)
-            try keyManager.deleteKeyPair(keyPairId)
-            throw SudoEmailError.internalError(msg)
-        }
-
-        let keyPair = createKeyPairWithKeyId(keyPairId, keyRingId: keyRingId, publicKeyData: publicKey, privateKeyData: privateKey)
-        return keyPair
-    }
-
-    func getPublicKeyWithId(keyId: String) throws -> KeyEntity? {
-        let keyRingId = try getKeyRingId()
-        let publicKey: Data
-
-        do {
-            guard let pubKey = try keyManager.getPublicKey(keyId) else {
-                return nil
-            }
-            publicKey = pubKey
-        } catch {
-            let msg = "Failed to get public key: \(error.localizedDescription)"
-            logger.error(msg)
-            throw SudoEmailError.internalError(msg)
-        }
-
-        let keyEntity = KeyEntity(type: .publicKey, keyId: keyId, keyRingId: keyRingId, keyData: publicKey)
-        return keyEntity
     }
 
     func generateNewCurrentSymmetricKey() throws -> String {
@@ -405,30 +323,6 @@ class DefaultDeviceKeyWorker: DeviceKeyWorker {
     }
 
     // MARK: - Helpers
-
-    /// Get the user's key ring id. If the user is not signed in, this will fail.
-    /// - Throws: `SudoEmailError.notSignedIn`.
-    /// - Returns: Key ring id of the user.
-    func getKeyRingId() throws -> String {
-        guard let userId = try userClient.getSubject() else {
-            throw SudoEmailError.notSignedIn
-        }
-        return "\(Defaults.keyRingServiceName).\(userId)"
-    }
-
-    /// Create the entity level key pair from the supplied data.
-    /// - Parameters:
-    ///   - keyId: Identifier of the key.
-    ///   - keyRingId: Identifier of the key ring.
-    ///   - publicKeyData: Data of the public key.
-    ///   - privateKeyData: Data of the private key.
-    /// - Returns: Key pair entities.
-    func createKeyPairWithKeyId(_ keyId: String, keyRingId: String, publicKeyData: Data, privateKeyData: Data) -> KeyPair {
-        return KeyPair(
-            publicKey: KeyEntity(type: .publicKey, keyId: keyId, keyRingId: keyRingId, keyData: publicKeyData),
-            privateKey: KeyEntity(type: .privateKey, keyId: keyId, keyRingId: keyRingId, keyData: privateKeyData)
-        )
-    }
 
     /// Decrypt the input string using the keyId.
     ///

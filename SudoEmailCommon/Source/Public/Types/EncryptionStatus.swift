@@ -7,8 +7,8 @@
 import Foundation
 
 /// Representation of the possible encryption statuses of an email message in Platform SDK
-public enum EncryptionStatus: Equatable {
-    
+public enum EncryptionStatus: String, Decodable {
+
     case ENCRYPTED
     
     case UNENCRYPTED

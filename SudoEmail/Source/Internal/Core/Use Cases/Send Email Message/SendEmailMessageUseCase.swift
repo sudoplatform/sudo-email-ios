@@ -145,7 +145,6 @@ class SendEmailMessageUseCase {
         emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = []
     ) async throws -> Data {
         let config = try await emailConfigDataRepository.getConfigurationData()
-        let emailMessageMaxOutboundMessageSize = config.emailMessageMaxOutboundMessageSize
         
         // Generate unencrypted RFC822 email data
         var rfc822Data = try buildMessageData(

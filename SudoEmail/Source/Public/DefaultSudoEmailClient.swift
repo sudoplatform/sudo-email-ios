@@ -36,7 +36,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     // MARK: - Properties: Repositories
 
-    let deviceKeyWorker: DeviceKeyWorker
+    let serviceKeyWorker: ServiceKeyWorker
 
     let emailAccountRepository: EmailAccountRepository & Resetable
 
@@ -77,13 +77,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ///   - userClient: SudoUserClient instance used for authentication.
     /// Throws:
     ///     - `SudoEmailError` if invalid config.
-    public convenience init(keyNamespace: String = "com.sudoplatform.email", userClient: SudoUserClient) throws {
+    public convenience init(keyNamespace: String = SudoEmail.Constants.defaultKeyNamespace, userClient: SudoUserClient) throws {
         try self.init(config: nil, keyNamespace: keyNamespace, userClient: userClient)
     }
     
     convenience init(
         config: SudoEmailConfig?,
-        keyNamespace: String = "com.sudoplatform.email",
+        keyNamespace: String = SudoEmail.Constants.defaultKeyNamespace,
         userClient: SudoUserClient
     ) throws {
         let graphQLClient: SudoApiClient
@@ -102,19 +102,22 @@ public class DefaultSudoEmailClient: SudoEmailClient {
                 appSyncClient: appSyncClient
             )
         } else {
-            guard let asClient = try SudoApiClientManager.instance?.getClient(sudoUserClient: userClient) else {
+            guard let asClient = try SudoApiClientManager.instance?.getClient(
+                sudoUserClient: userClient,
+                configNamespace: "emService"
+            ) else {
                 throw SudoEmailError.invalidConfig
             }
             graphQLClient = asClient
         }
 
         // Setup utility classes / workers
-        let deviceKeyWorker = DefaultDeviceKeyWorker(keyNamespace: keyNamespace, userClient: userClient)
-        let emailMessageUnsealerService = DefaultEmailMessageUnsealerService(deviceKeyWorker: deviceKeyWorker)
+        let serviceKeyWorker = DefaultServiceKeyWorker(keyNamespace: keyNamespace, userClient: userClient)
+        let emailMessageUnsealerService = DefaultEmailMessageUnsealerService(deviceKeyWorker: serviceKeyWorker)
         let emailConfig = try Bundle.main.loadEmailConfig()
         let s3Region = emailConfig.region
         // Setup Repositories
-        let emailAccountRepository = DefaultEmailAccountRepository(appSyncClient: graphQLClient, deviceKeyWorker: deviceKeyWorker)
+        let emailAccountRepository = DefaultEmailAccountRepository(appSyncClient: graphQLClient, deviceKeyWorker: serviceKeyWorker)
         let emailFolderRepository = DefaultEmailFolderRepository(appSyncClient: graphQLClient)
         let awsS3Worker = try DefaultAWSS3Worker(userClient: userClient, awsS3WorkerKey: Constants.awsS3WorkerKey)
         let emailMessageRepository = DefaultEmailMessageRepository(
@@ -125,16 +128,16 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             region: s3Region,
             userClient: userClient,
             s3Worker: awsS3Worker,
-            deviceKeyWorker: deviceKeyWorker
+            deviceKeyWorker: serviceKeyWorker
         )
-        let blockedAddressRepository = DefaultBlockedAddressRepository(appSyncClient: graphQLClient, keyWorker: deviceKeyWorker)
+        let blockedAddressRepository = DefaultBlockedAddressRepository(appSyncClient: graphQLClient, keyWorker: serviceKeyWorker)
         let domainRepository = DefaultDomainRepsitory(appSyncClient: graphQLClient)
         let emailConfigurationDataRepository = DefaultEmailConfigurationDataRepository(
             appSyncClient: graphQLClient
         )
         // Setup Services
-        let emailMessageUnsealerServiceService = DefaultEmailMessageUnsealerService(deviceKeyWorker: deviceKeyWorker)
-        let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: deviceKeyWorker)
+        let emailMessageUnsealerServiceService = DefaultEmailMessageUnsealerService(deviceKeyWorker: serviceKeyWorker)
+        let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: serviceKeyWorker)
         let rfc822MessageDataProcessor = Rfc822MessageDataProcessor()
         self.init(
             keyNamespace: keyNamespace,
@@ -147,7 +150,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailConfigurationDataRepository: emailConfigurationDataRepository,
             emailMessageUnsealerServiceService: emailMessageUnsealerServiceService,
             emailCryptoService: emailCryptoService,
-            deviceKeyWorker: deviceKeyWorker,
+            serviceKeyWorker: serviceKeyWorker,
             awsS3Worker: awsS3Worker,
             blockedAddressRepository: blockedAddressRepository,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor
@@ -169,7 +172,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         emailConfigurationDataRepository: EmailConfigurationDataRepository,
         emailMessageUnsealerServiceService: EmailMessageUnsealerService,
         emailCryptoService: EmailCryptoService,
-        deviceKeyWorker: DeviceKeyWorker,
+        serviceKeyWorker: ServiceKeyWorker,
         awsS3Worker: AWSS3Worker & Resetable,
         logger: Logger = .emailSDKLogger,
         blockedAddressRepository: BlockedAddressRepository & Resetable,
@@ -186,7 +189,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.emailConfigurationDataRepository = emailConfigurationDataRepository
         self.emailMessageUnsealerServiceService = emailMessageUnsealerServiceService
         self.emailCryptoService = emailCryptoService
-        self.deviceKeyWorker = deviceKeyWorker
+        self.serviceKeyWorker = serviceKeyWorker
         self.awsS3Worker = awsS3Worker
         self.blockedAddressRepository = blockedAddressRepository
         self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
@@ -196,7 +199,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.logger.info("Resetting client state.")
         try allResetables.forEach { try $0.reset() }
         try self.graphQLClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
-        try self.deviceKeyWorker.removeAllKeys()
+        try self.serviceKeyWorker.removeAllKeys()
     }
 
     // MARK: - SudoEmailClient
@@ -205,7 +208,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         withInput input: ProvisionEmailAddressInput
     ) async throws -> EmailAddress {
         let provisionEmailAccountUseCase = useCaseFactory.generateProvisionEmailAccountUseCase(
-            keyWorker: deviceKeyWorker,
+            keyWorker: serviceKeyWorker,
             emailAccountRepository: emailAccountRepository,
             keyId: input.keyId,
             logger: self.logger
@@ -308,11 +311,11 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         if archiveData.isEmpty {
             throw SudoEmailError.invalidArgument("")
         }
-        try deviceKeyWorker.importKeys(archiveData: archiveData)
+        try serviceKeyWorker.importKeys(archiveData: archiveData)
     }
 
     public func exportKeys() throws -> Data {
-        try deviceKeyWorker.exportKeys()
+        try serviceKeyWorker.exportKeys()
     }
 
     public func checkEmailAddressAvailability(withInput input: CheckEmailAddressAvailabilityInput) async throws -> [String] {
@@ -348,7 +351,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             let useCase = useCaseFactory.generateFetchEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
             emailAccount = try await useCase.execute(withEmailAddressId: input.id)
         }
-        let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        let transformer = EmailAccountEntityTransformer(deviceKeyWorker: serviceKeyWorker)
         return emailAccount != nil ? try transformer.transform(emailAccount!) : nil
     }
 

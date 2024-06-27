@@ -5,7 +5,7 @@ platform :ios, '15.0'
 
 workspace 'SudoEmail'
 use_frameworks!
-inhibit_all_warnings!
+# inhibit_all_warnings!
 
 project 'SudoEmail', {
     'Debug-Dev' => :debug,
@@ -20,22 +20,24 @@ target 'SudoEmail' do
   inherit! :search_paths
   podspec :name => 'SudoEmail'
   pod 'GzipSwift'
-
-  target 'SudoEmailTests' do
-    podspec :name => 'SudoEmail'
-  end
+  
+  target 'SudoEmailTests'
 
   target 'SudoEmailIntegrationTests' do
-    podspec :name => 'SudoEmail'
-    pod 'SudoEntitlements', '~> 9.0'
-    pod 'SudoEntitlementsAdmin', '~> 4.1'
+    pod 'SudoEntitlements', '~> 10.0'
+    pod 'SudoEntitlementsAdmin', '~> 5.0'
     pod 'SudoProfiles', '~> 17.0'
-  end
-  
-  target 'TestApp' do
-    podspec :name => 'SudoEmail'
-  end
 
+    target 'TestApp'
+  end  
+end
+
+target 'SudoEmailNotificationExtension' do
+  inherit! :search_paths
+  podspec :name => 'SudoEmailNotificationExtension'
+  
+  target 'SudoEmailNotificationExtensionTests'
+  target 'TestExtensionApp'
 end
 
 # Fix Xcode nagging warning on pod install/update

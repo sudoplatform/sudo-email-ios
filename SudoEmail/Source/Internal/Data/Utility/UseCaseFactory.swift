@@ -12,7 +12,7 @@ import SudoUser
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
     func generateProvisionEmailAccountUseCase(
-        keyWorker: DeviceKeyWorker,
+        keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
         keyId: String? = nil,
         logger: Logger
