@@ -140,7 +140,8 @@ class Rfc822MessageDataProcessor {
         let bcc = header?.bcc as? [MCOAddress] ?? []
         let replyTo = header?.replyTo as? [MCOAddress] ?? []
         let subject = header?.subject
-        var body = parser?.plainTextBodyRendering()
+        // Strip whitespace and preserve newline characters.
+        var body = parser?.plainTextBodyRenderingAndStripWhitespace(false).trimmingCharacters(in: .whitespaces)
         var attachments: [EmailAttachment] = []
         var inlineAttachments: [EmailAttachment] = []
 
@@ -162,7 +163,7 @@ class Rfc822MessageDataProcessor {
             }
             
             // There will be a list of the attachments at the end of the body that we want to remove
-            body = body?.replacingOccurrences(of: " - \(a.filename ?? ""), \(a.data.count) bytes", with: "")
+            body = body?.replacingOccurrences(of: "- \(a.filename ?? ""), \(a.data.count) bytes", with: "")
         })
         
         let encryptionHeader = header?.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)

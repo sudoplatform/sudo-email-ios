@@ -1,7 +1,7 @@
 #
 Pod::Spec.new do |spec|
   spec.name                  = 'SudoEmail'
-  spec.version               = '14.4.0'
+  spec.version               = '14.4.1'
   spec.author                = { 'Sudo Platform Engineering' => 'sudoplatform-engineering@anonyome.com' }
   spec.homepage              = 'https://sudoplatform.com'
 
@@ -13,8 +13,15 @@ Pod::Spec.new do |spec|
   spec.requires_arc          = true
   spec.swift_version         = '5.7'
 
+  # MailCore Framework does not support arm64 simulator so need to exclude that
+  spec.pod_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+  }
+  spec.user_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+  }
   spec.xcconfig = {
-      'OTHER_LDFLAGS'          => '"-ObjC"'
+    'OTHER_LDFLAGS' => '"-ObjC"'
   }
 
   spec.source_files = 'SudoEmailCommon/**/*.swift','SudoEmail/**/*.swift'
@@ -28,5 +35,5 @@ Pod::Spec.new do |spec|
   spec.dependency 'SudoLogging', '~> 1.0'
   spec.dependency 'SudoKeyManager', '~> 2.6', '>= 2.6.1'
   spec.dependency 'SudoApiClient', '~> 10.2'
-  spec.dependency 'SudoNotification', '~> 2.1'  
+  spec.dependency 'SudoNotification', '~> 2.1'
 end
