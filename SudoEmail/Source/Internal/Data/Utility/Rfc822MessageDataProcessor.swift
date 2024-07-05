@@ -28,10 +28,10 @@ class Rfc822MessageDataProcessor {
         var inlineAttachments: [EmailAttachment]?
         var encryptionStatus: EncryptionStatus = EncryptionStatus.UNENCRYPTED
     }
-    
+
     // MARK: - Rfc822MessageDataProcessor
-    
-    
+
+
     /// Encodes the given email into RFC822 compliant data
     /// - Parameters:
     ///   - message: The email to be encoded
@@ -40,19 +40,19 @@ class Rfc822MessageDataProcessor {
         let resultStr = try self.encodeToInternetMessageDataStr(message: message)
         return Data(resultStr.utf8)
     }
-    
+
     /// Encodes the given email into an RFC822 compliant string
     /// - Parameters:
     ///   - message: The email to be encoded
     /// - Returns: The encoded email as a string
     func encodeToInternetMessageDataStr(message: EmailMessageDetails) throws -> String {
         let builder = MCOMessageBuilder()
-        
+
         builder.header.from = MCOAddress(
             displayName: message.from[0].displayName,
             mailbox: message.from[0].emailAddress
         )
-        
+
         var toList = [MCOAddress]()
         message.to?.forEach({ to in
             toList.append(MCOAddress(
@@ -61,7 +61,7 @@ class Rfc822MessageDataProcessor {
             ))
         })
         builder.header.to = toList
-        
+
         var ccList = [MCOAddress]()
         message.cc?.forEach({ cc in
             ccList.append(MCOAddress(
@@ -70,7 +70,7 @@ class Rfc822MessageDataProcessor {
             ))
         })
         builder.header.cc = ccList
-        
+
         var bccList = [MCOAddress]()
         message.bcc?.forEach({ bcc in
             bccList.append(MCOAddress(
@@ -79,7 +79,7 @@ class Rfc822MessageDataProcessor {
             ))
         })
         builder.header.bcc = bccList
-        
+
         var replyToList = [MCOAddress]()
         message.replyTo?.forEach({ replyTo in
             replyToList.append(MCOAddress(
@@ -88,10 +88,10 @@ class Rfc822MessageDataProcessor {
             ))
         })
         builder.header.replyTo = replyToList
-        
+
         builder.header.subject = message.subject
         var body = message.body
-        
+
         if message.encryptionStatus == EncryptionStatus.ENCRYPTED {
             body = CANNED_TEXT_BODY
             builder.header.setExtraHeaderValue(PLATFORM_ENCRYPTION, forName: EMAIL_HEADER_NAME_ENCRYPTION)
@@ -128,47 +128,66 @@ class Rfc822MessageDataProcessor {
     }
 
     func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
-        let parser = MCOMessageParser(data: input.data(using: .utf8))
-        if(parser == nil) {
+        guard let parser = MCOMessageParser(data: input.data(using: .utf8)),
+              let header = parser.header else {
             throw SudoEmailError.decodingError
         }
-        let header = parser!.header
-        
-        let from = header?.from
-        let to = header?.to as? [MCOAddress] ?? []
-        let cc = header?.cc as? [MCOAddress] ?? []
-        let bcc = header?.bcc as? [MCOAddress] ?? []
-        let replyTo = header?.replyTo as? [MCOAddress] ?? []
-        let subject = header?.subject
-        // Strip whitespace and preserve newline characters.
-        var body = parser?.plainTextBodyRenderingAndStripWhitespace(false).trimmingCharacters(in: .whitespaces)
-        var attachments: [EmailAttachment] = []
-        var inlineAttachments: [EmailAttachment] = []
 
-        (parser?.attachments() as! [MCOAttachment]).forEach({ a in
-            // MailCore automatically encodes base64 data when parsing a message, so we encode the data here
-            // to protect the inner-contents from being unwrapped.
-            let data = a.data.base64EncodedString()
-            let attachment = EmailAttachment(
-                filename: a.filename!,
-                contentId: a.contentID,
-                mimetype: a.mimeType,
-                inlineAttachment: a.isInlineAttachment,
-                data: data
-            )
-            if (attachment.inlineAttachment) {
-                inlineAttachments.append(attachment)
-            } else {
-                attachments.append(attachment)
+        let from = header.from
+        let to = header.to as? [MCOAddress] ?? []
+        let cc = header.cc as? [MCOAddress] ?? []
+        let bcc = header.bcc as? [MCOAddress] ?? []
+        let replyTo = header.replyTo as? [MCOAddress] ?? []
+        let subject = header.subject
+
+        // Strip whitespace and preserve newline characters.
+        var body = parser.plainTextBodyRenderingAndStripWhitespace(false).trimmingCharacters(in: .whitespaces)
+
+        var inlineAttachments: [EmailAttachment] = []
+        var attachments: [EmailAttachment] = []
+
+        func formatMCOAttachments(_ mcoAttachments: [MCOAttachment], isInline: Bool = false) throws {
+            try mcoAttachments.forEach { a in
+                // Mailcore may parse content types such as 'text/rfc822-headers' and 'message/delivery-status'
+                // as attachments won't have filenames, meaning we need to skip attachments without filenames
+                // to avoid eventual errors with content types such as these.
+                if let filename = a.filename {
+                    let attachment = EmailAttachment(
+                        filename: filename,
+                        contentId: a.contentID,
+                        mimetype: a.mimeType,
+                        inlineAttachment: isInline || a.isInlineAttachment,
+                        // MailCore automatically encodes base64 data when parsing a message, so we encode
+                        // the data here to protect the inner-contents from being unwrapped.
+                        data: a.data.base64EncodedString()
+                    )
+                    if attachment.inlineAttachment {
+                        inlineAttachments.append(attachment)
+                    } else {
+                        attachments.append(attachment)
+                    }
+
+                    // There will be a list of the attachments at the end of the body that we want to remove, ie
+                    // `- a test.txt, 738 bytes`
+                    // `- aTest2.png, 14 KB`
+                    // `- a-large_test.pdf, 2.0 MB`
+                    let pattern = "- \(filename), \\d+(\\.){0,1}(\\d+){0,}\\s?(?:(bytes|KB|MB))\n"
+                    let regex = try NSRegularExpression(pattern: pattern)
+                    let range = NSRange(body.startIndex..<body.endIndex, in: body)
+                    body = regex.stringByReplacingMatches(in: body, options: [], range: range, withTemplate: "")
+                }
             }
-            
-            // There will be a list of the attachments at the end of the body that we want to remove
-            body = body?.replacingOccurrences(of: "- \(a.filename ?? ""), \(a.data.count) bytes", with: "")
-        })
-        
-        let encryptionHeader = header?.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)
+        }
+
+        // List are retrieved separately here to use Mailcore's logic as a baseline of which attachments are
+        // inline and which aren't - our logic can then be added on top.
+        // (Sometimes `parser.attachments()` can contain inline attachments...)
+        try formatMCOAttachments(parser.attachments() as? [MCOAttachment] ?? [])
+        try formatMCOAttachments(parser.htmlInlineAttachments() as? [MCOAttachment] ?? [], isInline: true)
+
+        let encryptionHeader = header.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)
         let encryptionStatus: EncryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
-        
+
         let result = EmailMessageDetails(
             from: [EmailAddressDetail(
                 emailAddress: from?.mailbox ?? "",
@@ -196,10 +215,10 @@ class Rfc822MessageDataProcessor {
             inlineAttachments: inlineAttachments,
             encryptionStatus: encryptionStatus
         )
-        
+
         return result
     }
-    
+
     ///
     /// MailCore2 encodes some parts of the email message as Encoded-Words. This function
     /// decodes them back to plaintext
@@ -217,7 +236,7 @@ class Rfc822MessageDataProcessor {
         if(matches.isEmpty) {
             return processed
         }
-        
+
         try matches.forEach({ match in
             // Each instance of an encoded word
             let group = input[Range(match.range(at: 0), in: input)!]
@@ -235,7 +254,7 @@ class Rfc822MessageDataProcessor {
                 default:
                     throw SudoEmailError.internalError("Invalid charset value: \(charset)")
                 }
-                
+
                 switch (encodingType) {
                     case "B": //Base64
                     guard let decodedValueData = Data(base64Encoded: String(value)) else {
@@ -259,18 +278,18 @@ class Rfc822MessageDataProcessor {
                 }
             }
         })
-        
-        
+
+
         return processed
     }
-    
+
     /// This decodes Q-Encoded values such as `=F0=9F=A4=94` which
     /// decodes to 🤔
     private func decodeQEncoding(encodedString: String) throws -> String {
         var decodedString = ""
         // Remove underscores that replace spaces. Will add them back later
         let components = encodedString.components(separatedBy: "_")
-        
+
         for (index, component) in components.enumerated() {
 
             if component.hasPrefix("=") {
@@ -295,7 +314,7 @@ class Rfc822MessageDataProcessor {
                 let byteCount = hexString.count / 2
                 var bytes = [UInt8]()
                 var currentIndex = hexString.startIndex
-                
+
                 for _ in 0..<byteCount {
                     if let byte = UInt8(hexString[currentIndex...hexString.index(after: currentIndex)], radix: 16) {
                         bytes.append(byte)
@@ -306,7 +325,7 @@ class Rfc822MessageDataProcessor {
                         throw SudoEmailError.decodingError
                     }
                 }
-                
+
                 if let decodedCharacter = String(bytes: bytes, encoding: .utf8) {
                     decodedString.append(decodedCharacter)
                 } else {
@@ -317,13 +336,13 @@ class Rfc822MessageDataProcessor {
             } else {
                 decodedString.append(component)
             }
-            
+
             // Add space after each component except the last one
             if index < components.count - 1 {
                 decodedString.append(" ")
             }
         }
-        
+
         return decodedString
     }
 }

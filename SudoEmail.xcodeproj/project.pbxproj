@@ -51,6 +51,16 @@
 		51A4567F2B556F8A0097DFF6 /* EmailAddressPublicInfoAPITransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4567E2B556F8A0097DFF6 /* EmailAddressPublicInfoAPITransformerTests.swift */; };
 		51A456832B55748E0097DFF6 /* LookupEmailAddressesPublicInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A456822B55748E0097DFF6 /* LookupEmailAddressesPublicInfoTests.swift */; };
 		51A456852B557DBE0097DFF6 /* LookupEmailAddressesPublicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A456842B557DBE0097DFF6 /* LookupEmailAddressesPublicInfo.swift */; };
+		51FE73B72C35257900A5D57B /* sample_email_with_attachments.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73AD2C35257700A5D57B /* sample_email_with_attachments.eml */; };
+		51FE73B82C35257900A5D57B /* delivery_failed_rfc_822_headers.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73AE2C35257700A5D57B /* delivery_failed_rfc_822_headers.eml */; };
+		51FE73B92C35257900A5D57B /* reply_from_gmail.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73AF2C35257800A5D57B /* reply_from_gmail.eml */; };
+		51FE73BA2C35257900A5D57B /* attached_email.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B02C35257800A5D57B /* attached_email.eml */; };
+		51FE73BB2C35257900A5D57B /* delivery_failed_plain_server_plain_attached.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B12C35257800A5D57B /* delivery_failed_plain_server_plain_attached.eml */; };
+		51FE73BC2C35257900A5D57B /* email_with_inline_and_non_inline_attachment.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B22C35257800A5D57B /* email_with_inline_and_non_inline_attachment.eml */; };
+		51FE73BD2C35257900A5D57B /* delivery_failed_plain_server_html_attached.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B32C35257800A5D57B /* delivery_failed_plain_server_html_attached.eml */; };
+		51FE73BE2C35257900A5D57B /* delivery_failed_inline_image.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B42C35257800A5D57B /* delivery_failed_inline_image.eml */; };
+		51FE73BF2C35257900A5D57B /* meeting_invite.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B52C35257900A5D57B /* meeting_invite.eml */; };
+		51FE73C02C35257900A5D57B /* basic_email.eml in Resources */ = {isa = PBXBuildFile; fileRef = 51FE73B62C35257900A5D57B /* basic_email.eml */; };
 		5D22F3DB2C1A3A4000AE54C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E5CB323418ABD004219B9 /* AppDelegate.swift */; };
 		5D22F3DC2C1A3A4000AE54C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E5CB523418ABD004219B9 /* ViewController.swift */; };
 		5D22F3DE2C1A3A4000AE54C9 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
@@ -622,6 +632,16 @@
 		51A456822B55748E0097DFF6 /* LookupEmailAddressesPublicInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupEmailAddressesPublicInfoTests.swift; sourceTree = "<group>"; };
 		51A456842B557DBE0097DFF6 /* LookupEmailAddressesPublicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupEmailAddressesPublicInfo.swift; sourceTree = "<group>"; };
 		51FE45A54AA952B3740CC8A3 /* Pods-SudoEmailNotificationExtension-SudoEmailNotificationExtensionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmailNotificationExtension-SudoEmailNotificationExtensionTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmailNotificationExtension-SudoEmailNotificationExtensionTests/Pods-SudoEmailNotificationExtension-SudoEmailNotificationExtensionTests.release.xcconfig"; sourceTree = "<group>"; };
+		51FE73AD2C35257700A5D57B /* sample_email_with_attachments.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_email_with_attachments.eml; sourceTree = "<group>"; };
+		51FE73AE2C35257700A5D57B /* delivery_failed_rfc_822_headers.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delivery_failed_rfc_822_headers.eml; sourceTree = "<group>"; };
+		51FE73AF2C35257800A5D57B /* reply_from_gmail.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = reply_from_gmail.eml; sourceTree = "<group>"; };
+		51FE73B02C35257800A5D57B /* attached_email.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = attached_email.eml; sourceTree = "<group>"; };
+		51FE73B12C35257800A5D57B /* delivery_failed_plain_server_plain_attached.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delivery_failed_plain_server_plain_attached.eml; sourceTree = "<group>"; };
+		51FE73B22C35257800A5D57B /* email_with_inline_and_non_inline_attachment.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = email_with_inline_and_non_inline_attachment.eml; sourceTree = "<group>"; };
+		51FE73B32C35257800A5D57B /* delivery_failed_plain_server_html_attached.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delivery_failed_plain_server_html_attached.eml; sourceTree = "<group>"; };
+		51FE73B42C35257800A5D57B /* delivery_failed_inline_image.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = delivery_failed_inline_image.eml; sourceTree = "<group>"; };
+		51FE73B52C35257900A5D57B /* meeting_invite.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meeting_invite.eml; sourceTree = "<group>"; };
+		51FE73B62C35257900A5D57B /* basic_email.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = basic_email.eml; sourceTree = "<group>"; };
 		535AE5DF504E81B2627F5498 /* Pods-SudoEmail-SudoEmailTests-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests-TestApp/Pods-SudoEmail-SudoEmailTests-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		544B4E921857B4A6D29589B4 /* Pods-SudoEmail-SudoEmailIntegrationTests-TestIntegrationApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests-TestIntegrationApp.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests-TestIntegrationApp/Pods-SudoEmail-SudoEmailIntegrationTests-TestIntegrationApp.release.xcconfig"; sourceTree = "<group>"; };
 		55F34EC148315754412ECFDD /* Pods-SudoEmail-SudoEmailTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests/Pods-SudoEmail-SudoEmailTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1024,7 +1044,6 @@
 		9F372BAE2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUnblockEmailAddressesUseCase.swift; sourceTree = "<group>"; };
 		9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesUseCaseTests.swift; sourceTree = "<group>"; };
 		9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesTests.swift; sourceTree = "<group>"; };
-		9F4B49DA79855B984059C2EB /* Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailIntegrationTests/Pods-SudoEmail-SudoEmailIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		9F66AD5A2C252351000CF5A2 /* EmailRfc822HeaderCodecTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailRfc822HeaderCodecTests.swift; sourceTree = "<group>"; };
 		9F6CA8432BCF613100FFC871 /* MockRfc822MessageDataProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRfc822MessageDataProcessor.swift; sourceTree = "<group>"; };
 		9F7ADB5F2B6CB0E700532663 /* MockBlockedAddressRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBlockedAddressRepository.swift; sourceTree = "<group>"; };
@@ -1208,6 +1227,23 @@
 				51A4567C2B556E3F0097DFF6 /* LookupEmailAddressesPublicInfoUseCaseTests.swift */,
 			);
 			path = "Email Address Public Info";
+			sourceTree = "<group>";
+		};
+		51FE73962C34DE2500A5D57B /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				51FE73B02C35257800A5D57B /* attached_email.eml */,
+				51FE73B62C35257900A5D57B /* basic_email.eml */,
+				51FE73B42C35257800A5D57B /* delivery_failed_inline_image.eml */,
+				51FE73B32C35257800A5D57B /* delivery_failed_plain_server_html_attached.eml */,
+				51FE73B12C35257800A5D57B /* delivery_failed_plain_server_plain_attached.eml */,
+				51FE73AE2C35257700A5D57B /* delivery_failed_rfc_822_headers.eml */,
+				51FE73B22C35257800A5D57B /* email_with_inline_and_non_inline_attachment.eml */,
+				51FE73B52C35257900A5D57B /* meeting_invite.eml */,
+				51FE73AF2C35257800A5D57B /* reply_from_gmail.eml */,
+				51FE73AD2C35257700A5D57B /* sample_email_with_attachments.eml */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		5D22F3F52C1A3A6200AE54C9 /* SudoEmailNotificationExtension */ = {
@@ -1851,6 +1887,7 @@
 		84783B37231C916200CCBC27 /* SudoEmailTests */ = {
 			isa = PBXGroup;
 			children = (
+				51FE73962C34DE2500A5D57B /* Data */,
 				84269C47233C4EBA00BF13D6 /* Mocks */,
 				8462FFBD23384A5A00D1A68E /* Test */,
 				84B25FFC24861F5500E99401 /* Utility */,
@@ -3030,6 +3067,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51FE73BA2C35257900A5D57B /* attached_email.eml in Resources */,
+				51FE73C02C35257900A5D57B /* basic_email.eml in Resources */,
+				51FE73BE2C35257900A5D57B /* delivery_failed_inline_image.eml in Resources */,
+				51FE73BD2C35257900A5D57B /* delivery_failed_plain_server_html_attached.eml in Resources */,
+				51FE73BB2C35257900A5D57B /* delivery_failed_plain_server_plain_attached.eml in Resources */,
+				51FE73B82C35257900A5D57B /* delivery_failed_rfc_822_headers.eml in Resources */,
+				51FE73BC2C35257900A5D57B /* email_with_inline_and_non_inline_attachment.eml in Resources */,
+				51FE73BF2C35257900A5D57B /* meeting_invite.eml in Resources */,
+				51FE73B92C35257900A5D57B /* reply_from_gmail.eml in Resources */,
+				51FE73B72C35257900A5D57B /* sample_email_with_attachments.eml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
