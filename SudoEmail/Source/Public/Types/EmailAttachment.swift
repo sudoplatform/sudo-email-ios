@@ -22,11 +22,11 @@ public struct EmailAttachment: Hashable, Equatable {
     /// Flag indicating whether this is an inline attachment or not.
     public let inlineAttachment: Bool
     
-    /// The email attachment data as a base64 encoded string.
-    public let data: String
+    /// The data of the email attachment.
+    public let data: Data
 
     /// Instantiate an instance of `EmailAttachment`.
-    public init(filename: String, contentId: String? = nil, mimetype: String, inlineAttachment: Bool, data: String) {
+    public init(filename: String, contentId: String? = nil, mimetype: String, inlineAttachment: Bool, data: Data) {
         self.filename = filename
         self.contentId = contentId
         self.mimetype = mimetype

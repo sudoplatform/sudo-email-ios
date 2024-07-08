@@ -116,8 +116,7 @@ class Rfc822MessageDataProcessor {
 
     /// Generates a MailCore-formatted attachment from a given `EmailAttachment`.
     private func formatAttachment(_ attachment: EmailAttachment) throws -> MCOAttachment {
-        let attachmentData = Data(base64Encoded: attachment.data) ?? Data(attachment.data.utf8)
-        guard let mcoAttachment = MCOAttachment(data: attachmentData, filename: attachment.filename) else {
+        guard let mcoAttachment = MCOAttachment(data: attachment.data, filename: attachment.filename) else {
             throw SudoEmailError.internalError("Failed to build attachment")
         }
         mcoAttachment.mimeType = attachment.mimetype
@@ -157,9 +156,7 @@ class Rfc822MessageDataProcessor {
                         contentId: a.contentID,
                         mimetype: a.mimeType,
                         inlineAttachment: isInline || a.isInlineAttachment,
-                        // MailCore automatically encodes base64 data when parsing a message, so we encode
-                        // the data here to protect the inner-contents from being unwrapped.
-                        data: a.data.base64EncodedString()
+                        data: a.data
                     )
                     if attachment.inlineAttachment {
                         inlineAttachments.append(attachment)

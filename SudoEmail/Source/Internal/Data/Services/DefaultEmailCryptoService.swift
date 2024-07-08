@@ -92,30 +92,28 @@ class DefaultEmailCryptoService: EmailCryptoService {
         }
 
         do {
-            // Body attachment data is base64 encoded from `Rfc822MessageDataProcessor`.
-            bodyAttachmentData = try decodeBase64String(bodyAttachmentData)
+            var decodedBodyData = String(decoding: bodyAttachmentData, as: UTF8.self)
 
             if securePackage.bodyAttachment.contentId == SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID {
-                // Legacy system base64 encodes this data, so decode it (again) here
-                bodyAttachmentData = try decodeBase64String(bodyAttachmentData)
+                // Legacy system base64 encodes this data, so decode it here
+                decodedBodyData = try decodeBase64String(decodedBodyData)
             }
 
-            let secureBodyData = try SecureDataEntity.fromJson(bodyAttachmentData)
+            let secureBodyData = try SecureDataEntity.fromJson(decodedBodyData)
 
             // Iterate through the set of keyAttachments and search for the key belonging to the current recipient.
             var keyComponents: SealedKeyComponentsEntity? = nil
             try keyAttachments.forEach({ key in
                 if !key.data.isEmpty {
-                    // Key attachment data is base64 encoded from `Rfc822MessageDataProcessor`.
-                    var keyData = try decodeBase64String(key.data)
+                    var decodedKeyData = String(decoding: key.data, as: UTF8.self)
 
                     if key.contentId == SecureEmailAttachmentType.LEGACY_KEY_EXCHANGE_CONTENT_ID {
-                        // Legacy system base64 encodes this data, so decode it (again) here
-                        keyData = try decodeBase64String(keyData)
+                        // Legacy system base64 encodes this data, so decode it here
+                        decodedKeyData = try decodeBase64String(decodedKeyData)
                     }
 
                     // Parse the key and pluck the publicKeyId
-                    let sealedKeyComponents = try SealedKeyComponentsEntity.fromJson(keyData)
+                    let sealedKeyComponents = try SealedKeyComponentsEntity.fromJson(decodedKeyData)
                     // Check if the private key pair exists based on the publicKeyId
                     if deviceKeyWorker.keyExists(keyId: sealedKeyComponents.publicKeyId, keyType: KeyType.privateKey) {
                         // Found the right key
@@ -162,7 +160,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
             contentId: attachmentType.contentId(),
             mimetype: attachmentType.mimeType(),
             inlineAttachment: false,
-            data: data
+            data: Data(data.utf8)
         )
     }
 }
