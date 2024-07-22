@@ -31,7 +31,6 @@ class Rfc822MessageDataProcessor {
 
     // MARK: - Rfc822MessageDataProcessor
 
-
     /// Encodes the given email into RFC822 compliant data
     /// - Parameters:
     ///   - message: The email to be encoded
@@ -95,35 +94,33 @@ class Rfc822MessageDataProcessor {
         if message.encryptionStatus == EncryptionStatus.ENCRYPTED {
             body = CANNED_TEXT_BODY
             builder.header.setExtraHeaderValue(PLATFORM_ENCRYPTION, forName: EMAIL_HEADER_NAME_ENCRYPTION)
-        }
-
-        if message.inlineAttachments?.count ?? 0 > 0 {
-            builder.htmlBody = body
-        } else {
             builder.textBody = body
+        } else {
+            // Mailcore handles creating a multipart message to ensure mail client compatibility,
+            // so by setting the body as html and formatting correctly here, the final message
+            // will contain this html part and a plain text part.
+            body = body?.replacingOccurrences(of: "\n", with: "<br>")
+            builder.htmlBody = body
         }
 
-        try message.attachments?.forEach({ builder.addAttachment(try formatAttachment($0)) })
+        // Build Mailcore attachments from provided message attachments
+        let allAttachments = (message.attachments ?? []) + (message.inlineAttachments ?? [])
+        try allAttachments.forEach { attachment in
+            guard let mcoAttachment = MCOAttachment(data: attachment.data, filename: attachment.filename) else {
+                throw SudoEmailError.internalError("Failed to build attachment")
+            }
+            mcoAttachment.mimeType = attachment.mimetype
+            mcoAttachment.isInlineAttachment = attachment.inlineAttachment
+            mcoAttachment.contentID = attachment.contentId
 
-        try message.inlineAttachments?.forEach({ builder.addAttachment(try formatAttachment($0)) })
+            builder.addAttachment(mcoAttachment)
+        }
 
         guard let data = builder.data() else {
             throw SudoEmailError.internalError("No data encoded")
         }
 
         return try self.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
-    }
-
-    /// Generates a MailCore-formatted attachment from a given `EmailAttachment`.
-    private func formatAttachment(_ attachment: EmailAttachment) throws -> MCOAttachment {
-        guard let mcoAttachment = MCOAttachment(data: attachment.data, filename: attachment.filename) else {
-            throw SudoEmailError.internalError("Failed to build attachment")
-        }
-        mcoAttachment.mimeType = attachment.mimetype
-        mcoAttachment.isInlineAttachment = attachment.inlineAttachment
-        mcoAttachment.contentID = attachment.contentId
-
-        return mcoAttachment
     }
 
     func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
@@ -147,18 +144,27 @@ class Rfc822MessageDataProcessor {
 
         func formatMCOAttachments(_ mcoAttachments: [MCOAttachment], isInline: Bool = false) throws {
             try mcoAttachments.forEach { a in
-                // Mailcore may parse content types such as 'text/rfc822-headers' and 'message/delivery-status'
-                // as attachments won't have filenames, meaning we need to skip attachments without filenames
-                // to avoid eventual errors with content types such as these.
+                // Mailcore may parse content types such as 'text/rfc822-headers' and 'message/delivery-status' as
+                // attachments that won't have filenames, meaning we need to skip attachments without filenames to
+                // avoid eventual errors with content types such as these.
                 if let filename = a.filename {
+                    let bodyRange = NSRange(body.startIndex..., in: body)
+                    var bodyContainsCid = false
+
+                    if let contentId = a.contentID {
+                        let cidRegex = try NSRegularExpression(pattern: "<img .*?src=\"cid:\(contentId)\".*?>", options: .caseInsensitive)
+                        bodyContainsCid = !cidRegex.matches(in: body, range: bodyRange).isEmpty
+                    }
+
+                    let isInlineAttachment = bodyContainsCid || a.isInlineAttachment || isInline
                     let attachment = EmailAttachment(
                         filename: filename,
                         contentId: a.contentID,
                         mimetype: a.mimeType,
-                        inlineAttachment: isInline || a.isInlineAttachment,
+                        inlineAttachment: isInlineAttachment,
                         data: a.data
                     )
-                    if attachment.inlineAttachment {
+                    if isInlineAttachment {
                         inlineAttachments.append(attachment)
                     } else {
                         attachments.append(attachment)
@@ -168,10 +174,8 @@ class Rfc822MessageDataProcessor {
                     // `- a test.txt, 738 bytes`
                     // `- aTest2.png, 14 KB`
                     // `- a-large_test.pdf, 2.0 MB`
-                    let pattern = "- \(filename), \\d+(\\.){0,1}(\\d+){0,}\\s?(?:(bytes|KB|MB))\n"
-                    let regex = try NSRegularExpression(pattern: pattern)
-                    let range = NSRange(body.startIndex..<body.endIndex, in: body)
-                    body = regex.stringByReplacingMatches(in: body, options: [], range: range, withTemplate: "")
+                    let filenameRegex = try NSRegularExpression(pattern: "- \(filename), \\d+(\\.){0,1}(\\d+){0,}\\s?(?:(bytes|KB|MB))\n")
+                    body = filenameRegex.stringByReplacingMatches(in: body, options: [], range: bodyRange, withTemplate: "")
                 }
             }
         }
@@ -183,7 +187,7 @@ class Rfc822MessageDataProcessor {
         try formatMCOAttachments(parser.htmlInlineAttachments() as? [MCOAttachment] ?? [], isInline: true)
 
         let encryptionHeader = header.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)
-        let encryptionStatus: EncryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
+        let encryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
 
         let result = EmailMessageDetails(
             from: [EmailAddressDetail(
@@ -230,7 +234,7 @@ class Rfc822MessageDataProcessor {
 
         let matches = regex.matches(in: input, range: NSMakeRange(0, input.count))
 
-        if(matches.isEmpty) {
+        if matches.isEmpty {
             return processed
         }
 
@@ -241,18 +245,18 @@ class Rfc822MessageDataProcessor {
             let encodingType = input[Range(match.range(at: 2), in: input)!]
             let value = input[Range(match.range(at: 3), in: input)!]
 
-            if(value == "") { // Found a match but its for an empty string
+            if value == "" { // Found a match but its for an empty string
                 processed = input.replacingOccurrences(of: group, with: value)
             } else {
                 let encodingCharset: String.Encoding
-                switch (charset) {
+                switch charset {
                 case "utf-8":
                     encodingCharset = String.Encoding.utf8
                 default:
                     throw SudoEmailError.internalError("Invalid charset value: \(charset)")
                 }
 
-                switch (encodingType) {
+                switch encodingType {
                     case "B": //Base64
                     guard let decodedValueData = Data(base64Encoded: String(value)) else {
                         print("Could not decode base64 string: \(String(value))")
@@ -295,8 +299,8 @@ class Rfc822MessageDataProcessor {
                 var isBytes = true
                 var hexString = ""
                 var remainder = ""
-                while(isBytes) {
-                    if(remainingSection.prefix(1) == "="){
+                while isBytes {
+                    if remainingSection.prefix(1) == "=" {
                         let index = remainingSection.index(remainingSection.startIndex, offsetBy: 3)
                         let chars = remainingSection[..<index]
                         hexString.append(
