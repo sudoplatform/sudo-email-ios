@@ -343,6 +343,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         withInput input: ListEmailMessagesInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
         let graphQLInput = GraphQL.ListEmailMessagesInput(
+            includeDeletedMessages: input.includeDeletedMessages,
             limit: input.limit,
             nextToken: input.nextToken,
             sortOrder: input.sortOrder?.toGraphQL(),
@@ -381,6 +382,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
         let graphQLInput = GraphQL.ListEmailMessagesForEmailAddressIdInput(
             emailAddressId: input.emailAddressId,
+            includeDeletedMessages: input.includeDeletedMessages,
             limit: input.limit,
             nextToken: input.nextToken,
             sortOrder: input.sortOrder?.toGraphQL(),
@@ -419,6 +421,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
         let graphQLInput = GraphQL.ListEmailMessagesForEmailFolderIdInput(
             folderId: input.emailFolderId,
+            includeDeletedMessages: input.includeDeletedMessages,
             limit: input.limit,
             nextToken: input.nextToken,
             sortOrder: input.sortOrder?.toGraphQL(),

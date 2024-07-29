@@ -41,6 +41,8 @@ struct EmailMessageAPITransformer {
                 return .failed
             case .received:
                 return .received
+            case .deleted:
+                return .deleted
             }
         }
     }

@@ -514,6 +514,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return transformer.transformEmailMessages(messagesResult)
     }
 
+    @available(*, deprecated, message: "Use getEmailMessageWithBody instead to retrieve email message data")
     public func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data {
         let useCase = useCaseFactory.generateFetchEmailMessageRFC822DataUseCase(
             emailMessageRepository: emailMessageRepository,

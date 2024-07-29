@@ -33,6 +33,8 @@ public struct EmailMessage: Equatable {
         case failed
         /// Inbound message has been received.
         case received
+        /// Message has been deleted. Data is unavailable
+        case deleted
     }
 
     /// Unique identifier of the email message.

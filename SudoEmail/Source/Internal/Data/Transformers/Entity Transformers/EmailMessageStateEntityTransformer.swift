@@ -22,6 +22,8 @@ struct EmailMessageStateEntityTransformer {
             return .failed
         case .received:
             return .received
+        case .deleted:
+            return .deleted
         case let .unknown(state):
             throw SudoEmailError.internalError("Unsupported state: \(state)")
         }
@@ -42,6 +44,8 @@ struct EmailMessageStateEntityTransformer {
             return .failed
         case .received:
             return .received
+        case .deleted:
+            return .deleted
         }
     }
 

@@ -260,6 +260,7 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - Success: Stored RFC 6854 email message data of the email message.
     ///   - Failure: `SudoEmailError.noEmailMessageRFC822Available` if the email message cannot be accessed/found.
+    @available(*, deprecated, message: "Use getEmailMessageWithBody instead to retrieve email message data")
     func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data
 
     /// Get the body and attachment data of an `EmailMessage`

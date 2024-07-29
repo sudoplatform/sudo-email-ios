@@ -139,6 +139,7 @@ internal enum EmailMessageDirection: RawRepresentable, Equatable, JSONDecodable,
 
 internal enum EmailMessageState: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
   internal typealias RawValue = String
+  case deleted
   case delivered
   case failed
   case queued
@@ -150,6 +151,7 @@ internal enum EmailMessageState: RawRepresentable, Equatable, JSONDecodable, JSO
 
   internal init?(rawValue: RawValue) {
     switch rawValue {
+      case "DELETED": self = .deleted
       case "DELIVERED": self = .delivered
       case "FAILED": self = .failed
       case "QUEUED": self = .queued
@@ -162,6 +164,7 @@ internal enum EmailMessageState: RawRepresentable, Equatable, JSONDecodable, JSO
 
   internal var rawValue: RawValue {
     switch self {
+      case .deleted: return "DELETED"
       case .delivered: return "DELIVERED"
       case .failed: return "FAILED"
       case .queued: return "QUEUED"
@@ -174,6 +177,7 @@ internal enum EmailMessageState: RawRepresentable, Equatable, JSONDecodable, JSO
 
   internal static func == (lhs: EmailMessageState, rhs: EmailMessageState) -> Bool {
     switch (lhs, rhs) {
+      case (.deleted, .deleted): return true
       case (.delivered, .delivered): return true
       case (.failed, .failed): return true
       case (.queued, .queued): return true
@@ -1374,8 +1378,17 @@ internal struct IntFilterInput: GraphQLMapConvertible {
 internal struct ListEmailMessagesInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
-    graphQLMap = ["limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
+  internal init(includeDeletedMessages: Optional<Bool?> = nil, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
+    graphQLMap = ["includeDeletedMessages": includeDeletedMessages, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
+  }
+
+  internal var includeDeletedMessages: Optional<Bool?> {
+    get {
+      return graphQLMap["includeDeletedMessages"] as! Optional<Bool?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "includeDeletedMessages")
+    }
   }
 
   internal var limit: Optional<Int?> {
@@ -1503,8 +1516,8 @@ internal struct DateRangeInput: GraphQLMapConvertible {
 internal struct ListEmailMessagesForEmailAddressIdInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(emailAddressId: GraphQLID, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
-    graphQLMap = ["emailAddressId": emailAddressId, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
+  internal init(emailAddressId: GraphQLID, includeDeletedMessages: Optional<Bool?> = nil, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
+    graphQLMap = ["emailAddressId": emailAddressId, "includeDeletedMessages": includeDeletedMessages, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
   }
 
   internal var emailAddressId: GraphQLID {
@@ -1513,6 +1526,15 @@ internal struct ListEmailMessagesForEmailAddressIdInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var includeDeletedMessages: Optional<Bool?> {
+    get {
+      return graphQLMap["includeDeletedMessages"] as! Optional<Bool?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "includeDeletedMessages")
     }
   }
 
@@ -1556,8 +1578,8 @@ internal struct ListEmailMessagesForEmailAddressIdInput: GraphQLMapConvertible {
 internal struct ListEmailMessagesForEmailFolderIdInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(filter: Optional<EmailMessageFilterInput?> = nil, folderId: GraphQLID, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
-    graphQLMap = ["filter": filter, "folderId": folderId, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
+  internal init(filter: Optional<EmailMessageFilterInput?> = nil, folderId: GraphQLID, includeDeletedMessages: Optional<Bool?> = nil, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil, sortOrder: Optional<SortOrder?> = nil, specifiedDateRange: Optional<EmailMessageDateRangeInput?> = nil) {
+    graphQLMap = ["filter": filter, "folderId": folderId, "includeDeletedMessages": includeDeletedMessages, "limit": limit, "nextToken": nextToken, "sortOrder": sortOrder, "specifiedDateRange": specifiedDateRange]
   }
 
   internal var filter: Optional<EmailMessageFilterInput?> {
@@ -1575,6 +1597,15 @@ internal struct ListEmailMessagesForEmailFolderIdInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "folderId")
+    }
+  }
+
+  internal var includeDeletedMessages: Optional<Bool?> {
+    get {
+      return graphQLMap["includeDeletedMessages"] as! Optional<Bool?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "includeDeletedMessages")
     }
   }
 

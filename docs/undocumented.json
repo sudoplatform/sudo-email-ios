@@ -191,7 +191,7 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
-      "line": 90,
+      "line": 92,
       "symbol": "EmailMessage.replyTo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -296,22 +296,22 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailAddressIdInput.swift",
-      "line": 32,
-      "symbol": "ListEmailMessagesForEmailAddressInput.init(emailAddressId:dateRange:cachePolicy:sortOrder:limit:nextToken:)",
+      "line": 35,
+      "symbol": "ListEmailMessagesForEmailAddressInput.init(emailAddressId:dateRange:cachePolicy:sortOrder:limit:nextToken:includeDeletedMessages:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesForEmailFolderIdInput.swift",
-      "line": 30,
-      "symbol": "ListEmailMessagesForEmailFolderIdInput.init(emailFolderId:dateRange:cachePolicy:sortOrder:limit:nextToken:)",
+      "line": 33,
+      "symbol": "ListEmailMessagesForEmailFolderIdInput.init(emailFolderId:dateRange:cachePolicy:sortOrder:limit:nextToken:includeDeletedMessages:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/ListEmailMessagesInput.swift",
-      "line": 27,
-      "symbol": "ListEmailMessagesInput.init(dateRange:cachePolicy:sortOrder:limit:nextToken:)",
+      "line": 30,
+      "symbol": "ListEmailMessagesInput.init(dateRange:cachePolicy:sortOrder:limit:nextToken:includeDeletedMessages:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },

@@ -79,8 +79,11 @@ class SendEmailMessageUseCase {
         }
         
         if (!internalRecipients.isEmpty) {
-            // Lookup public key information for each internal recipient
-            let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(emailAddresses: internalRecipients, cachePolicy: .remoteOnly)
+            // Lookup public key information for each internal recipient and sender
+            var recipientsAndSender = internalRecipients
+            recipientsAndSender.append(emailMessageHeader.from)
+            let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(emailAddresses: recipientsAndSender, cachePolicy: .remoteOnly)
+
             // Check whether internal recipient addresses and associated public keys exist in the platform
             let isInNetworkAddresses = internalRecipients.allSatisfy { recipient in
                 emailAddressesPublicInfo.contains { info in
@@ -189,8 +192,8 @@ class SendEmailMessageUseCase {
     ) throws -> Data {
         let from = [EmailAddressDetail(emailAddress: emailMessageHeader.from)]
         let to = emailMessageHeader.to.map { EmailAddressDetail(emailAddress: $0) }
-        let cc = emailMessageHeader.to.map { EmailAddressDetail(emailAddress: $0) }
-        let bcc = emailMessageHeader.to.map { EmailAddressDetail(emailAddress: $0) }
+        let cc = emailMessageHeader.cc.map { EmailAddressDetail(emailAddress: $0) }
+        let bcc = emailMessageHeader.bcc.map { EmailAddressDetail(emailAddress: $0) }
         let rfc822DataProperties = Rfc822MessageDataProcessor.EmailMessageDetails(
             from: from,
             to: to,
