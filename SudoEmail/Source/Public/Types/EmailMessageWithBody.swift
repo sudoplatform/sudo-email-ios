@@ -15,6 +15,9 @@ public struct EmailMessageWithBody {
     /// The email message body.
     public let body: String
 
+    /// Flag indicating whether the body is formatted as HTML.
+    public let isHtml: Bool
+
     /// A list of email message attachments.
     public let attachments: [EmailAttachment]
 
@@ -22,9 +25,10 @@ public struct EmailMessageWithBody {
     public let inlineAttachments: [EmailAttachment]
 
     /// Initialize an instance of `EmailMessageWithBody`.
-    public init(id: String, body: String, attachments: [EmailAttachment], inlineAttachments: [EmailAttachment]) {
+    public init(id: String, body: String, isHtml: Bool, attachments: [EmailAttachment], inlineAttachments: [EmailAttachment]) {
         self.id = id
         self.body = body
+        self.isHtml = isHtml
         self.attachments = attachments
         self.inlineAttachments = inlineAttachments
     }

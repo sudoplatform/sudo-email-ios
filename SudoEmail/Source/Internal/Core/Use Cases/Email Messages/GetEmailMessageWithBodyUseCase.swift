@@ -121,6 +121,7 @@ class GetEmailMessageWithBodyUseCase {
             return EmailMessageWithBody(
                 id: messageId,
                 body: parsedMessage.body ?? "",
+                isHtml: true,
                 attachments: parsedMessage.attachments ?? [],
                 inlineAttachments: parsedMessage.inlineAttachments ?? []
             )

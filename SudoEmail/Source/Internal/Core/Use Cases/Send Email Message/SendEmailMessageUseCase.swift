@@ -110,19 +110,6 @@ class SendEmailMessageUseCase {
                     emailMessageHeader: emailMessageHeader,
                     hasAttachments: hasAttachments
                 )
-            } else {
-                // Process non-encrypted email message
-                let rfc822Data = try await processAndBuildEmailMessage(
-                    emailMessageHeader: emailMessageHeader,
-                    body: body,
-                    attachments: attachments,
-                    inlineAttachments: inlineAttachments,
-                    encryptionStatus: EncryptionStatus.UNENCRYPTED
-                )
-                return try await emailMessageRepository.sendEmailMessage(
-                    withRFC822Data: rfc822Data,
-                    emailAccountId: senderEmailAddressId
-                )
             }
         }
         // Process non-encrypted email message
@@ -155,6 +142,7 @@ class SendEmailMessageUseCase {
             body: body,
             attachments: attachments,
             inlineAttachments: inlineAttachments,
+            isHtml: true,
             encryptionStatus: EncryptionStatus.UNENCRYPTED
         )
         
@@ -171,6 +159,7 @@ class SendEmailMessageUseCase {
                 body: body,
                 attachments: secureAttachments,
                 inlineAttachments: inlineAttachments,
+                isHtml: false,
                 encryptionStatus: EncryptionStatus.ENCRYPTED
             )
         }
@@ -188,6 +177,7 @@ class SendEmailMessageUseCase {
         body: String,
         attachments: [EmailAttachment],
         inlineAttachments: [EmailAttachment],
+        isHtml: Bool,
         encryptionStatus: EncryptionStatus
     ) throws -> Data {
         let from = [EmailAddressDetail(emailAddress: emailMessageHeader.from)]
@@ -203,6 +193,7 @@ class SendEmailMessageUseCase {
             body: body,
             attachments: attachments,
             inlineAttachments: inlineAttachments,
+            isHtml: isHtml,
             encryptionStatus: encryptionStatus
         )
         return try rfc822MessageDataProcessor.encodeToInternetMessageData(message: rfc822DataProperties)

@@ -13,6 +13,7 @@ let PLATFORM_ENCRYPTION = "sudoplatform"
 let CANNED_TEXT_BODY = "Encrypted message attached"
 
 let ENCODED_WORD_REGEX_PATTERN = "(?:=\\?([\\w-]+)\\?([A-Z])\\?([a-zA-Z0-9+\\/=_]*)\\?=)"
+let HTML_TAG_BODY_REGEX = "(?s)<html.*</html>"
 
 /// A class which handles the parsing of RFC822 compliant email messages in the Platform SDK
 class Rfc822MessageDataProcessor {
@@ -26,6 +27,7 @@ class Rfc822MessageDataProcessor {
         var body: String?
         var attachments: [EmailAttachment]?
         var inlineAttachments: [EmailAttachment]?
+        var isHtml: Bool = false
         var encryptionStatus: EncryptionStatus = EncryptionStatus.UNENCRYPTED
     }
 
@@ -94,13 +96,16 @@ class Rfc822MessageDataProcessor {
         if message.encryptionStatus == EncryptionStatus.ENCRYPTED {
             body = CANNED_TEXT_BODY
             builder.header.setExtraHeaderValue(PLATFORM_ENCRYPTION, forName: EMAIL_HEADER_NAME_ENCRYPTION)
-            builder.textBody = body
-        } else {
+        }
+
+        if message.isHtml {
             // Mailcore handles creating a multipart message to ensure mail client compatibility,
             // so by setting the body as html and formatting correctly here, the final message
             // will contain this html part and a plain text part.
             body = body?.replacingOccurrences(of: "\n", with: "<br>")
             builder.htmlBody = body
+        } else {
+            builder.textBody = body
         }
 
         // Build Mailcore attachments from provided message attachments
@@ -123,6 +128,21 @@ class Rfc822MessageDataProcessor {
         return try self.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
     }
 
+    // Recursively search a message part until a part with matching `mimeType` is found.
+    func searchMessageParts(part: MCOAbstractPart, mimeType: String) -> MCOAbstractPart? {
+        if part.mimeType == mimeType {
+            return part
+        }
+        if let subParts = (part as? MCOMultipart)?.parts as? [MCOAbstractPart] {
+            for subPart in subParts {
+                if let matchingPart = searchMessageParts(part: subPart, mimeType: mimeType) as? MCOAbstractPart {
+                    return matchingPart
+                }
+            }
+        }
+        return nil
+    }
+
     func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
         guard let parser = MCOMessageParser(data: input.data(using: .utf8)),
               let header = parser.header else {
@@ -135,9 +155,31 @@ class Rfc822MessageDataProcessor {
         let bcc = header.bcc as? [MCOAddress] ?? []
         let replyTo = header.replyTo as? [MCOAddress] ?? []
         let subject = header.subject
+        var isHtml = false
 
-        // Strip whitespace and preserve newline characters.
-        var body = parser.plainTextBodyRenderingAndStripWhitespace(false).trimmingCharacters(in: .whitespaces)
+        guard let mainPart = parser.mainPart() else {
+            throw SudoEmailError.internalError("Failed to decode message body")
+        }
+
+        var body = ""
+
+        // First check for html message body
+        if let htmlTextPart = searchMessageParts(part: mainPart, mimeType: "text/html"),
+           let bodyData = (htmlTextPart as? MCOAttachment)?.data {
+            let decodedHtmlBody = String(decoding: bodyData, as: UTF8.self)
+            body = decodedHtmlBody
+
+            let htmlTagsRegex = try NSRegularExpression(pattern: HTML_TAG_BODY_REGEX, options: .caseInsensitive)
+            let bodyContainsHtmlTags = !htmlTagsRegex.matches(in: body, range: NSMakeRange(0, body.count)).isEmpty
+            if !bodyContainsHtmlTags {
+                body = "<html>\(body)</html>"
+            }
+        // Fall back to plaintext message body if no html present
+        } else if let plainTextPart = searchMessageParts(part: mainPart, mimeType: "text/plain"),
+                  let bodyData = (plainTextPart as? MCOAttachment)?.data {
+            let decodedPlainTextBody = String(decoding: bodyData, as: UTF8.self)
+            body = decodedPlainTextBody
+        }
 
         var inlineAttachments: [EmailAttachment] = []
         var attachments: [EmailAttachment] = []
@@ -152,7 +194,8 @@ class Rfc822MessageDataProcessor {
                     var bodyContainsCid = false
 
                     if let contentId = a.contentID {
-                        let cidRegex = try NSRegularExpression(pattern: "<img .*?src=\"cid:\(contentId)\".*?>", options: .caseInsensitive)
+                        // Check for image tag with content id across all lines.
+                        let cidRegex = try NSRegularExpression(pattern: "(?s)<img .*?src=\"cid:\(contentId)\".*?>", options: .caseInsensitive)
                         bodyContainsCid = !cidRegex.matches(in: body, range: bodyRange).isEmpty
                     }
 
@@ -214,6 +257,7 @@ class Rfc822MessageDataProcessor {
             body: body,
             attachments: attachments,
             inlineAttachments: inlineAttachments,
+            isHtml: isHtml,
             encryptionStatus: encryptionStatus
         )
 
