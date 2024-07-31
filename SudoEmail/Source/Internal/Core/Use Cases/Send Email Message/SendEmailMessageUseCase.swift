@@ -71,17 +71,17 @@ class SendEmailMessageUseCase {
         var internalRecipients: [String] = []
         var externalRecipients: [String] = []
         allRecipients.forEach { address in
-            if domains.contains(where: { domain in address.contains(domain.name) }) {
-                internalRecipients.append(address)
+            if domains.contains(where: { domain in address.address.contains(domain.name) }) {
+                internalRecipients.append(address.address)
             } else {
-                externalRecipients.append(address)
+                externalRecipients.append(address.address)
             }
         }
         
         if (!internalRecipients.isEmpty) {
             // Lookup public key information for each internal recipient and sender
             var recipientsAndSender = internalRecipients
-            recipientsAndSender.append(emailMessageHeader.from)
+            recipientsAndSender.append(emailMessageHeader.from.address)
             let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(emailAddresses: recipientsAndSender, cachePolicy: .remoteOnly)
 
             // Check whether internal recipient addresses and associated public keys exist in the platform
@@ -180,10 +180,10 @@ class SendEmailMessageUseCase {
         isHtml: Bool,
         encryptionStatus: EncryptionStatus
     ) throws -> Data {
-        let from = [EmailAddressDetail(emailAddress: emailMessageHeader.from)]
-        let to = emailMessageHeader.to.map { EmailAddressDetail(emailAddress: $0) }
-        let cc = emailMessageHeader.cc.map { EmailAddressDetail(emailAddress: $0) }
-        let bcc = emailMessageHeader.bcc.map { EmailAddressDetail(emailAddress: $0) }
+        let from = [EmailAddressDetail(emailAddress: emailMessageHeader.from.address, displayName: emailMessageHeader.from.displayName)]
+        let to = emailMessageHeader.to.map { EmailAddressDetail(emailAddress: $0.address, displayName: $0.displayName) }
+        let cc = emailMessageHeader.cc.map { EmailAddressDetail(emailAddress: $0.address, displayName: $0.displayName) }
+        let bcc = emailMessageHeader.bcc.map { EmailAddressDetail(emailAddress: $0.address, displayName: $0.displayName) }
         let rfc822DataProperties = Rfc822MessageDataProcessor.EmailMessageDetails(
             from: from,
             to: to,

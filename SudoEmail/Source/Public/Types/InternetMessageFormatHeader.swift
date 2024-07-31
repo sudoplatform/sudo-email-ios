@@ -18,25 +18,32 @@ import Foundation
 public struct InternetMessageFormatHeader: Equatable {
 
     /// The email address belonging to the sender.
-    public let from: String
+    public let from: EmailAddressAndName
 
     /// The email addresses belonging to the primary recipients.
-    public let to: [String]
+    public let to: [EmailAddressAndName]
 
     /// The email addresses belonging to the secondary recipients.
-    public let cc: [String]
+    public let cc: [EmailAddressAndName]
 
     /// The email addresses belonging to additional recipients.
-    public let bcc: [String]
+    public let bcc: [EmailAddressAndName]
 
     /// The email addresses in which responses are to be sent.
-    public let replyTo: [String]
+    public let replyTo: [EmailAddressAndName]
 
     /// The subject line of the email message.
     public let subject: String
 
     /// Initialize an instance of `InternetMessageFormatHeader`.
-    public init(from: String, to: [String] = [], cc: [String] = [], bcc: [String] = [], replyTo: [String] = [], subject: String) {
+    public init(
+        from: EmailAddressAndName,
+        to: [EmailAddressAndName] = [],
+        cc: [EmailAddressAndName] = [],
+        bcc: [EmailAddressAndName] = [],
+        replyTo: [EmailAddressAndName] = [],
+        subject: String
+    ) {
         self.from = from
         self.to = to
         self.cc = cc
@@ -44,5 +51,4 @@ public struct InternetMessageFormatHeader: Equatable {
         self.replyTo = replyTo
         self.subject = subject
     }
-
 }

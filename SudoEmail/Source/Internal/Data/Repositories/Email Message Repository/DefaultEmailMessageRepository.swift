@@ -185,13 +185,13 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
         // Perform `SendEncryptedEmailMessage` mutation (in-network)
         let rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
-            bcc: emailMessageHeader.bcc,
-            cc: emailMessageHeader.cc,
-            from: emailMessageHeader.from,
+            bcc: emailMessageHeader.bcc.map { $0.description },
+            cc: emailMessageHeader.cc.map { $0.description },
+            from: emailMessageHeader.from.description,
             hasAttachments: hasAttachments,
-            replyTo: emailMessageHeader.replyTo,
+            replyTo: emailMessageHeader.replyTo.map { $0.description },
             subject: emailMessageHeader.subject,
-            to: emailMessageHeader.to
+            to: emailMessageHeader.to.map { $0.description }
         )
         let input = GraphQL.SendEncryptedEmailMessageInput(
             emailAddressId: emailAccountId,
