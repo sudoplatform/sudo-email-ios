@@ -6,7 +6,7 @@
 
 import Foundation
 import MailCore
-
+import SudoLogging
 
 let EMAIL_HEADER_NAME_ENCRYPTION = "X-Sudoplatform-Encryption"
 let PLATFORM_ENCRYPTION = "sudoplatform"
@@ -142,6 +142,20 @@ class Rfc822MessageDataProcessor {
         }
         return nil
     }
+    
+    func transformMCOAttachments(_ mcoAttachments: [MCOAttachment]) -> [EmailAttachment] {
+        var attachments: [EmailAttachment] = []
+        for mcoAttachment in mcoAttachments {
+            attachments.append(EmailAttachment(
+                filename: mcoAttachment.filename,
+                contentId: mcoAttachment.contentID,
+                mimetype: mcoAttachment.mimeType,
+                inlineAttachment: mcoAttachment.isInlineAttachment,
+                data: mcoAttachment.data
+            ))
+        }
+        return attachments
+    }
 
     func decodeInternetMessageData(input: String) throws -> EmailMessageDetails {
         guard let parser = MCOMessageParser(data: input.data(using: .utf8)),
@@ -155,79 +169,23 @@ class Rfc822MessageDataProcessor {
         let bcc = header.bcc as? [MCOAddress] ?? []
         let replyTo = header.replyTo as? [MCOAddress] ?? []
         let subject = header.subject
-        var isHtml = false
+        /// This is forcing HTML for incoming email. Even plain text would resolve to a HTML render.
+        /// Product decision as to whether we *need* support for raw plaintext. If we do, this might
+        /// need some minor refactoring. e.g: let isHtml = parser.isPlaintext()
+        let isHtml = true
+        let renderer = parser.isPlaintext() ?
+            HTMLPlaintextRenderer(logger: Logger.emailSDKLogger) : HTMLRenderer()
+        let body = parser.htmlRendering(with: renderer)
 
-        guard let mainPart = parser.mainPart() else {
-            throw SudoEmailError.internalError("Failed to decode message body")
+        var attachments: [EmailAttachment]?
+        if let mcoAttachments = parser.attachments() as NSArray? as? [MCOAttachment] {
+            attachments = transformMCOAttachments(mcoAttachments)
         }
-
-        var body = ""
-
-        // First check for html message body
-        if let htmlTextPart = searchMessageParts(part: mainPart, mimeType: "text/html"),
-           let bodyData = (htmlTextPart as? MCOAttachment)?.data {
-            let decodedHtmlBody = String(decoding: bodyData, as: UTF8.self)
-            body = decodedHtmlBody
-
-            let htmlTagsRegex = try NSRegularExpression(pattern: HTML_TAG_BODY_REGEX, options: .caseInsensitive)
-            let bodyContainsHtmlTags = !htmlTagsRegex.matches(in: body, range: NSMakeRange(0, body.count)).isEmpty
-            if !bodyContainsHtmlTags {
-                body = "<html>\(body)</html>"
-            }
-        // Fall back to plaintext message body if no html present
-        } else if let plainTextPart = searchMessageParts(part: mainPart, mimeType: "text/plain"),
-                  let bodyData = (plainTextPart as? MCOAttachment)?.data {
-            let decodedPlainTextBody = String(decoding: bodyData, as: UTF8.self)
-            body = decodedPlainTextBody
+        
+        var inlineAttachments: [EmailAttachment]?
+        if let mcoInlineAttachments = parser.htmlInlineAttachments() as NSArray? as? [MCOAttachment] {
+            inlineAttachments = transformMCOAttachments(mcoInlineAttachments)
         }
-
-        var inlineAttachments: [EmailAttachment] = []
-        var attachments: [EmailAttachment] = []
-
-        func formatMCOAttachments(_ mcoAttachments: [MCOAttachment], isInline: Bool = false) throws {
-            try mcoAttachments.forEach { a in
-                // Mailcore may parse content types such as 'text/rfc822-headers' and 'message/delivery-status' as
-                // attachments that won't have filenames, meaning we need to skip attachments without filenames to
-                // avoid eventual errors with content types such as these.
-                if let filename = a.filename {
-                    let bodyRange = NSRange(body.startIndex..., in: body)
-                    var bodyContainsCid = false
-
-                    if let contentId = a.contentID {
-                        // Check for image tag with content id across all lines.
-                        let cidRegex = try NSRegularExpression(pattern: "(?s)<img .*?src=\"cid:\(contentId)\".*?>", options: .caseInsensitive)
-                        bodyContainsCid = !cidRegex.matches(in: body, range: bodyRange).isEmpty
-                    }
-
-                    let isInlineAttachment = bodyContainsCid || a.isInlineAttachment || isInline
-                    let attachment = EmailAttachment(
-                        filename: filename,
-                        contentId: a.contentID,
-                        mimetype: a.mimeType,
-                        inlineAttachment: isInlineAttachment,
-                        data: a.data
-                    )
-                    if isInlineAttachment {
-                        inlineAttachments.append(attachment)
-                    } else {
-                        attachments.append(attachment)
-                    }
-
-                    // There will be a list of the attachments at the end of the body that we want to remove, ie
-                    // `- a test.txt, 738 bytes`
-                    // `- aTest2.png, 14 KB`
-                    // `- a-large_test.pdf, 2.0 MB`
-                    let filenameRegex = try NSRegularExpression(pattern: "- \(filename), \\d+(\\.){0,1}(\\d+){0,}\\s?(?:(bytes|KB|MB))\n")
-                    body = filenameRegex.stringByReplacingMatches(in: body, options: [], range: bodyRange, withTemplate: "")
-                }
-            }
-        }
-
-        // List are retrieved separately here to use Mailcore's logic as a baseline of which attachments are
-        // inline and which aren't - our logic can then be added on top.
-        // (Sometimes `parser.attachments()` can contain inline attachments...)
-        try formatMCOAttachments(parser.attachments() as? [MCOAttachment] ?? [])
-        try formatMCOAttachments(parser.htmlInlineAttachments() as? [MCOAttachment] ?? [], isInline: true)
 
         let encryptionHeader = header.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)
         let encryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
@@ -260,7 +218,6 @@ class Rfc822MessageDataProcessor {
             isHtml: isHtml,
             encryptionStatus: encryptionStatus
         )
-
         return result
     }
 

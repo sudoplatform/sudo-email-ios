@@ -22,6 +22,13 @@
 		0C4C09B82B95317200A82096 /* MockListEmailMessagesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4C09B72B95317200A82096 /* MockListEmailMessagesUseCase.swift */; };
 		0C4C09BA2B95323600A82096 /* ListEmailMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4C09B92B95323600A82096 /* ListEmailMessagesTests.swift */; };
 		0C4C09BC2B953EC000A82096 /* ListEmailMessagesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4C09BB2B953EC000A82096 /* ListEmailMessagesUseCaseTests.swift */; };
+		1BDEB97B2C699CC2003FD274 /* HTMLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEB97A2C699CC2003FD274 /* HTMLRenderer.swift */; };
+		1BDEB97D2C699CFB003FD274 /* HTMLPlaintextRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEB97C2C699CFB003FD274 /* HTMLPlaintextRenderer.swift */; };
+		1BDEB97F2C6ADE78003FD274 /* MailCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDEB97E2C6ADE78003FD274 /* MailCore.xcframework */; };
+		1BDEB98F2C6EF15B003FD274 /* test_inline_image.eml in Resources */ = {isa = PBXBuildFile; fileRef = 1BDEB98E2C6EF15B003FD274 /* test_inline_image.eml */; };
+		1BDEB9912C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml in Resources */ = {isa = PBXBuildFile; fileRef = 1BDEB9902C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml */; };
+		1BDEB9932C6EF186003FD274 /* complicated_with_attachments_and_inline.eml in Resources */ = {isa = PBXBuildFile; fileRef = 1BDEB9922C6EF185003FD274 /* complicated_with_attachments_and_inline.eml */; };
+		1BDEB9D72C744FDE003FD274 /* MCOMessageParser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEB9D62C744FDE003FD274 /* MCOMessageParser+Extensions.swift */; };
 		3E2008872F65EA6A2366A4F0 /* Pods_SudoEmail_SudoEmailIntegrationTests_TestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23CFEFE27D890177FA4C55C3 /* Pods_SudoEmail_SudoEmailIntegrationTests_TestApp.framework */; };
 		5106CFE22BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5106CFE12BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift */; };
 		510F5D272BBD98C10096FD10 /* EmailCryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D262BBD98C10096FD10 /* EmailCryptoService.swift */; };
@@ -601,6 +608,13 @@
 		0C4C09B92B95323600A82096 /* ListEmailMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailMessagesTests.swift; sourceTree = "<group>"; };
 		0C4C09BB2B953EC000A82096 /* ListEmailMessagesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailMessagesUseCaseTests.swift; sourceTree = "<group>"; };
 		17136BBF307A12E21FBA63AB /* Pods-SudoEmailNotificationExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmailNotificationExtension.release.xcconfig"; path = "Target Support Files/Pods-SudoEmailNotificationExtension/Pods-SudoEmailNotificationExtension.release.xcconfig"; sourceTree = "<group>"; };
+		1BDEB97A2C699CC2003FD274 /* HTMLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLRenderer.swift; sourceTree = "<group>"; };
+		1BDEB97C2C699CFB003FD274 /* HTMLPlaintextRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLPlaintextRenderer.swift; sourceTree = "<group>"; };
+		1BDEB97E2C6ADE78003FD274 /* MailCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MailCore.xcframework; path = Pods/AnonyomeMailCore2/Frameworks/MailCore.xcframework; sourceTree = "<group>"; };
+		1BDEB98E2C6EF15B003FD274 /* test_inline_image.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_inline_image.eml; sourceTree = "<group>"; };
+		1BDEB9902C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simple_with_regular_and_inline_attachments.eml; sourceTree = "<group>"; };
+		1BDEB9922C6EF185003FD274 /* complicated_with_attachments_and_inline.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = complicated_with_attachments_and_inline.eml; sourceTree = "<group>"; };
+		1BDEB9D62C744FDE003FD274 /* MCOMessageParser+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MCOMessageParser+Extensions.swift"; sourceTree = "<group>"; };
 		23CFEFE27D890177FA4C55C3 /* Pods_SudoEmail_SudoEmailIntegrationTests_TestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SudoEmail_SudoEmailIntegrationTests_TestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C531EE10702F47AD7637A50 /* Pods-SudoEmail-SudoEmailTests-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SudoEmail-SudoEmailTests-TestApp.release.xcconfig"; path = "Target Support Files/Pods-SudoEmail-SudoEmailTests-TestApp/Pods-SudoEmail-SudoEmailTests-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		5106CFE12BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressPublicKeyIntegrationTests.swift; sourceTree = "<group>"; };
@@ -1136,6 +1150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BDEB97F2C6ADE78003FD274 /* MailCore.xcframework in Frameworks */,
 				8DF1A06E55236FF0ECBBC1C0 /* Pods_SudoEmail.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1156,6 +1171,7 @@
 			isa = PBXGroup;
 			children = (
 				9FF182022BB4D7AA000EF217 /* TestApp */,
+				1BDEB97E2C6ADE78003FD274 /* MailCore.xcframework */,
 				B046F2B28438883B25D7299F /* Pods_SudoEmail.framework */,
 				CFB47DB5865F3E3B7C2BDB8C /* Pods_SudoEmail_SudoEmailIntegrationTests.framework */,
 				23CFEFE27D890177FA4C55C3 /* Pods_SudoEmail_SudoEmailIntegrationTests_TestApp.framework */,
@@ -1234,6 +1250,7 @@
 			children = (
 				51FE73B02C35257800A5D57B /* attached_email.eml */,
 				51FE73B62C35257900A5D57B /* basic_email.eml */,
+				1BDEB9922C6EF185003FD274 /* complicated_with_attachments_and_inline.eml */,
 				51FE73B42C35257800A5D57B /* delivery_failed_inline_image.eml */,
 				51FE73B32C35257800A5D57B /* delivery_failed_plain_server_html_attached.eml */,
 				51FE73B12C35257800A5D57B /* delivery_failed_plain_server_plain_attached.eml */,
@@ -1242,6 +1259,8 @@
 				51FE73B52C35257900A5D57B /* meeting_invite.eml */,
 				51FE73AF2C35257800A5D57B /* reply_from_gmail.eml */,
 				51FE73AD2C35257700A5D57B /* sample_email_with_attachments.eml */,
+				1BDEB9902C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml */,
+				1BDEB98E2C6EF15B003FD274 /* test_inline_image.eml */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1683,6 +1702,7 @@
 				84B2609C248DF2F100E99401 /* Bundle+ConfigLoadable.swift */,
 				84309D6D24652E5E00F48ECC /* Bundle+Static.swift */,
 				843064E6233C34E30083874D /* Date+MillisecondsSinceEpoch.swift */,
+				1BDEB9D62C744FDE003FD274 /* MCOMessageParser+Extensions.swift */,
 				8483151D24BC14E6004E89EA /* Result+ErrorMap.swift */,
 				5DDE24672C045AF300387540 /* SudoUser+getKeyRingId.swift */,
 			);
@@ -2292,6 +2312,8 @@
 				9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */,
 				95388BF92849C85F004D971D /* EmailRFC822HeaderCodec.swift */,
 				849AF01524A08AE7005CFA2E /* EmailSubscriptionToken.swift */,
+				1BDEB97C2C699CFB003FD274 /* HTMLPlaintextRenderer.swift */,
+				1BDEB97A2C699CC2003FD274 /* HTMLRenderer.swift */,
 				9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageDataProcessor.swift */,
 				9F8673AF2B6C9A1300B9950E /* StringHasher.swift */,
 				849AF01924A1A5B8005CFA2E /* SubscriptionManager.swift */,
@@ -3069,6 +3091,7 @@
 			files = (
 				51FE73BA2C35257900A5D57B /* attached_email.eml in Resources */,
 				51FE73C02C35257900A5D57B /* basic_email.eml in Resources */,
+				1BDEB9932C6EF186003FD274 /* complicated_with_attachments_and_inline.eml in Resources */,
 				51FE73BE2C35257900A5D57B /* delivery_failed_inline_image.eml in Resources */,
 				51FE73BD2C35257900A5D57B /* delivery_failed_plain_server_html_attached.eml in Resources */,
 				51FE73BB2C35257900A5D57B /* delivery_failed_plain_server_plain_attached.eml in Resources */,
@@ -3077,6 +3100,8 @@
 				51FE73BF2C35257900A5D57B /* meeting_invite.eml in Resources */,
 				51FE73B92C35257900A5D57B /* reply_from_gmail.eml in Resources */,
 				51FE73B72C35257900A5D57B /* sample_email_with_attachments.eml in Resources */,
+				1BDEB9912C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml in Resources */,
+				1BDEB98F2C6EF15B003FD274 /* test_inline_image.eml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3618,6 +3643,8 @@
 				844673FE247DF3130016FA56 /* GraphQLAPI.swift in Sources */,
 				8494E4E92458F237003FD52E /* GraphQLFilterable.swift in Sources */,
 				84A4560D24B69B6A002DBF0D /* GraphQLResultWorker.swift in Sources */,
+				1BDEB97D2C699CFB003FD274 /* HTMLPlaintextRenderer.swift in Sources */,
+				1BDEB97B2C699CC2003FD274 /* HTMLRenderer.swift in Sources */,
 				51A06DBA2BC362710002B1F3 /* InternetMessageFormatHeader.swift in Sources */,
 				84B2600724862E0200E99401 /* KeyEntity.swift in Sources */,
 				84B2600524862D5A00E99401 /* KeyEntityTransformer.swift in Sources */,
@@ -3644,6 +3671,7 @@
 				84B260DF2490B67100E99401 /* ListOutputEntity.swift in Sources */,
 				51A456762B50CAFE0097DFF6 /* LookupEmailAddressesPublicInfoInput.swift in Sources */,
 				51A456702B50AEA80097DFF6 /* LookupEmailAddressesPublicInfoUseCase.swift in Sources */,
+				1BDEB9D72C744FDE003FD274 /* MCOMessageParser+Extensions.swift in Sources */,
 				5D86DAF92C11652B0061BF58 /* NotificationConfigurationExtensions.swift in Sources */,
 				8460A32C23D97655004AB5A9 /* Owner.swift in Sources */,
 				84B2607E2489E06500E99401 /* OwnerAPITransformer.swift in Sources */,

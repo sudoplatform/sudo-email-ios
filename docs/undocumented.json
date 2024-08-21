@@ -50,6 +50,20 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Internal/Data/Utility/HTMLPlaintextRenderer.swift",
+      "line": 11,
+      "symbol": "HTMLPlaintextRenderer",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Internal/Data/Utility/HTMLRenderer.swift",
+      "line": 10,
+      "symbol": "HTMLRenderer",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Platform/Subscriptions/PlatformSubscriptionStatus.swift",
       "line": 12,
       "symbol": "PlatformSubscriptionStatus.initialized",

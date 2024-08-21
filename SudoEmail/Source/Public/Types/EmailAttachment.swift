@@ -11,7 +11,7 @@ public struct EmailAttachment: Hashable, Equatable {
     // MARK: - Properties
 
     /// The name of the email attachment file.
-    public let filename: String
+    public let filename: String?
     
     /// Identifier used to identify an attachment within an email body.
     public let contentId: String?
@@ -26,7 +26,7 @@ public struct EmailAttachment: Hashable, Equatable {
     public let data: Data
 
     /// Instantiate an instance of `EmailAttachment`.
-    public init(filename: String, contentId: String? = nil, mimetype: String, inlineAttachment: Bool, data: Data) {
+    public init(filename: String? = nil, contentId: String? = nil, mimetype: String, inlineAttachment: Bool, data: Data) {
         self.filename = filename
         self.contentId = contentId
         self.mimetype = mimetype
