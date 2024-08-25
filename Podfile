@@ -20,13 +20,14 @@ target 'SudoEmail' do
   inherit! :search_paths
   podspec :name => 'SudoEmail'
   pod 'GzipSwift'
-  
+  pod 'ReachabilitySwift'
+
   target 'SudoEmailTests'
 
   target 'SudoEmailIntegrationTests' do
-    pod 'SudoEntitlements', '~> 10.0'
-    pod 'SudoEntitlementsAdmin', '~> 5.0'
-    pod 'SudoProfiles', '~> 17.0'
+    pod 'SudoEntitlements', '~> 11.0'
+    pod 'SudoEntitlementsAdmin', '~> 6.0'
+    pod 'SudoProfiles', '~> 18.0'
 
     target 'TestApp'
   end  

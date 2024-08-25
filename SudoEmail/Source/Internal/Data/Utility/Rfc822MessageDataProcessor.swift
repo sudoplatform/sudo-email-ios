@@ -135,7 +135,7 @@ class Rfc822MessageDataProcessor {
         }
         if let subParts = (part as? MCOMultipart)?.parts as? [MCOAbstractPart] {
             for subPart in subParts {
-                if let matchingPart = searchMessageParts(part: subPart, mimeType: mimeType) as? MCOAbstractPart {
+                if let matchingPart = searchMessageParts(part: subPart, mimeType: mimeType) {
                     return matchingPart
                 }
             }

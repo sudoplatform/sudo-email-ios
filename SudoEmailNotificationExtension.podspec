@@ -1,7 +1,7 @@
 #
 Pod::Spec.new do |spec|
   spec.name                  = 'SudoEmailNotificationExtension'
-  spec.version               = '16.1.0'
+  spec.version               = '17.0.0'
   spec.author                = { 'Sudo Platform Engineering' => 'sudoplatform-engineering@anonyome.com' }
   spec.homepage              = 'https://sudoplatform.com'
 
@@ -17,5 +17,5 @@ Pod::Spec.new do |spec|
 
   spec.dependency 'SudoLogging', '~> 1.0'
   spec.dependency 'SudoKeyManager', '~> 2.6', '>= 2.6.1'
-  spec.dependency 'SudoNotificationExtension', '~> 2.1'
+  spec.dependency 'SudoNotificationExtension', '~> 3.0'
 end

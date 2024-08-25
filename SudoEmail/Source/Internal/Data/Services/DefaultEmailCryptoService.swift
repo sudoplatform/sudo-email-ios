@@ -86,7 +86,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
     }
 
     func decrypt(securePackage: SecurePackageEntity) throws -> Data {
-        guard var bodyAttachmentData = (securePackage.bodyAttachment.data.isEmpty ? nil : securePackage.bodyAttachment.data),
+        guard let bodyAttachmentData = (securePackage.bodyAttachment.data.isEmpty ? nil : securePackage.bodyAttachment.data),
               let keyAttachments = (securePackage.keyAttachments.isEmpty ? nil : securePackage.keyAttachments) else {
             throw EmailCryptoServiceError.invalidArgumentError()
         }
