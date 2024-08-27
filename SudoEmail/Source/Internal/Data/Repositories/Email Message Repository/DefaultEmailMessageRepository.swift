@@ -462,8 +462,14 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         guard let s3Key = await getS3KeyForEmailMessageId(id, emailAddressId: emailAddressId, publicKeyId: sealedEmailMessage.keyId) else {
             throw SudoEmailError.notSignedIn
         }
-        let rfc822Object = try await self.s3Worker.getObject(bucket: emailBucket, key: s3Key)
-        return rfc822Object
+
+        do {
+            let rfc822Object = try await self.s3Worker.getObject(bucket: emailBucket, key: s3Key)
+            return rfc822Object
+        } catch {
+            logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
+            throw error
+        }
     }
 
     func getDraft(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage? {

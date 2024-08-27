@@ -113,7 +113,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
         // Setup utility classes / workers
         let serviceKeyWorker = DefaultServiceKeyWorker(keyNamespace: keyNamespace, userClient: userClient)
-        let emailMessageUnsealerService = DefaultEmailMessageUnsealerService(deviceKeyWorker: serviceKeyWorker)
+        let emailMessageUnsealerService = DefaultEmailMessageUnsealerService(deviceKeyWorker: serviceKeyWorker, logger: Logger.emailSDKLogger)
         let emailConfig = try Bundle.main.loadEmailConfig()
         let s3Region = emailConfig.region
         // Setup Repositories

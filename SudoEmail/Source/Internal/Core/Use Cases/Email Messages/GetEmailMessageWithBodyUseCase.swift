@@ -3,6 +3,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
+
 import Gzip
 
 /** Content encoding values for email message data. */
@@ -14,12 +15,16 @@ class GetEmailMessageWithBodyUseCase {
 
     // MARK: - Properties
 
+    /// Email message repository used to send the email message.
     let emailMessageRepository: EmailMessageRepository
 
+    /// Service used to handle unsealing of sealed email messages.
     let emailMessageUnsealerService: EmailMessageUnsealerService
 
+    /// Email Crypto Service used to send email messages with E2E encryption.
     let emailCryptoService: EmailCryptoService
-    
+
+    /// RFC 822 Message Processor used to handle the encoding and parsing of the email message content.
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
     // MARK: - Lifecycle

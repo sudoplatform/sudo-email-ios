@@ -4,16 +4,21 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import SudoLogging
+
 class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
 
     // MARK: - Properties
 
     var deviceKeyWorker: DeviceKeyWorker
 
+    var logger: Logger
+
     // MARK: - Lifecycle
 
-    init(deviceKeyWorker: DeviceKeyWorker) {
+    init(deviceKeyWorker: DeviceKeyWorker, logger: Logger = .emailSDKLogger) {
         self.deviceKeyWorker = deviceKeyWorker
+        self.logger = logger
     }
 
     // MARK: - EmailMessageUnsealer
@@ -59,14 +64,20 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
     }
 
     func unsealEmailMessageRFC822Data(_ data: Data, withKeyId keyId: String, algorithm: String) throws -> Data {
-        guard let stringData = String(data: data, encoding: .utf8) else {
-            throw SudoEmailError.internalError("Unable to decode received sealed RFC822 email message data")
+        do {
+            guard let stringData = String(data: data, encoding: .utf8) else {
+                throw SudoEmailError.internalError("failed to parse string from data")
+            }
+            let unsealedString = try deviceKeyWorker.unsealString(stringData, withKeyId: keyId, algorithm: algorithm)
+            guard let unsealedData = unsealedString.data(using: .utf8) else {
+                throw SudoEmailError.internalError("failed to encode unsealed data")
+            }
+            return unsealedData
+        } catch {
+            let msg = "Unable to unseal email message RFC822 message data (\(error.localizedDescription))"
+            logger.error(msg)
+            throw SudoEmailError.internalError(msg)
         }
-        let unsealedString = try deviceKeyWorker.unsealString(stringData, withKeyId: keyId, algorithm: algorithm)
-        guard let unsealedData = unsealedString.data(using: .utf8) else {
-            throw SudoEmailError.internalError("Unable to encode unsealed RFC822 email message data")
-        }
-        return unsealedData
     }
 
     // MARK: - Helpers
