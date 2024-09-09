@@ -63,7 +63,7 @@ class SendEmailMessageUseCase {
         let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments) =
             (input.senderEmailAddressId, input.emailMessageHeader, input.body, input.attachments, input.inlineAttachments)
         
-        let domains = try await emailDomainRepository.fetchSupportedDomains()
+        let domains = try await emailDomainRepository.fetchConfiguredDomains()
         
         let allRecipients = emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc
         

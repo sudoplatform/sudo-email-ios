@@ -338,6 +338,19 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         }
         return domainEntities.map { String($0.name) }
     }
+    
+    public func getConfiguredEmailDomains(_ cachePolicy: CachePolicy) async throws -> [String] {
+        var domainEntities: [DomainEntity]
+        switch cachePolicy {
+        case .cacheOnly:
+            let useCase = useCaseFactory.generateGetConfiguredDomainsUseCase(domainRepository: domainRepository)
+            domainEntities = try await useCase.execute()
+        case .remoteOnly:
+            let useCase = useCaseFactory.generateFetchConfiguredDomainsUseCase(domainRepository: domainRepository)
+            domainEntities = try await useCase.execute()
+        }
+        return domainEntities.map { String($0.name) }
+    }
 
     public func getEmailAddress(withInput input: GetEmailAddressInput) async throws -> EmailAddress? {
         var emailAccount: EmailAccountEntity?

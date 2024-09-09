@@ -4045,6 +4045,78 @@ internal final class GetEmailDomainsQuery: GraphQLQuery {
   }
 }
 
+internal final class GetConfiguredEmailDomainsQuery: GraphQLQuery {
+  internal static let operationString =
+    "query GetConfiguredEmailDomains {\n  getConfiguredEmailDomains {\n    __typename\n    domains\n  }\n}"
+
+  internal init() {
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Query"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("getConfiguredEmailDomains", type: .nonNull(.object(GetConfiguredEmailDomain.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(getConfiguredEmailDomains: GetConfiguredEmailDomain) {
+      self.init(snapshot: ["__typename": "Query", "getConfiguredEmailDomains": getConfiguredEmailDomains.snapshot])
+    }
+
+    internal var getConfiguredEmailDomains: GetConfiguredEmailDomain {
+      get {
+        return GetConfiguredEmailDomain(snapshot: snapshot["getConfiguredEmailDomains"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "getConfiguredEmailDomains")
+      }
+    }
+
+    internal struct GetConfiguredEmailDomain: GraphQLSelectionSet {
+      internal static let possibleTypes = ["ConfiguredDomains"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("domains", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(domains: [String]) {
+        self.init(snapshot: ["__typename": "ConfiguredDomains", "domains": domains])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var domains: [String] {
+        get {
+          return snapshot["domains"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "domains")
+        }
+      }
+    }
+  }
+}
+
 internal final class CheckEmailAddressAvailabilityQuery: GraphQLQuery {
   internal static let operationString =
     "query CheckEmailAddressAvailability($input: CheckEmailAddressAvailabilityInput!) {\n  checkEmailAddressAvailability(input: $input) {\n    __typename\n    addresses\n  }\n}"

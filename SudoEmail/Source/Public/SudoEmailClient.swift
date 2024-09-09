@@ -17,6 +17,9 @@ public typealias SudoSubscriptionStatusChangeHandler = (PlatformSubscriptionStat
 /// Maximum number of items that can be deleted per request.
 public let deleteRequestLimit = 100
 
+/// Maximum number of items that can be updated per request.
+public let updateRequestLimit = 100
+
 /// Maximum number of draft messages that can be deleted per request.
 public let deleteDraftsRequestLimit = 10
 
@@ -74,7 +77,11 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
 
-    /// Delete the email messages identified by the list of ids.
+    /// Delete multiple email messages using a list of identifiers.
+    ///
+    /// Email Messages can only be deleted in batches of 100 or less. Anything greater will throw
+    /// a LimitExceededError.
+    ///
     /// - Parameters:
     ///   - ids: A list of one or more identifiers of the email messages to be deleted. There is a limit of
     ///   100 email message ids per API request. Exceeding this will cause an error to be thrown.
@@ -93,17 +100,22 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func deleteEmailMessage(withId id: String) async throws -> String?
 
-    /// Update the email messages identified by a list of ids.
-    ///  - Parameters:
-    ///    - input: Input parameters used to update a list of email messages
-    ///  - Returns: The results of the updates:
-    ///       - status:
-    ///         - Success - All email messages succeeded to update.
-    ///         - Partial - Only a partial number of messages succeeded to update. Includes a list of the
+    /// Update multiple email messages using a list of identifiers.
+    ///
+    /// Email Messages can only be updated in batches of 100 or less. Anything greater will throw
+    /// a LimitExceededError.
+    ///
+    /// - Parameters:
+    ///   - input: Parameters used to update a list of email messages.
+    /// - Returns: The results of the updates:
+    ///      - status:
+    ///        - Success - All email messages succeeded to update.
+    ///        - Partial - Only a partial amount of messages succeeded to update. Result includes a list of the
     ///           identifiers of the email messages that failed and succeeded to update.
-    ///         - Failure - All email messages failed to update.
-    ///       - successItems - A list of the id, createdAt and updatedAt of each message that successfully updated
-    ///       - failureItems - A list of the id, and errorType of each message that failed to be updated
+    ///        - Failure - All email messages failed to update. Result contains a list of identifiers of email messages
+    ///           that failed to update.
+    ///      - successItems - A list of the id, createdAt and updatedAt of each message that successfully updated
+    ///      - failureItems - A list of the id, and errorType of each message that failed to be updated
     func updateEmailMessages(
         withInput input: UpdateEmailMessagesInput
     ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>
@@ -155,7 +167,8 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func checkEmailAddressAvailability(withInput input: CheckEmailAddressAvailabilityInput) async throws -> [String]
 
-    /// Get a list of the supported email domains from the service.
+    /// Get a list of the supported email domains. Primarily intended to be used to perform a domain search
+    /// which occurs prior to provisioning an email address.
     /// - Parameters:
     ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
     ///       API calls.
@@ -163,6 +176,17 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Success: Array of supported domains.
     ///   - Failure: `SudoEmailError`.
     func getSupportedEmailDomains(_ cachePolicy: CachePolicy) async throws -> [String]
+    
+    /// Get a list of all of the configured domains. Primarily intended to be used as part of performing
+    /// an email send operation in order to fetch all domains configured for the service so that appropriate
+    /// encryption decisions can be made.
+    /// - Parameters:
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of identical API calls.
+    ///       API calls.
+    /// - Returns:
+    ///   - Success: Array of all configured domains.
+    ///   - Failure: `SudoEmailError`.
+    func getConfiguredEmailDomains(_ cachePolicy: CachePolicy) async throws -> [String]
 
     /// Get a `EmailAddress` record using the `id` parameter. If the email address cannot be found, `nil` will be returned.
     /// - Parameters:

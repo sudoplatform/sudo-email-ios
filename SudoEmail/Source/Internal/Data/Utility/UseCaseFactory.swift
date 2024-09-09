@@ -42,6 +42,14 @@ class UseCaseFactory {
     func generateGetSupportedDomainsUseCase(domainRepository: DomainRepository) -> GetSupportedDomainsUseCase {
         return GetSupportedDomainsUseCase(domainRepository: domainRepository)
     }
+    
+    func generateFetchConfiguredDomainsUseCase(domainRepository: DomainRepository) -> FetchConfiguredDomainsUseCase {
+        return FetchConfiguredDomainsUseCase(domainRepository: domainRepository)
+    }
+
+    func generateGetConfiguredDomainsUseCase(domainRepository: DomainRepository) -> GetConfiguredDomainsUseCase {
+        return GetConfiguredDomainsUseCase(domainRepository: domainRepository)
+    }
 
     func generateSendEmailMessageUseCase(
         emailAccountRepository: EmailAccountRepository,

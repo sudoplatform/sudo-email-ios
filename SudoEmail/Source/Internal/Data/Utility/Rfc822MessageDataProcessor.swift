@@ -33,20 +33,11 @@ class Rfc822MessageDataProcessor {
 
     // MARK: - Rfc822MessageDataProcessor
 
-    /// Encodes the given email into RFC822 compliant data
-    /// - Parameters:
-    ///   - message: The email to be encoded
-    /// - Returns: The encoded email as RFC822 data
-    func encodeToInternetMessageData(message: EmailMessageDetails) throws -> Data {
-        let resultStr = try self.encodeToInternetMessageDataStr(message: message)
-        return Data(resultStr.utf8)
-    }
-
     /// Encodes the given email into an RFC822 compliant string
     /// - Parameters:
     ///   - message: The email to be encoded
-    /// - Returns: The encoded email as a string
-    func encodeToInternetMessageDataStr(message: EmailMessageDetails) throws -> String {
+    /// - Returns: The encoded email as RFC data
+    func encodeToInternetMessageData(message: EmailMessageDetails) throws -> Data {
         let builder = MCOMessageBuilder()
 
         builder.header.from = MCOAddress(
@@ -102,7 +93,6 @@ class Rfc822MessageDataProcessor {
             // Mailcore handles creating a multipart message to ensure mail client compatibility,
             // so by setting the body as html and formatting correctly here, the final message
             // will contain this html part and a plain text part.
-            body = body?.replacingOccurrences(of: "\n", with: "<br>")
             builder.htmlBody = body
         } else {
             builder.textBody = body
@@ -124,23 +114,8 @@ class Rfc822MessageDataProcessor {
         guard let data = builder.data() else {
             throw SudoEmailError.internalError("No data encoded")
         }
-
-        return try self.decodeEncodedWords(input: String(decoding: data, as: UTF8.self))
-    }
-
-    // Recursively search a message part until a part with matching `mimeType` is found.
-    func searchMessageParts(part: MCOAbstractPart, mimeType: String) -> MCOAbstractPart? {
-        if part.mimeType == mimeType {
-            return part
-        }
-        if let subParts = (part as? MCOMultipart)?.parts as? [MCOAbstractPart] {
-            for subPart in subParts {
-                if let matchingPart = searchMessageParts(part: subPart, mimeType: mimeType) {
-                    return matchingPart
-                }
-            }
-        }
-        return nil
+        
+        return data
     }
     
     func transformMCOAttachments(_ mcoAttachments: [MCOAttachment]) -> [EmailAttachment] {
@@ -186,6 +161,12 @@ class Rfc822MessageDataProcessor {
         if let mcoInlineAttachments = parser.htmlInlineAttachments() as NSArray? as? [MCOAttachment] {
             inlineAttachments = transformMCOAttachments(mcoInlineAttachments)
         }
+        
+        // Inline attachments can be interpreted by the parser as either a regular attachment with the inline
+        // flag set to true, or as an explicit inline attachment, so we need to cater for both scenarios
+        var allInlineAttachments: [EmailAttachment] = []
+        allInlineAttachments.append(contentsOf: inlineAttachments ?? [])
+        allInlineAttachments.append(contentsOf: attachments?.filter { $0.inlineAttachment == true } ?? [])
 
         let encryptionHeader = header.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)
         let encryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
@@ -213,138 +194,11 @@ class Rfc822MessageDataProcessor {
             ) },
             subject: subject,
             body: body,
-            attachments: attachments,
-            inlineAttachments: inlineAttachments,
+            attachments: attachments?.filter { $0.inlineAttachment != true },
+            inlineAttachments: allInlineAttachments,
             isHtml: isHtml,
             encryptionStatus: encryptionStatus
         )
         return result
-    }
-
-    ///
-    /// MailCore2 encodes some parts of the email message as Encoded-Words. This function
-    /// decodes them back to plaintext
-    /// - Parameters:
-    ///   - input: The string value of the RFC822 encoded message as output from MailCore2
-    /// - Returns: The string value with any Encoded-Words decoded
-    private func decodeEncodedWords(input: String) throws -> String {
-        var processed = input
-        let regex = try NSRegularExpression(
-            pattern: ENCODED_WORD_REGEX_PATTERN
-        )
-
-        let matches = regex.matches(in: input, range: NSMakeRange(0, input.count))
-
-        if matches.isEmpty {
-            return processed
-        }
-
-        try matches.forEach({ match in
-            // Each instance of an encoded word
-            let group = input[Range(match.range(at: 0), in: input)!]
-            let charset = input[Range(match.range(at: 1), in: input)!]
-            let encodingType = input[Range(match.range(at: 2), in: input)!]
-            let value = input[Range(match.range(at: 3), in: input)!]
-
-            if value == "" { // Found a match but its for an empty string
-                processed = input.replacingOccurrences(of: group, with: value)
-            } else {
-                let encodingCharset: String.Encoding
-                switch charset {
-                case "utf-8":
-                    encodingCharset = String.Encoding.utf8
-                default:
-                    throw SudoEmailError.internalError("Invalid charset value: \(charset)")
-                }
-
-                switch encodingType {
-                    case "B": //Base64
-                    guard let decodedValueData = Data(base64Encoded: String(value)) else {
-                        print("Could not decode base64 string: \(String(value))")
-                        throw SudoEmailError.decodingError
-                    }
-                    let decodedValueStr = String(data: decodedValueData, encoding: encodingCharset)
-                    processed = processed.replacingOccurrences(
-                        of: group,
-                        with: decodedValueStr!
-                    )
-                    break
-                case "Q": //Q-Encoded
-                    let decoded = try self.decodeQEncoding(
-                        encodedString: String(value)
-                    )
-                    processed = processed.replacingOccurrences(of: group, with: decoded)
-                    break
-                default:
-                    throw SudoEmailError.internalError("Invalid encodingType value: \(encodingType)")
-                }
-            }
-        })
-
-
-        return processed
-    }
-
-    /// This decodes Q-Encoded values such as `=F0=9F=A4=94` which
-    /// decodes to 🤔
-    private func decodeQEncoding(encodedString: String) throws -> String {
-        var decodedString = ""
-        // Remove underscores that replace spaces. Will add them back later
-        let components = encodedString.components(separatedBy: "_")
-
-        for (index, component) in components.enumerated() {
-
-            if component.hasPrefix("=") {
-                // convert the hex string
-                var remainingSection = component
-                var isBytes = true
-                var hexString = ""
-                var remainder = ""
-                while isBytes {
-                    if remainingSection.prefix(1) == "=" {
-                        let index = remainingSection.index(remainingSection.startIndex, offsetBy: 3)
-                        let chars = remainingSection[..<index]
-                        hexString.append(
-                            String(chars).replacingOccurrences(of: "=", with: "")
-                        )
-                        remainingSection = String(remainingSection[index...])
-                    } else {
-                        isBytes = false
-                        remainder = remainingSection
-                    }
-                }
-                let byteCount = hexString.count / 2
-                var bytes = [UInt8]()
-                var currentIndex = hexString.startIndex
-
-                for _ in 0..<byteCount {
-                    if let byte = UInt8(hexString[currentIndex...hexString.index(after: currentIndex)], radix: 16) {
-                        bytes.append(byte)
-                        currentIndex = hexString.index(after: currentIndex)
-                        currentIndex = hexString.index(after: currentIndex)
-                    } else {
-                        print("invalid hex string `\(hexString)`")
-                        throw SudoEmailError.decodingError
-                    }
-                }
-
-                if let decodedCharacter = String(bytes: bytes, encoding: .utf8) {
-                    decodedString.append(decodedCharacter)
-                } else {
-                    print("Unable to decode bytes `\(bytes)`")
-                    throw SudoEmailError.decodingError
-                }
-                decodedString.append(remainder)
-            } else {
-                decodedString.append(component)
-            }
-
-            // Add space after each component except the last one
-            if index < components.count - 1 {
-                decodedString.append(" ")
-            }
-        }
-
-        return decodedString
     }
 }
