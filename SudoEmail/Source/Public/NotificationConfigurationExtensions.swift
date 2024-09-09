@@ -61,7 +61,7 @@ public extension NotificationConfiguration {
 
     ///
     /// Extension function to add rules to a [NotificationConfiguration] for enabling
-    /// or disabling notifications for a particular email address ID.
+    /// or disabling email service notifications for a particular email address ID.
     ///
     /// Once all notification configurations across all Sudo platform SDKs have
     /// been performed, call the
@@ -118,12 +118,70 @@ public extension NotificationConfiguration {
     }
 
     ///
-    /// Determine whether or not notifications for a particular email address are enabled
+    /// Extension function to add rules to a [NotificationConfiguration] for enabling
+    /// or disabling email service notifications for a particular Sudo ID.
+    ///
+    /// Once all notification configurations across all Sudo platform SDKs have
+    /// been performed, call the
+    /// `SudoNotificationClient.setNotificationConfiguration`
+    /// to set the full notification configuration for your application.
     ///
     /// - Parameters:
-    ///   - forEmailAddressWithId: ID of email address to determine notification enablement status for
+    ///   - sudoId: ID of Sudo to set notification enablement for
+    ///   - enabled: Whether or not notifications are to be enabled or disabled for the
+    ///     email address with the specified ID.
     ///
-    /// - Returns: Whether or not notifications are enabled for the particular email address with given iD
+    /// - Returns: New NotificationConfiguration with updated rules
+    ///
+    func setEmailNotificationsForSudoId(sudoId: String, enabled: Bool) -> NotificationConfiguration {
+        // Start with any rules for other services
+        var newRules = configs
+            .filter { $0.name != Constants.serviceName }
+
+        // Then find all the email service rules except our defaults and
+        // any existing rule matching this sudp ID.
+        let newEmServiceRules = configs
+            .filter { $0.name == Constants.serviceName }
+            // Filter out any current or historic default rules.
+            // We'll add current default rules back in
+            .filter { $0.rules != defaultFirstRuleString && $0.rules != defaultLastRuleString }
+            // Filter out any rule specific to our sudoId
+            .filter { !isRuleMatchingSudoId(rule: $0.rules, sudoId: sudoId) }
+
+        // Re-add DEFAULT_FIRST_RULE
+        newRules.append(defaultFirstRule)
+
+        // Re-add email service rules for other addresses
+        newRules.append(contentsOf: newEmServiceRules)
+
+        // If we're disabling notifications for this Sudo then
+        // add an explicit rule for that
+        if (!enabled) {
+            let newJsonRule = """
+                {"==":[{"var":"meta.sudoId"},"\(sudoId)"]}
+                """
+            newRules.append(
+                NotificationFilterItem(
+                    name: Constants.serviceName,
+                    status: false,
+                    rules: newJsonRule
+                )
+            )
+        }
+
+        // Re-add the default catch all enabling rule
+        newRules.append(defaultLastRule)
+
+        return NotificationConfiguration(configs: newRules)
+    }
+
+    ///
+    /// Determine whether or not email service notifications for a particular email address are enabled
+    ///
+    /// - Parameters:
+    ///   - forEmailAddressWithId: ID of email address to determine email service notification enablement status for
+    ///
+    /// - Returns: Whether or not email service notifications are enabled for the particular email address with given iD
     ///
     func areNotificationsEnabled(forEmailAddressWithId emailAddressId: String) -> Bool {
         let disablingRule = configs.first {
@@ -135,13 +193,39 @@ public extension NotificationConfiguration {
         return disablingRule == nil
     }
 
+    ///
+    /// Determine whether or not email service notifications for a particular Sudo are enabled
+    ///
+    /// - Parameters:
+    ///   - forSudoWithId: ID of Sudo to determine email service notification enablement status for
+    ///
+    /// - Returns: Whether or not email service notifications are enabled for the particular Sudo with given iD
+    ///
+    func areNotificationsEnabled(forSudoWithId sudoId: String) -> Bool {
+        let disablingRule = configs.first {
+            $0.name == Constants.serviceName &&
+            $0.status == NotificationConfiguration.disabledStatus &&
+            isRuleMatchingSudoId(rule: $0.rules, sudoId: sudoId)
+        }
+
+        return disablingRule == nil
+    }
+
     // MARK: - Helpers
 
     internal func isRuleMatchingEmailAddressId(rule: String?, emailAddressId: String) -> Bool {
+        return isRuleMatchingSingleMeta(rule: rule, metaName: "emailAddressId", metaValue: emailAddressId)
+    }
+
+    internal func isRuleMatchingSudoId(rule: String?, sudoId: String) -> Bool {
+        return isRuleMatchingSingleMeta(rule: rule, metaName: "sudoId", metaValue: sudoId)
+    }
+
+    internal func isRuleMatchingSingleMeta(rule: String?, metaName: String, metaValue: String) -> Bool {
         guard let rule = rule?.data(using: .utf8) else {
             return false
         }
-        
+
         guard let json = try? JSONSerialization.jsonObject(with: rule, options: []) as? [String: Any] else {
             return false
         }
@@ -150,7 +234,7 @@ public extension NotificationConfiguration {
         guard let array = equality as? [Any], array.count == 2 else {
             return false
         }
-        
+
         let lhs = array[0]
         let rhs = array[1]
 
@@ -161,7 +245,7 @@ public extension NotificationConfiguration {
                   let v = lhs["var"] as? String else {
                 return false
             }
-            if (v == "meta.emailAddressId" && rhs == emailAddressId) {
+            if (v == "meta.\(metaName)" && rhs == metaValue) {
                 return true
             }
         }
@@ -173,11 +257,11 @@ public extension NotificationConfiguration {
                   let v = rhs["var"] as? String else {
                 return false
             }
-            if (v == "meta.emailAddressId" && lhs == emailAddressId) {
+            if (v == "meta.\(metaName)" && lhs == metaValue) {
                 return true
             }
         }
-        
+
         return false
     }
 }
