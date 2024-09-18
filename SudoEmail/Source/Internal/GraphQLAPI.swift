@@ -9765,13 +9765,13 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
 
 internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailMessageCreated($owner: String!) {\n  onEmailMessageCreated(owner: $owner) {\n    __typename\n    ...SealedEmailMessage\n  }\n}"
+    "subscription OnEmailMessageCreated($owner: ID!) {\n  onEmailMessageCreated(owner: $owner) {\n    __typename\n    ...SealedEmailMessage\n  }\n}"
 
   internal static var requestString: String { return operationString.appending(SealedEmailMessage.fragmentString) }
 
-  internal var owner: String
+  internal var owner: GraphQLID
 
-  internal init(owner: String) {
+  internal init(owner: GraphQLID) {
     self.owner = owner
   }
 
@@ -10143,14 +10143,14 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
 
 internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubscription {
   internal static let operationString =
-    "subscription OnEmailMessageCreatedWithDirection($owner: String!, $direction: EmailMessageDirection!) {\n  onEmailMessageCreated(owner: $owner, direction: $direction) {\n    __typename\n    ...SealedEmailMessage\n  }\n}"
+    "subscription OnEmailMessageCreatedWithDirection($owner: ID!, $direction: EmailMessageDirection!) {\n  onEmailMessageCreated(owner: $owner, direction: $direction) {\n    __typename\n    ...SealedEmailMessage\n  }\n}"
 
   internal static var requestString: String { return operationString.appending(SealedEmailMessage.fragmentString) }
 
-  internal var owner: String
+  internal var owner: GraphQLID
   internal var direction: EmailMessageDirection
 
-  internal init(owner: String, direction: EmailMessageDirection) {
+  internal init(owner: GraphQLID, direction: EmailMessageDirection) {
     self.owner = owner
     self.direction = direction
   }
