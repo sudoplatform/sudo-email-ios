@@ -55,17 +55,21 @@ class UseCaseFactory {
         emailAccountRepository: EmailAccountRepository,
         emailMessageRepository: EmailMessageRepository,
         emailDomainRepository: DomainRepository,
-        emailCryptoService: EmailCryptoService,
         emailConfigDataRepository: EmailConfigurationDataRepository,
-        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
+        emailCryptoService: EmailCryptoService,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
+        messageFormatter: MessageFormatter
     ) -> SendEmailMessageUseCase {
         return SendEmailMessageUseCase(
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository,
             emailDomainRepository: emailDomainRepository,
-            emailCryptoService: emailCryptoService,
             emailConfigDataRepository: emailConfigDataRepository,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor
+            emailCryptoService: emailCryptoService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            messageFormatter: messageFormatter
         )
     }
 
@@ -248,16 +252,10 @@ class UseCaseFactory {
     }
     
     func generateGetEmailMessageWithBodyUseCase(
-        emailMessageRepository: EmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService,
-        emailCryptoService: EmailCryptoService,
-        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
+        emailMessageRepository: EmailMessageRepository
     ) -> GetEmailMessageWithBodyUseCase {
         return GetEmailMessageWithBodyUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService,
-            emailCryptoService: emailCryptoService,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor
+            emailMessageRepository: emailMessageRepository
         )
     }
     

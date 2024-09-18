@@ -48,6 +48,12 @@ struct EmailMessageFilterEntityTransformer {
         case let .seen(seenFilter):
             let seenFilter = boolFilterTransformer.transform(seenFilter)
             return .seen(seenFilter)
+        case let .repliedTo(repliedToFilter):
+            let repliedToFilter = boolFilterTransformer.transform(repliedToFilter)
+            return .repliedTo(repliedToFilter)
+        case let .forwarded(forwardedFilter):
+            let forwardedFilter = boolFilterTransformer.transform(forwardedFilter)
+            return .forwarded(forwardedFilter)
         case let .keyId(keyIdFilter):
             let keyIdFilter = stringFilterTransformer.transform(keyIdFilter)
             return .keyId(keyIdFilter)

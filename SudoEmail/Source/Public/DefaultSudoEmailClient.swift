@@ -62,11 +62,15 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     // MARK: - Properties: Services
 
-    let emailMessageUnsealerServiceService: EmailMessageUnsealerService
+    let emailMessageUnsealerService: EmailMessageUnsealerService
 
     let emailCryptoService: EmailCryptoService
-    
+
+    // MARK: - Properties: Utility
+
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
+
+    let messageFormatter: MessageFormatter
 
     // MARK: - Lifecycle
 
@@ -116,6 +120,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailMessageUnsealerService = DefaultEmailMessageUnsealerService(deviceKeyWorker: serviceKeyWorker, logger: Logger.emailSDKLogger)
         let emailConfig = try Bundle.main.loadEmailConfig()
         let s3Region = emailConfig.region
+        let rfc822MessageDataProcessor = Rfc822MessageDataProcessor()
+        let messageFormatter = MessageFormatter()
+        // Setup Services
+        let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: serviceKeyWorker)
         // Setup Repositories
         let emailAccountRepository = DefaultEmailAccountRepository(appSyncClient: graphQLClient, deviceKeyWorker: serviceKeyWorker)
         let emailFolderRepository = DefaultEmailFolderRepository(appSyncClient: graphQLClient)
@@ -128,6 +136,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             region: s3Region,
             userClient: userClient,
             s3Worker: awsS3Worker,
+            emailCryptoService: emailCryptoService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
             deviceKeyWorker: serviceKeyWorker
         )
         let blockedAddressRepository = DefaultBlockedAddressRepository(appSyncClient: graphQLClient, keyWorker: serviceKeyWorker)
@@ -135,10 +145,6 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailConfigurationDataRepository = DefaultEmailConfigurationDataRepository(
             appSyncClient: graphQLClient
         )
-        // Setup Services
-        let emailMessageUnsealerServiceService = DefaultEmailMessageUnsealerService(deviceKeyWorker: serviceKeyWorker)
-        let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: serviceKeyWorker)
-        let rfc822MessageDataProcessor = Rfc822MessageDataProcessor()
         self.init(
             keyNamespace: keyNamespace,
             graphQLClient: graphQLClient,
@@ -148,12 +154,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailMessageRepository: emailMessageRepository,
             domainRepository: domainRepository,
             emailConfigurationDataRepository: emailConfigurationDataRepository,
-            emailMessageUnsealerServiceService: emailMessageUnsealerServiceService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
             emailCryptoService: emailCryptoService,
             serviceKeyWorker: serviceKeyWorker,
             awsS3Worker: awsS3Worker,
             blockedAddressRepository: blockedAddressRepository,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            messageFormatter: messageFormatter
         )
     }
 
@@ -170,13 +177,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         emailMessageRepository: EmailMessageRepository & Resetable,
         domainRepository: DomainRepository,
         emailConfigurationDataRepository: EmailConfigurationDataRepository,
-        emailMessageUnsealerServiceService: EmailMessageUnsealerService,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
         emailCryptoService: EmailCryptoService,
         serviceKeyWorker: ServiceKeyWorker,
         awsS3Worker: AWSS3Worker & Resetable,
         logger: Logger = .emailSDKLogger,
         blockedAddressRepository: BlockedAddressRepository & Resetable,
-        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
+        messageFormatter: MessageFormatter
     ) {
         self.graphQLClient = graphQLClient
         self.userClient = userClient
@@ -187,12 +195,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.emailMessageRepository = emailMessageRepository
         self.domainRepository = domainRepository
         self.emailConfigurationDataRepository = emailConfigurationDataRepository
-        self.emailMessageUnsealerServiceService = emailMessageUnsealerServiceService
+        self.emailMessageUnsealerService = emailMessageUnsealerService
         self.emailCryptoService = emailCryptoService
         self.serviceKeyWorker = serviceKeyWorker
         self.awsS3Worker = awsS3Worker
         self.blockedAddressRepository = blockedAddressRepository
         self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
+        self.messageFormatter = messageFormatter
     }
 
     public func reset() throws {
@@ -247,9 +256,11 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository,
             emailDomainRepository: domainRepository,
-            emailCryptoService: emailCryptoService,
             emailConfigDataRepository: emailConfigurationDataRepository,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor
+            emailCryptoService: emailCryptoService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            messageFormatter: messageFormatter
         )
         return try await useCase.execute(withInput: input)
     }
@@ -470,14 +481,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         case .cacheOnly:
             let useCase = useCaseFactory.generateGetEmailMessageUseCase(
                 emailMessageRepository: emailMessageRepository,
-                emailMessageUnsealerService: emailMessageUnsealerServiceService
+                emailMessageUnsealerService: emailMessageUnsealerService
             )
             emailMessageEntity = try await useCase.execute(withMessageId: input.id)
         case .remoteOnly,
             nil:
             let useCase = useCaseFactory.generateFetchEmailMessageUseCase(
                 emailMessageRepository: emailMessageRepository,
-                emailMessageUnsealerService: emailMessageUnsealerServiceService
+                emailMessageUnsealerService: emailMessageUnsealerService
             )
             emailMessageEntity = try await useCase.execute(withMessageId: input.id)
         }
@@ -491,7 +502,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
         let useCase = useCaseFactory.generateListEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
             sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
         )
         let messagesResult = try await useCase.execute(withInput: input)
@@ -505,7 +516,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
         let useCase = useCaseFactory.generateListEmailMessagesForEmailAddressIdUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
             sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
         )
         let messagesResult = try await useCase.execute(withInput: input)
@@ -519,7 +530,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
         let useCase = useCaseFactory.generateListEmailMessagesForEmailFolderIdUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
             sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
         )
         let messagesResult = try await useCase.execute(withInput: input)
@@ -531,17 +542,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data {
         let useCase = useCaseFactory.generateFetchEmailMessageRFC822DataUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService
+            emailMessageUnsealerService: emailMessageUnsealerService
         )
         return try await useCase.execute(withMessageId: input.id, emailAddressId: input.emailAddressId)
     }
 
     public func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
         let useCase = useCaseFactory.generateGetEmailMessageWithBodyUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService,
-            emailCryptoService: emailCryptoService,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor
+            emailMessageRepository: emailMessageRepository
         )
         return try await useCase.execute(withInput: input)
     }
@@ -600,7 +608,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ) async throws -> SubscriptionToken? {
         let useCase = useCaseFactory.generateSubscribeToEmailMessageCreatedUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService
+            emailMessageUnsealerService: emailMessageUnsealerService
         )
         let directionTransformer = EmailMessageDirectionEntityTransformer()
         let directionEntity = directionTransformer.transform(direction)
@@ -617,7 +625,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ) async throws -> SubscriptionToken? {
         let useCase = useCaseFactory.generateSubscribeToEmailMessageDeletedUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerServiceService
+            emailMessageUnsealerService: emailMessageUnsealerService
         )
         let token = try await useCase.execute(id: id) { result in
             let transformer = EmailMessageAPITransformer()

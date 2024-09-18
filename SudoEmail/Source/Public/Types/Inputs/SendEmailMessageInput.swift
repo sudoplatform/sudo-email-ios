@@ -27,11 +27,21 @@ public struct SendEmailMessageInput: Equatable {
     /// Default is an empty list.
     public let inlineAttachments: [EmailAttachment]
 
-    public init(senderEmailAddressId: String, emailMessageHeader: InternetMessageFormatHeader, body: String, attachments: [EmailAttachment] = [], inlineAttachments: [EmailAttachment] = []) {
+    /// Identifier of the message being replied to.
+    /// If this property is set, `forwardingMessageId` must not be set.
+    public let replyingMessageId: String?
+
+    /// Identifier of the message being forwarded.
+    /// If this property is set, `replyingMessageId` must not be set.
+    public let forwardingMessageId: String?
+
+    public init(senderEmailAddressId: String, emailMessageHeader: InternetMessageFormatHeader, body: String, attachments: [EmailAttachment] = [], inlineAttachments: [EmailAttachment] = [], replyingMessageId: String? = nil, forwardingMessageId: String? = nil) {
         self.senderEmailAddressId = senderEmailAddressId
         self.emailMessageHeader = emailMessageHeader
         self.body = body
         self.attachments = attachments
         self.inlineAttachments = inlineAttachments
+        self.replyingMessageId = replyingMessageId
+        self.forwardingMessageId = forwardingMessageId
     }
 }

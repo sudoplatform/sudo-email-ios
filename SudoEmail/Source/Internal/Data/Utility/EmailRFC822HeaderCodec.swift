@@ -21,6 +21,8 @@ struct Rfc822Header: Decodable {
     var hasAttachments: Bool?
     /// Will be sent in formate: 1970-01-01T00:00:00.000Z
     var date: Date?
+    var inReplyTo: String?
+    var references: [String]?
 }
 
 class EmailRFC822HeaderCodec {

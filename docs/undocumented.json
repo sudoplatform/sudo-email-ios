@@ -176,13 +176,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailAddressDetail.swift",
-      "line": 9,
-      "symbol": "EmailAddressDetail",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailAttachment.swift",
       "line": 9,
       "symbol": "EmailAttachment",
@@ -205,7 +198,7 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/EmailMessage.swift",
-      "line": 92,
+      "line": 98,
       "symbol": "EmailMessage.replyTo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -345,8 +338,8 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/SendEmailMessageInput.swift",
-      "line": 30,
-      "symbol": "SendEmailMessageInput.init(senderEmailAddressId:emailMessageHeader:body:attachments:inlineAttachments:)",
+      "line": 38,
+      "symbol": "SendEmailMessageInput.init(senderEmailAddressId:emailMessageHeader:body:attachments:inlineAttachments:replyingMessageId:forwardingMessageId:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },

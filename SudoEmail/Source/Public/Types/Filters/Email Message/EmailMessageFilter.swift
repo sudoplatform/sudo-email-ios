@@ -22,6 +22,10 @@ public indirect enum EmailMessageFilter {
     case direction(EmailMessageDirectionFilter)
     /// Filter rule for an `seen` property.
     case seen(BoolFilter)
+    /// Filter rule for a `repliedTo` property.
+    case repliedTo(BoolFilter)
+    /// Filter rule for a `forwarded` property.
+    case forwarded(BoolFilter)
     /// Filter rule for an `state` property.
     case state(EmailMessageStateFilter)
     /// Filter rule for negating a `EmailMessage` filter rule.

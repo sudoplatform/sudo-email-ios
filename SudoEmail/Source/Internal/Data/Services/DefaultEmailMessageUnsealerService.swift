@@ -39,6 +39,8 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
                 folderId: message.folderId,
                 previousFolderId: message.previousFolderId,
                 seen: message.seen,
+                repliedTo: message.repliedTo,
+                forwarded: message.forwarded,
                 direction: message.direction,
                 state: message.state,
                 clientRefId: message.clientRefId,

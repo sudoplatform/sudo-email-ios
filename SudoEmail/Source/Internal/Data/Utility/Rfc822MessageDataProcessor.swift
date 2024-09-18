@@ -15,21 +15,44 @@ let CANNED_TEXT_BODY = "Encrypted message attached"
 let ENCODED_WORD_REGEX_PATTERN = "(?:=\\?([\\w-]+)\\?([A-Z])\\?([a-zA-Z0-9+\\/=_]*)\\?=)"
 let HTML_TAG_BODY_REGEX = "(?s)<html.*</html>"
 
+struct EmailMessageDetails {
+    var from: [EmailAddressAndName]
+    var to: [EmailAddressAndName]?
+    var cc: [EmailAddressAndName]?
+    var bcc: [EmailAddressAndName]?
+    var replyTo: [EmailAddressAndName]?
+    var subject: String?
+    var body: String?
+    var attachments: [EmailAttachment]?
+    var inlineAttachments: [EmailAttachment]?
+    var isHtml: Bool = false
+    var encryptionStatus: EncryptionStatus = EncryptionStatus.UNENCRYPTED
+    var forwardMessageId: String?
+    var replyMessageId: String?
+}
+
+extension EmailMessageDetails {
+    init(_ emailMessageDetails: EmailMessageDetails) {
+        self.init(
+            from: emailMessageDetails.from,
+            to: emailMessageDetails.to,
+            cc: emailMessageDetails.cc,
+            bcc: emailMessageDetails.bcc,
+            replyTo: emailMessageDetails.replyTo,
+            subject: emailMessageDetails.subject,
+            body: emailMessageDetails.body,
+            attachments: emailMessageDetails.attachments,
+            inlineAttachments: emailMessageDetails.inlineAttachments,
+            isHtml: emailMessageDetails.isHtml,
+            encryptionStatus: emailMessageDetails.encryptionStatus,
+            forwardMessageId: emailMessageDetails.forwardMessageId,
+            replyMessageId: emailMessageDetails.replyMessageId
+        )
+    }
+}
+
 /// A class which handles the parsing of RFC822 compliant email messages in the Platform SDK
 class Rfc822MessageDataProcessor {
-    struct EmailMessageDetails {
-        var from: [EmailAddressDetail]
-        var to: [EmailAddressDetail]?
-        var cc: [EmailAddressDetail]?
-        var bcc: [EmailAddressDetail]?
-        var replyTo: [EmailAddressDetail]?
-        var subject: String?
-        var body: String?
-        var attachments: [EmailAttachment]?
-        var inlineAttachments: [EmailAttachment]?
-        var isHtml: Bool = false
-        var encryptionStatus: EncryptionStatus = EncryptionStatus.UNENCRYPTED
-    }
 
     // MARK: - Rfc822MessageDataProcessor
 
@@ -42,14 +65,14 @@ class Rfc822MessageDataProcessor {
 
         builder.header.from = MCOAddress(
             displayName: message.from[0].displayName,
-            mailbox: message.from[0].emailAddress
+            mailbox: message.from[0].address
         )
 
         var toList = [MCOAddress]()
         message.to?.forEach({ to in
             toList.append(MCOAddress(
                 displayName: to.displayName,
-                mailbox: to.emailAddress
+                mailbox: to.address
             ))
         })
         builder.header.to = toList
@@ -58,7 +81,7 @@ class Rfc822MessageDataProcessor {
         message.cc?.forEach({ cc in
             ccList.append(MCOAddress(
                 displayName: cc.displayName,
-                mailbox: cc.emailAddress
+                mailbox: cc.address
             ))
         })
         builder.header.cc = ccList
@@ -67,7 +90,7 @@ class Rfc822MessageDataProcessor {
         message.bcc?.forEach({ bcc in
             bccList.append(MCOAddress(
                 displayName: bcc.displayName,
-                mailbox: bcc.emailAddress
+                mailbox: bcc.address
             ))
         })
         builder.header.bcc = bccList
@@ -76,7 +99,7 @@ class Rfc822MessageDataProcessor {
         message.replyTo?.forEach({ replyTo in
             replyToList.append(MCOAddress(
                 displayName: replyTo.displayName,
-                mailbox: replyTo.emailAddress
+                mailbox: replyTo.address
             ))
         })
         builder.header.replyTo = replyToList
@@ -87,6 +110,12 @@ class Rfc822MessageDataProcessor {
         if message.encryptionStatus == EncryptionStatus.ENCRYPTED {
             body = CANNED_TEXT_BODY
             builder.header.setExtraHeaderValue(PLATFORM_ENCRYPTION, forName: EMAIL_HEADER_NAME_ENCRYPTION)
+        }
+
+        if let replyMessageId = message.replyMessageId {
+            builder.header.setExtraHeaderValue("<\(replyMessageId)>", forName: "In-Reply-To")
+        } else if let forwardMessageId = message.forwardMessageId {
+            builder.header.setExtraHeaderValue("<\(forwardMessageId)>", forName: "References")
         }
 
         if message.isHtml {
@@ -172,24 +201,24 @@ class Rfc822MessageDataProcessor {
         let encryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
 
         let result = EmailMessageDetails(
-            from: [EmailAddressDetail(
-                emailAddress: from?.mailbox ?? "",
+            from: [EmailAddressAndName(
+                address: from?.mailbox ?? "",
                 displayName: from?.displayName
             )],
-            to: to.map { EmailAddressDetail(
-                emailAddress: $0.mailbox ?? "",
+            to: to.map { EmailAddressAndName(
+                address: $0.mailbox ?? "",
                 displayName: $0.displayName
             ) },
-            cc: cc.map { EmailAddressDetail(
-                emailAddress: $0.mailbox ?? "",
+            cc: cc.map { EmailAddressAndName(
+                address: $0.mailbox ?? "",
                 displayName: $0.displayName
             ) },
-            bcc: bcc.map { EmailAddressDetail(
-                emailAddress: $0.mailbox ?? "",
+            bcc: bcc.map { EmailAddressAndName(
+                address: $0.mailbox ?? "",
                 displayName: $0.displayName
             ) },
-            replyTo: replyTo.map { EmailAddressDetail(
-                emailAddress: $0.mailbox ?? "",
+            replyTo: replyTo.map { EmailAddressAndName(
+                address: $0.mailbox ?? "",
                 displayName: $0.displayName
             ) },
             subject: subject,

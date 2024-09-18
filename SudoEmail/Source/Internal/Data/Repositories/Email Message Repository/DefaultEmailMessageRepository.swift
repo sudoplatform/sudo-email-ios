@@ -10,6 +10,11 @@ import SudoApiClient
 import SudoLogging
 import SudoUser
 
+/** Content encoding values for email message data. */
+let CRYPTO_CONTENT_ENCODING: String = "sudoplatform-crypto"
+let BINARY_DATA_CONTENT_ENCODING: String = "sudoplatform-binary-data"
+let COMPRESSION_CONTENT_ENCODING: String = "sudoplatform-compression"
+
 /// Metadata associated with draft email messages stored in S3
 struct DraftEmailMessageEncryptionMetadata: Equatable {
     /// encryption algorithm
@@ -60,16 +65,22 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     let logger: Logger
 
     /// Utility class to unseal email messages.
-    var unsealer: EmailMessageUnsealerService
+    let unsealer: EmailMessageUnsealerService
 
     /// Cryptographic key worker for this device
-    var deviceKeyWorker: DeviceKeyWorker
+    let deviceKeyWorker: DeviceKeyWorker
 
     /// Utility class to manage subscriptions.
     let subscriptionManager: SubscriptionManager
 
     /// S3 client for uploading email messages to the user's S3 transient bucket.
     let s3Worker: AWSS3Worker
+
+    /// Email Crypto Service used to send email messages with E2E encryption.
+    let emailCryptoService: EmailCryptoService
+
+    /// RFC 822 Message Processor used to handle the encoding and parsing of the email message content.
+    let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
     // MARK: - Lifecycle
 
@@ -83,6 +94,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         region: String,
         userClient: SudoUserClient,
         s3Worker: AWSS3Worker,
+        emailCryptoService: EmailCryptoService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
         deviceKeyWorker: DeviceKeyWorker,
         logger: Logger = .emailSDKLogger
     ) {
@@ -94,6 +107,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         self.region = region
         self.userClient = userClient
         self.s3Worker = s3Worker
+        self.emailCryptoService = emailCryptoService
+        self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
         self.deviceKeyWorker = deviceKeyWorker
         self.logger = logger
     }
@@ -124,7 +139,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
         return result
     }
-    
+
 
     // Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
@@ -161,7 +176,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     }
 
     // Sends an in-network email message with E2E encryption.
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> SendEmailMessageResult {
+    // For replying/forwarding messages, one of `replyingMessageId` or `forwardingMessageId` must be provided as an argument
+    // as i
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool, replyingMessageId: String? = nil, forwardingMessageId: String? = nil) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
         guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
             throw SudoEmailError.notSignedIn
@@ -183,8 +200,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             region: self.region
         )
 
-        // Perform `SendEncryptedEmailMessage` mutation (in-network)
-        let rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
+        var rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
             bcc: emailMessageHeader.bcc.map { $0.description },
             cc: emailMessageHeader.cc.map { $0.description },
             from: emailMessageHeader.from.description,
@@ -193,6 +209,14 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             subject: emailMessageHeader.subject,
             to: emailMessageHeader.to.map { $0.description }
         )
+        // Reply or forward message id needs to be explicitly added to the RFC822 header for E2E sending
+        if let replyingMessageId = replyingMessageId {
+            rfc822HeaderInput.inReplyTo = replyingMessageId
+        } else if let forwardingMessageId = forwardingMessageId {
+            rfc822HeaderInput.references = [forwardingMessageId]
+        }
+
+        // Perform `SendEncryptedEmailMessage` mutation (in-network)
         let input = GraphQL.SendEncryptedEmailMessageInput(
             emailAddressId: emailAccountId,
             message: s3EmailObjectInput,
@@ -338,7 +362,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     func fetchEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity? {
         return try await getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData)
     }
-    
+
     func listEmailMessages(
         withInput input: ListEmailMessagesInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
@@ -469,6 +493,93 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         } catch {
             logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
             throw error
+        }
+    }
+
+    func getEmailMessageWithBody(messageId: String, emailAddressId: String) async throws -> EmailMessageWithBody? {
+        // Start tasks concurrently
+        async let emailMessageTask = fetchEmailMessageById(messageId)
+        async let rfc822ObjectTask = fetchEmailMessageRFC822Data(messageId, emailAddressId: emailAddressId)
+
+        guard let emailMessage = try await emailMessageTask else {
+            return nil
+        }
+        guard let rfc822Object = try await rfc822ObjectTask else {
+            throw SudoEmailError.noEmailMessageRFC822Available
+        }
+
+        do {
+            let contentEncodingValues = (rfc822Object.contentEncoding?.split(separator: ",") ?? ["\(CRYPTO_CONTENT_ENCODING)", "\(BINARY_DATA_CONTENT_ENCODING)"])
+                .reversed()
+            var decodedData = rfc822Object.body
+            do {
+                for (encodingValue) in contentEncodingValues {
+                    switch encodingValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+                        case COMPRESSION_CONTENT_ENCODING:
+                            let base64Decoded = Data(base64Encoded: decodedData)
+                            decodedData = try (base64Decoded?.gunzipped())!
+                        case CRYPTO_CONTENT_ENCODING:
+                            decodedData = try unsealer.unsealEmailMessageRFC822Data(
+                                rfc822Object.body,
+                                withKeyId: emailMessage.keyId,
+                                algorithm: emailMessage.algorithm
+                            )
+                        case BINARY_DATA_CONTENT_ENCODING:
+                            break
+                        default:
+                            throw SudoEmailError.decodingError
+                    }
+                }
+            }
+
+            guard let internetMessageData = String(data: decodedData, encoding: .utf8) else {
+                throw SudoEmailError.decodingError
+            }
+            var parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: internetMessageData)
+
+            if emailMessage.encryptionStatus == EncryptionStatus.ENCRYPTED {
+                var keyAttachments: Set<EmailAttachment> = []
+                var bodyAttachment: EmailAttachment? = nil
+
+                parsedMessage.attachments?.forEach({ attachment in
+                    let contentId = attachment.contentId ?? ""
+                    let isKeyExchangeType = contentId.contains(SecureEmailAttachmentType.KEY_EXCHANGE.contentId()) ||
+                                             contentId.contains(SecureEmailAttachmentType.LEGACY_KEY_EXCHANGE_CONTENT_ID)
+                    if isKeyExchangeType {
+                        keyAttachments.insert(attachment)
+                    } else {
+                        let isBodyType = contentId.contains(SecureEmailAttachmentType.BODY.contentId()) ||
+                                          contentId.contains(SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID)
+                        if isBodyType {
+                            bodyAttachment = attachment
+                        }
+                    }
+                })
+
+                if keyAttachments.isEmpty {
+                    throw SudoEmailError.keyAttachmentsNotFound
+                }
+                guard let bodyAttachment = bodyAttachment else {
+                    throw SudoEmailError.bodyAttachmentNotFound
+                }
+
+                let securePackage = SecurePackageEntity(keyAttachments: keyAttachments, bodyAttachment: bodyAttachment)
+                let unencryptedMessageData = try emailCryptoService.decrypt(securePackage: securePackage)
+                guard let unencryptedMessageStr = String(data: unencryptedMessageData, encoding: .utf8) else {
+                    throw SudoEmailError.decodingError
+                }
+                parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: unencryptedMessageStr)
+            }
+
+            return EmailMessageWithBody(
+                id: messageId,
+                body: parsedMessage.body ?? "",
+                isHtml: true,
+                attachments: parsedMessage.attachments ?? [],
+                inlineAttachments: parsedMessage.inlineAttachments ?? []
+            )
+        } catch {
+            throw SudoEmailError.internalError("Failed to retrieve message with body: \(error.localizedDescription)")
         }
     }
 

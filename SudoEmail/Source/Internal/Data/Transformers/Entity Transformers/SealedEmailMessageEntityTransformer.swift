@@ -39,6 +39,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let direction = try directionTransformer.transform(graphQLMessage.direction)
         let state = try stateTransformer.transform(graphQLMessage.state)
         let version = graphQLMessage.version
@@ -57,6 +59,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -87,6 +91,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -105,6 +111,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -135,6 +143,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -153,6 +163,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -183,6 +195,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -201,6 +215,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -227,6 +243,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = sealedEmailMessage.updatedAt
         let sortDate = sealedEmailMessage.sortDate
         let seen = sealedEmailMessage.seen
+        let repliedTo = sealedEmailMessage.repliedTo
+        let forwarded = sealedEmailMessage.forwarded
         let version = sealedEmailMessage.version
         let size = sealedEmailMessage.size
         let direction = sealedEmailMessage.direction
@@ -241,6 +259,8 @@ struct SealedEmailMessageEntityTransformer {
             folderId: folderId,
             previousFolderId: previousFolderId,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             direction: direction,
             state: state,
             clientRefId: clientRefId,
@@ -271,6 +291,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -289,6 +311,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -319,6 +343,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -337,6 +363,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -367,6 +395,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -385,6 +415,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,
@@ -415,6 +447,8 @@ struct SealedEmailMessageEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLMessage.updatedAtEpochMs)
         let sortDate = Date(millisecondsSince1970: graphQLMessage.sortDateEpochMs)
         let seen = graphQLMessage.seen
+        let repliedTo = graphQLMessage.repliedTo
+        let forwarded = graphQLMessage.forwarded
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let direction = try directionTransformer.transform(graphQLMessage.direction)
@@ -433,6 +467,8 @@ struct SealedEmailMessageEntityTransformer {
             previousFolderId: previousFolderId,
             direction: direction,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             state: state,
             clientRefId: clientRefId,
             version: version,

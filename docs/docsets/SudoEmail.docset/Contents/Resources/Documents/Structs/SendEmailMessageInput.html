@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 17.2.1 Docs
+          SudoEmail 17.3.0 Docs
         </a>
         
       </p>
@@ -462,6 +462,62 @@ Default is an empty list.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">inlineAttachments</span><span class="p">:</span> <span class="p">[</span><span class="kt">EmailAttachment</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04SendB12MessageInputV08replyingD2IdSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/replyingMessageId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV08replyingD2IdSSSgvp">replyingMessageId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Identifier of the message being replied to.
+If this property is set, <code><a href="../Structs/SendEmailMessageInput.html#/s:9SudoEmail04SendB12MessageInputV010forwardingD2IdSSSgvp">forwardingMessageId</a></code> must not be set.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">replyingMessageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04SendB12MessageInputV010forwardingD2IdSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/forwardingMessageId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV010forwardingD2IdSSSgvp">forwardingMessageId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Identifier of the message being forwarded.
+If this property is set, <code><a href="../Structs/SendEmailMessageInput.html#/s:9SudoEmail04SendB12MessageInputV08replyingD2IdSSSgvp">replyingMessageId</a></code> must not be set.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">forwardingMessageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>

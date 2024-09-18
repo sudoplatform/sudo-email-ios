@@ -42,6 +42,12 @@ struct SealedEmailMessageEntity {
     /// True if the user has seen the email message previously.
     var seen: Bool
 
+    /// True if the email message has been replied to.
+    var repliedTo: Bool
+
+    /// True if the email message has been forwarded.
+    var forwarded: Bool
+
     /// State of the email message.
     var state: StateEntity
 

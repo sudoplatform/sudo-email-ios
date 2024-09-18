@@ -93,6 +93,8 @@ struct EmailMessageAPITransformer {
         let folderId = entity.folderId
         let previousFolderId = entity.previousFolderId
         let seen = entity.seen
+        let repliedTo = entity.repliedTo
+        let forwarded = entity.forwarded
         let direction = directionTransformer.transform(entity.direction)
         let state = stateTransformer.transform(entity.state)
         let version = entity.version
@@ -118,6 +120,8 @@ struct EmailMessageAPITransformer {
             updatedAt: updatedAt,
             sortDate: sortDate,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             direction: direction,
             state: state,
             version: version,
@@ -148,6 +152,8 @@ struct EmailMessageAPITransformer {
         let folderId = entity.folderId
         let previousFolderId = entity.previousFolderId
         let seen = entity.seen
+        let repliedTo = entity.repliedTo
+        let forwarded = entity.forwarded
         let direction = directionTransformer.transform(entity.direction)
         let state = stateTransformer.transform(entity.state)
         let version = entity.version
@@ -166,6 +172,8 @@ struct EmailMessageAPITransformer {
             updatedAt: updatedAt,
             sortDate: sortDate,
             seen: seen,
+            repliedTo: repliedTo,
+            forwarded: forwarded,
             direction: direction,
             state: state,
             version: version,

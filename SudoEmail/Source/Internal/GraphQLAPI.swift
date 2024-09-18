@@ -586,8 +586,8 @@ internal struct SendEncryptedEmailMessageInput: GraphQLMapConvertible {
 internal struct Rfc822HeaderInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(bcc: [String], cc: [String], dateEpochMs: Optional<Double?> = nil, from: String, hasAttachments: Optional<Bool?> = nil, replyTo: [String], subject: Optional<String?> = nil, to: [String]) {
-    graphQLMap = ["bcc": bcc, "cc": cc, "dateEpochMs": dateEpochMs, "from": from, "hasAttachments": hasAttachments, "replyTo": replyTo, "subject": subject, "to": to]
+  internal init(bcc: [String], cc: [String], dateEpochMs: Optional<Double?> = nil, from: String, hasAttachments: Optional<Bool?> = nil, inReplyTo: Optional<String?> = nil, references: Optional<[String]?> = nil, replyTo: [String], subject: Optional<String?> = nil, to: [String]) {
+    graphQLMap = ["bcc": bcc, "cc": cc, "dateEpochMs": dateEpochMs, "from": from, "hasAttachments": hasAttachments, "inReplyTo": inReplyTo, "references": references, "replyTo": replyTo, "subject": subject, "to": to]
   }
 
   internal var bcc: [String] {
@@ -632,6 +632,24 @@ internal struct Rfc822HeaderInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "hasAttachments")
+    }
+  }
+
+  internal var inReplyTo: Optional<String?> {
+    get {
+      return graphQLMap["inReplyTo"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "inReplyTo")
+    }
+  }
+
+  internal var references: Optional<[String]?> {
+    get {
+      return graphQLMap["references"] as! Optional<[String]?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "references")
     }
   }
 
@@ -1649,8 +1667,8 @@ internal struct ListEmailMessagesForEmailFolderIdInput: GraphQLMapConvertible {
 internal struct EmailMessageFilterInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(algorithm: Optional<StringFilterInput?> = nil, and: Optional<[EmailMessageFilterInput?]?> = nil, clientRefId: Optional<IDFilterInput?> = nil, direction: Optional<EmailMessageDirectionFilterInput?> = nil, folderId: Optional<IDFilterInput?> = nil, id: Optional<IDFilterInput?> = nil, keyId: Optional<IDFilterInput?> = nil, messageId: Optional<IDFilterInput?> = nil, not: Optional<EmailMessageFilterInput?> = nil, or: Optional<[EmailMessageFilterInput?]?> = nil, seen: Optional<BooleanFilterInput?> = nil, state: Optional<EmailMessageStateFilterInput?> = nil) {
-    graphQLMap = ["algorithm": algorithm, "and": and, "clientRefId": clientRefId, "direction": direction, "folderId": folderId, "id": id, "keyId": keyId, "messageId": messageId, "not": not, "or": or, "seen": seen, "state": state]
+  internal init(algorithm: Optional<StringFilterInput?> = nil, and: Optional<[EmailMessageFilterInput?]?> = nil, clientRefId: Optional<IDFilterInput?> = nil, direction: Optional<EmailMessageDirectionFilterInput?> = nil, folderId: Optional<IDFilterInput?> = nil, forwarded: Optional<BooleanFilterInput?> = nil, id: Optional<IDFilterInput?> = nil, keyId: Optional<IDFilterInput?> = nil, messageId: Optional<IDFilterInput?> = nil, not: Optional<EmailMessageFilterInput?> = nil, or: Optional<[EmailMessageFilterInput?]?> = nil, repliedTo: Optional<BooleanFilterInput?> = nil, seen: Optional<BooleanFilterInput?> = nil, state: Optional<EmailMessageStateFilterInput?> = nil) {
+    graphQLMap = ["algorithm": algorithm, "and": and, "clientRefId": clientRefId, "direction": direction, "folderId": folderId, "forwarded": forwarded, "id": id, "keyId": keyId, "messageId": messageId, "not": not, "or": or, "repliedTo": repliedTo, "seen": seen, "state": state]
   }
 
   internal var algorithm: Optional<StringFilterInput?> {
@@ -1698,6 +1716,15 @@ internal struct EmailMessageFilterInput: GraphQLMapConvertible {
     }
   }
 
+  internal var forwarded: Optional<BooleanFilterInput?> {
+    get {
+      return graphQLMap["forwarded"] as! Optional<BooleanFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "forwarded")
+    }
+  }
+
   internal var id: Optional<IDFilterInput?> {
     get {
       return graphQLMap["id"] as! Optional<IDFilterInput?>
@@ -1740,6 +1767,15 @@ internal struct EmailMessageFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "or")
+    }
+  }
+
+  internal var repliedTo: Optional<BooleanFilterInput?> {
+    get {
+      return graphQLMap["repliedTo"] as! Optional<BooleanFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "repliedTo")
     }
   }
 
@@ -6603,6 +6639,8 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
         GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
         GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -6616,8 +6654,8 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
       }
 
       internal var __typename: String {
@@ -6734,6 +6772,24 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var repliedTo: Bool {
+        get {
+          return snapshot["repliedTo"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "repliedTo")
+        }
+      }
+
+      internal var forwarded: Bool {
+        get {
+          return snapshot["forwarded"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "forwarded")
         }
       }
 
@@ -7027,6 +7083,8 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
           GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
           GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
           GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
           GraphQLField("clientRefId", type: .scalar(String.self)),
           GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -7040,8 +7098,8 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
         }
 
         internal var __typename: String {
@@ -7158,6 +7216,24 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "seen")
+          }
+        }
+
+        internal var repliedTo: Bool {
+          get {
+            return snapshot["repliedTo"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "repliedTo")
+          }
+        }
+
+        internal var forwarded: Bool {
+          get {
+            return snapshot["forwarded"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "forwarded")
           }
         }
 
@@ -7452,6 +7528,8 @@ internal final class ListEmailMessagesForEmailAddressIdQuery: GraphQLQuery {
           GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
           GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
           GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
           GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
           GraphQLField("clientRefId", type: .scalar(String.self)),
           GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -7465,8 +7543,8 @@ internal final class ListEmailMessagesForEmailAddressIdQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
         }
 
         internal var __typename: String {
@@ -7583,6 +7661,24 @@ internal final class ListEmailMessagesForEmailAddressIdQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "seen")
+          }
+        }
+
+        internal var repliedTo: Bool {
+          get {
+            return snapshot["repliedTo"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "repliedTo")
+          }
+        }
+
+        internal var forwarded: Bool {
+          get {
+            return snapshot["forwarded"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "forwarded")
           }
         }
 
@@ -7877,6 +7973,8 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
           GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
           GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
           GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
           GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
           GraphQLField("clientRefId", type: .scalar(String.self)),
           GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -7890,8 +7988,8 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
         }
 
         internal var __typename: String {
@@ -8008,6 +8106,24 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "seen")
+          }
+        }
+
+        internal var repliedTo: Bool {
+          get {
+            return snapshot["repliedTo"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "repliedTo")
+          }
+        }
+
+        internal var forwarded: Bool {
+          get {
+            return snapshot["forwarded"]! as! Bool
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "forwarded")
           }
         }
 
@@ -9823,6 +9939,8 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
         GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
         GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -9836,8 +9954,8 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
       }
 
       internal var __typename: String {
@@ -9954,6 +10072,24 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var repliedTo: Bool {
+        get {
+          return snapshot["repliedTo"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "repliedTo")
+        }
+      }
+
+      internal var forwarded: Bool {
+        get {
+          return snapshot["forwarded"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "forwarded")
         }
       }
 
@@ -10203,6 +10339,8 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
         GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
         GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -10216,8 +10354,8 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
       }
 
       internal var __typename: String {
@@ -10334,6 +10472,24 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         }
         set {
           snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var repliedTo: Bool {
+        get {
+          return snapshot["repliedTo"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "repliedTo")
+        }
+      }
+
+      internal var forwarded: Bool {
+        get {
+          return snapshot["forwarded"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "forwarded")
         }
       }
 
@@ -10581,6 +10737,8 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
         GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
         GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -10594,8 +10752,8 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
       }
 
       internal var __typename: String {
@@ -10712,6 +10870,24 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var repliedTo: Bool {
+        get {
+          return snapshot["repliedTo"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "repliedTo")
+        }
+      }
+
+      internal var forwarded: Bool {
+        get {
+          return snapshot["forwarded"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "forwarded")
         }
       }
 
@@ -10961,6 +11137,8 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
         GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
         GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
         GraphQLField("clientRefId", type: .scalar(String.self)),
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -10974,8 +11152,8 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
       }
 
       internal var __typename: String {
@@ -11092,6 +11270,24 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         }
         set {
           snapshot.updateValue(newValue, forKey: "seen")
+        }
+      }
+
+      internal var repliedTo: Bool {
+        get {
+          return snapshot["repliedTo"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "repliedTo")
+        }
+      }
+
+      internal var forwarded: Bool {
+        get {
+          return snapshot["forwarded"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "forwarded")
         }
       }
 
@@ -13406,7 +13602,7 @@ internal struct SealedAttribute: GraphQLFragment {
 
 internal struct SealedEmailMessage: GraphQLFragment {
   internal static let fragmentString =
-    "fragment SealedEmailMessage on SealedEmailMessage {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  emailAddressId\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  sortDateEpochMs\n  folderId\n  previousFolderId\n  direction\n  seen\n  state\n  clientRefId\n  rfc822Header {\n    __typename\n    algorithm\n    keyId\n    plainTextType\n    base64EncodedSealedData\n  }\n  size\n  encryptionStatus\n}"
+    "fragment SealedEmailMessage on SealedEmailMessage {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  emailAddressId\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  sortDateEpochMs\n  folderId\n  previousFolderId\n  direction\n  seen\n  repliedTo\n  forwarded\n  state\n  clientRefId\n  rfc822Header {\n    __typename\n    algorithm\n    keyId\n    plainTextType\n    base64EncodedSealedData\n  }\n  size\n  encryptionStatus\n}"
 
   internal static let possibleTypes = ["SealedEmailMessage"]
 
@@ -13424,6 +13620,8 @@ internal struct SealedEmailMessage: GraphQLFragment {
     GraphQLField("previousFolderId", type: .scalar(GraphQLID.self)),
     GraphQLField("direction", type: .nonNull(.scalar(EmailMessageDirection.self))),
     GraphQLField("seen", type: .nonNull(.scalar(Bool.self))),
+    GraphQLField("repliedTo", type: .nonNull(.scalar(Bool.self))),
+    GraphQLField("forwarded", type: .nonNull(.scalar(Bool.self))),
     GraphQLField("state", type: .nonNull(.scalar(EmailMessageState.self))),
     GraphQLField("clientRefId", type: .scalar(String.self)),
     GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
@@ -13437,8 +13635,8 @@ internal struct SealedEmailMessage: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-    self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
+    self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
   }
 
   internal var __typename: String {
@@ -13555,6 +13753,24 @@ internal struct SealedEmailMessage: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "seen")
+    }
+  }
+
+  internal var repliedTo: Bool {
+    get {
+      return snapshot["repliedTo"]! as! Bool
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "repliedTo")
+    }
+  }
+
+  internal var forwarded: Bool {
+    get {
+      return snapshot["forwarded"]! as! Bool
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "forwarded")
     }
   }
 

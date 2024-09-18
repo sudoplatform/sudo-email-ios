@@ -53,6 +53,12 @@ struct EmailMessageFilterInputGQLTransformer {
         case let .seen(seen):
             let seen = boolFilterTransformer.transform(seen)
             return GraphQL.EmailMessageFilterInput(seen: seen)
+        case let .repliedTo(repliedTo):
+            let repliedTo = boolFilterTransformer.transform(repliedTo)
+            return GraphQL.EmailMessageFilterInput(repliedTo: repliedTo)
+        case let .forwarded(forwarded):
+            let forwarded = boolFilterTransformer.transform(forwarded)
+            return GraphQL.EmailMessageFilterInput(forwarded: forwarded)
         case let .not(emailMessageFilter):
             let emailMessageFilter = transform(emailMessageFilter)
             return GraphQL.EmailMessageFilterInput(not: emailMessageFilter)

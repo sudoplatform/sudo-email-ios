@@ -70,6 +70,12 @@ public struct EmailMessage: Equatable {
     /// True if the user has seen the email message previously.
     public var seen: Bool
 
+    /// True if the email message has been replied to.
+    public var repliedTo: Bool
+
+    /// True if the email message has been forwarded.
+    public var forwarded: Bool
+
     /// Direction of the email message.
     public var direction: Direction
 
@@ -122,6 +128,8 @@ public struct EmailMessage: Equatable {
         updatedAt: Date,
         sortDate: Date,
         seen: Bool,
+        repliedTo: Bool,
+        forwarded: Bool,
         direction: Direction,
         state: State,
         version: Int,
@@ -147,6 +155,8 @@ public struct EmailMessage: Equatable {
         self.folderId = folderId
         self.previousFolderId = previousFolderId
         self.seen = seen
+        self.repliedTo = repliedTo
+        self.forwarded = forwarded
         self.direction = direction
         self.state = state
         self.version = version
@@ -200,6 +210,12 @@ public struct PartialEmailMessage: Equatable {
     /// True if the user has seen the email message previously.
     public var seen: Bool
 
+    /// True if the email message has been replied to.
+    public var repliedTo: Bool
+
+    /// True if the email message has been forwarded.
+    public var forwarded: Bool
+
     /// Direction of the email message.
     public var direction: EmailMessage.Direction
 
@@ -232,6 +248,8 @@ public struct PartialEmailMessage: Equatable {
         updatedAt: Date,
         sortDate: Date,
         seen: Bool,
+        repliedTo: Bool,
+        forwarded: Bool,
         direction: EmailMessage.Direction,
         state: EmailMessage.State,
         version: Int,
@@ -250,6 +268,8 @@ public struct PartialEmailMessage: Equatable {
         self.folderId = folderId
         self.previousFolderId = previousFolderId
         self.seen = seen
+        self.repliedTo = repliedTo
+        self.forwarded = forwarded
         self.direction = direction
         self.state = state
         self.version = version

@@ -22,8 +22,10 @@ protocol EmailMessageRepository: AnyObject {
     ///   - emailAccountId: Identifier of the email account to send the email message from. The user must own this account.
     ///   - emailMessageHeader: Message headers used for E2E encryption.
     ///   - hasAttachments: Indicates whether or not the encrypted data contains email attachments.
+    ///   - replyingMessageId: Identifier of the email message being replied to.
+    ///   - forwardingMessageId: Identifier of the email message being forwarded.
     /// - Returns: SendEmailMessageResult
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool) async throws -> SendEmailMessageResult
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool, replyingMessageId: String?, forwardingMessageId: String?) async throws -> SendEmailMessageResult
 
     /// Delete an email message.
     /// - Parameters:
@@ -64,6 +66,16 @@ protocol EmailMessageRepository: AnyObject {
         id: String,
         emailAddressId: String
     ) async throws -> String
+
+    /// Get the message body and attachments of an email address.
+    ///  - Parameters:
+    ///    - messageId: The identifier of the email message to retrieve.
+    ///    - emailAddressId: The email address id associated with the email message to retrieve.
+    ///  - Returns: The identifier of the deleted email message.
+    func getEmailMessageWithBody(
+        messageId: String,
+        emailAddressId: String
+    ) async throws -> EmailMessageWithBody?
 
     /// Get the sealed email message by its identifier. Gets the message locally from the cache of the device.
     /// - Parameters:
