@@ -158,6 +158,17 @@ protocol EmailMessageRepository: AnyObject {
         withId id: String?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken
+    
+    /// Subscribe to all sealed email messages updated.
+    /// - Parameters:
+    ///   - id: The specific email message id to watch for update. If `nil`, all message updates will be watched.
+    ///   - resultHandler: Result handler for email message update events.
+    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
+    /// - Returns: The token identifying this subscription
+    func subscribeToEmailMessageUpdated(
+        withId id: String?,
+        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
+    ) async throws -> SubscriptionToken
 
     /// Unsubscribe from all email notifications.
     func unsubscribeAll()

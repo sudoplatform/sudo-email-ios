@@ -751,6 +751,54 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             )
         }
     }
+    
+    func subscribeToEmailMessageUpdated(
+        withId id: String?,
+        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
+    ) async throws -> SubscriptionToken {
+        let subscriptionId = UUID().uuidString
+        let userId = try getUserId()
+        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(subscriptionId, resultHandler: resultHandler)
+        if let id = id {
+            let graphQLSubscription = GraphQL.OnEmailMessageUpdatedWithIdSubscription(owner: userId, id: id)
+            let subscriptionResultHandler = constructSubscriptionResultHandler(
+                type: GraphQL.OnEmailMessageUpdatedWithIdSubscription.self,
+                transform: { graphQL in
+                    guard let message = graphQL.onEmailMessageUpdated else {
+                        return nil
+                    }
+                    let transformer = SealedEmailMessageEntityTransformer()
+                    return try transformer.transform(message)
+                },
+                resultHandler: resultHandler
+            )
+            return try await subscribeWithId(
+                subscriptionId,
+                subscription: graphQLSubscription,
+                statusChangeHandler: subscriptionStatusChangeHandler,
+                resultHandler: subscriptionResultHandler
+            )
+        } else {
+            let graphQLSubscription = GraphQL.OnEmailMessageUpdatedSubscription(owner: userId)
+            let subscriptionResultHandler = constructSubscriptionResultHandler(
+                type: GraphQL.OnEmailMessageUpdatedSubscription.self,
+                transform: { graphQL in
+                    guard let message = graphQL.onEmailMessageUpdated else {
+                        return nil
+                    }
+                    let transformer = SealedEmailMessageEntityTransformer()
+                    return try transformer.transform(message)
+                },
+                resultHandler: resultHandler
+            )
+            return try await subscribeWithId(
+                subscriptionId,
+                subscription: graphQLSubscription,
+                statusChangeHandler: subscriptionStatusChangeHandler,
+                resultHandler: subscriptionResultHandler
+            )
+        }
+    }
 
     func unsubscribeAll() {
         subscriptionManager.removeAllSubscriptions()

@@ -330,6 +330,16 @@ class UseCaseFactory {
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
+    
+    func generateSubscribeToEmailMessageUpdatedUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailMessageUnsealerService: EmailMessageUnsealerService
+    ) -> SubscribeToEmailMessageUpdatedUseCase {
+        return SubscribeToEmailMessageUpdatedUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailMessageUnsealerService: emailMessageUnsealerService
+        )
+    }
 
     func generateUnsubscribeAllUseCase(
         emailMessageRepository: EmailMessageRepository

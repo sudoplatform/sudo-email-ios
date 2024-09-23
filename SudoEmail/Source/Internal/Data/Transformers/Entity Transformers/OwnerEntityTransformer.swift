@@ -162,4 +162,22 @@ struct OwnerEntityTransformer {
         return OwnerEntity(id: id, issuer: issuer)
     }
 
+    /// Transform the success result of `OnEmailMessageUpdatedSubscription` owner from the service to a `OwnerEntity`.
+    func transform(
+        _ data: GraphQL.OnEmailMessageUpdatedSubscription.Data.OnEmailMessageUpdated.Owner
+    ) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `OnEmailMessageUpdatedWithIdSubscription` owner from the service to a `OwnerEntity`.
+    func transform(
+        _ data: GraphQL.OnEmailMessageUpdatedWithIdSubscription.Data.OnEmailMessageUpdated.Owner
+    ) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
 }

@@ -400,6 +400,17 @@ public protocol SudoEmailClient: AnyObject {
         withId id: String?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken?
+    
+    /// Subscribe to email message updated events.
+    /// - Parameters:
+    ///   - id: Identifier of a specific deletion event to watch for. If `nil`, all update events will be handled.
+    ///   - resultHandler: Email message update event.
+    /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
+    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
+    func subscribeToEmailMessageUpdated(
+        withId id: String?,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) async throws -> SubscriptionToken?
 
     /// Unsubscribe all subscribers from receiving sudo email notifications
     func unsubscribeAll()

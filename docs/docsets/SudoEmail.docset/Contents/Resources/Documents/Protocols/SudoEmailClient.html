@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 17.3.0 Docs
+          SudoEmail 17.4.0 Docs
         </a>
         
       </p>
@@ -2508,6 +2508,79 @@ Failure - All addresses failed to be unblocked.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageUpdated6withId13resultHandlerAA17SubscriptionToken_pSgSSSg_ys6ResultOyAA0bF0Vs5Error_pGctYaKF"></a>
+                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageUpdated(withId:resultHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageUpdated6withId13resultHandlerAA17SubscriptionToken_pSgSSSg_ys6ResultOyAA0bF0Vs5Error_pGctYaKF">subscribeToEmailMessageUpdated(withId:<wbr>resultHandler:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subscribe to email message updated events.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/SudoEmailError.html">SudoEmailError</a></code> if an error occurs while setting up the initial connection the subscription.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">subscribeToEmailMessageUpdated</span><span class="p">(</span>
+    <span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+    <span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier of a specific deletion event to watch for. If <code>nil</code>, all update events will be handled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resultHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Email message update event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></code> object to cancel the subscription. On denitialization, the subscription will be cancelled.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP14unsubscribeAllyyF"></a>
                     <a name="//apple_ref/swift/Method/unsubscribeAll()" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP14unsubscribeAllyyF">unsubscribeAll()</a>
@@ -2540,7 +2613,7 @@ Failure - All addresses failed to be unblocked.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-09-18)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-09-23)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
