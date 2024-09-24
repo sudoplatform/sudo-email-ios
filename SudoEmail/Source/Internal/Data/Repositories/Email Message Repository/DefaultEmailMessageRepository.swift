@@ -176,7 +176,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     }
 
     // Sends an in-network email message with E2E encryption.
-    // For replying/forwarding messages, one of `replyingMessageId` or `forwardingMessageId` must be provided as an argument
+    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     // as i
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool, replyingMessageId: String? = nil, forwardingMessageId: String? = nil) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
@@ -209,10 +209,11 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             subject: emailMessageHeader.subject,
             to: emailMessageHeader.to.map { $0.description }
         )
-        // Reply or forward message id needs to be explicitly added to the RFC822 header for E2E sending
+        // Reply/forward message ids needs to be explicitly added to the RFC822 header for E2E sending
         if let replyingMessageId = replyingMessageId {
             rfc822HeaderInput.inReplyTo = replyingMessageId
-        } else if let forwardingMessageId = forwardingMessageId {
+        }
+        if let forwardingMessageId = forwardingMessageId {
             rfc822HeaderInput.references = [forwardingMessageId]
         }
 

@@ -31,26 +31,6 @@ struct EmailMessageDetails {
     var replyMessageId: String?
 }
 
-extension EmailMessageDetails {
-    init(_ emailMessageDetails: EmailMessageDetails) {
-        self.init(
-            from: emailMessageDetails.from,
-            to: emailMessageDetails.to,
-            cc: emailMessageDetails.cc,
-            bcc: emailMessageDetails.bcc,
-            replyTo: emailMessageDetails.replyTo,
-            subject: emailMessageDetails.subject,
-            body: emailMessageDetails.body,
-            attachments: emailMessageDetails.attachments,
-            inlineAttachments: emailMessageDetails.inlineAttachments,
-            isHtml: emailMessageDetails.isHtml,
-            encryptionStatus: emailMessageDetails.encryptionStatus,
-            forwardMessageId: emailMessageDetails.forwardMessageId,
-            replyMessageId: emailMessageDetails.replyMessageId
-        )
-    }
-}
-
 /// A class which handles the parsing of RFC822 compliant email messages in the Platform SDK
 class Rfc822MessageDataProcessor {
 
@@ -200,7 +180,7 @@ class Rfc822MessageDataProcessor {
         let encryptionHeader = header.extraHeaderValue(forName: EMAIL_HEADER_NAME_ENCRYPTION)
         let encryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
 
-        let result = EmailMessageDetails(
+        var result = EmailMessageDetails(
             from: [EmailAddressAndName(
                 address: from?.mailbox ?? "",
                 displayName: from?.displayName
@@ -228,6 +208,14 @@ class Rfc822MessageDataProcessor {
             isHtml: isHtml,
             encryptionStatus: encryptionStatus
         )
+
+        if let forwardMessageId = header.references?.last as? String {
+            result.forwardMessageId = forwardMessageId
+        }
+        if let replyMessageId = header.inReplyTo?.last as? String {
+            result.replyMessageId = replyMessageId
+        }
+
         return result
     }
 }

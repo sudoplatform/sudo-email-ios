@@ -32,9 +32,6 @@ class SendEmailMessageUseCase {
     /// RFC 822 Message Processor used to handle the encoding and parsing of the email message content.
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
-    /// Utility class used to format messages for replying/forwarding.
-    let messageFormatter: MessageFormatter
-
     /// Logs diagnostic and error information.
     var logger: Logger
 
@@ -49,7 +46,6 @@ class SendEmailMessageUseCase {
         emailCryptoService: EmailCryptoService,
         emailMessageUnsealerService: EmailMessageUnsealerService,
         rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
-        messageFormatter: MessageFormatter,
         logger: Logger = .emailSDKLogger
     ) {
         self.emailAccountRepository = emailAccountRepository
@@ -59,7 +55,6 @@ class SendEmailMessageUseCase {
         self.emailCryptoService = emailCryptoService
         self.emailMessageUnsealerService = emailMessageUnsealerService
         self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
-        self.messageFormatter = messageFormatter
         self.logger = logger
     }
 
@@ -72,49 +67,8 @@ class SendEmailMessageUseCase {
     func execute(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
         let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (input.senderEmailAddressId, input.emailMessageHeader, input.body, input.attachments, input.inlineAttachments, input.replyingMessageId, input.forwardingMessageId)
 
-        if replyingMessageId != nil && forwardingMessageId != nil {
-            throw SudoEmailError.invalidArgument(
-                "Unable to send - received values for both `replyingMessageId` and `forwardingMessageId`"
-            )
-        }
-
-        // Get message details associated with provided reply or forward id
-        var replyMessageDetails: EncodableMessageDetails?
-        var forwardMessageDetails: EncodableMessageDetails?
-        func retrieveMessageDetails(messageId: String) async throws -> EncodableMessageDetails? {
-            var messageDetails: EncodableMessageDetails?
-            do {
-                async let messageTask = emailMessageRepository.fetchEmailMessageById(messageId)
-                async let messageWithBodyTask = emailMessageRepository.getEmailMessageWithBody(messageId: messageId, emailAddressId: senderEmailAddressId)
-                if let sealedMessage = try? await messageTask,
-                   let messageWithBody = try? await messageWithBodyTask,
-                   let unsealedMessage = try? emailMessageUnsealerService.unsealEmailMessage(sealedMessage) {
-                    let messageEntity = EmailMessageAPITransformer().transform(unsealedMessage)
-                    messageDetails = EncodableMessageDetails(
-                        from: messageEntity.from,
-                        to: messageEntity.to,
-                        cc: messageEntity.cc,
-                        date: messageEntity.date,
-                        subject: messageEntity.subject,
-                        body: messageWithBody.body,
-                        id: messageEntity.id
-                    )
-                } else {
-                    logger.debug("Message/message contents not found with id \(messageId)")
-                }
-            } catch {
-                logger.error("Failed to retrieve reply message contents with id \(messageId): \(error.localizedDescription)")
-            }
-            return messageDetails
-        }
-        if let replyingMessageId = replyingMessageId {
-            replyMessageDetails = try await retrieveMessageDetails(messageId: replyingMessageId)
-        } else if let forwardingMessageId = forwardingMessageId {
-            forwardMessageDetails = try await retrieveMessageDetails(messageId: forwardingMessageId)
-        }
-
         let domains = try await emailDomainRepository.fetchConfiguredDomains()
-        
+
         let allRecipients = emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc
         
         // Identify whether recipients are internal and external based on their domains
@@ -154,7 +108,9 @@ class SendEmailMessageUseCase {
                     attachments: attachments,
                     inlineAttachments: inlineAttachments,
                     encryptionStatus: EncryptionStatus.ENCRYPTED,
-                    emailAddressesPublicInfo: emailAddressesPublicInfo
+                    emailAddressesPublicInfo: emailAddressesPublicInfo,
+                    replyMessageId: replyingMessageId,
+                    forwardMessageId: forwardingMessageId
                 )
                 let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
                 return try await emailMessageRepository.sendEmailMessage(
@@ -174,8 +130,8 @@ class SendEmailMessageUseCase {
             attachments: attachments,
             inlineAttachments: inlineAttachments,
             encryptionStatus: EncryptionStatus.UNENCRYPTED,
-            replyMessageDetails: replyMessageDetails,
-            forwardMessageDetails: forwardMessageDetails
+            replyMessageId: replyingMessageId,
+            forwardMessageId: forwardingMessageId
         )
         return try await emailMessageRepository.sendEmailMessage(
             withRFC822Data: rfc822Data,
@@ -190,8 +146,8 @@ class SendEmailMessageUseCase {
         inlineAttachments: [EmailAttachment],
         encryptionStatus: EncryptionStatus,
         emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = [],
-        replyMessageDetails: EncodableMessageDetails? = nil,
-        forwardMessageDetails: EncodableMessageDetails? = nil
+        replyMessageId: String? = nil,
+        forwardMessageId: String? = nil
     ) async throws -> Data {
         let config = try await emailConfigDataRepository.getConfigurationData()
 
@@ -203,8 +159,8 @@ class SendEmailMessageUseCase {
             inlineAttachments: inlineAttachments,
             isHtml: true,
             encryptionStatus: EncryptionStatus.UNENCRYPTED,
-            replyMessageDetails: replyMessageDetails,
-            forwardMessageDetails: forwardMessageDetails
+            replyMessageId: replyMessageId,
+            forwardMessageId: forwardMessageId
         )
         
         if (encryptionStatus == EncryptionStatus.ENCRYPTED) {
@@ -222,8 +178,8 @@ class SendEmailMessageUseCase {
                 inlineAttachments: inlineAttachments,
                 isHtml: false,
                 encryptionStatus: EncryptionStatus.ENCRYPTED,
-                replyMessageDetails: replyMessageDetails,
-                forwardMessageDetails: forwardMessageDetails
+                replyMessageId: replyMessageId,
+                forwardMessageId: forwardMessageId
             )
         }
         
@@ -242,8 +198,8 @@ class SendEmailMessageUseCase {
         inlineAttachments: [EmailAttachment],
         isHtml: Bool,
         encryptionStatus: EncryptionStatus,
-        replyMessageDetails: EncodableMessageDetails? = nil,
-        forwardMessageDetails: EncodableMessageDetails? = nil
+        replyMessageId: String? = nil,
+        forwardMessageId: String? = nil
     ) throws -> Data {
         let from = [EmailAddressAndName(address: emailMessageHeader.from.address, displayName: emailMessageHeader.from.displayName)]
         let to = emailMessageHeader.to.map { EmailAddressAndName(address: $0.address, displayName: $0.displayName) }
@@ -261,18 +217,11 @@ class SendEmailMessageUseCase {
             isHtml: isHtml,
             encryptionStatus: encryptionStatus
         )
-        // Format the email message body and/or subject if reply or forward message details are provided
-        if let replyMessageDetails = replyMessageDetails,
-           let formattedRfc822DataProperties = messageFormatter.formatAsReplyingMessage(
-            messageDetails: rfc822DataProperties,
-            replyMessage: replyMessageDetails
-           ) ?? nil {
-            rfc822DataProperties = formattedRfc822DataProperties
-            rfc822DataProperties.replyMessageId = replyMessageDetails.id
-        } else if let forwardMessageDetails = forwardMessageDetails,
-                  let formattedRfc822DataProperties = (messageFormatter.formatAsForwardingMessage(messageDetails: rfc822DataProperties, forwardMessage: forwardMessageDetails) ?? nil) {
-            rfc822DataProperties = formattedRfc822DataProperties
-            rfc822DataProperties.forwardMessageId = forwardMessageDetails.id
+        if let forwardMessageId = forwardMessageId {
+            rfc822DataProperties.forwardMessageId = forwardMessageId
+        }
+        if let replyMessageId = replyMessageId {
+            rfc822DataProperties.replyMessageId = replyMessageId
         }
         return try rfc822MessageDataProcessor.encodeToInternetMessageData(message: rfc822DataProperties)
     }

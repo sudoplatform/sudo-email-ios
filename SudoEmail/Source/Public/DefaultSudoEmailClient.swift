@@ -70,8 +70,6 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
-    let messageFormatter: MessageFormatter
-
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultSudoEmailClient`. It uses configuration parameters defined in `sudoplatformconfig.json` file located in the app
@@ -121,7 +119,6 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailConfig = try Bundle.main.loadEmailConfig()
         let s3Region = emailConfig.region
         let rfc822MessageDataProcessor = Rfc822MessageDataProcessor()
-        let messageFormatter = MessageFormatter()
         // Setup Services
         let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: serviceKeyWorker)
         // Setup Repositories
@@ -159,8 +156,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             serviceKeyWorker: serviceKeyWorker,
             awsS3Worker: awsS3Worker,
             blockedAddressRepository: blockedAddressRepository,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
-            messageFormatter: messageFormatter
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
     }
 
@@ -183,8 +179,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         awsS3Worker: AWSS3Worker & Resetable,
         logger: Logger = .emailSDKLogger,
         blockedAddressRepository: BlockedAddressRepository & Resetable,
-        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
-        messageFormatter: MessageFormatter
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) {
         self.graphQLClient = graphQLClient
         self.userClient = userClient
@@ -201,7 +196,6 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.awsS3Worker = awsS3Worker
         self.blockedAddressRepository = blockedAddressRepository
         self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
-        self.messageFormatter = messageFormatter
     }
 
     public func reset() throws {
@@ -259,8 +253,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailConfigDataRepository: emailConfigurationDataRepository,
             emailCryptoService: emailCryptoService,
             emailMessageUnsealerService: emailMessageUnsealerService,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
-            messageFormatter: messageFormatter
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
         return try await useCase.execute(withInput: input)
     }

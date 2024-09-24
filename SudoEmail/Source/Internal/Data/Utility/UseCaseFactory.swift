@@ -58,8 +58,7 @@ class UseCaseFactory {
         emailConfigDataRepository: EmailConfigurationDataRepository,
         emailCryptoService: EmailCryptoService,
         emailMessageUnsealerService: EmailMessageUnsealerService,
-        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
-        messageFormatter: MessageFormatter
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor
     ) -> SendEmailMessageUseCase {
         return SendEmailMessageUseCase(
             emailAccountRepository: emailAccountRepository,
@@ -68,8 +67,7 @@ class UseCaseFactory {
             emailConfigDataRepository: emailConfigDataRepository,
             emailCryptoService: emailCryptoService,
             emailMessageUnsealerService: emailMessageUnsealerService,
-            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
-            messageFormatter: messageFormatter
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor
         )
     }
 
