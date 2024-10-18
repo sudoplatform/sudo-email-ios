@@ -23,7 +23,7 @@ class GetEmailAddressBlocklistUseCase {
     
     // MARK: - Lifecycle
     
-    /// Initialize and instance of `GetEmailAddressBlocklistUseCase`
+    /// Initialize an instance of `GetEmailAddressBlocklistUseCase`
     init(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,

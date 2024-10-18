@@ -6,7 +6,7 @@
 
 import Foundation
 
-/// The result of a successfull email message update
+/// The result of a successful email message update
 public struct UpdatedEmailMessageSuccess {
     
     /// The unique identifier of the email message

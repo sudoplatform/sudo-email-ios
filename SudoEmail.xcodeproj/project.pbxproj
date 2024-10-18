@@ -46,6 +46,7 @@
 		510F5D2E2BBE6AF00096FD10 /* SealedKeyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D2D2BBE6AF00096FD10 /* SealedKeyEntity.swift */; };
 		510F5D312BBF6E7B0096FD10 /* SealedKeyEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D302BBF6E7B0096FD10 /* SealedKeyEntityTests.swift */; };
 		517845662BF7259600268489 /* DataFactory+Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517845652BF7259600268489 /* DataFactory+Core.swift */; };
+		518B683F2CC0892700CE9238 /* DeleteEmailMessageResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B683E2CC0892700CE9238 /* DeleteEmailMessageResult.swift */; };
 		51A06DAE2BBFA7090002B1F3 /* SecureDataEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A06DAD2BBFA7090002B1F3 /* SecureDataEntityTests.swift */; };
 		51A06DB02BBFAC2C0002B1F3 /* SecureEmailAttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A06DAF2BBFAC2C0002B1F3 /* SecureEmailAttachmentType.swift */; };
 		51A06DB22BBFB11D0002B1F3 /* DefaultEmailCryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A06DB12BBFB11D0002B1F3 /* DefaultEmailCryptoService.swift */; };
@@ -649,6 +650,7 @@
 		510F5D2D2BBE6AF00096FD10 /* SealedKeyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SealedKeyEntity.swift; sourceTree = "<group>"; };
 		510F5D302BBF6E7B0096FD10 /* SealedKeyEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SealedKeyEntityTests.swift; sourceTree = "<group>"; };
 		517845652BF7259600268489 /* DataFactory+Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFactory+Core.swift"; sourceTree = "<group>"; };
+		518B683E2CC0892700CE9238 /* DeleteEmailMessageResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteEmailMessageResult.swift; sourceTree = "<group>"; };
 		51A06DAD2BBFA7090002B1F3 /* SecureDataEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureDataEntityTests.swift; sourceTree = "<group>"; };
 		51A06DAF2BBFAC2C0002B1F3 /* SecureEmailAttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEmailAttachmentType.swift; sourceTree = "<group>"; };
 		51A06DB12BBFB11D0002B1F3 /* DefaultEmailCryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEmailCryptoService.swift; sourceTree = "<group>"; };
@@ -2114,6 +2116,7 @@
 				95DEFF5E285699D60071363B /* CachePolicy.swift */,
 				958DC127291A05B3003562C8 /* ConfigurationData.swift */,
 				95DEFF722859A8660071363B /* DateRange.swift */,
+				518B683E2CC0892700CE9238 /* DeleteEmailMessageResult.swift */,
 				956F1EDA28EE9765002E2E5A /* DraftEmailMessage.swift */,
 				956F1EDE28EEA0EA002E2E5A /* DraftEmailMessageMetadata.swift */,
 				844673FF247DF6ED0016FA56 /* EmailAddress.swift */,
@@ -3600,6 +3603,7 @@
 				5D86DAF72C1154660061BF58 /* DefaultSudoEmailNotificationFilterClient.swift in Sources */,
 				952BDA59290219BA00C63A4C /* DeleteDraftEmailMessagesInput.swift in Sources */,
 				952BDA5B29021F0A00C63A4C /* DeleteDraftEmailMessagesUseCase.swift in Sources */,
+				518B683F2CC0892700CE9238 /* DeleteEmailMessageResult.swift in Sources */,
 				84A455F724B55D71002DBF0D /* DeleteEmailMessagesUseCase.swift in Sources */,
 				84B2606D2489C65B00E99401 /* DeprovisionEmailAccountUseCase.swift in Sources */,
 				5DDE246A2C045C6100387540 /* DeviceKeyWorker.swift in Sources */,

@@ -85,20 +85,24 @@ public protocol SudoEmailClient: AnyObject {
     /// - Parameters:
     ///   - ids: A list of one or more identifiers of the email messages to be deleted. There is a limit of
     ///   100 email message ids per API request. Exceeding this will cause an error to be thrown.
-    /// - Returns:The status of the delete:
-    ///    Success - All email messages succeeded to delete.
-    ///    Partial - Only a partial amount of messages succeeded to delete. Includes a list of the
-    ///              identifiers of the email messages that failed and succeeded to delete.
-    ///    Failure - All email messages failed to delete.
-    func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String, String>
+    /// - Returns: The results of the delete operation:
+    ///     - status:
+    ///         - Success - All draft email messages succeeded to delete.
+    ///         - Partial - Only a partial amount of draft messages succeeded to delete. Result includes two lists;
+    ///           one containing success results and the other containing failure results.
+    ///         - Failure - All draft email messages failed to delete. Result contains a list of identifiers of draft email
+    ///           messages that failed to delete.
+    ///     - successItems - A list of the result items containing identifiers of the draft email messages that were successfully deleted.
+    ///     - failureItems - A list of the id and errorType of each draft email message that failed to be deleted.
+    func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult>
 
     /// Delete an email message.
     /// - Parameters:
     ///   - id: Identifier of the email message to be deleted.
     /// - Returns:
-    ///   - Success: Identifier of the email message that was deleted.
+    ///   - Success: Result containing the identifier of the email message that was deleted.
     ///   - Failure: `SudoEmailError`.
-    func deleteEmailMessage(withId id: String) async throws -> String?
+    func deleteEmailMessage(withId id: String) async throws -> DeleteEmailMessageSuccessResult?
 
     /// Update multiple email messages using a list of identifiers.
     ///
@@ -143,14 +147,18 @@ public protocol SudoEmailClient: AnyObject {
     /// Any emailAddressId that is not owned or does not exist, will throw an error.
     ///  - Parameters:
     ///    - input: Input parameters used to delete a list of draft email messages.
-    ///  - Returns: The status of the delete:
-    ///     Success - All draft email messages succeeded to delete.
-    ///     Partial - Only a partial number of the draft email messages were deleted successfully. Includes a list of the
-    ///           identifiers of the draft email messages that failed and succeeded to delete.
-    ///     Failure - All draft email messages failed to delete.
+    ///  - Returns: The results of the delete operation:
+    ///     - status:
+    ///         - Success - All email messages succeeded to delete.
+    ///         - Partial - Only a partial amount of draft messages succeeded to delete. Result includes two lists;
+    ///           one containing success results and the other containing failure results.
+    ///         - Failure - All email messages failed to delete. Result contains a list of identifiers of email messages
+    ///           that failed to delete.
+    ///     - successItems - A list of result items containing the identifiers of the email messages that were successfully deleted.
+    ///     - failureItems - A list of the id and errorType of each email message that failed to be deleted.
     func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
-    ) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult>
+    ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult>
 
     /// Imports cryptographic keys from a key archive.
     ///

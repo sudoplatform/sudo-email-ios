@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 17.4.1 Docs
+          SudoEmail 18.0.0 Docs
         </a>
         
       </p>
@@ -160,7 +160,7 @@
                 <a class="nav-group-task-link" href="../Structs/AnyError.html">AnyError</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a>
+                <a class="nav-group-task-link" href="../Structs/BatchOperationResult.html">BatchOperationResult</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/CheckEmailAddressAvailabilityInput.html">CheckEmailAddressAvailabilityInput</a>
@@ -173,6 +173,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DeleteDraftEmailMessagesInput.html">DeleteDraftEmailMessagesInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DeleteEmailMessageSuccessResult.html">DeleteEmailMessageSuccessResult</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DraftEmailMessage.html">DraftEmailMessage</a>
@@ -559,9 +562,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultVyS2SGSaySSG_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultVyAA06Deleteb14MessageSuccessJ0VAA0bli7FailureJ0VGSaySSG_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/deleteEmailMessages(withIds:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultVyS2SGSaySSG_tYaKF">deleteEmailMessages(withIds:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB8Messages7withIdsAA20BatchOperationResultVyAA06Deleteb14MessageSuccessJ0VAA0bli7FailureJ0VGSaySSG_tYaKF">deleteEmailMessages(withIds:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -578,7 +581,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteEmailMessages</span><span class="p">(</span><span class="n">withIds</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteEmailMessages</span><span class="p">(</span><span class="n">withIds</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DeleteEmailMessageSuccessResult.html">DeleteEmailMessageSuccessResult</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -588,9 +591,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP06deleteB7Message6withIdSSSgSS_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP06deleteB7Message6withIdAA06DeletebE13SuccessResultVSgSS_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/deleteEmailMessage(withId:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB7Message6withIdSSSgSS_tYaKF">deleteEmailMessage(withId:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP06deleteB7Message6withIdAA06DeletebE13SuccessResultVSgSS_tYaKF">deleteEmailMessage(withId:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -607,7 +610,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteEmailMessage</span><span class="p">(</span><span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteEmailMessage</span><span class="p">(</span><span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DeleteEmailMessageSuccessResult.html">DeleteEmailMessageSuccessResult</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -638,7 +641,7 @@ Throws:</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateEmailMessages</span><span class="p">(</span>
     <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/UpdateEmailMessagesInput.html">UpdateEmailMessagesInput</a></span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/UpdatedEmailMessageSuccess.html">UpdatedEmailMessageSuccess</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/UpdatedEmailMessageSuccess.html">UpdatedEmailMessageSuccess</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -710,9 +713,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultVySSAA0b7Messagej7FailureK0VGAA06DeleteebfH0V_tYaKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultVyAA06Deleteb14MessageSuccessK0VAA0bmj7FailureK0VGAA0lebfH0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/deleteDraftEmailMessages(withInput:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultVySSAA0b7Messagej7FailureK0VGAA06DeleteebfH0V_tYaKF">deleteDraftEmailMessages(withInput:<wbr>)</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011deleteDraftB8Messages9withInputAA20BatchOperationResultVyAA06Deleteb14MessageSuccessK0VAA0bmj7FailureK0VGAA0lebfH0V_tYaKF">deleteDraftEmailMessages(withInput:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -731,7 +734,7 @@ Throws:</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteDraftEmailMessages</span><span class="p">(</span>
     <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/DeleteDraftEmailMessagesInput.html">DeleteDraftEmailMessagesInput</a></span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DeleteEmailMessageSuccessResult.html">DeleteEmailMessageSuccessResult</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1017,7 +1020,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">blockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">blockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1046,7 +1049,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unblockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unblockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1075,7 +1078,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unblockEmailAddressesByHashedValue</span><span class="p">(</span><span class="nv">hashedValues</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:9SudoEmail20BatchOperationResultV">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unblockEmailAddressesByHashedValue</span><span class="p">(</span><span class="nv">hashedValues</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1626,7 +1629,7 @@ Throws:</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-09-25)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-10-18)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

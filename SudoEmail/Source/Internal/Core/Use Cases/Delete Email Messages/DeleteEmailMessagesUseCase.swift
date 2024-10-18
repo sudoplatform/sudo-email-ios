@@ -24,25 +24,39 @@ class DeleteEmailMessagesUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///   - ids: List of unique Identifiers of the email messages to be deleted.
-    /// - Returns: The status of the delete operation:
-    ///       - success: All email messages deleted successfully.
-    ///       - partial: Only some of the email messages deleted successfully. Includes a list of the
-    ///               identifiers of the email messages that failed and succeeded to update.
-    ///       - failed: All email messages failed to delete.
-    func execute(withIds ids: [String]) async throws -> BatchOperationResult<String, String> {
+    /// - Returns: The results of the delete operation:
+    ///     - status:
+    ///         - Success - All draft email messages succeeded to delete.
+    ///         - Partial - Only a partial amount of draft messages succeeded to delete. Result includes two lists;
+    ///           one containing success results and the other containing failure results.
+    ///         - Failure - All draft email messages failed to delete. Result contains a list of identifiers of draft email
+    ///           messages that failed to delete.
+    ///     - successItems - A list of the identifiers of the draft email messages that were successfully deleted.
+    ///     - failureItems - A list of the id and errorType of each draft email message that failed to be deleted.
+    func execute(withIds ids: [String]) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
         if ids.isEmpty {
             throw SudoEmailError.invalidArgument("Attempt to delete empty list of email messages")
         }
+
         let failureIds = try await emailMessageRepository.deleteEmailMessages(withIds: ids)
+        let failureItems = failureIds.map {
+            EmailMessageOperationFailureResult(id: $0, errorType: "Failed to delete email message")
+        }
+        let successIds = ids.filter { !failureIds.contains($0) }
+
         let status: BatchOperationResultStatus
-        if failureIds.isEmpty {
+        if (successIds.count == ids.count) {
             status = BatchOperationResultStatus.success
         } else if failureIds.count == ids.count {
             status = BatchOperationResultStatus.failure
         } else {
             status = BatchOperationResultStatus.partial
         }
-        let successIds = ids.filter { !failureIds.contains($0) }
-        return BatchOperationResult(status: status, successItems: successIds, failureItems: failureIds)
+
+        return BatchOperationResult(
+            status: status,
+            successItems: successIds,
+            failureItems: failureItems
+        )
     }
 }

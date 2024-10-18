@@ -114,28 +114,7 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
-      "line": 19,
-      "symbol": "BatchOperationResult.status",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
-      "line": 21,
-      "symbol": "BatchOperationResult.successItems",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
-      "line": 23,
-      "symbol": "BatchOperationResult.failureItems",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/BatchOperationResult.swift",
-      "line": 25,
+      "line": 31,
       "symbol": "BatchOperationResult.init(status:successItems:failureItems:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

@@ -258,17 +258,24 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return try await useCase.execute(withInput: input)
     }
 
-    public func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<String, String> {
+    public func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult> {
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
-        return try await useCase.execute(withIds: ids)
+        let deleteResult = try await useCase.execute(withIds: ids)
+        let successItems = deleteResult.successItems != nil ? deleteResult.successItems?.map { DeleteEmailMessageSuccessResult(id: $0) } : []
+        let result = BatchOperationResult(
+            status: deleteResult.status,
+            successItems: successItems,
+            failureItems: deleteResult.failureItems
+        )
+        return result
     }
 
-    public func deleteEmailMessage(withId id: String) async throws -> String? {
+    public func deleteEmailMessage(withId id: String) async throws -> DeleteEmailMessageSuccessResult? {
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
         let result = try await useCase.execute(withIds: [id])
         switch result.status {
         case .success:
-            return id
+            return DeleteEmailMessageSuccessResult(id: id)
         default:
             return nil
         }
@@ -303,12 +310,21 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
-    ) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
+    ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult> {
         let useCase = useCaseFactory.generateDeleteDraftEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository
         )
-        return try await useCase.execute(withInput: input)
+
+        let deleteResult = try await useCase.execute(withInput: input)
+        let successItems = deleteResult.successItems != nil ? deleteResult.successItems?.map { DeleteEmailMessageSuccessResult(id: $0) } : []
+
+        let result = BatchOperationResult(
+            status: deleteResult.status,
+            successItems: successItems,
+            failureItems: deleteResult.failureItems
+        )
+        return result
     }
 
     public func importKeys(archiveData: Data) throws {
