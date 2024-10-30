@@ -34,6 +34,7 @@ struct EmailFolderAPITransformer {
         let version = entity.version
         let createdAt = entity.createdAt
         let updatedAt = entity.updatedAt
+        let customFolderName = entity.customFolderName
         return EmailFolder(
             id: id,
             owner: owner,
@@ -45,7 +46,8 @@ struct EmailFolderAPITransformer {
             ttl: ttl,
             version: version,
             createdAt: createdAt,
-            updatedAt: updatedAt
+            updatedAt: updatedAt,
+            customFolderName: customFolderName
         )
     }
 }

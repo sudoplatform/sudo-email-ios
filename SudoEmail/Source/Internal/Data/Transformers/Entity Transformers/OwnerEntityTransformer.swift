@@ -179,5 +179,14 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
+    
+    /// Transform the success result of `CreateCustomEmailFolder` owner from the service to a `OwnerEntity`.
+    func transform(
+        _ data: GraphQL.CreateCustomEmailFolderMutation.Data.CreateCustomEmailFolder.Owner
+    ) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
 
 }

@@ -197,6 +197,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CreateCustomEmailFolderInput.swift",
+      "line": 19,
+      "symbol": "CreateCustomEmailFolderInput.init(emailAddressId:customFolderName:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/CreateDraftEmailMessageInput.swift",
       "line": 20,
       "symbol": "CreateDraftEmailMessageInput.init(rfc822Data:senderEmailAddressId:)",

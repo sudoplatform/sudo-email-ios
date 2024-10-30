@@ -820,6 +820,32 @@ internal struct UnblockEmailAddressesInput: GraphQLMapConvertible {
   }
 }
 
+internal struct CreateCustomEmailFolderInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(customFolderName: SealedAttributeInput, emailAddressId: GraphQLID) {
+    graphQLMap = ["customFolderName": customFolderName, "emailAddressId": emailAddressId]
+  }
+
+  internal var customFolderName: SealedAttributeInput {
+    get {
+      return graphQLMap["customFolderName"] as! SealedAttributeInput
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "customFolderName")
+    }
+  }
+
+  internal var emailAddressId: GraphQLID {
+    get {
+      return graphQLMap["emailAddressId"] as! GraphQLID
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+}
+
 internal struct CreatePublicKeyInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
@@ -2358,6 +2384,7 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
           GraphQLField("ttl", type: .scalar(Double.self)),
+          GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
         ]
 
         internal var snapshot: Snapshot
@@ -2366,8 +2393,8 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
         }
 
         internal var __typename: String {
@@ -2478,6 +2505,15 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
           }
         }
 
+        internal var customFolderName: CustomFolderName? {
+          get {
+            return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+          }
+        }
+
         internal var fragments: Fragments {
           get {
             return Fragments(snapshot: snapshot)
@@ -2543,6 +2579,96 @@ internal final class ProvisionEmailAddressMutation: GraphQLMutation {
             }
             set {
               snapshot.updateValue(newValue, forKey: "issuer")
+            }
+          }
+        }
+
+        internal struct CustomFolderName: GraphQLSelectionSet {
+          internal static let possibleTypes = ["SealedAttribute"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+            GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+            GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+            GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+            self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var algorithm: String {
+            get {
+              return snapshot["algorithm"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "algorithm")
+            }
+          }
+
+          internal var keyId: String {
+            get {
+              return snapshot["keyId"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "keyId")
+            }
+          }
+
+          internal var plainTextType: String {
+            get {
+              return snapshot["plainTextType"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "plainTextType")
+            }
+          }
+
+          internal var base64EncodedSealedData: String {
+            get {
+              return snapshot["base64EncodedSealedData"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+            }
+          }
+
+          internal var fragments: Fragments {
+            get {
+              return Fragments(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+
+          internal struct Fragments {
+            internal var snapshot: Snapshot
+
+            internal var sealedAttribute: SealedAttribute {
+              get {
+                return SealedAttribute(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
             }
           }
         }
@@ -3668,6 +3794,357 @@ internal final class UnblockEmailAddressesMutation: GraphQLMutation {
   }
 }
 
+internal final class CreateCustomEmailFolderMutation: GraphQLMutation {
+  internal static let operationString =
+    "mutation CreateCustomEmailFolder($input: CreateCustomEmailFolderInput!) {\n  createCustomEmailFolder(input: $input) {\n    __typename\n    ...EmailFolder\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(EmailFolder.fragmentString).appending(SealedAttribute.fragmentString) }
+
+  internal var input: CreateCustomEmailFolderInput
+
+  internal init(input: CreateCustomEmailFolderInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Mutation"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("createCustomEmailFolder", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(CreateCustomEmailFolder.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(createCustomEmailFolder: CreateCustomEmailFolder) {
+      self.init(snapshot: ["__typename": "Mutation", "createCustomEmailFolder": createCustomEmailFolder.snapshot])
+    }
+
+    internal var createCustomEmailFolder: CreateCustomEmailFolder {
+      get {
+        return CreateCustomEmailFolder(snapshot: snapshot["createCustomEmailFolder"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "createCustomEmailFolder")
+      }
+    }
+
+    internal struct CreateCustomEmailFolder: GraphQLSelectionSet {
+      internal static let possibleTypes = ["EmailFolder"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        GraphQLField("version", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("folderName", type: .nonNull(.scalar(String.self))),
+        GraphQLField("size", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("ttl", type: .scalar(Double.self)),
+        GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+        self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var id: GraphQLID {
+        get {
+          return snapshot["id"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      internal var owner: GraphQLID {
+        get {
+          return snapshot["owner"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "owner")
+        }
+      }
+
+      internal var owners: [Owner] {
+        get {
+          return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var version: Int {
+        get {
+          return snapshot["version"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "version")
+        }
+      }
+
+      internal var createdAtEpochMs: Double {
+        get {
+          return snapshot["createdAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+        }
+      }
+
+      internal var updatedAtEpochMs: Double {
+        get {
+          return snapshot["updatedAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+        }
+      }
+
+      internal var emailAddressId: GraphQLID {
+        get {
+          return snapshot["emailAddressId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
+        }
+      }
+
+      internal var folderName: String {
+        get {
+          return snapshot["folderName"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "folderName")
+        }
+      }
+
+      internal var size: Double {
+        get {
+          return snapshot["size"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "size")
+        }
+      }
+
+      internal var unseenCount: Double {
+        get {
+          return snapshot["unseenCount"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "unseenCount")
+        }
+      }
+
+      internal var ttl: Double? {
+        get {
+          return snapshot["ttl"] as? Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "ttl")
+        }
+      }
+
+      internal var customFolderName: CustomFolderName? {
+        get {
+          return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var emailFolder: EmailFolder {
+          get {
+            return EmailFolder(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+      }
+
+      internal struct Owner: GraphQLSelectionSet {
+        internal static let possibleTypes = ["Owner"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(String.self))),
+          GraphQLField("issuer", type: .nonNull(.scalar(String.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(id: String, issuer: String) {
+          self.init(snapshot: ["__typename": "Owner", "id": id, "issuer": issuer])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var id: String {
+          get {
+            return snapshot["id"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        internal var issuer: String {
+          get {
+            return snapshot["issuer"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "issuer")
+          }
+        }
+      }
+
+      internal struct CustomFolderName: GraphQLSelectionSet {
+        internal static let possibleTypes = ["SealedAttribute"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+          GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+          GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+          GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+          self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var algorithm: String {
+          get {
+            return snapshot["algorithm"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "algorithm")
+          }
+        }
+
+        internal var keyId: String {
+          get {
+            return snapshot["keyId"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "keyId")
+          }
+        }
+
+        internal var plainTextType: String {
+          get {
+            return snapshot["plainTextType"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "plainTextType")
+          }
+        }
+
+        internal var base64EncodedSealedData: String {
+          get {
+            return snapshot["base64EncodedSealedData"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+          }
+        }
+
+        internal var fragments: Fragments {
+          get {
+            return Fragments(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+
+        internal struct Fragments {
+          internal var snapshot: Snapshot
+
+          internal var sealedAttribute: SealedAttribute {
+            get {
+              return SealedAttribute(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 internal final class CreatePublicKeyForEmailMutation: GraphQLMutation {
   internal static let operationString =
     "mutation CreatePublicKeyForEmail($input: CreatePublicKeyInput!) {\n  createPublicKeyForEmail(input: $input) {\n    __typename\n    ...PublicKey\n  }\n}"
@@ -4637,6 +5114,7 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
           GraphQLField("ttl", type: .scalar(Double.self)),
+          GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
         ]
 
         internal var snapshot: Snapshot
@@ -4645,8 +5123,8 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
         }
 
         internal var __typename: String {
@@ -4757,6 +5235,15 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
           }
         }
 
+        internal var customFolderName: CustomFolderName? {
+          get {
+            return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+          }
+        }
+
         internal var fragments: Fragments {
           get {
             return Fragments(snapshot: snapshot)
@@ -4822,6 +5309,96 @@ internal final class GetEmailAddressQuery: GraphQLQuery {
             }
             set {
               snapshot.updateValue(newValue, forKey: "issuer")
+            }
+          }
+        }
+
+        internal struct CustomFolderName: GraphQLSelectionSet {
+          internal static let possibleTypes = ["SealedAttribute"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+            GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+            GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+            GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+            self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var algorithm: String {
+            get {
+              return snapshot["algorithm"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "algorithm")
+            }
+          }
+
+          internal var keyId: String {
+            get {
+              return snapshot["keyId"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "keyId")
+            }
+          }
+
+          internal var plainTextType: String {
+            get {
+              return snapshot["plainTextType"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "plainTextType")
+            }
+          }
+
+          internal var base64EncodedSealedData: String {
+            get {
+              return snapshot["base64EncodedSealedData"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+            }
+          }
+
+          internal var fragments: Fragments {
+            get {
+              return Fragments(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+
+          internal struct Fragments {
+            internal var snapshot: Snapshot
+
+            internal var sealedAttribute: SealedAttribute {
+              get {
+                return SealedAttribute(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
             }
           }
         }
@@ -5281,6 +5858,7 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
             GraphQLField("size", type: .nonNull(.scalar(Double.self))),
             GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
             GraphQLField("ttl", type: .scalar(Double.self)),
+            GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
           ]
 
           internal var snapshot: Snapshot
@@ -5289,8 +5867,8 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
             self.snapshot = snapshot
           }
 
-          internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-            self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+          internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+            self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
           }
 
           internal var __typename: String {
@@ -5401,6 +5979,15 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
             }
           }
 
+          internal var customFolderName: CustomFolderName? {
+            get {
+              return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+            }
+            set {
+              snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+            }
+          }
+
           internal var fragments: Fragments {
             get {
               return Fragments(snapshot: snapshot)
@@ -5466,6 +6053,96 @@ internal final class ListEmailAddressesQuery: GraphQLQuery {
               }
               set {
                 snapshot.updateValue(newValue, forKey: "issuer")
+              }
+            }
+          }
+
+          internal struct CustomFolderName: GraphQLSelectionSet {
+            internal static let possibleTypes = ["SealedAttribute"]
+
+            internal static let selections: [GraphQLSelection] = [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+              GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+              GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+            ]
+
+            internal var snapshot: Snapshot
+
+            internal init(snapshot: Snapshot) {
+              self.snapshot = snapshot
+            }
+
+            internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+              self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+            }
+
+            internal var __typename: String {
+              get {
+                return snapshot["__typename"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            internal var algorithm: String {
+              get {
+                return snapshot["algorithm"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "algorithm")
+              }
+            }
+
+            internal var keyId: String {
+              get {
+                return snapshot["keyId"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "keyId")
+              }
+            }
+
+            internal var plainTextType: String {
+              get {
+                return snapshot["plainTextType"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "plainTextType")
+              }
+            }
+
+            internal var base64EncodedSealedData: String {
+              get {
+                return snapshot["base64EncodedSealedData"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+              }
+            }
+
+            internal var fragments: Fragments {
+              get {
+                return Fragments(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
+            }
+
+            internal struct Fragments {
+              internal var snapshot: Snapshot
+
+              internal var sealedAttribute: SealedAttribute {
+                get {
+                  return SealedAttribute(snapshot: snapshot)
+                }
+                set {
+                  snapshot += newValue.snapshot
+                }
               }
             }
           }
@@ -5926,6 +6603,7 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
             GraphQLField("size", type: .nonNull(.scalar(Double.self))),
             GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
             GraphQLField("ttl", type: .scalar(Double.self)),
+            GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
           ]
 
           internal var snapshot: Snapshot
@@ -5934,8 +6612,8 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
             self.snapshot = snapshot
           }
 
-          internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-            self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+          internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+            self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
           }
 
           internal var __typename: String {
@@ -6046,6 +6724,15 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
             }
           }
 
+          internal var customFolderName: CustomFolderName? {
+            get {
+              return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+            }
+            set {
+              snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+            }
+          }
+
           internal var fragments: Fragments {
             get {
               return Fragments(snapshot: snapshot)
@@ -6111,6 +6798,96 @@ internal final class ListEmailAddressesForSudoIdQuery: GraphQLQuery {
               }
               set {
                 snapshot.updateValue(newValue, forKey: "issuer")
+              }
+            }
+          }
+
+          internal struct CustomFolderName: GraphQLSelectionSet {
+            internal static let possibleTypes = ["SealedAttribute"]
+
+            internal static let selections: [GraphQLSelection] = [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+              GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+              GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+            ]
+
+            internal var snapshot: Snapshot
+
+            internal init(snapshot: Snapshot) {
+              self.snapshot = snapshot
+            }
+
+            internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+              self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+            }
+
+            internal var __typename: String {
+              get {
+                return snapshot["__typename"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            internal var algorithm: String {
+              get {
+                return snapshot["algorithm"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "algorithm")
+              }
+            }
+
+            internal var keyId: String {
+              get {
+                return snapshot["keyId"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "keyId")
+              }
+            }
+
+            internal var plainTextType: String {
+              get {
+                return snapshot["plainTextType"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "plainTextType")
+              }
+            }
+
+            internal var base64EncodedSealedData: String {
+              get {
+                return snapshot["base64EncodedSealedData"]! as! String
+              }
+              set {
+                snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+              }
+            }
+
+            internal var fragments: Fragments {
+              get {
+                return Fragments(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
+            }
+
+            internal struct Fragments {
+              internal var snapshot: Snapshot
+
+              internal var sealedAttribute: SealedAttribute {
+                get {
+                  return SealedAttribute(snapshot: snapshot)
+                }
+                set {
+                  snapshot += newValue.snapshot
+                }
               }
             }
           }
@@ -6285,7 +7062,7 @@ internal final class ListEmailFoldersForEmailAddressIdQuery: GraphQLQuery {
   internal static let operationString =
     "query ListEmailFoldersForEmailAddressId($input: ListEmailFoldersForEmailAddressIdInput!) {\n  listEmailFoldersForEmailAddressId(input: $input) {\n    __typename\n    items {\n      __typename\n      ...EmailFolder\n    }\n    nextToken\n  }\n}"
 
-  internal static var requestString: String { return operationString.appending(EmailFolder.fragmentString) }
+  internal static var requestString: String { return operationString.appending(EmailFolder.fragmentString).appending(SealedAttribute.fragmentString) }
 
   internal var input: ListEmailFoldersForEmailAddressIdInput
 
@@ -6386,6 +7163,7 @@ internal final class ListEmailFoldersForEmailAddressIdQuery: GraphQLQuery {
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
           GraphQLField("ttl", type: .scalar(Double.self)),
+          GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
         ]
 
         internal var snapshot: Snapshot
@@ -6394,8 +7172,8 @@ internal final class ListEmailFoldersForEmailAddressIdQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
         }
 
         internal var __typename: String {
@@ -6506,6 +7284,15 @@ internal final class ListEmailFoldersForEmailAddressIdQuery: GraphQLQuery {
           }
         }
 
+        internal var customFolderName: CustomFolderName? {
+          get {
+            return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+          }
+        }
+
         internal var fragments: Fragments {
           get {
             return Fragments(snapshot: snapshot)
@@ -6571,6 +7358,96 @@ internal final class ListEmailFoldersForEmailAddressIdQuery: GraphQLQuery {
             }
             set {
               snapshot.updateValue(newValue, forKey: "issuer")
+            }
+          }
+        }
+
+        internal struct CustomFolderName: GraphQLSelectionSet {
+          internal static let possibleTypes = ["SealedAttribute"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+            GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+            GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+            GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+            self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var algorithm: String {
+            get {
+              return snapshot["algorithm"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "algorithm")
+            }
+          }
+
+          internal var keyId: String {
+            get {
+              return snapshot["keyId"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "keyId")
+            }
+          }
+
+          internal var plainTextType: String {
+            get {
+              return snapshot["plainTextType"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "plainTextType")
+            }
+          }
+
+          internal var base64EncodedSealedData: String {
+            get {
+              return snapshot["base64EncodedSealedData"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+            }
+          }
+
+          internal var fragments: Fragments {
+            get {
+              return Fragments(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+
+          internal struct Fragments {
+            internal var snapshot: Snapshot
+
+            internal var sealedAttribute: SealedAttribute {
+              get {
+                return SealedAttribute(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
             }
           }
         }
@@ -9686,6 +10563,7 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
           GraphQLField("ttl", type: .scalar(Double.self)),
+          GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
         ]
 
         internal var snapshot: Snapshot
@@ -9694,8 +10572,8 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+          self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
         }
 
         internal var __typename: String {
@@ -9806,6 +10684,15 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
           }
         }
 
+        internal var customFolderName: CustomFolderName? {
+          get {
+            return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+          }
+        }
+
         internal var fragments: Fragments {
           get {
             return Fragments(snapshot: snapshot)
@@ -9871,6 +10758,96 @@ internal final class OnEmailAddressCreatedSubscription: GraphQLSubscription {
             }
             set {
               snapshot.updateValue(newValue, forKey: "issuer")
+            }
+          }
+        }
+
+        internal struct CustomFolderName: GraphQLSelectionSet {
+          internal static let possibleTypes = ["SealedAttribute"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+            GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+            GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+            GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+            self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var algorithm: String {
+            get {
+              return snapshot["algorithm"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "algorithm")
+            }
+          }
+
+          internal var keyId: String {
+            get {
+              return snapshot["keyId"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "keyId")
+            }
+          }
+
+          internal var plainTextType: String {
+            get {
+              return snapshot["plainTextType"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "plainTextType")
+            }
+          }
+
+          internal var base64EncodedSealedData: String {
+            get {
+              return snapshot["base64EncodedSealedData"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+            }
+          }
+
+          internal var fragments: Fragments {
+            get {
+              return Fragments(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+
+          internal struct Fragments {
+            internal var snapshot: Snapshot
+
+            internal var sealedAttribute: SealedAttribute {
+              get {
+                return SealedAttribute(snapshot: snapshot)
+              }
+              set {
+                snapshot += newValue.snapshot
+              }
             }
           }
         }
@@ -13420,6 +14397,7 @@ internal struct EmailAddress: GraphQLFragment {
       GraphQLField("size", type: .nonNull(.scalar(Double.self))),
       GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
       GraphQLField("ttl", type: .scalar(Double.self)),
+      GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
     ]
 
     internal var snapshot: Snapshot
@@ -13428,8 +14406,8 @@ internal struct EmailAddress: GraphQLFragment {
       self.snapshot = snapshot
     }
 
-    internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-      self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+    internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+      self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
     }
 
     internal var __typename: String {
@@ -13540,6 +14518,15 @@ internal struct EmailAddress: GraphQLFragment {
       }
     }
 
+    internal var customFolderName: CustomFolderName? {
+      get {
+        return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+      }
+      set {
+        snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+      }
+    }
+
     internal var fragments: Fragments {
       get {
         return Fragments(snapshot: snapshot)
@@ -13605,6 +14592,96 @@ internal struct EmailAddress: GraphQLFragment {
         }
         set {
           snapshot.updateValue(newValue, forKey: "issuer")
+        }
+      }
+    }
+
+    internal struct CustomFolderName: GraphQLSelectionSet {
+      internal static let possibleTypes = ["SealedAttribute"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+        GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+        GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+        self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var algorithm: String {
+        get {
+          return snapshot["algorithm"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "algorithm")
+        }
+      }
+
+      internal var keyId: String {
+        get {
+          return snapshot["keyId"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyId")
+        }
+      }
+
+      internal var plainTextType: String {
+        get {
+          return snapshot["plainTextType"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "plainTextType")
+        }
+      }
+
+      internal var base64EncodedSealedData: String {
+        get {
+          return snapshot["base64EncodedSealedData"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var sealedAttribute: SealedAttribute {
+          get {
+            return SealedAttribute(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
         }
       }
     }
@@ -13763,7 +14840,7 @@ internal struct EmailConfigurationData: GraphQLFragment {
 
 internal struct EmailFolder: GraphQLFragment {
   internal static let fragmentString =
-    "fragment EmailFolder on EmailFolder {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  emailAddressId\n  folderName\n  size\n  unseenCount\n  ttl\n}"
+    "fragment EmailFolder on EmailFolder {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  emailAddressId\n  folderName\n  size\n  unseenCount\n  ttl\n  customFolderName {\n    __typename\n    ...SealedAttribute\n  }\n}"
 
   internal static let possibleTypes = ["EmailFolder"]
 
@@ -13780,6 +14857,7 @@ internal struct EmailFolder: GraphQLFragment {
     GraphQLField("size", type: .nonNull(.scalar(Double.self))),
     GraphQLField("unseenCount", type: .nonNull(.scalar(Double.self))),
     GraphQLField("ttl", type: .scalar(Double.self)),
+    GraphQLField("customFolderName", type: .object(CustomFolderName.selections)),
   ]
 
   internal var snapshot: Snapshot
@@ -13788,8 +14866,8 @@ internal struct EmailFolder: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil) {
-    self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl])
+  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, emailAddressId: GraphQLID, folderName: String, size: Double, unseenCount: Double, ttl: Double? = nil, customFolderName: CustomFolderName? = nil) {
+    self.init(snapshot: ["__typename": "EmailFolder", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "emailAddressId": emailAddressId, "folderName": folderName, "size": size, "unseenCount": unseenCount, "ttl": ttl, "customFolderName": customFolderName.flatMap { $0.snapshot }])
   }
 
   internal var __typename: String {
@@ -13900,6 +14978,15 @@ internal struct EmailFolder: GraphQLFragment {
     }
   }
 
+  internal var customFolderName: CustomFolderName? {
+    get {
+      return (snapshot["customFolderName"] as? Snapshot).flatMap { CustomFolderName(snapshot: $0) }
+    }
+    set {
+      snapshot.updateValue(newValue?.snapshot, forKey: "customFolderName")
+    }
+  }
+
   internal struct Owner: GraphQLSelectionSet {
     internal static let possibleTypes = ["Owner"]
 
@@ -13943,6 +15030,96 @@ internal struct EmailFolder: GraphQLFragment {
       }
       set {
         snapshot.updateValue(newValue, forKey: "issuer")
+      }
+    }
+  }
+
+  internal struct CustomFolderName: GraphQLSelectionSet {
+    internal static let possibleTypes = ["SealedAttribute"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("algorithm", type: .nonNull(.scalar(String.self))),
+      GraphQLField("keyId", type: .nonNull(.scalar(String.self))),
+      GraphQLField("plainTextType", type: .nonNull(.scalar(String.self))),
+      GraphQLField("base64EncodedSealedData", type: .nonNull(.scalar(String.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(algorithm: String, keyId: String, plainTextType: String, base64EncodedSealedData: String) {
+      self.init(snapshot: ["__typename": "SealedAttribute", "algorithm": algorithm, "keyId": keyId, "plainTextType": plainTextType, "base64EncodedSealedData": base64EncodedSealedData])
+    }
+
+    internal var __typename: String {
+      get {
+        return snapshot["__typename"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    internal var algorithm: String {
+      get {
+        return snapshot["algorithm"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "algorithm")
+      }
+    }
+
+    internal var keyId: String {
+      get {
+        return snapshot["keyId"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "keyId")
+      }
+    }
+
+    internal var plainTextType: String {
+      get {
+        return snapshot["plainTextType"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "plainTextType")
+      }
+    }
+
+    internal var base64EncodedSealedData: String {
+      get {
+        return snapshot["base64EncodedSealedData"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "base64EncodedSealedData")
+      }
+    }
+
+    internal var fragments: Fragments {
+      get {
+        return Fragments(snapshot: snapshot)
+      }
+      set {
+        snapshot += newValue.snapshot
+      }
+    }
+
+    internal struct Fragments {
+      internal var snapshot: Snapshot
+
+      internal var sealedAttribute: SealedAttribute {
+        get {
+          return SealedAttribute(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
       }
     }
   }

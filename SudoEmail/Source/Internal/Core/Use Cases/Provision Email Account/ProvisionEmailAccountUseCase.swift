@@ -25,7 +25,7 @@ class ProvisionEmailAccountUseCase {
 
     // MARK: - Properties
 
-    /// Iidentifier of the Public Key to provision the email account with.
+    /// Identifier of the Public Key to provision the email account with.
     let keyId: String?
 
     /// Logs diagnostic and error information.

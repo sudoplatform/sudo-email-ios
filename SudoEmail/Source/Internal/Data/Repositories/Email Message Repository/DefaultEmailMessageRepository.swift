@@ -325,7 +325,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             throw SudoEmailError.decodingError
         }
         let encryptionMetadata = DraftEmailMessageEncryptionMetadata(
-            algorithm: DefaultEmailAccountRepository.Defaults.symmetricAlgorithm,
+            algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
             keyId: symmetricKeyId
         )
 

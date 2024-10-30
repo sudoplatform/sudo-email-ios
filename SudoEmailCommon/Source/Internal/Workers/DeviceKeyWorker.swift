@@ -150,6 +150,8 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         static let rsaBlockSize = 256
         /// algorithm used when creating/registering public keys.
         static let algorithm = "RSAEncryptionOAEPAESCBC"
+        /// algorithm used when encrypting/decrypting with symmetric keys.
+        static let symmetricAlgorithm = "AES/CBC/PKCS7Padding"
     }
 
     // MARK: - Properties

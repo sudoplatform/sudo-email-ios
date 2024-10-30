@@ -159,6 +159,15 @@ public protocol SudoEmailClient: AnyObject {
     func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult>
+    
+    /// Create  a custom EmailFolder
+    ///   - Parameters:
+    ///     - input: Input parameters used to create a custom EmailFolder.
+    ///   - Returns:
+    ///     - The newly created EmailFolder
+    func createCustomEmailFolder(
+        withInput input: CreateCustomEmailFolderInput
+    ) async throws -> EmailFolder
 
     /// Imports cryptographic keys from a key archive.
     ///

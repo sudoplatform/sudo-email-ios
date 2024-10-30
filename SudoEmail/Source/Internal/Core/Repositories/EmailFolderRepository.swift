@@ -17,4 +17,9 @@ protocol EmailFolderRepository: AnyObject {
         withInput input: ListEmailFoldersForEmailAddressIdInput
     ) async throws -> ListOutputEntity<EmailFolderEntity>
 
+    /// Create a custom email folder
+    /// - Parameters:
+    ///     - input: Parameters used to create a custom email folder
+    /// - Returns: The newly created folder entity
+    func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolderEntity
 }

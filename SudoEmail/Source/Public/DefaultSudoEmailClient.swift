@@ -123,7 +123,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailCryptoService = DefaultEmailCryptoService(deviceKeyWorker: serviceKeyWorker)
         // Setup Repositories
         let emailAccountRepository = DefaultEmailAccountRepository(appSyncClient: graphQLClient, deviceKeyWorker: serviceKeyWorker)
-        let emailFolderRepository = DefaultEmailFolderRepository(appSyncClient: graphQLClient)
+        let emailFolderRepository = DefaultEmailFolderRepository(appSyncClient: graphQLClient, deviceKeyWorker: serviceKeyWorker)
         let awsS3Worker = try DefaultAWSS3Worker(userClient: userClient, awsS3WorkerKey: Constants.awsS3WorkerKey)
         let emailMessageRepository = DefaultEmailMessageRepository(
             unsealer: emailMessageUnsealerService,
@@ -223,7 +223,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailAddress: emailAddressEntity,
             ownershipProofToken: input.ownershipProofToken
         )
-        let apiTransformer = EmailAddressAPITransformer()
+        let apiTransformer = EmailAddressAPITransformer( deviceKeyWorker: serviceKeyWorker)
         let emailAddress = apiTransformer.transform(emailAccount)
         return emailAddress
     }
@@ -232,7 +232,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let useCase = useCaseFactory.generateDeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
         let emailAccount = try await useCase.execute(emailAccountId: id)
 
-        let apiTransformer = EmailAddressAPITransformer()
+        let apiTransformer = EmailAddressAPITransformer( deviceKeyWorker: serviceKeyWorker)
         let emailAddress = apiTransformer.transform(emailAccount)
         return emailAddress
     }
@@ -326,6 +326,21 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         )
         return result
     }
+    
+    public func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolder {
+        let useCase = useCaseFactory.generateCreateCustomEmailFolderUseCase(
+            emailFolderRepository: emailFolderRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+        
+        let result = try await useCase.execute(withInput: CreateCustomEmailFolderInput(emailAddressId: input.emailAddressId, customFolderName: input.customFolderName))
+        
+        let apiTransformer = EmailFolderAPITransformer()
+
+        let customFolder = apiTransformer.transform(result)
+        
+        return customFolder
+    }
 
     public func importKeys(archiveData: Data) throws {
         if archiveData.isEmpty {
@@ -400,7 +415,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             let useCase = useCaseFactory.generateFetchListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
             emailAccounts = try await useCase.execute(limit: input.limit, nextToken: input.nextToken)
         }
-        let transformer = ListOutputAPITransformer()
+        let transformer = ListOutputAPITransformer(deviceKeyWorker: serviceKeyWorker)
         return transformer.transformEmailAccounts(emailAccounts)
     }
 
@@ -416,7 +431,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             limit: input.limit,
             nextToken: input.nextToken
         )
-        let transformer = ListOutputAPITransformer()
+        let transformer = ListOutputAPITransformer(deviceKeyWorker: serviceKeyWorker)
         return transformer.transformEmailAccounts(emailAccounts)
     }
 
@@ -479,7 +494,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailFolderRepository: emailFolderRepository
         )
         let emailFolders = try await useCase.execute(withInput: input)
-        let transformer = ListOutputAPITransformer()
+        let transformer = ListOutputAPITransformer(deviceKeyWorker: serviceKeyWorker)
         return transformer.transformEmailFolders(emailFolders)
     }
 

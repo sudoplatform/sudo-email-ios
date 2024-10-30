@@ -17,13 +17,6 @@ private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-
 /// Allows manipulation of data on the email service, via AppSync GraphQL.
 class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
 
-    // MARK: - Supplementary
-
-    enum Defaults {
-        /// algorithm used when encrypting/decrypting with symmetric keys.
-        static let symmetricAlgorithm = "AES/CBC/PKCS7Padding"
-    }
-
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
@@ -119,7 +112,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             )
             input = GraphQL.ProvisionEmailAddressInput(
                 alias: .init(
-                    algorithm: Defaults.symmetricAlgorithm,
+                    algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
                     base64EncodedSealedData: sealedAlias,
                     keyId: symmetricKeyId,
                     plainTextType: "string"
@@ -178,7 +171,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
                 withKeyId: symmetricKeyId
             )
             updateEmailAddressMetadataInput.values.alias = .init(
-                algorithm: Defaults.symmetricAlgorithm,
+                algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
                 base64EncodedSealedData: sealedAlias,
                 keyId: symmetricKeyId,
                 plainTextType: "string"

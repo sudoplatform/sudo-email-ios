@@ -17,11 +17,6 @@ private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-
 /// Allows manipulation of data on the email service via AppSync GraphQL
 class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
     
-    enum Defaults {
-        /// algorithm used when encrypting/decrypting with symmetric keys.
-        static let symmetricAlgorithm = "AES/CBC/PKCS7Padding"
-    }
-    
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
@@ -79,7 +74,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
             return GraphQL.BlockedEmailAddressInput(hashAlgorithm: GraphQL.BlockedAddressHashAlgorithm.sha256,
                 hashedBlockedValue: hashedBlockedAddresses[index],
                 sealedValue: GraphQL.SealedAttributeInput(
-                    algorithm: Defaults.symmetricAlgorithm,
+                    algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
                     base64EncodedSealedData: sealedBlockedValues[index],
                     keyId: symmetricKeyId!,
                     plainTextType: "string"

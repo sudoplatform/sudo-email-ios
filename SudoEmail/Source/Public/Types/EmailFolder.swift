@@ -43,6 +43,9 @@ public struct EmailFolder: Equatable {
 
     /// Email service timestamp to when the email folder was last updated.
     public let updatedAt: Date
+    
+    /// The custom name of the folder.
+    var customFolderName: String?
 
     /// Initialize an instance of `EmailFolder`.
     public init(
@@ -56,7 +59,8 @@ public struct EmailFolder: Equatable {
         ttl: Double?,
         version: Int,
         createdAt: Date,
-        updatedAt: Date
+        updatedAt: Date,
+        customFolderName: String?
     ) {
         self.id = id
         self.owner = owner
@@ -69,5 +73,6 @@ public struct EmailFolder: Equatable {
         self.version = version
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.customFolderName = customFolderName
     }
 }

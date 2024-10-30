@@ -13,7 +13,14 @@ struct EmailAddressAPITransformer {
     let ownerTransformer = OwnerAPITransformer()
 
     /// Utility for transforming folders to/from `EmailFolderEntity`
-    let folderTransformer = EmailFolderEntityTransformer()
+    let folderTransformer: EmailFolderEntityTransformer
+    
+    let deviceKeyWorker: DeviceKeyWorker!
+    
+    init(deviceKeyWorker: DeviceKeyWorker) {
+        self.deviceKeyWorker = deviceKeyWorker
+        self.folderTransformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+    }
 
     func transform(_ entity: EmailAccountEntity?) -> EmailAddress? {
         guard let entity = entity else {

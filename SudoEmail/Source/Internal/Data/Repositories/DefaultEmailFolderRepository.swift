@@ -21,6 +21,9 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
 
     /// App sync client for peforming operations against the email service.
     var appSyncClient: SudoApiClient
+    
+    /// Cryptographic key worker for this device
+    var deviceKeyWorker: DeviceKeyWorker
 
     /// Used to log diagnostic and error information.
     var logger: Logger
@@ -28,8 +31,9 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultEmailFolderRepository`.
-    init(appSyncClient: SudoApiClient, logger: Logger = .emailSDKLogger) {
+    init(appSyncClient: SudoApiClient, deviceKeyWorker: DeviceKeyWorker, logger: Logger = .emailSDKLogger) {
         self.appSyncClient = appSyncClient
+        self.deviceKeyWorker = deviceKeyWorker
         self.logger = logger
     }
 
@@ -62,12 +66,54 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             }
         }
         let emailFolders = fetchResult?.data?.listEmailFoldersForEmailAddressId.items ?? []
-        let transformer = EmailFolderEntityTransformer()
-        let emailFolderEntities = emailFolders.map(transformer.transform(_:))
+        let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        let emailFolderEntities = try emailFolders.map(transformer.transform(_:))
         return ListOutputEntity(
             items: emailFolderEntities,
             nextToken: fetchResult?.data?.listEmailFoldersForEmailAddressId.nextToken
         )
+    }
+    
+    func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolderEntity {
+        let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
+        (deviceKeyWorker.generateNewCurrentSymmetricKey())
+        let sealedCustomEmailFolderName = try deviceKeyWorker.sealString(input.customFolderName, withKeyId: symmetricKeyId)
+        
+        let mutationInput = GraphQL.CreateCustomEmailFolderInput(
+            customFolderName: .init(
+                algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
+                base64EncodedSealedData: sealedCustomEmailFolderName,
+                keyId: symmetricKeyId,
+                plainTextType: "string"
+            ),
+            emailAddressId: input.emailAddressId
+        )
+        let mutation = GraphQL.CreateCustomEmailFolderMutation(input: mutationInput)
+        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        guard let result = performResult?.data else {
+            if let error = performError {
+                switch error {
+                case ApiOperationError.graphQLError(let cause):
+                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                        throw SudoEmailError.internalError("Unexpected error: \(error)")
+                    }
+                    throw sudoEmailError
+                case ApiOperationError.notSignedIn:
+                    throw SudoEmailError.notSignedIn
+                default:
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
+            }
+            throw SudoEmailError.internalError("Unexpected error")
+        }
+        do {
+            let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            let entity = try transformer.transform(result.createCustomEmailFolder)
+            return entity
+        } catch {
+            logger.error("CreateCustomEmailFolder result transformation failed with \(error)")
+            throw error
+        }
     }
 
     func reset() throws {

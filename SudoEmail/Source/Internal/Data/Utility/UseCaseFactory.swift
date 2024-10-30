@@ -108,6 +108,16 @@ class UseCaseFactory {
             emailAccountRepository: emailAccountRepository
         )
     }
+    
+    func generateCreateCustomEmailFolderUseCase(
+        emailFolderRepository: EmailFolderRepository,
+        emailAccountRepository: EmailAccountRepository
+    ) -> CreateCustomEmailFolderUseCase {
+        return CreateCustomEmailFolderUseCase(
+            emailAccountRepository: emailAccountRepository,
+            emailFolderRepository: emailFolderRepository
+        )
+    }
 
     func generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: EmailAccountRepository) -> CheckEmailAddressAvailabilityUseCase {
         return CheckEmailAddressAvailabilityUseCase(emailAccountRepository: emailAccountRepository)

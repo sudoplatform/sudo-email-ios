@@ -10,13 +10,20 @@ import Foundation
 struct ListOutputAPITransformer {
 
     /// Utility to transform email account entities to email addresses.
-    let emailAddressTransformer = EmailAddressAPITransformer()
+    let emailAddressTransformer: EmailAddressAPITransformer
 
     /// Utility to transform email folder entities to email folders.
     let emailFolderTransformer = EmailFolderAPITransformer()
 
     /// Utility to transform email message entites to email messages.
     let emailMessageTransformer = EmailMessageAPITransformer()
+    
+    let deviceKeyWorker: DeviceKeyWorker!
+    
+    init(deviceKeyWorker: DeviceKeyWorker) {
+        self.deviceKeyWorker = deviceKeyWorker
+        self.emailAddressTransformer = EmailAddressAPITransformer(deviceKeyWorker: deviceKeyWorker)
+    }
 
     /// Transform a email account entity list output to API list output of email addresses.
     func transformEmailAccounts(_ entities: ListOutputEntity<EmailAccountEntity>) -> ListOutput<EmailAddress> {

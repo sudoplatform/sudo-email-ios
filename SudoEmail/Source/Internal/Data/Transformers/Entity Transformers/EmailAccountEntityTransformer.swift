@@ -16,12 +16,13 @@ struct EmailAccountEntityTransformer {
     let ownerTransformer = OwnerEntityTransformer()
 
     /// Utility for transforming folders to `EmailFolderEntity`
-    let folderTransformer = EmailFolderEntityTransformer()
+    let folderTransformer: EmailFolderEntityTransformer
 
     let deviceKeyWorker: DeviceKeyWorker!
 
     init(deviceKeyWorker: DeviceKeyWorker) {
         self.deviceKeyWorker = deviceKeyWorker
+        self.folderTransformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
     }
 
     /// Transform the success result of `ProvisionEmailAddressMutation` from the service to a `EmailAccountEntity`.
@@ -48,7 +49,7 @@ struct EmailAccountEntityTransformer {
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
-        let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
+        let folders = try graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = (graphQLEmail.lastReceivedAtEpochMs != nil)
@@ -142,7 +143,7 @@ struct EmailAccountEntityTransformer {
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
-        let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
+        let folders = try graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = (graphQLEmail.lastReceivedAtEpochMs != nil)
@@ -189,7 +190,7 @@ struct EmailAccountEntityTransformer {
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
-        let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
+        let folders = try graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = graphQLEmail.lastReceivedAtEpochMs.map { Date(millisecondsSince1970: $0) }
@@ -236,7 +237,7 @@ struct EmailAccountEntityTransformer {
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
-        let folders = graphQLEmail.folders.map(folderTransformer.transform(_:))
+        let folders = try graphQLEmail.folders.map(folderTransformer.transform(_:))
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = graphQLEmail.lastReceivedAtEpochMs.map { Date(millisecondsSince1970: $0) }
