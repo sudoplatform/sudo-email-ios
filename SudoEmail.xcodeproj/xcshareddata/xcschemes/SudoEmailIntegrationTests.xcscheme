@@ -65,6 +65,11 @@
             value = "${API_KEY}"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "ENABLE_EMAIL_INTEROP_TESTS"
+            value = "${ENABLE_EMAIL_INTEROP_TESTS}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction

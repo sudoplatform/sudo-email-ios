@@ -115,6 +115,41 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             throw error
         }
     }
+    
+    func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolderEntity? {
+        let mutationInput = GraphQL.DeleteCustomEmailFolderInput(
+            emailAddressId: input.emailAddressId, emailFolderId: input.emailFolderId
+        )
+        
+        let mutation = GraphQL.DeleteCustomEmailFolderMutation(input: mutationInput)
+        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        guard let result = performResult?.data else {
+            if let error = performError {
+                switch error {
+                case ApiOperationError.graphQLError(let cause):
+                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
+                        throw SudoEmailError.internalError("Unexpected error: \(error)")
+                    }
+                    throw sudoEmailError
+                case ApiOperationError.notSignedIn:
+                    throw SudoEmailError.notSignedIn
+                default:
+                    throw SudoEmailError.internalError("Unexpected error: \(error)")
+                }
+            }
+            return nil
+        }
+        do {
+            let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            guard let entity = result.deleteCustomEmailFolder else {
+                return nil
+            }
+            return try transformer.transform(entity)
+        } catch {
+            logger.error("DeleteCustomEmailFolder result transformation failed with \(error)")
+            throw error
+        }
+    }
 
     func reset() throws {
         try self.appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))

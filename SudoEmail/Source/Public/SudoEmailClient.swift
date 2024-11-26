@@ -160,7 +160,7 @@ public protocol SudoEmailClient: AnyObject {
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult>
     
-    /// Create  a custom EmailFolder
+    /// Create a custom EmailFolder
     ///   - Parameters:
     ///     - input: Input parameters used to create a custom EmailFolder.
     ///   - Returns:
@@ -168,6 +168,16 @@ public protocol SudoEmailClient: AnyObject {
     func createCustomEmailFolder(
         withInput input: CreateCustomEmailFolderInput
     ) async throws -> EmailFolder
+    
+    /// Delete a custom EmailFolder
+    /// Any messages in the folder will be moved to TRASH
+    ///   - Parameters:
+    ///     - input: Input parameters used to delete a custom EmailFolder.
+    ///   - Returns:
+    ///     - The deleted EmailFolder or nil if not found
+    func deleteCustomEmailFolder(
+        withInput input: DeleteCustomEmailFolderInput
+    ) async throws -> EmailFolder?
 
     /// Imports cryptographic keys from a key archive.
     ///

@@ -211,6 +211,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/DeleteCustomEmailFolderInput.swift",
+      "line": 19,
+      "symbol": "DeleteCustomEmailFolderInput.init(emailFolderId:emailAddressId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/DeleteDraftEmailMessagesInput.swift",
       "line": 19,
       "symbol": "DeleteDraftEmailMessagesInput.init(ids:emailAddressId:)",

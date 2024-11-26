@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 18.1.0 Docs
+          SudoEmail 18.2.0 Docs
         </a>
         
       </p>
@@ -173,6 +173,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/CreateDraftEmailMessageInput.html">CreateDraftEmailMessageInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DeleteCustomEmailFolderInput.html">DeleteCustomEmailFolderInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DeleteDraftEmailMessagesInput.html">DeleteDraftEmailMessagesInput</a>
@@ -997,7 +1000,7 @@ that failed to delete.</li>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Create  a custom EmailFolder</p>
+                        <p>Create a custom EmailFolder</p>
 
                       </div>
                       <div class="declaration">
@@ -1033,6 +1036,64 @@ that failed to delete.</li>
                         <h4>Return Value</h4>
                         <p><ul>
 <li>The newly created EmailFolder</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP012deleteCustomB6Folder9withInputAA0bF0VSgAA06DeleteebfH0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/deleteCustomEmailFolder(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP012deleteCustomB6Folder9withInputAA0bF0VSgAA06DeleteebfH0V_tYaKF">deleteCustomEmailFolder(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delete a custom EmailFolder
+Any messages in the folder will be moved to TRASH</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">deleteCustomEmailFolder</span><span class="p">(</span>
+    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/DeleteCustomEmailFolderInput.html">DeleteCustomEmailFolderInput</a></span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">EmailFolder</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>input</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Input parameters used to delete a custom EmailFolder.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>The deleted EmailFolder or nil if not found</li>
 </ul></p>
                       </div>
                     </section>
@@ -2696,7 +2757,7 @@ Failure - All addresses failed to be unblocked.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-10-30)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-11-26)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

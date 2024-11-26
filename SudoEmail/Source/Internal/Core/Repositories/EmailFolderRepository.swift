@@ -22,4 +22,10 @@ protocol EmailFolderRepository: AnyObject {
     ///     - input: Parameters used to create a custom email folder
     /// - Returns: The newly created folder entity
     func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolderEntity
+    
+    /// Delete a custom email folder
+    /// - Parameters:
+    ///     - input: Parameters used to delete a custom email folder
+    /// - Returns: The deleted folder, or nil if not found
+    func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolderEntity?
 }

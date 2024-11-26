@@ -341,6 +341,26 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         
         return customFolder
     }
+    
+    public func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolder? {
+        let useCase = useCaseFactory.generateDeleteCustomEmailFolderUseCase(
+            emailFolderRepository: emailFolderRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+        
+        let result = try await useCase.execute(
+            withInput: DeleteCustomEmailFolderInput(
+                emailFolderId: input.emailFolderId,
+                emailAddressId: input.emailAddressId
+            )
+        )
+        
+        let apiTransformer = EmailFolderAPITransformer()
+
+        let customFolder = apiTransformer.transform(result)
+        
+        return customFolder
+    }
 
     public func importKeys(archiveData: Data) throws {
         if archiveData.isEmpty {
