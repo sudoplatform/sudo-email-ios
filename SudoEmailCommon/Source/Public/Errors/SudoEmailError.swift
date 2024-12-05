@@ -36,6 +36,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case entitlementExceeded
     /// The email address supplied could not be found.
     case addressNotFound
+    /// The email folder supplied could not be found.
+    case emailFolderNotFound
     /// The email message supplied could not be found.
     case emailMessageNotFound
     /// The email address supplied is not authorized to perform the operation.
@@ -75,6 +77,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "Account is locked"
         case .addressNotFound:
             return "Email address could not be found"
+        case .emailFolderNotFound:
+            return "Email folder could not be found"
         case .bodyAttachmentNotFound:
             return "Body attachments could not be found"
         case .decodingError:
