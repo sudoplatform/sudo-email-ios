@@ -120,17 +120,13 @@ class UseCaseFactory {
     }
     
     func generateDeleteCustomEmailFolderUseCase(
-        emailFolderRepository: EmailFolderRepository
+        emailFolderRepository: EmailFolderRepository,
+        emailAccountRepository: EmailAccountRepository
     ) -> DeleteCustomEmailFolderUseCase {
         return DeleteCustomEmailFolderUseCase(
+            emailAccountRepository: emailAccountRepository,
             emailFolderRepository: emailFolderRepository
         )
-    }
-    
-    func generateUpdateCustomEmailFolderUseCase(
-        emailFolderRepository: EmailFolderRepository
-    ) -> UpdateCustomEmailFolderUseCase {
-        return UpdateCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
     }
 
     func generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: EmailAccountRepository) -> CheckEmailAddressAvailabilityUseCase {

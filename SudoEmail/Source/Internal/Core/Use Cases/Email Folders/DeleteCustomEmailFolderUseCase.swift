@@ -13,6 +13,9 @@ class DeleteCustomEmailFolderUseCase {
     
     // MARK: - Properties
     
+    /// Email account repository to ensure ownership of the email address
+    let emailAccountRepository: EmailAccountRepository
+    
     /// Email folder repository to delete the custom folder
     let emailFolderRepository: EmailFolderRepository
     
@@ -21,9 +24,11 @@ class DeleteCustomEmailFolderUseCase {
     
     /// Initialize an instance of the `DeleteCustomEmailFolderUseCase`
     init(
+        emailAccountRepository: EmailAccountRepository,
         emailFolderRepository: EmailFolderRepository,
         logger: Logger = .emailSDKLogger
     ) {
+        self.emailAccountRepository = emailAccountRepository
         self.emailFolderRepository = emailFolderRepository
         self.logger = logger
     }

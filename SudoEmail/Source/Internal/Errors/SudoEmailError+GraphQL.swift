@@ -22,8 +22,6 @@ internal extension SudoEmailError {
         switch errorType {
         case "sudoplatform.email.AddressNotFound":
             self = .addressNotFound
-        case "sudoplatform.email.EmailFolderNotFound":
-            self = .emailFolderNotFound
         case "sudoplatform.email.EmailMessageNotFound":
             self = .emailMessageNotFound
         case "sudoplatform.email.EntitlementExceededError":

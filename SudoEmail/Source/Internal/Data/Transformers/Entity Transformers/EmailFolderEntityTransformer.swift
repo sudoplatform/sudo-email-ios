@@ -315,43 +315,5 @@ struct EmailFolderEntityTransformer {
             customFolderName: unsealedCustomFolderName
         )
     }
-    
-    func transform(_ folder: GraphQL.UpdateCustomEmailFolderMutation.Data.UpdateCustomEmailFolder) throws -> EmailFolderEntity {
-        let ownerTransformer = OwnerEntityTransformer()
-
-        let id = folder.id
-        let owner = folder.owner
-        let owners = folder.owners.map(ownerTransformer.transform(_:))
-        let emailAddressId = folder.emailAddressId
-        let folderName = folder.folderName
-        let size = folder.size
-        let unseenCount = Int(folder.unseenCount)
-        let ttl = folder.ttl
-        let version = folder.version
-        let createdAt = Date(millisecondsSince1970: folder.createdAtEpochMs)
-        let updatedAt = Date(millisecondsSince1970: folder.updatedAtEpochMs)
-        var unsealedCustomFolderName: String?
-        if let customFolderName = folder.customFolderName {
-            unsealedCustomFolderName = try deviceKeyWorker.unsealString(
-                customFolderName.base64EncodedSealedData,
-                withKeyId: customFolderName.keyId,
-                algorithm: customFolderName.algorithm
-            )
-        }
-        return EmailFolderEntity(
-            id: id,
-            owner: owner,
-            owners: owners,
-            emailAddressId: emailAddressId,
-            folderName: folderName,
-            size: size,
-            unseenCount: unseenCount,
-            ttl: ttl,
-            version: version,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            customFolderName: unsealedCustomFolderName
-        )
-    }
 
 }

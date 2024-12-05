@@ -151,56 +151,6 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         }
     }
 
-    func updateCustomEmailFolder(withInput input: UpdateCustomEmailFolderInput) async throws -> EmailFolderEntity {
-        guard let symmetricKeyId = try deviceKeyWorker.getCurrentSymmetricKeyId() else {
-            throw SudoEmailError.keyNotFound
-        }
-
-        var updateCustomEmailAddressInput = GraphQL.UpdateCustomEmailFolderInput(
-            emailAddressId: input.emailAddressId,
-            emailFolderId: input.emailFolderId,
-            values: .init()
-        )
-        if let customFolderName = input.values.customFolderName {
-            let sealedCustomFolderName = try deviceKeyWorker.sealString(
-                customFolderName,
-                withKeyId: symmetricKeyId
-            )
-            updateCustomEmailAddressInput.values.customFolderName = .init(
-                algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
-                base64EncodedSealedData: sealedCustomFolderName,
-                keyId: symmetricKeyId,
-                plainTextType: "string"
-            )
-        }
-        let mutation = GraphQL.UpdateCustomEmailFolderMutation(input: updateCustomEmailAddressInput)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-        guard let result = performResult?.data else {
-            if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-            }
-            throw SudoEmailError.internalError("Unexpected error")
-        }
-        do {
-            let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            let entity = try transformer.transform(result.updateCustomEmailFolder)
-            return entity
-        } catch {
-            logger.error("UpdateCustomEmailFolder result transformation failed with \(error)")
-            throw error
-        }
-    }
-
     func reset() throws {
         try self.appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
     }

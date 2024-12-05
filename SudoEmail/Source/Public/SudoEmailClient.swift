@@ -178,15 +178,6 @@ public protocol SudoEmailClient: AnyObject {
     func deleteCustomEmailFolder(
         withInput input: DeleteCustomEmailFolderInput
     ) async throws -> EmailFolder?
-    
-    /// Update a custom EmailFolder
-    ///   - Parameters:
-    ///     - input: Input parameters used to update a custom EmailFolder.
-    ///   - Returns:
-    ///     - The updated EmailFolder
-    func updateCustomEmailFolder(
-        withInput input: UpdateCustomEmailFolderInput
-    ) async throws -> EmailFolder
 
     /// Imports cryptographic keys from a key archive.
     ///
