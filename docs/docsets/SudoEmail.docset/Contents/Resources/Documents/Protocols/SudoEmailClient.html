@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 18.2.0 Docs
+          SudoEmail 18.4.0 Docs
         </a>
         
       </p>
@@ -66,12 +66,6 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Global%20Variables.html#/s:9SudoEmail24deleteDraftsRequestLimitSivp">deleteDraftsRequestLimit</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Global%20Variables.html#/s:9SudoEmail18deleteRequestLimitSivp">deleteRequestLimit</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Global%20Variables.html#/s:9SudoEmail18updateRequestLimitSivp">updateRequestLimit</a>
               </li>
             </ul>
           </li>
@@ -284,6 +278,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UnsealedBlockedAddress.html#/s:9SudoEmail22UnsealedBlockedAddressV0cdE6StatusO">– UnsealedBlockedAddressStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/UpdateCustomEmailFolderInput.html">UpdateCustomEmailFolderInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/UpdateCustomEmailFolderValues.html">UpdateCustomEmailFolderValues</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UpdateDraftEmailMessageInput.html">UpdateDraftEmailMessageInput</a>
@@ -1094,6 +1094,63 @@ Any messages in the folder will be moved to TRASH</p>
                         <h4>Return Value</h4>
                         <p><ul>
 <li>The deleted EmailFolder or nil if not found</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP012updateCustomB6Folder9withInputAA0bF0VAA06UpdateebfH0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/updateCustomEmailFolder(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP012updateCustomB6Folder9withInputAA0bF0VAA06UpdateebfH0V_tYaKF">updateCustomEmailFolder(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Update a custom EmailFolder</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">updateCustomEmailFolder</span><span class="p">(</span>
+    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/UpdateCustomEmailFolderInput.html">UpdateCustomEmailFolderInput</a></span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">EmailFolder</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>input</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Input parameters used to update a custom EmailFolder.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>The updated EmailFolder</li>
 </ul></p>
                       </div>
                     </section>
@@ -2757,7 +2814,7 @@ Failure - All addresses failed to be unblocked.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-12-05)</p>
+      <p>&copy; 2024 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2024-12-06)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

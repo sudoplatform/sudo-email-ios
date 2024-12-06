@@ -259,7 +259,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deleteEmailMessages(withIds ids: [String]) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult> {
-        let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+        let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailConfigRepository: emailConfigurationDataRepository
+        )
         let deleteResult = try await useCase.execute(withIds: ids)
         let successItems = deleteResult.successItems != nil ? deleteResult.successItems?.map { DeleteEmailMessageSuccessResult(id: $0) } : []
         let result = BatchOperationResult(
@@ -271,7 +274,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deleteEmailMessage(withId id: String) async throws -> DeleteEmailMessageSuccessResult? {
-        let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+        let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailConfigRepository: emailConfigurationDataRepository
+        )
         let result = try await useCase.execute(withIds: [id])
         switch result.status {
         case .success:
@@ -284,7 +290,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func updateEmailMessages(
         withInput input: UpdateEmailMessagesInput
     ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
-        let useCase = useCaseFactory.generateUpdateEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+        let useCase = useCaseFactory.generateUpdateEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailConfigRepository: emailConfigurationDataRepository
+        )
         return try await useCase.execute(withInput: input)
     }
 
@@ -344,8 +353,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     
     public func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolder? {
         let useCase = useCaseFactory.generateDeleteCustomEmailFolderUseCase(
-            emailFolderRepository: emailFolderRepository,
-            emailAccountRepository: emailAccountRepository
+            emailFolderRepository: emailFolderRepository
         )
         
         let result = try await useCase.execute(
@@ -354,6 +362,18 @@ public class DefaultSudoEmailClient: SudoEmailClient {
                 emailAddressId: input.emailAddressId
             )
         )
+        
+        let apiTransformer = EmailFolderAPITransformer()
+
+        let customFolder = apiTransformer.transform(result)
+        
+        return customFolder
+    }
+    
+    public func updateCustomEmailFolder(withInput input: UpdateCustomEmailFolderInput) async throws -> EmailFolder {
+        let useCase = useCaseFactory.generateUpdateCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
+        
+        let result = try await useCase.execute(withInput: input)
         
         let apiTransformer = EmailFolderAPITransformer()
 

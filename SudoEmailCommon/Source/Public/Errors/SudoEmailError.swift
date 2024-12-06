@@ -36,6 +36,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case entitlementExceeded
     /// The email address supplied could not be found.
     case addressNotFound
+    /// The email folder supplied could not be found.
+    case emailFolderNotFound
     /// The email message supplied could not be found.
     case emailMessageNotFound
     /// The email address supplied is not authorized to perform the operation.
@@ -61,7 +63,7 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case insufficientEntitlements
     case internalError(_ cause: String?)
     case invalidArgument(_ msg: String?)
-    case limitExceeded
+    case limitExceeded(_ msg: String?)
     case noEntitlements
     case policyFailed
     case serviceError
@@ -75,6 +77,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "Account is locked"
         case .addressNotFound:
             return "Email address could not be found"
+        case .emailFolderNotFound:
+            return "Email folder could not be found"
         case .bodyAttachmentNotFound:
             return "Body attachments could not be found"
         case .decodingError:
@@ -111,8 +115,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return "Key attachments could not be found"
         case .keyNotFound:
             return "Key not found"
-        case .limitExceeded:
-            return "API limit exceeded"
+        case let .limitExceeded(msg):
+            return msg ?? "API limit exceeded"
         case .noEmailMessageRFC822Available:
             return "No RFC822 data is available for this message"
         case .noEntitlements:

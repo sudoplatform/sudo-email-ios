@@ -233,9 +233,6 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     }
 
     func deleteEmailMessages(withIds ids: [String]) async throws -> [String] {
-        if ids.count > deleteRequestLimit {
-            throw SudoEmailError.limitExceeded
-        }
         let input = GraphQL.DeleteEmailMessagesInput(messageIds: ids)
         let mutation = GraphQL.DeleteEmailMessagesMutation(input: input)
         do {

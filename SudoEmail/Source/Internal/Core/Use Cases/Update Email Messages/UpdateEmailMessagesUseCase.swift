@@ -11,12 +11,16 @@ class UpdateEmailMessagesUseCase {
 
     /// Email message repository to update the record of the email message.
     let emailMessageRepository: EmailMessageRepository
+    
+    /// Email configuration repository.
+    let emailConfigRepository: EmailConfigurationDataRepository
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `UpdateEmailMessagesUseCase`.
-    init (emailMessageRepository: EmailMessageRepository) {
+    init (emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
         self.emailMessageRepository = emailMessageRepository
+        self.emailConfigRepository = emailConfigRepository
     }
 
     // MARK: - Methods
@@ -28,6 +32,10 @@ class UpdateEmailMessagesUseCase {
     func execute(
         withInput input: UpdateEmailMessagesInput
     ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
+        let config = try await emailConfigRepository.getConfigurationData()
+        if (input.ids.count > config.updateEmailMessagesLimit) {
+            throw SudoEmailError.limitExceeded("Cannot update more than \(config.updateEmailMessagesLimit) messages.")
+        }
         return try await emailMessageRepository.updateEmailMessages(withInput: input)
     }
 }

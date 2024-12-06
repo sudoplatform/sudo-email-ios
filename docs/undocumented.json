@@ -337,6 +337,20 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateCustomEmailFolderInput.swift",
+      "line": 15,
+      "symbol": "UpdateCustomEmailFolderValues.init(customFolderName:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateCustomEmailFolderInput.swift",
+      "line": 32,
+      "symbol": "UpdateCustomEmailFolderInput.init(emailFolderId:emailAddressId:values:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmail/Source/Public/Types/Inputs/UpdateDraftEmailMessageInput.swift",
       "line": 24,
       "symbol": "UpdateDraftEmailMessageInput.init(id:rfc822Data:senderEmailAddressId:)",
@@ -422,119 +436,119 @@
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 54,
+      "line": 56,
       "symbol": "SudoEmailError.accountLocked",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 55,
+      "line": 57,
       "symbol": "SudoEmailError.decodingError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 56,
+      "line": 58,
       "symbol": "SudoEmailError.environmentError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 57,
+      "line": 59,
       "symbol": "SudoEmailError.fatalError(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 58,
+      "line": 60,
       "symbol": "SudoEmailError.identityInsufficient",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 59,
+      "line": 61,
       "symbol": "SudoEmailError.identityNotVerified",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 60,
+      "line": 62,
       "symbol": "SudoEmailError.invalidToken",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 61,
+      "line": 63,
       "symbol": "SudoEmailError.insufficientEntitlements",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 62,
+      "line": 64,
       "symbol": "SudoEmailError.internalError(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 63,
+      "line": 65,
       "symbol": "SudoEmailError.invalidArgument(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 64,
-      "symbol": "SudoEmailError.limitExceeded",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
-      "line": 65,
-      "symbol": "SudoEmailError.noEntitlements",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
       "line": 66,
-      "symbol": "SudoEmailError.policyFailed",
+      "symbol": "SudoEmailError.limitExceeded(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
       "line": 67,
-      "symbol": "SudoEmailError.serviceError",
+      "symbol": "SudoEmailError.noEntitlements",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
       "line": 68,
-      "symbol": "SudoEmailError.serviceQuotaExceeded",
+      "symbol": "SudoEmailError.policyFailed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
       "line": 69,
-      "symbol": "SudoEmailError.unknownTimezone",
+      "symbol": "SudoEmailError.serviceError",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
       "line": 70,
+      "symbol": "SudoEmailError.serviceQuotaExceeded",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
+      "line": 71,
+      "symbol": "SudoEmailError.unknownTimezone",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gitlab-runner/builds/8z4Lxv5zc/0/platform/email/sudo-email-ios/sudo-email-ios-gh/SudoEmailCommon/Source/Public/Errors/SudoEmailError.swift",
+      "line": 72,
       "symbol": "SudoEmailError.versionMismatch",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"

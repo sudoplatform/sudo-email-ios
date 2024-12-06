@@ -14,12 +14,6 @@ public typealias ClientCompletion<O> = (Swift.Result<O, Error>) -> Void
 /// Generic type associated with Subscription Status change completion/closures.
 public typealias SudoSubscriptionStatusChangeHandler = (PlatformSubscriptionStatus) -> Void
 
-/// Maximum number of items that can be deleted per request.
-public let deleteRequestLimit = 100
-
-/// Maximum number of items that can be updated per request.
-public let updateRequestLimit = 100
-
 /// Maximum number of draft messages that can be deleted per request.
 public let deleteDraftsRequestLimit = 10
 
@@ -178,6 +172,15 @@ public protocol SudoEmailClient: AnyObject {
     func deleteCustomEmailFolder(
         withInput input: DeleteCustomEmailFolderInput
     ) async throws -> EmailFolder?
+    
+    /// Update a custom EmailFolder
+    ///   - Parameters:
+    ///     - input: Input parameters used to update a custom EmailFolder.
+    ///   - Returns:
+    ///     - The updated EmailFolder
+    func updateCustomEmailFolder(
+        withInput input: UpdateCustomEmailFolderInput
+    ) async throws -> EmailFolder
 
     /// Imports cryptographic keys from a key archive.
     ///

@@ -11,12 +11,16 @@ class DeleteEmailMessagesUseCase {
 
     /// Email message repository to delete the record of the email message.
     let emailMessageRepository: EmailMessageRepository
+    
+    /// Email configuration repository.
+    let emailConfigRepository: EmailConfigurationDataRepository
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DeleteEmailMessagesUseCase`.
-    init (emailMessageRepository: EmailMessageRepository) {
+    init (emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
         self.emailMessageRepository = emailMessageRepository
+        self.emailConfigRepository = emailConfigRepository
     }
 
     // MARK: - Methods
@@ -36,6 +40,10 @@ class DeleteEmailMessagesUseCase {
     func execute(withIds ids: [String]) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
         if ids.isEmpty {
             throw SudoEmailError.invalidArgument("Attempt to delete empty list of email messages")
+        }
+        let config = try await emailConfigRepository.getConfigurationData()
+        if (ids.count > config.deleteEmailMessagesLimit) {
+            throw SudoEmailError.limitExceeded("Cannot delete more than \(config.deleteEmailMessagesLimit) messages.")
         }
 
         let failureIds = try await emailMessageRepository.deleteEmailMessages(withIds: ids)

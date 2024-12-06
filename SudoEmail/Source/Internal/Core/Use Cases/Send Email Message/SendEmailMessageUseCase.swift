@@ -66,25 +66,22 @@ class SendEmailMessageUseCase {
     /// - Returns: SendEmailMessageResult
     func execute(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
         let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (input.senderEmailAddressId, input.emailMessageHeader, input.body, input.attachments, input.inlineAttachments, input.replyingMessageId, input.forwardingMessageId)
+        
+        let config = try await emailConfigDataRepository.getConfigurationData()
 
         let domains = try await emailDomainRepository.fetchConfiguredDomains()
 
-        let allRecipients = emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc
+        let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address }
         
-        // Identify whether recipients are internal and external based on their domains
-        var internalRecipients: [String] = []
-        var externalRecipients: [String] = []
-        allRecipients.forEach { address in
-            if domains.contains(where: { domain in address.address.contains(domain.name) }) {
-                internalRecipients.append(address.address)
-            } else {
-                externalRecipients.append(address.address)
+        let allRecipientsInternal = !allRecipients.isEmpty && allRecipients.allSatisfy { recipient in
+            domains.contains { domain in
+                recipient.contains(domain.name)
             }
         }
         
-        if (!internalRecipients.isEmpty) {
+        if (allRecipientsInternal) {
             // Lookup public key information for each internal recipient and sender
-            var recipientsAndSender = internalRecipients
+            var recipientsAndSender = allRecipients
             recipientsAndSender.append(emailMessageHeader.from.address)
             let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(
                 emailAddresses: recipientsAndSender,
@@ -92,7 +89,7 @@ class SendEmailMessageUseCase {
             )
 
             // Check whether internal recipient addresses and associated public keys exist in the platform
-            let isInNetworkAddresses = internalRecipients.allSatisfy { recipient in
+            let isInNetworkAddresses = allRecipients.allSatisfy { recipient in
                 emailAddressesPublicInfo.contains { info in
                     info.emailAddress == recipient
                 }
@@ -100,43 +97,51 @@ class SendEmailMessageUseCase {
             if (!isInNetworkAddresses) {
                 throw SudoEmailError.inNetworkAddressNotFound("At least one email address does not exist in network")
             }
-            if (externalRecipients.isEmpty) {
-                // Process encrypted email message
-                let encryptedRfc822Data = try await processAndBuildEmailMessage(
-                    emailMessageHeader: emailMessageHeader,
-                    body: body,
-                    attachments: attachments,
-                    inlineAttachments: inlineAttachments,
-                    encryptionStatus: EncryptionStatus.ENCRYPTED,
-                    emailAddressesPublicInfo: emailAddressesPublicInfo,
-                    replyMessageId: replyingMessageId,
-                    forwardMessageId: forwardingMessageId
-                )
-                let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
-                return try await emailMessageRepository.sendEmailMessage(
-                    withRFC822Data: encryptedRfc822Data,
-                    emailAccountId: senderEmailAddressId,
-                    emailMessageHeader: emailMessageHeader,
-                    hasAttachments: hasAttachments,
-                    replyingMessageId: replyingMessageId,
-                    forwardingMessageId: forwardingMessageId
-                )
+            
+            if (allRecipients.count > config.encryptedEmailMessageRecipientsLimit) {
+                throw SudoEmailError.limitExceeded("Cannot send encrypted message to more than \(config.encryptedEmailMessageRecipientsLimit) recipients")
             }
+            // Process encrypted email message
+            let encryptedRfc822Data = try await processAndBuildEmailMessage(
+                emailMessageHeader: emailMessageHeader,
+                body: body,
+                attachments: attachments,
+                inlineAttachments: inlineAttachments,
+                encryptionStatus: EncryptionStatus.ENCRYPTED,
+                emailAddressesPublicInfo: emailAddressesPublicInfo,
+                replyMessageId: replyingMessageId,
+                forwardMessageId: forwardingMessageId,
+                emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
+            )
+            let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
+            return try await emailMessageRepository.sendEmailMessage(
+                withRFC822Data: encryptedRfc822Data,
+                emailAccountId: senderEmailAddressId,
+                emailMessageHeader: emailMessageHeader,
+                hasAttachments: hasAttachments,
+                replyingMessageId: replyingMessageId,
+                forwardingMessageId: forwardingMessageId
+            )
+        } else {
+            if (allRecipients.count > config.emailMessageRecipientsLimit) {
+                throw SudoEmailError.limitExceeded("Cannot send message to more than \(config.emailMessageRecipientsLimit) recipients")
+            }
+            // Process non-encrypted email message
+            let rfc822Data = try await processAndBuildEmailMessage(
+                emailMessageHeader: emailMessageHeader,
+                body: body,
+                attachments: attachments,
+                inlineAttachments: inlineAttachments,
+                encryptionStatus: EncryptionStatus.UNENCRYPTED,
+                replyMessageId: replyingMessageId,
+                forwardMessageId: forwardingMessageId,
+                emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
+            )
+            return try await emailMessageRepository.sendEmailMessage(
+                withRFC822Data: rfc822Data,
+                emailAccountId: senderEmailAddressId
+            )
         }
-        // Process non-encrypted email message
-        let rfc822Data = try await processAndBuildEmailMessage(
-            emailMessageHeader: emailMessageHeader,
-            body: body,
-            attachments: attachments,
-            inlineAttachments: inlineAttachments,
-            encryptionStatus: EncryptionStatus.UNENCRYPTED,
-            replyMessageId: replyingMessageId,
-            forwardMessageId: forwardingMessageId
-        )
-        return try await emailMessageRepository.sendEmailMessage(
-            withRFC822Data: rfc822Data,
-            emailAccountId: senderEmailAddressId
-        )
     }
 
     private func processAndBuildEmailMessage(
@@ -147,10 +152,9 @@ class SendEmailMessageUseCase {
         encryptionStatus: EncryptionStatus,
         emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = [],
         replyMessageId: String? = nil,
-        forwardMessageId: String? = nil
+        forwardMessageId: String? = nil,
+        emailMessageMaxOutboundMessageSize: Int
     ) async throws -> Data {
-        let config = try await emailConfigDataRepository.getConfigurationData()
-
         // Generate unencrypted RFC822 email data
         var rfc822Data = try buildMessageData(
             emailMessageHeader: emailMessageHeader,
@@ -183,9 +187,9 @@ class SendEmailMessageUseCase {
             )
         }
         
-        if (rfc822Data.count > config.emailMessageMaxOutboundMessageSize) {
-            logger.error("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
-            throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(config.emailMessageMaxOutboundMessageSize) bytes")
+        if (rfc822Data.count > emailMessageMaxOutboundMessageSize) {
+            logger.error("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
+            throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes")
         }
         
         return rfc822Data

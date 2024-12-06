@@ -71,12 +71,24 @@ class UseCaseFactory {
         )
     }
 
-    func generateDeleteEmailMessagesUseCase(emailMessageRepository: EmailMessageRepository) -> DeleteEmailMessagesUseCase {
-        return DeleteEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+    func generateDeleteEmailMessagesUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailConfigRepository: EmailConfigurationDataRepository
+    ) -> DeleteEmailMessagesUseCase {
+        return DeleteEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailConfigRepository: emailConfigRepository
+        )
     }
 
-    func generateUpdateEmailMessagesUseCase(emailMessageRepository: EmailMessageRepository) -> UpdateEmailMessagesUseCase {
-        return UpdateEmailMessagesUseCase(emailMessageRepository: emailMessageRepository)
+    func generateUpdateEmailMessagesUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailConfigRepository: EmailConfigurationDataRepository
+    ) -> UpdateEmailMessagesUseCase {
+        return UpdateEmailMessagesUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailConfigRepository: emailConfigRepository
+        )
     }
 
     func generateCreateDraftEmailMessageUseCase(
@@ -120,13 +132,17 @@ class UseCaseFactory {
     }
     
     func generateDeleteCustomEmailFolderUseCase(
-        emailFolderRepository: EmailFolderRepository,
-        emailAccountRepository: EmailAccountRepository
+        emailFolderRepository: EmailFolderRepository
     ) -> DeleteCustomEmailFolderUseCase {
         return DeleteCustomEmailFolderUseCase(
-            emailAccountRepository: emailAccountRepository,
             emailFolderRepository: emailFolderRepository
         )
+    }
+    
+    func generateUpdateCustomEmailFolderUseCase(
+        emailFolderRepository: EmailFolderRepository
+    ) -> UpdateCustomEmailFolderUseCase {
+        return UpdateCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
     }
 
     func generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: EmailAccountRepository) -> CheckEmailAddressAvailabilityUseCase {

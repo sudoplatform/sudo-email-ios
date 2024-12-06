@@ -22,6 +22,8 @@ internal extension SudoEmailError {
         switch errorType {
         case "sudoplatform.email.AddressNotFound":
             self = .addressNotFound
+        case "sudoplatform.email.EmailFolderNotFound":
+            self = .emailFolderNotFound
         case "sudoplatform.email.EmailMessageNotFound":
             self = .emailMessageNotFound
         case "sudoplatform.email.EntitlementExceededError":
@@ -54,7 +56,8 @@ internal extension SudoEmailError {
         case "sudoplatform.InvalidTokenError":
             self = .invalidToken
         case "sudoplatform.LimitExceededError":
-            self = .limitExceeded
+            let msg = error.message.isEmpty ? nil : error.message
+            self = .limitExceeded(msg)
         case "sudoplatform.NoEntitlementsError":
             self = .noEntitlements
         case "sudoplatform.PolicyFailed":
@@ -85,7 +88,7 @@ internal extension SudoEmailError {
         case ApiOperationError.notSignedIn:
             return .notSignedIn
         case ApiOperationError.limitExceeded:
-            return .limitExceeded
+            return .limitExceeded(nil)
         case ApiOperationError.insufficientEntitlements:
             return .insufficientEntitlements
         case ApiOperationError.invalidArgument:
