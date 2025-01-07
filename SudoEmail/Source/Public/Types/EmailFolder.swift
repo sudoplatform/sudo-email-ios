@@ -45,7 +45,7 @@ public struct EmailFolder: Equatable {
     public let updatedAt: Date
     
     /// The custom name of the folder.
-    var customFolderName: String?
+    public let customFolderName: String?
 
     /// Initialize an instance of `EmailFolder`.
     public init(
