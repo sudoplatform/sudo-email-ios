@@ -81,7 +81,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
         } catch {
             let msg = "\(Constants.ENCRYPTION_ERROR_MSG): \(error.localizedDescription)"
             logger.error(msg)
-            throw EmailCryptoServiceError.secureDataEncryptionError(msg)
+            throw error as? EmailCryptoServiceError ?? SudoEmailError.internalError(msg)
         }
     }
 
@@ -136,10 +136,10 @@ class DefaultEmailCryptoService: EmailCryptoService {
                 data: secureBodyData.encryptedData,
                 initVector: secureBodyData.initVectorKeyID
             )
-        } catch {
-            let msg = "\(Constants.DECRYPTION_ERROR_MSG): \(error.localizedDescription)"
+        }  catch {
+            let msg = "\(Constants.ENCRYPTION_ERROR_MSG): \(error.localizedDescription)"
             logger.error(msg)
-            throw EmailCryptoServiceError.secureDataDecryptionError(msg)
+            throw error as? EmailCryptoServiceError ?? SudoEmailError.internalError(msg)
         }
     }
 
