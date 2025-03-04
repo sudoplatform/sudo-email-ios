@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -8,9 +8,9 @@ import Foundation
 
 /// Utility class to transform data received from GraphQL to the Core/Entity level of the SDK.
 struct EmailFolderEntityTransformer {
-    
+
     let deviceKeyWorker: DeviceKeyWorker!
-    
+
     init(deviceKeyWorker: DeviceKeyWorker) {
         self.deviceKeyWorker = deviceKeyWorker
     }
@@ -239,7 +239,7 @@ struct EmailFolderEntityTransformer {
             customFolderName: unsealedCustomFolderName
         )
     }
-    
+
     func transform(_ folder: GraphQL.CreateCustomEmailFolderMutation.Data.CreateCustomEmailFolder) throws -> EmailFolderEntity {
         let ownerTransformer = OwnerEntityTransformer()
 
@@ -277,7 +277,7 @@ struct EmailFolderEntityTransformer {
             customFolderName: unsealedCustomFolderName
         )
     }
-    
+
     func transform(_ folder: GraphQL.DeleteCustomEmailFolderMutation.Data.DeleteCustomEmailFolder) throws -> EmailFolderEntity {
         let ownerTransformer = OwnerEntityTransformer()
 
@@ -315,7 +315,7 @@ struct EmailFolderEntityTransformer {
             customFolderName: unsealedCustomFolderName
         )
     }
-    
+
     func transform(_ folder: GraphQL.UpdateCustomEmailFolderMutation.Data.UpdateCustomEmailFolder) throws -> EmailFolderEntity {
         let ownerTransformer = OwnerEntityTransformer()
 
@@ -353,5 +353,4 @@ struct EmailFolderEntityTransformer {
             customFolderName: unsealedCustomFolderName
         )
     }
-
 }

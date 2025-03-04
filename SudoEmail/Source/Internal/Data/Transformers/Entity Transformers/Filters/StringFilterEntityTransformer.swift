@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -10,11 +10,11 @@ struct StringFilterEntityTransformer {
     /// Transform a input string filter to an entity.
     func transform(_ filter: StringFilter) -> StringFilterEntity {
         switch filter {
-        case let .equals(string):
+        case .equals(let string):
             return StringFilterEntity.equals(string)
-        case let .notEquals(string):
+        case .notEquals(let string):
             return StringFilterEntity.notEquals(string)
-        case let .beginsWith(string):
+        case .beginsWith(let string):
             return StringFilterEntity.beginsWith(string)
         }
     }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -22,7 +22,7 @@ struct EmailAccountEntityTransformer {
 
     init(deviceKeyWorker: DeviceKeyWorker) {
         self.deviceKeyWorker = deviceKeyWorker
-        self.folderTransformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        folderTransformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
     }
 
     /// Transform the success result of `ProvisionEmailAddressMutation` from the service to a `EmailAccountEntity`.
@@ -53,8 +53,8 @@ struct EmailAccountEntityTransformer {
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = (graphQLEmail.lastReceivedAtEpochMs != nil)
-                            ? Date(millisecondsSince1970: graphQLEmail.lastReceivedAtEpochMs!)
-                            : nil
+            ? Date(millisecondsSince1970: graphQLEmail.lastReceivedAtEpochMs!)
+            : nil
         return EmailAccountEntity(
             id: id,
             owner: owner,
@@ -100,8 +100,8 @@ struct EmailAccountEntityTransformer {
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = (graphQLEmail.lastReceivedAtEpochMs != nil)
-                            ? Date(millisecondsSince1970: graphQLEmail.lastReceivedAtEpochMs!)
-                            : nil
+            ? Date(millisecondsSince1970: graphQLEmail.lastReceivedAtEpochMs!)
+            : nil
         return EmailAccountEntity(
             id: id,
             owner: owner,
@@ -147,8 +147,8 @@ struct EmailAccountEntityTransformer {
         let createdAt = Date(millisecondsSince1970: graphQLEmail.createdAtEpochMs)
         let updatedAt = Date(millisecondsSince1970: graphQLEmail.updatedAtEpochMs)
         let lastReceivedAt = (graphQLEmail.lastReceivedAtEpochMs != nil)
-                            ? Date(millisecondsSince1970: graphQLEmail.lastReceivedAtEpochMs!)
-                            : nil
+            ? Date(millisecondsSince1970: graphQLEmail.lastReceivedAtEpochMs!)
+            : nil
         return EmailAccountEntity(
             id: id,
             owner: owner,
@@ -293,5 +293,4 @@ struct EmailAccountEntityTransformer {
             alias: emailAccountEntity.emailAddress.alias
         )
     }
-
 }

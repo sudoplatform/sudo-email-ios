@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,12 +17,12 @@ struct ListOutputAPITransformer {
 
     /// Utility to transform email message entites to email messages.
     let emailMessageTransformer = EmailMessageAPITransformer()
-    
+
     let deviceKeyWorker: DeviceKeyWorker!
-    
+
     init(deviceKeyWorker: DeviceKeyWorker) {
         self.deviceKeyWorker = deviceKeyWorker
-        self.emailAddressTransformer = EmailAddressAPITransformer(deviceKeyWorker: deviceKeyWorker)
+        emailAddressTransformer = EmailAddressAPITransformer(deviceKeyWorker: deviceKeyWorker)
     }
 
     /// Transform a email account entity list output to API list output of email addresses.

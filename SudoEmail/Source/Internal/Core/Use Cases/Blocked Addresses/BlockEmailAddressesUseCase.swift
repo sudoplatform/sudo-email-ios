@@ -1,28 +1,28 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 import Foundation
-import SudoUser
 import SudoLogging
+import SudoUser
 
 /// Core use case representation of the operation to block email addresses for a user
 class BlockEmailAddressesUseCase {
-    
+
     // MARK: - Properties
-    
+
     /// Domain repository to access blocked addresses
     let blockedAddressRepository: BlockedAddressRepository
-    
+
     /// Sudo User Client to look up user info
     let userClient: SudoUserClient
 
     let log: Logger
-    
+
     // MARK: - Lifecycle
-    
+
     /// Initialize an instance of `BlockEmailAddressesUseCase`
     init(
         blockedAddressRepository: BlockedAddressRepository,
@@ -33,21 +33,28 @@ class BlockEmailAddressesUseCase {
         self.userClient = userClient
         self.log = log
     }
-    
+
     // MARK: - Methods
-    
+
     /// Execute the use case.
     /// - Parameters:
     ///   - addresses: A list of addresses to block in format `local-part@domain`.
-    func execute(addresses: [String]) async throws -> BatchOperationResult<String, String> {
-        self.log.debug("execute: \(addresses)")
-        let owner = try self.userClient.getSubject()
-        
-        if (owner == nil) {
-            self.log.error("User not logged in")
+    ///   - action: The action to take on incoming messages from the blocked address(es).
+    ///   - emailAddressId: The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner's
+    /// addresses.
+    func execute(
+        addresses: [String],
+        action: UnsealedBlockedAddress.BlockedAddressAction,
+        emailAddressId: String?
+    ) async throws -> BatchOperationResult<String, String> {
+        log.debug("execute: \(addresses) \(action) \(emailAddressId ?? "")")
+        let owner = try userClient.getSubject()
+
+        if owner == nil {
+            log.error("User not logged in")
             throw SudoEmailError.notSignedIn
         }
-        
-        return try await self.blockedAddressRepository.blockAddresses(addresses: addresses, owner: owner!)
+
+        return try await blockedAddressRepository.blockAddresses(addresses: addresses, action: action, owner: owner!, emailAddressId: emailAddressId)
     }
 }

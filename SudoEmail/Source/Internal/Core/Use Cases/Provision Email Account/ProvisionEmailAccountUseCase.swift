@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -32,7 +32,7 @@ class ProvisionEmailAccountUseCase {
     let logger: Logger
 
     // MARK: - Lifecycle
-    
+
     /// Initialize an instance of the `ProvisionEmailAccount` use case.
     init(
         keyWorker: ServiceKeyWorker,
@@ -56,7 +56,7 @@ class ProvisionEmailAccountUseCase {
     func execute(emailAddress: EmailAddressEntity, ownershipProofToken: String) async throws -> EmailAccountEntity {
         var publicKey: KeyEntity
         do {
-            if let keyId = self.keyId {
+            if let keyId = keyId {
                 guard let pubKey = try keyWorker.getPublicKeyWithId(keyId: keyId) else {
                     throw SudoEmailError.keyNotFound
                 }
@@ -68,7 +68,7 @@ class ProvisionEmailAccountUseCase {
         } catch {
             throw SudoEmailError.internalError(error.localizedDescription)
         }
-        let emailAccount = try await self.emailAccountRepository.createWithEmailAddress(
+        let emailAccount = try await emailAccountRepository.createWithEmailAddress(
             emailAddress,
             publicKey: publicKey,
             ownershipProofToken: ownershipProofToken

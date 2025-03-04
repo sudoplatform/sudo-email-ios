@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -15,28 +15,27 @@ struct EmailAddressFilterInputGQLTransformer {
     /// Transform a `EmailAccountFilterEntity` filter rule into a GraphQL `EmailAddressFilterInput` filter rule.
     func transform(_ entity: EmailAccountFilterEntity) -> GraphQL.EmailAddressFilterInput {
         switch entity {
-        case let .id(id):
+        case .id(let id):
             let idFilterInput = stringTransformer.transformToIdFilterInput(id)
             return GraphQL.EmailAddressFilterInput(id: idFilterInput)
-        case let .identityId(id):
+        case .identityId(let id):
             let idFilterInput = stringTransformer.transformToIdFilterInput(id)
             return GraphQL.EmailAddressFilterInput(identityId: idFilterInput)
-        case let .keyRingId(id):
+        case .keyRingId(let id):
             let idFilterInput = stringTransformer.transformToIdFilterInput(id)
             return GraphQL.EmailAddressFilterInput(keyRingId: idFilterInput)
-        case let .emailAddress(stringFilterEntity):
+        case .emailAddress(let stringFilterEntity):
             let stringFilterInput = stringTransformer.transformToStringFilterInput(stringFilterEntity)
             return GraphQL.EmailAddressFilterInput(emailAddress: stringFilterInput)
-        case let .not(emailFilterEntity):
+        case .not(let emailFilterEntity):
             let emailFilterInput = transform(emailFilterEntity)
             return GraphQL.EmailAddressFilterInput(not: emailFilterInput)
-        case let .and(emailFilterEntities):
+        case .and(let emailFilterEntities):
             let emailFilterInputs = emailFilterEntities.map(transform(_:))
             return GraphQL.EmailAddressFilterInput(and: emailFilterInputs)
-        case let .or(emailFilterEntities):
+        case .or(let emailFilterEntities):
             let emailFilterInputs = emailFilterEntities.map(transform(_:))
             return GraphQL.EmailAddressFilterInput(or: emailFilterInputs)
         }
     }
-
 }

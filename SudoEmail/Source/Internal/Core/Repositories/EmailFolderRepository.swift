@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -22,13 +22,13 @@ protocol EmailFolderRepository: AnyObject {
     ///     - input: Parameters used to create a custom email folder
     /// - Returns: The newly created folder entity
     func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolderEntity
-    
+
     /// Delete a custom email folder
     /// - Parameters:
     ///     - input: Parameters used to delete a custom email folder
     /// - Returns: The deleted folder, or nil if not found
     func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolderEntity?
-    
+
     /// Update a custom email folder
     ///
     /// - Parameters:

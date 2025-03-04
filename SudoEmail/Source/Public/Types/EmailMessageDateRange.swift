@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -23,18 +23,18 @@ public struct EmailMessageDateRange: Equatable {
         self.sortDate = sortDate
         self.updatedAt = updatedAt
     }
-    
+
     // MARK: - Methods: Internal
 
     func toGraphQL() -> GraphQL.EmailMessageDateRangeInput? {
         return .init(
-            sortDateEpochMs: self.sortDate.map {
+            sortDateEpochMs: sortDate.map {
                 GraphQL.DateRangeInput(
                     endDateEpochMs: floor($0.endDate.millisecondsSince1970),
                     startDateEpochMs: floor($0.startDate.millisecondsSince1970)
                 )
             },
-            updatedAtEpochMs: self.updatedAt.map {
+            updatedAtEpochMs: updatedAt.map {
                 GraphQL.DateRangeInput(
                     endDateEpochMs: floor($0.endDate.millisecondsSince1970),
                     startDateEpochMs: floor($0.startDate.millisecondsSince1970)

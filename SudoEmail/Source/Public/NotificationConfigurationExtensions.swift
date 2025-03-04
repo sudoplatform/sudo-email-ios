@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -44,17 +44,16 @@ public extension NotificationConfiguration {
     ///
     func initEmailNotifications() -> NotificationConfiguration {
         var newConfigs = configs.filter { $0.name != Constants.serviceName }
-        
+
         let emServiceConfigs = configs
             .filter { $0.name == Constants.serviceName }
             // Filter out any current or historic default rules.
             // We'll add current default rules back in
             .filter { $0.rules != defaultFirstRuleString && $0.rules != defaultLastRuleString }
-            
+
         newConfigs.append(defaultFirstRule)
         newConfigs.append(contentsOf: emServiceConfigs)
         newConfigs.append(defaultLastRule)
-
 
         return NotificationConfiguration(configs: newConfigs)
     }
@@ -98,10 +97,10 @@ public extension NotificationConfiguration {
 
         // If we're disabling notifications for this email address then
         // add an explicit rule for that
-        if (!enabled) {
+        if !enabled {
             let newJsonRule = """
-                {"==":[{"var":"meta.emailAddressId"},"\(emailAddressId)"]}
-                """
+            {"==":[{"var":"meta.emailAddressId"},"\(emailAddressId)"]}
+            """
             newRules.append(
                 NotificationFilterItem(
                     name: Constants.serviceName,
@@ -156,10 +155,10 @@ public extension NotificationConfiguration {
 
         // If we're disabling notifications for this Sudo then
         // add an explicit rule for that
-        if (!enabled) {
+        if !enabled {
             let newJsonRule = """
-                {"==":[{"var":"meta.sudoId"},"\(sudoId)"]}
-                """
+            {"==":[{"var":"meta.sudoId"},"\(sudoId)"]}
+            """
             newRules.append(
                 NotificationFilterItem(
                     name: Constants.serviceName,
@@ -186,8 +185,8 @@ public extension NotificationConfiguration {
     func areNotificationsEnabled(forEmailAddressWithId emailAddressId: String) -> Bool {
         let disablingRule = configs.first {
             $0.name == Constants.serviceName &&
-            $0.status == NotificationConfiguration.disabledStatus &&
-            isRuleMatchingEmailAddressId(rule: $0.rules, emailAddressId: emailAddressId)
+                $0.status == NotificationConfiguration.disabledStatus &&
+                isRuleMatchingEmailAddressId(rule: $0.rules, emailAddressId: emailAddressId)
         }
 
         return disablingRule == nil
@@ -204,8 +203,8 @@ public extension NotificationConfiguration {
     func areNotificationsEnabled(forSudoWithId sudoId: String) -> Bool {
         let disablingRule = configs.first {
             $0.name == Constants.serviceName &&
-            $0.status == NotificationConfiguration.disabledStatus &&
-            isRuleMatchingSudoId(rule: $0.rules, sudoId: sudoId)
+                $0.status == NotificationConfiguration.disabledStatus &&
+                isRuleMatchingSudoId(rule: $0.rules, sudoId: sudoId)
         }
 
         return disablingRule == nil
@@ -239,25 +238,25 @@ public extension NotificationConfiguration {
         let rhs = array[1]
 
         // "var meta.emailAddressId == emailAddressId
-        if (lhs is [String:Any] && rhs is String) {
-            guard let lhs = lhs as? [String:Any],
+        if lhs is [String: Any], rhs is String {
+            guard let lhs = lhs as? [String: Any],
                   let rhs = rhs as? String,
                   let v = lhs["var"] as? String else {
                 return false
             }
-            if (v == "meta.\(metaName)" && rhs == metaValue) {
+            if v == "meta.\(metaName)", rhs == metaValue {
                 return true
             }
         }
 
         // "emailAddressId == var meta.emailAddressId
-        else if (rhs is [String:Any] && lhs is String) {
+        else if rhs is [String: Any], lhs is String {
             guard let lhs = lhs as? String,
-                  let rhs = rhs as? [String:Any],
+                  let rhs = rhs as? [String: Any],
                   let v = rhs["var"] as? String else {
                 return false
             }
-            if (v == "meta.\(metaName)" && lhs == metaValue) {
+            if v == "meta.\(metaName)", lhs == metaValue {
                 return true
             }
         }

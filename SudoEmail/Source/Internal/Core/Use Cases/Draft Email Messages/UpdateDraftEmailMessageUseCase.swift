@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,17 +26,16 @@ class UpdateDraftEmailMessageUseCase {
     func execute(
         withInput input: UpdateDraftEmailMessageInput
     ) async throws -> DraftEmailMessageMetadata {
-        guard (
-            try await emailAccountRepository.fetchWithEmailAddressId(input.senderEmailAddressId)
+        guard try (
+            await emailAccountRepository.fetchWithEmailAddressId(input.senderEmailAddressId)
         ) != nil else {
             throw SudoEmailError.addressNotFound
         }
-        if !(try await emailMessageRepository.draftExists(
-                id: input.id,
-                emailAddressId: input.senderEmailAddressId
-            )
-        ) {
-                throw SudoEmailError.emailMessageNotFound
+        if try !(await emailMessageRepository.draftExists(
+            id: input.id,
+            emailAddressId: input.senderEmailAddressId
+        )) {
+            throw SudoEmailError.emailMessageNotFound
         }
         let metadata = try await emailMessageRepository.saveDraft(
             rfc822Data: input.rfc822Data,

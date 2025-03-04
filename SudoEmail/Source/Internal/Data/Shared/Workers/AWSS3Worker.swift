@@ -1,13 +1,13 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
-import SudoUser
-import SudoLogging
 import AWSS3
+import Foundation
+import SudoLogging
+import SudoUser
 
 /// List of possible errors thrown by `AWSS3Worker` implementation.
 ///
@@ -30,7 +30,7 @@ struct S3ObjectEntity: Equatable {
 
     /// The metadata associated with the
     public var metadata: [String: String]?
-    
+
     // The content encoding value for the data
     public var contentEncoding: String?
 }
@@ -98,22 +98,22 @@ protocol AWSS3Worker: AnyObject {
 
 /// Default S3 client implementation.
 public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
-    
+
     // MARK: - Supplementary
-    
+
     enum RequestHeaderNames {
         static let algorithm = "x-amz-meta-algorithm"
         static let keyId = "x-amz-meta-key-id"
     }
-    
+
     // MARK: - Properties
-    
+
     /// unique key for the AWSS3TransferUtility
     private let awsS3WorkerKey: String
-    
+
     /// AWSCognitoCredentialsProvider instance for use with AWS3TransferUtility
     private let awsCredentialsProvider: AWSCognitoCredentialsProvider
-    
+
     private let awsServiceConfiguration: AWSServiceConfiguration
 
     /// AWS S3 transfer utility instance
@@ -137,7 +137,7 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
             throw SudoEmailError.invalidConfig
         }
         let idProviderManager = IdentityProviderManager(client: userClient, region: s3Region, poolId: identityConfig.poolId)
-        self.awsCredentialsProvider = AWSCognitoCredentialsProvider(
+        awsCredentialsProvider = AWSCognitoCredentialsProvider(
             regionType: s3RegionType,
             identityPoolId: identityConfig.identityPoolId,
             identityProviderManager: idProviderManager
@@ -148,44 +148,44 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
         ) else {
             throw SudoEmailError.invalidConfig
         }
-        self.awsServiceConfiguration = configuration
-        try self.getRegisteredClients()
+        awsServiceConfiguration = configuration
+        try getRegisteredClients()
     }
 
     @discardableResult
     private func getRegisteredClients() throws -> (awsS3Worker: AWSS3TransferUtility, s3Client: AWSS3) {
-        if let awsS3Worker = self._awsS3Worker,
-           let s3Client = self._s3Client {
+        if let awsS3Worker = _awsS3Worker,
+           let s3Client = _s3Client {
             return (awsS3Worker, s3Client)
         } else {
             // Register S3 key
-            AWSS3TransferUtility.register(with: self.awsServiceConfiguration, forKey: self.awsS3WorkerKey)
-            AWSS3.register(with: self.awsServiceConfiguration, forKey: self.awsS3WorkerKey)
+            AWSS3TransferUtility.register(with: awsServiceConfiguration, forKey: awsS3WorkerKey)
+            AWSS3.register(with: awsServiceConfiguration, forKey: awsS3WorkerKey)
 
             // Initialize clients
-            guard let awsS3Worker = AWSS3TransferUtility.s3TransferUtility(forKey: self.awsS3WorkerKey) else {
-                throw AWSS3WorkerError.fatalError(description: "Cannot find S3 client registered with key: \(self.awsS3WorkerKey).")
+            guard let awsS3Worker = AWSS3TransferUtility.s3TransferUtility(forKey: awsS3WorkerKey) else {
+                throw AWSS3WorkerError.fatalError(description: "Cannot find S3 client registered with key: \(awsS3WorkerKey).")
             }
             awsS3Worker.shouldRemoveCompletedTasks = true
-            let s3Client = AWSS3.s3(forKey: self.awsS3WorkerKey)
+            let s3Client = AWSS3.s3(forKey: awsS3WorkerKey)
 
             // Cache clients for reuse
-            self._awsS3Worker = awsS3Worker
-            self._s3Client = s3Client
+            _awsS3Worker = awsS3Worker
+            _s3Client = s3Client
 
             return (awsS3Worker, s3Client)
         }
     }
 
     func reset() {
-        AWSS3TransferUtility.remove(forKey: self.awsS3WorkerKey)
-        self._awsS3Worker = nil
+        AWSS3TransferUtility.remove(forKey: awsS3WorkerKey)
+        _awsS3Worker = nil
 
-        AWSS3.remove(forKey: self.awsS3WorkerKey)
-        self._s3Client = nil
+        AWSS3.remove(forKey: awsS3WorkerKey)
+        _s3Client = nil
 
-        self.awsCredentialsProvider.clearKeychain()
-        self.awsCredentialsProvider.invalidateCachedTemporaryCredentials()
+        awsCredentialsProvider.clearKeychain()
+        awsCredentialsProvider.invalidateCachedTemporaryCredentials()
     }
 
     func upload(
@@ -209,7 +209,7 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                 key: key,
                 contentType: contentType,
                 expression: updateExpression,
-                completionHandler: { task, error -> Void in
+                completionHandler: { _, error in
                     if let error = error {
                         continuation.resume(throwing: AWSS3WorkerError.serviceError(cause: error))
                     } else {
@@ -230,12 +230,12 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
     func download(bucket: String, key: String) async throws -> Data {
         let awsS3Worker = try getRegisteredClients().awsS3Worker
         let downloadExpression = AWSS3TransferUtilityDownloadExpression()
-        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Data, Error>) in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
             awsS3Worker.downloadData(
                 fromBucket: bucket,
                 key: key,
                 expression: downloadExpression,
-                completionHandler: { (_, _, data, error) in
+                completionHandler: { _, _, data, error in
                     if let error = error {
                         continuation.resume(throwing: AWSS3WorkerError.serviceError(cause: error))
                         return
@@ -247,13 +247,13 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                     continuation.resume(returning: data)
                 }
             )
-            .continueWith { (task) -> AnyObject? in
+            .continueWith { task -> AnyObject? in
                 if let error = task.error {
                     continuation.resume(throwing: error)
                 }
                 return nil
             }
-        })
+        }
     }
 
     func getObject(bucket: String, key: String) async throws -> S3ObjectEntity {
@@ -265,8 +265,8 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
         request.bucket = bucket
         request.key = key
 
-        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<S3ObjectEntity, Error>) in
-            s3Client.getObject(request).continueWith { (task) -> AnyObject? in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<S3ObjectEntity, Error>) in
+            s3Client.getObject(request).continueWith { task -> AnyObject? in
                 if let error = task.error {
                     if error._userInfo?["Code"] == "NoSuchKey" {
                         continuation.resume(throwing: AWSS3WorkerError.noSuchKey(description: "S3 key does not exist"))
@@ -297,7 +297,7 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                 continuation.resume(returning: s3ObjectEntity)
                 return nil
             }
-        })
+        }
     }
 
     func objectExists(bucket: String, key: String) async throws -> Bool {
@@ -309,8 +309,8 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
         request.prefix = key
         request.maxKeys = 1
 
-        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Bool, Error>) in
-            s3Client.listObjectsV2(request).continueWith { (task) -> AnyObject? in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+            s3Client.listObjectsV2(request).continueWith { task -> AnyObject? in
                 if let error = task.error {
                     if error._userInfo?["Code"] == "NoSuchKey" {
                         continuation.resume(returning: false)
@@ -328,7 +328,7 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                     return nil
                 }
             }
-        })
+        }
     }
 
     func list(bucket: String, key: String) async throws -> [AWSS3Object] {
@@ -339,8 +339,8 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
         request.bucket = bucket
         request.prefix = key
 
-        return try await withCheckedThrowingContinuation({(continuation: CheckedContinuation<[AWSS3Object], Error>) in
-            s3Client.listObjectsV2(request).continueWith { (task) -> AnyObject? in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<[AWSS3Object], Error>) in
+            s3Client.listObjectsV2(request).continueWith { task -> AnyObject? in
                 if let error = task.error {
                     if error._userInfo?["Code"] == "NoSuchKey" {
                         continuation.resume(returning: [])
@@ -357,7 +357,7 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                 continuation.resume(returning: listS3ObjectResult)
                 return nil
             }
-        })
+        }
     }
 
     func deleteObject(bucket: String, key: String) async throws -> String {
@@ -368,8 +368,8 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
         request.bucket = bucket
         request.key = key
 
-        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<String, Error>) in
-            s3Client.deleteObject(request).continueWith { (task) -> AnyObject? in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
+            s3Client.deleteObject(request).continueWith { task -> AnyObject? in
                 if let error = task.error {
                     if error._userInfo?["Code"] == "NoSuchKey" {
                         continuation.resume(returning: key)
@@ -382,6 +382,6 @@ public class DefaultAWSS3Worker: AWSS3Worker & Resetable {
                 continuation.resume(returning: key)
                 return nil
             }
-        })
+        }
     }
 }

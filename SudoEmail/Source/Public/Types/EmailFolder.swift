@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -43,7 +43,7 @@ public struct EmailFolder: Equatable {
 
     /// Email service timestamp to when the email folder was last updated.
     public let updatedAt: Date
-    
+
     /// The custom name of the folder.
     public let customFolderName: String?
 

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -7,7 +7,7 @@
 class ListDraftEmailMessagesForEmailAddressIdUseCase {
 
     // MARK: - Properties
-    
+
     let emailMessageRepository: EmailMessageRepository
 
     // MARK: - Lifecycle
@@ -20,15 +20,18 @@ class ListDraftEmailMessagesForEmailAddressIdUseCase {
 
     func execute(emailAddressId: String) async throws -> [DraftEmailMessage] {
         do {
-            let metadata = try await self.emailMessageRepository.listDraftsMetadataForEmailAddressId(emailAddressId: emailAddressId)
-            
+            let metadata = try await emailMessageRepository.listDraftsMetadataForEmailAddressId(emailAddressId: emailAddressId)
+
             let result = try await withThrowingTaskGroup(of: DraftEmailMessage?.self) { group -> [DraftEmailMessage] in
                 var draftMessages: [DraftEmailMessage] = []
-                
+
                 for m in metadata {
                     group.addTask {
                         do {
-                            let draft = try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(id: m.id, emailAddressId: emailAddressId))
+                            let draft = try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
+                                id: m.id,
+                                emailAddressId: emailAddressId
+                            ))
                             return draft
                         } catch {
                             throw error

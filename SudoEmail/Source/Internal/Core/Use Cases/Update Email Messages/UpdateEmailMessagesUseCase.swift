@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -11,14 +11,14 @@ class UpdateEmailMessagesUseCase {
 
     /// Email message repository to update the record of the email message.
     let emailMessageRepository: EmailMessageRepository
-    
+
     /// Email configuration repository.
     let emailConfigRepository: EmailConfigurationDataRepository
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `UpdateEmailMessagesUseCase`.
-    init (emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
+    init(emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
         self.emailMessageRepository = emailMessageRepository
         self.emailConfigRepository = emailConfigRepository
     }
@@ -33,7 +33,7 @@ class UpdateEmailMessagesUseCase {
         withInput input: UpdateEmailMessagesInput
     ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
         let config = try await emailConfigRepository.getConfigurationData()
-        if (input.ids.count > config.updateEmailMessagesLimit) {
+        if input.ids.count > config.updateEmailMessagesLimit {
             throw SudoEmailError.limitExceeded("Cannot update more than \(config.updateEmailMessagesLimit) messages.")
         }
         return try await emailMessageRepository.updateEmailMessages(withInput: input)

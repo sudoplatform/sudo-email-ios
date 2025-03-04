@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,7 +17,7 @@ struct SealedEmailMessageEntityTransformer {
 
     /// Utility for transforming owners to `OwnerTransformer`.
     let ownerTransformer = OwnerEntityTransformer()
-    
+
     /// Utility for transforming encryptionStatus
     let encryptionStatusTransformer = EmailMessageEncryptionStatusEntityTransformer()
 
@@ -72,7 +72,7 @@ struct SealedEmailMessageEntityTransformer {
             rfc822Header: rfc822Header
         )
     }
-    
+
     /// Transform the success result of `ListEmailMessagesQuery` from the service to a `SealedEmailMessageEntity`.
     func transform(
         _ graphQLMessage: GraphQL.ListEmailMessagesQuery.Data.ListEmailMessage.Item
@@ -480,7 +480,7 @@ struct SealedEmailMessageEntityTransformer {
             rfc822Header: rfc822Header
         )
     }
-    
+
     /// Transform the success result of `OnEmailMessageUpdatedSubscription` from the service to a `SealedEmailMessageEntity`.
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageUpdatedSubscription.Data.OnEmailMessageUpdated
@@ -584,5 +584,4 @@ struct SealedEmailMessageEntityTransformer {
             rfc822Header: rfc822Header
         )
     }
-
 }

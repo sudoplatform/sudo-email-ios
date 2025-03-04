@@ -486,6 +486,11 @@
 		9F372BB12B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */; };
 		9F372BB32B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */; };
 		9F3B47F62CF973F000DBFE59 /* UpdateCustomEmailFolderIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3B47F52CF973F000DBFE59 /* UpdateCustomEmailFolderIntegrationTests.swift */; };
+		9F42BE772D6E8DE300505C43 /* Data+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE762D6E8DE300505C43 /* Data+Utility.swift */; };
+		9F42BE792D6FC1D400505C43 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE782D6FC1D400505C43 /* String+Extensions.swift */; };
+		9F42BE7B2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE7A2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift */; };
+		9F42BE7D2D6FF27A00505C43 /* MockUnblockEmailAddressesByHashedValueUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE7C2D6FF27A00505C43 /* MockUnblockEmailAddressesByHashedValueUseCase.swift */; };
+		9F42BE7F2D6FF4FD00505C43 /* UnblockEmailAddressesByHashedValueUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE7E2D6FF4FD00505C43 /* UnblockEmailAddressesByHashedValueUseCaseTests.swift */; };
 		9F66AD5B2C252351000CF5A2 /* EmailRfc822HeaderCodecTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F66AD5A2C252351000CF5A2 /* EmailRfc822HeaderCodecTests.swift */; };
 		9F6A9DAF2CCB2B3D0026CAE1 /* CreateCustomEmailFolderInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6A9DAE2CCB2B3D0026CAE1 /* CreateCustomEmailFolderInput.swift */; };
 		9F6A9DB12CCB2FA60026CAE1 /* CreateCustomEmailFolderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6A9DB02CCB2FA60026CAE1 /* CreateCustomEmailFolderUseCase.swift */; };
@@ -529,6 +534,8 @@
 		9FE8EB9B2CF4140A00ABE2DA /* DeleteCustomEmailFolderUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8EB9A2CF4140A00ABE2DA /* DeleteCustomEmailFolderUseCaseTests.swift */; };
 		9FE8EB9D2CF418AF00ABE2DA /* DeleteCustomEmailFolderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8EB9C2CF418AF00ABE2DA /* DeleteCustomEmailFolderTests.swift */; };
 		9FE8EB9F2CF42E8E00ABE2DA /* DeleteCustomEmailFolderIntergrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8EB9E2CF42E8E00ABE2DA /* DeleteCustomEmailFolderIntergrationTests.swift */; };
+		9FED90452D65868500A08BEF /* BlockedEmailAddressActionTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FED90442D65868500A08BEF /* BlockedEmailAddressActionTransformer.swift */; };
+		9FED90472D6589EA00A08BEF /* BlockedAddressActionGQLTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FED90462D6589EA00A08BEF /* BlockedAddressActionGQLTransformer.swift */; };
 		9FF181FB2BB4D716000EF217 /* SudoEmail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84783B2A231C916200CCBC27 /* SudoEmail.framework */; };
 		9FF181FC2BB4D716000EF217 /* SudoEmail.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 84783B2A231C916200CCBC27 /* SudoEmail.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9FFABE272C06CB2D006A3932 /* MailServiceInteroperabilityIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFABE262C06CB2D006A3932 /* MailServiceInteroperabilityIntegrationTests.swift */; };
@@ -1095,6 +1102,11 @@
 		9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesUseCaseTests.swift; sourceTree = "<group>"; };
 		9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesTests.swift; sourceTree = "<group>"; };
 		9F3B47F52CF973F000DBFE59 /* UpdateCustomEmailFolderIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCustomEmailFolderIntegrationTests.swift; sourceTree = "<group>"; };
+		9F42BE762D6E8DE300505C43 /* Data+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Utility.swift"; sourceTree = "<group>"; };
+		9F42BE782D6FC1D400505C43 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		9F42BE7A2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesByHashedValueTests.swift; sourceTree = "<group>"; };
+		9F42BE7C2D6FF27A00505C43 /* MockUnblockEmailAddressesByHashedValueUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUnblockEmailAddressesByHashedValueUseCase.swift; sourceTree = "<group>"; };
+		9F42BE7E2D6FF4FD00505C43 /* UnblockEmailAddressesByHashedValueUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesByHashedValueUseCaseTests.swift; sourceTree = "<group>"; };
 		9F66AD5A2C252351000CF5A2 /* EmailRfc822HeaderCodecTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailRfc822HeaderCodecTests.swift; sourceTree = "<group>"; };
 		9F6A9DAE2CCB2B3D0026CAE1 /* CreateCustomEmailFolderInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCustomEmailFolderInput.swift; sourceTree = "<group>"; };
 		9F6A9DB02CCB2FA60026CAE1 /* CreateCustomEmailFolderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCustomEmailFolderUseCase.swift; sourceTree = "<group>"; };
@@ -1138,6 +1150,8 @@
 		9FE8EB9A2CF4140A00ABE2DA /* DeleteCustomEmailFolderUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCustomEmailFolderUseCaseTests.swift; sourceTree = "<group>"; };
 		9FE8EB9C2CF418AF00ABE2DA /* DeleteCustomEmailFolderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCustomEmailFolderTests.swift; sourceTree = "<group>"; };
 		9FE8EB9E2CF42E8E00ABE2DA /* DeleteCustomEmailFolderIntergrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCustomEmailFolderIntergrationTests.swift; sourceTree = "<group>"; };
+		9FED90442D65868500A08BEF /* BlockedEmailAddressActionTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedEmailAddressActionTransformer.swift; sourceTree = "<group>"; };
+		9FED90462D6589EA00A08BEF /* BlockedAddressActionGQLTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedAddressActionGQLTransformer.swift; sourceTree = "<group>"; };
 		9FF182032BB4D7AA000EF217 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9FF182042BB4D7AA000EF217 /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
 		9FF182052BB4D7AA000EF217 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1774,6 +1788,7 @@
 				843064E6233C34E30083874D /* Date+MillisecondsSinceEpoch.swift */,
 				1BDEB9D62C744FDE003FD274 /* MCOMessageParser+Extensions.swift */,
 				8483151D24BC14E6004E89EA /* Result+ErrorMap.swift */,
+				9F42BE782D6FC1D400505C43 /* String+Extensions.swift */,
 				5DDE24672C045AF300387540 /* SudoUser+getKeyRingId.swift */,
 			);
 			path = Extensions;
@@ -1925,6 +1940,7 @@
 		8462FFBD23384A5A00D1A68E /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				9F42BE752D6E8DB300505C43 /* Extensions */,
 				84B25FD32485E32400E99401 /* Internal */,
 				84B25FFD2486201000E99401 /* Public */,
 			);
@@ -2018,6 +2034,7 @@
 				8483150424B81DD0004E89EA /* SubscribeToEmailMessageTests.swift */,
 				9F9B3A7B2C92A5DA0019AE25 /* SubscribeToEmailMessageUpdatedTests.swift */,
 				848314EE24B81BA1004E89EA /* TestCase.swift */,
+				9F42BE7A2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift */,
 				9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */,
 				95CC4BF4292450BA008A6BF2 /* UnsubscribeAllTests.swift */,
 				9FA45FCF2CF96D9400BEE223 /* UpdateCustomEmailFolderTests.swift */,
@@ -2102,6 +2119,7 @@
 				849AF01D24A2CE80005CFA2E /* MockSubscribeToEmailMessageCreatedUseCase.swift */,
 				84A4561424B6C9F1002DBF0D /* MockSubscribeToEmailMessageDeletedUseCase.swift */,
 				9F9B3A772C92A2D20019AE25 /* MockSubscribeToEmailMessageUpdatedUseCase.swift */,
+				9F42BE7C2D6FF27A00505C43 /* MockUnblockEmailAddressesByHashedValueUseCase.swift */,
 				9F372BAE2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift */,
 				95CC4BF629245376008A6BF2 /* MockUnsubscribeAllUseCase.swift */,
 				9FA45FCB2CF9664B00BEE223 /* MockUpdateCustomEmailFolderUseCase.swift */,
@@ -2370,7 +2388,6 @@
 				84B260782489DECA00E99401 /* API Transformers */,
 				84B260772489DEBC00E99401 /* Entity Transformers */,
 				84B260E02490B6F000E99401 /* GraphQL Transformers */,
-				9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */,
 			);
 			path = Transformers;
 			sourceTree = "<group>";
@@ -2527,6 +2544,8 @@
 			isa = PBXGroup;
 			children = (
 				842889192499D54F00D39E6C /* Filters */,
+				9FED90442D65868500A08BEF /* BlockedEmailAddressActionTransformer.swift */,
+				9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */,
 				84872C1324D1410B0078E205 /* DomainEntityTransformer.swift */,
 				95CE638029133A610027B290 /* DraftEmailMetadataEntityTransformer.swift */,
 				84B2601724876BE000E99401 /* EmailAccountEntityTransformer.swift */,
@@ -2657,6 +2676,7 @@
 			isa = PBXGroup;
 			children = (
 				84288947249AFCD700D39E6C /* Filters */,
+				9FED90462D6589EA00A08BEF /* BlockedAddressActionGQLTransformer.swift */,
 				84288942249AFB1200D39E6C /* EmailMessageDirectionGQLTransformer.swift */,
 				84288941249AFB1200D39E6C /* EmailMessageStateGQLTransformer.swift */,
 				95CD233628866A9F004C8793 /* UpdateEmailMessagesValuesGQLTransformer.swift */,
@@ -2868,9 +2888,18 @@
 			children = (
 				9F372B9E2B6CB6E8009FD8CC /* BlockEmailAddressesUseCaseTests.swift */,
 				9F85E1D02B719E5700C70AF1 /* GetEmailAddressBlocklistUseCaseTests.swift */,
+				9F42BE7E2D6FF4FD00505C43 /* UnblockEmailAddressesByHashedValueUseCaseTests.swift */,
 				9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */,
 			);
 			path = "Blocked Addresses";
+			sourceTree = "<group>";
+		};
+		9F42BE752D6E8DB300505C43 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9F42BE762D6E8DE300505C43 /* Data+Utility.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		9F8673A82B6C774500B9950E /* Blocked Addresses */ = {
@@ -2948,6 +2977,8 @@
 			buildPhases = (
 				A1AB2582BD57D207ADB3645E /* [CP] Check Pods Manifest.lock */,
 				5D22F3EF2C1A3A6200AE54C9 /* Headers */,
+				9F99364E2D75301200CE5CAA /* SwiftLint */,
+				9F99364F2D75302C00CE5CAA /* SwiftFormat */,
 				5D22F3F02C1A3A6200AE54C9 /* Sources */,
 				5D22F3F12C1A3A6200AE54C9 /* Frameworks */,
 				5D22F3F22C1A3A6200AE54C9 /* Resources */,
@@ -2988,6 +3019,8 @@
 			buildPhases = (
 				8483E1DFCA536A1F51FA0ABF /* [CP] Check Pods Manifest.lock */,
 				841E5CAD23418ABC004219B9 /* Sources */,
+				9F9936512D7530F900CE5CAA /* SwiftLint */,
+				9F9936502D7530DB00CE5CAA /* SwiftFormat */,
 				841E5CAE23418ABC004219B9 /* Frameworks */,
 				841E5CAF23418ABC004219B9 /* Resources */,
 				84CFF8C523D7F52500C6BC46 /* Copy Config To Resources */,
@@ -3032,10 +3065,11 @@
 			buildPhases = (
 				745ADE58587EF8E149618BE9 /* [CP] Check Pods Manifest.lock */,
 				84783B25231C916200CCBC27 /* Headers */,
+				846891642378D2C8001FA865 /* SwiftLint */,
+				9F1BB8A32D711A7E0048CBFD /* SwiftFormat */,
 				84783B26231C916200CCBC27 /* Sources */,
 				84783B27231C916200CCBC27 /* Frameworks */,
 				84783B28231C916200CCBC27 /* Resources */,
-				846891642378D2C8001FA865 /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -3343,23 +3377,24 @@
 			shellPath = /bin/sh;
 			shellScript = "cp -f /var/anonyome_key/* \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\ncp -v -f config/* \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\ncp -f config/register_key.id \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\" || :\n";
 		};
-		846891642378D2C8001FA865 /* Swift Lint */ = {
+		846891642378D2C8001FA865 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
 			);
-			name = "Swift Lint";
+			name = SwiftLint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint > /dev/null; then\n    swiftlint --path ${PROJECT_DIR}\nelif [ -x /usr/local/bin/swiftlint ]; then\n    /usr/local/bin/swiftlint --path ${PROJECT_DIR}\nelif [ -x /usr/homebrew/bin/swiftlint ]; then\n    /usr/homebrew/bin/swiftlint --path ${PROJECT_DIR}\nelse\n    echo \"Warning: SwiftLint not installed, run 'brew install swiftlint'\"\n    exit 1\nfi\n";
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftLint.sh\n";
 		};
 		8483E1DFCA536A1F51FA0ABF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3439,6 +3474,101 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9F1BB8A32D711A7E0048CBFD /* SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftFormat;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftFormat.sh\n";
+		};
+		9F99364E2D75301200CE5CAA /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftLint.sh\n";
+		};
+		9F99364F2D75302C00CE5CAA /* SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftFormat;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftFormat.sh\n";
+		};
+		9F9936502D7530DB00CE5CAA /* SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftFormat;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftFormat.sh\n";
+		};
+		9F9936512D7530F900CE5CAA /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftLint.sh\n";
 		};
 		A1AB2582BD57D207ADB3645E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3629,7 +3759,9 @@
 				841E5CCB2342D464004219B9 /* AWSRegionType+Decodable.swift in Sources */,
 				95370EC628656CF500401050 /* AWSS3Worker.swift in Sources */,
 				956F5CE528A9AAB30059BD79 /* BatchOperationResult.swift in Sources */,
+				9FED90472D6589EA00A08BEF /* BlockedAddressActionGQLTransformer.swift in Sources */,
 				9F8673A72B6C766100B9950E /* BlockedAddressRepository.swift in Sources */,
+				9FED90452D65868500A08BEF /* BlockedEmailAddressActionTransformer.swift in Sources */,
 				9F949DDC2B842A8A009064FB /* BlockedEmailAddressTransformer.swift in Sources */,
 				9F8673AA2B6C776E00B9950E /* BlockEmailAddressesUseCase.swift in Sources */,
 				84288946249AFBE600D39E6C /* BooleanFilterInputGQLTransformer.swift in Sources */,
@@ -3805,6 +3937,7 @@
 				84B260852489F0CF00E99401 /* SendEmailMessageUseCase.swift in Sources */,
 				844D992B2496F72800B942F2 /* ServiceKeyWorker.swift in Sources */,
 				95DEFF752859A9800071363B /* SortOrder.swift in Sources */,
+				9F42BE792D6FC1D400505C43 /* String+Extensions.swift in Sources */,
 				84B260CC2490A31200E99401 /* StringFilter.swift in Sources */,
 				84B260D32490A62900E99401 /* StringFilterEntity.swift in Sources */,
 				84B260D72490A69800E99401 /* StringFilterEntityTransformer.swift in Sources */,
@@ -3854,6 +3987,7 @@
 				9F6A9DB52CCF253E0026CAE1 /* CreateCustomEmailFolderTests.swift in Sources */,
 				9F6A9DB32CCF1DC30026CAE1 /* CreateCustomEmailFolderUseCaseTests.swift in Sources */,
 				956F1EEB28F38F94002E2E5A /* CreateDraftEmailMessageUseCaseTests.swift in Sources */,
+				9F42BE772D6E8DE300505C43 /* Data+Utility.swift in Sources */,
 				8483152624BD2094004E89EA /* DataFactory+Core.swift in Sources */,
 				847EF2B924BD5DD500423B74 /* DataFactory+GraphQL.swift in Sources */,
 				8483152424BD2066004E89EA /* DataFactoryNamespace.swift in Sources */,
@@ -4000,6 +4134,7 @@
 				9F9B3A782C92A2D20019AE25 /* MockSubscribeToEmailMessageUpdatedUseCase.swift in Sources */,
 				84F6529B24A972C8009EDD3A /* MockSubscriptionManager.swift in Sources */,
 				849AF02024A2CF65005CFA2E /* MockSubscriptionToken.swift in Sources */,
+				9F42BE7D2D6FF27A00505C43 /* MockUnblockEmailAddressesByHashedValueUseCase.swift in Sources */,
 				9F372BAF2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift in Sources */,
 				95CC4BF729245376008A6BF2 /* MockUnsubscribeAllUseCase.swift in Sources */,
 				9FA45FCC2CF9664B00BEE223 /* MockUpdateCustomEmailFolderUseCase.swift in Sources */,
@@ -4033,6 +4168,8 @@
 				84F6529924A97210009EDD3A /* SubscriptionManagerTests.swift in Sources */,
 				84A4560124B59129002DBF0D /* SudoEmailErrorTests.swift in Sources */,
 				848314EF24B81BA1004E89EA /* TestCase.swift in Sources */,
+				9F42BE7B2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift in Sources */,
+				9F42BE7F2D6FF4FD00505C43 /* UnblockEmailAddressesByHashedValueUseCaseTests.swift in Sources */,
 				9F372BB32B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift in Sources */,
 				9F372BB12B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift in Sources */,
 				95CC4BF5292450BA008A6BF2 /* UnsubscribeAllTests.swift in Sources */,

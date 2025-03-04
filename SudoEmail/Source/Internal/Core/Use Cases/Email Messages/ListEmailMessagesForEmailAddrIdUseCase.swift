@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -47,7 +47,7 @@ class ListEmailMessagesForEmailAddrIdUseCase {
                 let unsealedMessage = try emailMessageUnsealerService.unsealEmailMessage(message)
                 successMessages.append(unsealedMessage)
             } catch {
-                let partialMessage = self.sealedEmailMessageEntityTransformer.transform(sealedEmailMessage: message)
+                let partialMessage = sealedEmailMessageEntityTransformer.transform(sealedEmailMessage: message)
                 let partialResult = PartialResult(partial: partialMessage, error: error)
                 partialResults.append(partialResult)
             }
@@ -66,5 +66,4 @@ class ListEmailMessagesForEmailAddrIdUseCase {
         )
         return ListAPIResult.success(listSuccessResult)
     }
-
 }

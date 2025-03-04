@@ -1,13 +1,14 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
+// swiftlint:disable type_name
 class ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
 
     // MARK: - Properties
-    
+
     let emailMessageRepository: EmailMessageRepository
 
     // MARK: - Lifecycle
@@ -26,3 +27,5 @@ class ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
         return draftEmailMessageMetadataEntity.map(transformer.transform(_:))
     }
 }
+
+// swiftlint:enable type_name

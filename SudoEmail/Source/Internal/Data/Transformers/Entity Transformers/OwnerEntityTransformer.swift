@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -89,7 +89,7 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return Owner(id: id, issuer: issuer)
     }
-    
+
     /// Transform the success result of `ListEmailMessagesQuery` Owner from the service to a `OwnerEntity`.
     func transform(
         _ data: GraphQL.ListEmailMessagesQuery.Data.ListEmailMessage.Item.Owner
@@ -179,7 +179,7 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
-    
+
     /// Transform the success result of `CreateCustomEmailFolder` owner from the service to a `OwnerEntity`.
     func transform(
         _ data: GraphQL.CreateCustomEmailFolderMutation.Data.CreateCustomEmailFolder.Owner
@@ -188,7 +188,7 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
-    
+
     /// Transform the success result of `DeleteCustomEmailFolder` owner from the service to a `OwnerEntity`.
     func transform(
         _ data: GraphQL.DeleteCustomEmailFolderMutation.Data.DeleteCustomEmailFolder.Owner
@@ -197,7 +197,7 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
-    
+
     /// Transform the success result of `UpdateCustomEmailFolder` owner from the service to a `OwnerEntity`.
     func transform(
         _ data: GraphQL.UpdateCustomEmailFolderMutation.Data.UpdateCustomEmailFolder.Owner
@@ -206,5 +206,4 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
-
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -10,7 +10,7 @@ import SudoLogging
 class SendEmailMessageUseCase {
 
     // MARK: - Properties
-    
+
     /// Email account repository used to look up the encryption status of other email addresses.
     let emailAccountRepository: EmailAccountRepository
 
@@ -19,7 +19,7 @@ class SendEmailMessageUseCase {
 
     /// Email domain repository used to retrieve the supported email domains.
     let emailDomainRepository: DomainRepository
-    
+
     /// Email Configuration Data Repository used to get runtime configurations.
     let emailConfigDataRepository: EmailConfigurationDataRepository
 
@@ -65,21 +65,29 @@ class SendEmailMessageUseCase {
     ///   - input: Input parameters used to send email message.
     /// - Returns: SendEmailMessageResult
     func execute(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
-        let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (input.senderEmailAddressId, input.emailMessageHeader, input.body, input.attachments, input.inlineAttachments, input.replyingMessageId, input.forwardingMessageId)
-        
+        let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (
+            input.senderEmailAddressId,
+            input.emailMessageHeader,
+            input.body,
+            input.attachments,
+            input.inlineAttachments,
+            input.replyingMessageId,
+            input.forwardingMessageId
+        )
+
         let config = try await emailConfigDataRepository.getConfigurationData()
 
         let domains = try await emailDomainRepository.fetchConfiguredDomains()
 
         let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address }
-        
+
         let allRecipientsInternal = !allRecipients.isEmpty && allRecipients.allSatisfy { recipient in
             domains.contains { domain in
                 recipient.contains(domain.name)
             }
         }
-        
-        if (allRecipientsInternal) {
+
+        if allRecipientsInternal {
             // Lookup public key information for each internal recipient and sender
             var recipientsAndSender = allRecipients
             recipientsAndSender.append(emailMessageHeader.from.address)
@@ -94,11 +102,11 @@ class SendEmailMessageUseCase {
                     info.emailAddress == recipient
                 }
             }
-            if (!isInNetworkAddresses) {
+            if !isInNetworkAddresses {
                 throw SudoEmailError.inNetworkAddressNotFound("At least one email address does not exist in network")
             }
-            
-            if (allRecipients.count > config.encryptedEmailMessageRecipientsLimit) {
+
+            if allRecipients.count > config.encryptedEmailMessageRecipientsLimit {
                 throw SudoEmailError.limitExceeded("Cannot send encrypted message to more than \(config.encryptedEmailMessageRecipientsLimit) recipients")
             }
             // Process encrypted email message
@@ -123,7 +131,7 @@ class SendEmailMessageUseCase {
                 forwardingMessageId: forwardingMessageId
             )
         } else {
-            if (allRecipients.count > config.emailMessageRecipientsLimit) {
+            if allRecipients.count > config.emailMessageRecipientsLimit {
                 throw SudoEmailError.limitExceeded("Cannot send message to more than \(config.emailMessageRecipientsLimit) recipients")
             }
             // Process non-encrypted email message
@@ -166,8 +174,8 @@ class SendEmailMessageUseCase {
             replyMessageId: replyMessageId,
             forwardMessageId: forwardMessageId
         )
-        
-        if (encryptionStatus == EncryptionStatus.ENCRYPTED) {
+
+        if encryptionStatus == EncryptionStatus.ENCRYPTED {
             // For each recipient, encrypt the rfc822 with the recipient's public key
             // and store the encrypted payload as an attachment
             let keys = emailAddressesPublicInfo.map { KeyEntity(type: .publicKey, keyId: $0.keyId, keyData: Data($0.publicKey.utf8)) }
@@ -186,15 +194,15 @@ class SendEmailMessageUseCase {
                 forwardMessageId: forwardMessageId
             )
         }
-        
-        if (rfc822Data.count > emailMessageMaxOutboundMessageSize) {
+
+        if rfc822Data.count > emailMessageMaxOutboundMessageSize {
             logger.error("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
             throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes")
         }
-        
+
         return rfc822Data
     }
-    
+
     private func buildMessageData(
         emailMessageHeader: InternetMessageFormatHeader,
         body: String,

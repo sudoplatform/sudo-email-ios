@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -11,7 +11,7 @@ public struct DraftEmailMessage: Equatable {
 
     /// Unique identifier of the draft email message.
     public var id: String
-    
+
     /// Unique identifier of the email address associated with the draft email message.
     public var emailAddressId: String
 

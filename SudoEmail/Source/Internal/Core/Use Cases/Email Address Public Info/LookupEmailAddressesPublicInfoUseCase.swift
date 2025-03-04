@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -27,5 +27,4 @@ class LookupEmailAddressesPublicInfoUseCase {
     func execute(emailAddresses: [String], cachePolicy: CachePolicy) async throws -> [EmailAddressPublicInfoEntity] {
         return try await emailAccountRepository.lookupPublicInfo(emailAddresses: emailAddresses, cachePolicy: cachePolicy)
     }
-
 }

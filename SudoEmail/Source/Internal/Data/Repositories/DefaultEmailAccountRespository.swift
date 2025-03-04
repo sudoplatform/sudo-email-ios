@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
+import Foundation
 import SudoApiClient
 import SudoLogging
 
@@ -38,7 +38,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
     }
 
     func reset() throws {
-        try self.appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
+        try appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
     }
 
     // MARK: - EmailAccountRepository
@@ -50,12 +50,12 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         // Code is generated as a double nil so this mitigates problems with that.
         var convertedDomains: [String]?? = Optional(nil)
         if let domains = domains {
-            convertedDomains = domains.map { $0.name }
+            convertedDomains = domains.map(\.name)
         }
         let input = GraphQL.CheckEmailAddressAvailabilityInput(domains: convertedDomains, localParts: localParts)
         let query = GraphQL.CheckEmailAddressAvailabilityQuery(input: input)
         let cachePolicy: AWSAppSync.CachePolicy = AWSAppSync.CachePolicy.fetchIgnoringCacheData
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: cachePolicy,
             queue: dispatchQueue
@@ -102,7 +102,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             publicKey: publicKeyData
         )
         let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
-        (deviceKeyWorker.generateNewCurrentSymmetricKey())
+            (deviceKeyWorker.generateNewCurrentSymmetricKey())
 
         var input: GraphQL.ProvisionEmailAddressInput
         if let alias = emailAddress.alias {
@@ -129,7 +129,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             )
         }
         let mutation = GraphQL.ProvisionEmailAddressMutation(input: input)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -178,7 +178,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
             )
         }
         let mutation = GraphQL.UpdateEmailAddressMetadataMutation(input: updateEmailAddressMetadataInput)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -201,7 +201,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
     func deleteWithId(_ id: String) async throws -> EmailAccountEntity {
         let input = GraphQL.DeprovisionEmailAddressInput(emailAddressId: id)
         let mutation = GraphQL.DeprovisionEmailAddressMutation(input: input)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -277,7 +277,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         let cachePolicy = cachePolicy ?? .remoteOnly
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue
@@ -308,12 +308,12 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
 
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue
         )
-        
+
         guard let result = fetchResult?.data else {
             guard let error = fetchError else {
                 return []
@@ -335,7 +335,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         let query = GraphQL.GetEmailAddressQuery(id: emailAddressId)
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue
@@ -377,7 +377,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository, Resetable {
         let query = GraphQL.ListEmailAddressesQuery(input: input)
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue

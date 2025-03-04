@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -7,7 +7,6 @@
 import Foundation
 import SudoLogging
 import SudoUser
-
 
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
@@ -42,7 +41,7 @@ class UseCaseFactory {
     func generateGetSupportedDomainsUseCase(domainRepository: DomainRepository) -> GetSupportedDomainsUseCase {
         return GetSupportedDomainsUseCase(domainRepository: domainRepository)
     }
-    
+
     func generateFetchConfiguredDomainsUseCase(domainRepository: DomainRepository) -> FetchConfiguredDomainsUseCase {
         return FetchConfiguredDomainsUseCase(domainRepository: domainRepository)
     }
@@ -120,7 +119,7 @@ class UseCaseFactory {
             emailAccountRepository: emailAccountRepository
         )
     }
-    
+
     func generateCreateCustomEmailFolderUseCase(
         emailFolderRepository: EmailFolderRepository,
         emailAccountRepository: EmailAccountRepository
@@ -130,7 +129,7 @@ class UseCaseFactory {
             emailFolderRepository: emailFolderRepository
         )
     }
-    
+
     func generateDeleteCustomEmailFolderUseCase(
         emailFolderRepository: EmailFolderRepository
     ) -> DeleteCustomEmailFolderUseCase {
@@ -138,7 +137,7 @@ class UseCaseFactory {
             emailFolderRepository: emailFolderRepository
         )
     }
-    
+
     func generateUpdateCustomEmailFolderUseCase(
         emailFolderRepository: EmailFolderRepository
     ) -> UpdateCustomEmailFolderUseCase {
@@ -176,7 +175,7 @@ class UseCaseFactory {
     ) -> LookupEmailAddressesPublicInfoUseCase {
         return LookupEmailAddressesPublicInfoUseCase(emailAccountRepository: emailAccountRepository)
     }
-    
+
     func generateBlockEmailAddressesUseCase(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,
@@ -184,7 +183,7 @@ class UseCaseFactory {
     ) -> BlockEmailAddressesUseCase {
         return BlockEmailAddressesUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
     }
-    
+
     func generateUnblockEmailAddressesUseCase(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,
@@ -192,7 +191,7 @@ class UseCaseFactory {
     ) -> UnblockEmailAddressesUseCase {
         return UnblockEmailAddressesUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
     }
-    
+
     func generateUnblockEmailAddressesByHashedValueUseCase(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,
@@ -200,7 +199,7 @@ class UseCaseFactory {
     ) -> UnblockEmailAddressesByHashedValueUseCase {
         return UnblockEmailAddressesByHashedValueUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
     }
-    
+
     func generateGetEmailAddressBlocklistUseCase(
         blockedAddressRepository: BlockedAddressRepository,
         userClient: SudoUserClient,
@@ -238,7 +237,7 @@ class UseCaseFactory {
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
-    
+
     func generateListEmailMessagesUseCase(
         emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService,
@@ -284,7 +283,7 @@ class UseCaseFactory {
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
-    
+
     func generateGetEmailMessageWithBodyUseCase(
         emailMessageRepository: EmailMessageRepository
     ) -> GetEmailMessageWithBodyUseCase {
@@ -292,7 +291,7 @@ class UseCaseFactory {
             emailMessageRepository: emailMessageRepository
         )
     }
-    
+
     func generateListDraftEmailMessagesUseCase(
         emailAccountRepository: EmailAccountRepository,
         emailMessageRepository: EmailMessageRepository
@@ -302,7 +301,7 @@ class UseCaseFactory {
             emailMessageRepository: emailMessageRepository
         )
     }
-    
+
     func generateListDraftEmailMessagesForEmailAddressIdUseCase(
         emailMessageRepository: EmailMessageRepository
     ) -> ListDraftEmailMessagesForEmailAddressIdUseCase {
@@ -310,7 +309,7 @@ class UseCaseFactory {
             emailMessageRepository: emailMessageRepository
         )
     }
-    
+
     func generateListDraftEmailMessageMetadataUseCase(
         emailAccountRepository: EmailAccountRepository,
         emailMessageRepository: EmailMessageRepository
@@ -320,7 +319,7 @@ class UseCaseFactory {
             emailMessageRepository: emailMessageRepository
         )
     }
-    
+
     func generateListDraftEmailMessageMetadataForEmailAddressIdUseCase(
         emailMessageRepository: EmailMessageRepository
     ) -> ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
@@ -364,7 +363,7 @@ class UseCaseFactory {
             emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
-    
+
     func generateSubscribeToEmailMessageUpdatedUseCase(
         emailMessageRepository: EmailMessageRepository,
         emailMessageUnsealerService: EmailMessageUnsealerService

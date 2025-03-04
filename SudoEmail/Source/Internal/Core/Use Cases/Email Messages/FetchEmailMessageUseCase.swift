@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -28,6 +28,6 @@ class FetchEmailMessageUseCase {
 
     func execute(withMessageId id: String) async throws -> EmailMessageEntity? {
         guard let sealedMessage = try await emailMessageRepository.fetchEmailMessageById(id) else { return nil }
-        return try self.emailMessageUnsealerService.unsealEmailMessage(sealedMessage)
+        return try emailMessageUnsealerService.unsealEmailMessage(sealedMessage)
     }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,9 +26,9 @@ protocol ServiceKeyWorker: DeviceKeyWorker {
 }
 
 class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
-    
+
     // MARK: - Supplementary
-    
+
     /// Default values used within `DefaultServiceKeyWorker`.
     enum Defaults {
         /// Key name for the current key pair id to access on the key manager.
@@ -46,14 +46,14 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
         /// algorithm used when creating/registering public keys.
         static let algorithm = "RSAEncryptionOAEPAESCBC"
     }
-    
+
     // MARK: - Properties
-    
+
     /// User client for getting the subject (owner identifier) of the user for key ring id.
     var userClient: SudoUserClient
-    
+
     // MARK: - Lifecycle
-    
+
     convenience init(
         keyNamespace: String,
         userClient: SudoUserClient,
@@ -62,14 +62,14 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
         let keyManager = LegacySudoKeyManager(serviceName: Defaults.keyRingServiceName, keyTag: Defaults.keyManagerKeyTag, namespace: keyNamespace)
         self.init(keyManager: keyManager, userClient: userClient, logger: logger)
     }
-    
+
     init(keyManager: SudoKeyManager, userClient: SudoUserClient, logger: Logger) {
         self.userClient = userClient
         super.init(keyManager: keyManager, logger: logger)
     }
-    
+
     // MARK: - ServiceKeyWorker
-    
+
     func generateKeyPair() throws -> KeyPair {
         let keyRingId = try getKeyRingId()
         let keyPairId = try keyManager.generateKeyId()
@@ -78,7 +78,7 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             logger.error(msg)
             throw SudoEmailError.internalError(msg)
         }
-        
+
         // Try to delete the existing password if it exists.
         try keyManager.deletePassword(Defaults.currentKeyPairIdPointerName)
         try keyManager.generateKeyPair(keyPairId)
@@ -91,7 +91,7 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             try keyManager.deleteKeyPair(keyPairId)
             throw SudoEmailError.internalError(msg)
         }
-        
+
         let publicKey: Data
         let privateKey: Data
         do {
@@ -109,15 +109,15 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             try keyManager.deleteKeyPair(keyPairId)
             throw SudoEmailError.internalError(msg)
         }
-        
+
         let keyPair = createKeyPairWithKeyId(keyPairId, keyRingId: keyRingId, publicKeyData: publicKey, privateKeyData: privateKey)
         return keyPair
     }
-    
+
     func getPublicKeyWithId(keyId: String) throws -> KeyEntity? {
         let keyRingId = try getKeyRingId()
         let publicKey: Data
-        
+
         do {
             guard let pubKey = try keyManager.getPublicKey(keyId) else {
                 return nil
@@ -128,14 +128,13 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             logger.error(msg)
             throw SudoEmailError.internalError(msg)
         }
-        
+
         let keyEntity = KeyEntity(type: .publicKey, keyId: keyId, keyRingId: keyRingId, keyData: publicKey)
         return keyEntity
     }
-    
-    
+
     // MARK: - Helpers
-    
+
     /// Create the entity level key pair from the supplied data.
     /// - Parameters:
     ///   - keyId: Identifier of the key.

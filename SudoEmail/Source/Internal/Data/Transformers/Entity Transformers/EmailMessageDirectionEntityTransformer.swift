@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -14,7 +14,7 @@ struct EmailMessageDirectionEntityTransformer {
             return .inbound
         case .outbound:
             return .outbound
-        case let .unknown(direction):
+        case .unknown(let direction):
             throw SudoEmailError.internalError("Unsupported email message direction: \(direction)")
         }
     }
@@ -38,5 +38,4 @@ struct EmailMessageDirectionEntityTransformer {
             return .outbound
         }
     }
-
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -24,7 +24,7 @@ class CreateDraftEmailMessageUseCase {
     // MARK: - Methods
 
     func execute(withInput input: CreateDraftEmailMessageInput) async throws -> DraftEmailMessageMetadata {
-        guard (try await emailAccountRepository.fetchWithEmailAddressId(input.senderEmailAddressId)) != nil else {
+        guard try (await emailAccountRepository.fetchWithEmailAddressId(input.senderEmailAddressId)) != nil else {
             throw SudoEmailError.addressNotFound
         }
         let metadata = try await emailMessageRepository.saveDraft(

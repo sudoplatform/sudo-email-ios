@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -55,9 +55,9 @@ struct SealedKeyEntity: Encodable, Equatable, Hashable {
 
     static func == (lhs: SealedKeyEntity, rhs: SealedKeyEntity) -> Bool {
         return lhs.publicKeyId == rhs.publicKeyId &&
-               lhs.symmetricKey == rhs.symmetricKey &&
-               lhs.algorithm == rhs.algorithm &&
-               lhs.encryptedKey == rhs.encryptedKey
+            lhs.symmetricKey == rhs.symmetricKey &&
+            lhs.algorithm == rhs.algorithm &&
+            lhs.encryptedKey == rhs.encryptedKey
     }
 
     // MARK: - Conformance: Hashable
@@ -68,7 +68,7 @@ struct SealedKeyEntity: Encodable, Equatable, Hashable {
         hasher.combine(algorithm)
         hasher.combine(encryptedKey)
     }
-    
+
     // MARK: - Methods
 
     /// Encode the current `SealedKeyEntity` instance into a JSON string.
@@ -78,7 +78,6 @@ struct SealedKeyEntity: Encodable, Equatable, Hashable {
         let jsonData = try encoder.encode(self)
         return String(data: jsonData, encoding: .utf8)!
     }
-
 }
 
 struct SealedKeyComponentsEntity: Decodable {

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -20,10 +20,10 @@ struct EmailConfigurationDataEntity {
 
     /// The maximum allowed size of an outbound email message.
     var emailMessageMaxOutboundMessageSize: Int
-    
+
     /// The maximum number of recipients for an out-of-network email message.
     var emailMessageRecipientsLimit: Int
-    
+
     /// The maximum number of recipients for an in-network encrypted email message.
     var encryptedEmailMessageRecipientsLimit: Int
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -68,7 +68,7 @@ struct SealedEmailMessageEntity {
 
     /// Size, in bytes, of this email message
     var size: Double
-    
+
     /// The encryption status of the message
     var encryptionStatus: EncryptionStatus
 

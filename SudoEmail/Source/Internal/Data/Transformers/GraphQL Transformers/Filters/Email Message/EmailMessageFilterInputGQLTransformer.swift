@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,49 +26,48 @@ struct EmailMessageFilterInputGQLTransformer {
     /// Transform a `EmailMessageFilterEntity` filter rule into a GraphQL `EmailMessageFilterInput` filter rule.
     func transform(_ entity: EmailMessageFilterEntity) -> GraphQL.EmailMessageFilterInput {
         switch entity {
-        case let .id(id):
+        case .id(let id):
             let id = stringFilterTransformer.transformToIdFilterInput(id)
             return GraphQL.EmailMessageFilterInput(id: id)
-        case let .messageId(messageId):
+        case .messageId(let messageId):
             let messageId = stringFilterTransformer.transformToIdFilterInput(messageId)
             return GraphQL.EmailMessageFilterInput(messageId: messageId)
-        case let .algorithm(algorithm):
+        case .algorithm(let algorithm):
             let algorithm = stringFilterTransformer.transformToStringFilterInput(algorithm)
             return GraphQL.EmailMessageFilterInput(algorithm: algorithm)
-        case let .keyId(keyId):
+        case .keyId(let keyId):
             let keyId = stringFilterTransformer.transformToIdFilterInput(keyId)
             return GraphQL.EmailMessageFilterInput(keyId: keyId)
-        case let .clientRefId(clientRefId):
+        case .clientRefId(let clientRefId):
             let clientRefId = stringFilterTransformer.transformToIdFilterInput(clientRefId)
             return GraphQL.EmailMessageFilterInput(clientRefId: clientRefId)
-        case let .folderId(folderId):
+        case .folderId(let folderId):
             let folderId = stringFilterTransformer.transformToIdFilterInput(folderId)
             return GraphQL.EmailMessageFilterInput(folderId: folderId)
-        case let .direction(direction):
+        case .direction(let direction):
             let direction = directionFilterTransformer.transform(direction)
             return GraphQL.EmailMessageFilterInput(direction: direction)
-        case let .state(state):
+        case .state(let state):
             let state = stateFilterTransformer.transform(state)
             return GraphQL.EmailMessageFilterInput(state: state)
-        case let .seen(seen):
+        case .seen(let seen):
             let seen = boolFilterTransformer.transform(seen)
             return GraphQL.EmailMessageFilterInput(seen: seen)
-        case let .repliedTo(repliedTo):
+        case .repliedTo(let repliedTo):
             let repliedTo = boolFilterTransformer.transform(repliedTo)
             return GraphQL.EmailMessageFilterInput(repliedTo: repliedTo)
-        case let .forwarded(forwarded):
+        case .forwarded(let forwarded):
             let forwarded = boolFilterTransformer.transform(forwarded)
             return GraphQL.EmailMessageFilterInput(forwarded: forwarded)
-        case let .not(emailMessageFilter):
+        case .not(let emailMessageFilter):
             let emailMessageFilter = transform(emailMessageFilter)
             return GraphQL.EmailMessageFilterInput(not: emailMessageFilter)
-        case let .and(emailMessageFilters):
+        case .and(let emailMessageFilters):
             let emailMessageFilters = emailMessageFilters.map(transform(_:))
             return GraphQL.EmailMessageFilterInput(and: emailMessageFilters)
-        case let .or(emailMessageFilters):
+        case .or(let emailMessageFilters):
             let emailMessageFilters = emailMessageFilters.map(transform(_:))
             return GraphQL.EmailMessageFilterInput(or: emailMessageFilters)
         }
     }
-
 }

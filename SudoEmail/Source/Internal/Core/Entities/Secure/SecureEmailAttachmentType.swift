@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -13,7 +13,7 @@ enum SecureEmailAttachmentType {
     case keyExchange(fileName: String, mimeType: String, contentId: String)
 
     case body(fileName: String, mimeType: String, contentId: String)
-    
+
     static let LEGACY_KEY_EXCHANGE_MIME_TYPE = "application/x-sudomail-key"
     static let LEGACY_KEY_EXCHANGE_CONTENT_ID = "securekeyexhangedata@sudomail.com" // Intentional mispelling of 'exchange' to match legacy system
     static let LEGACY_BODY_MIME_TYPE = "application/x-sudomail-body"
@@ -40,9 +40,9 @@ enum SecureEmailAttachmentType {
         }
     }
 
-    func fileName() -> String { self.getValues().fileName }
+    func fileName() -> String { getValues().fileName }
 
-    func mimeType() -> String { self.getValues().mimeType }
+    func mimeType() -> String { getValues().mimeType }
 
-    func contentId() -> String { self.getValues().contentId }
+    func contentId() -> String { getValues().contentId }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -49,39 +49,39 @@ class Rfc822MessageDataProcessor {
         )
 
         var toList = [MCOAddress]()
-        message.to?.forEach({ to in
+        message.to?.forEach { to in
             toList.append(MCOAddress(
                 displayName: to.displayName,
                 mailbox: to.address
             ))
-        })
+        }
         builder.header.to = toList
 
         var ccList = [MCOAddress]()
-        message.cc?.forEach({ cc in
+        message.cc?.forEach { cc in
             ccList.append(MCOAddress(
                 displayName: cc.displayName,
                 mailbox: cc.address
             ))
-        })
+        }
         builder.header.cc = ccList
 
         var bccList = [MCOAddress]()
-        message.bcc?.forEach({ bcc in
+        message.bcc?.forEach { bcc in
             bccList.append(MCOAddress(
                 displayName: bcc.displayName,
                 mailbox: bcc.address
             ))
-        })
+        }
         builder.header.bcc = bccList
 
         var replyToList = [MCOAddress]()
-        message.replyTo?.forEach({ replyTo in
+        message.replyTo?.forEach { replyTo in
             replyToList.append(MCOAddress(
                 displayName: replyTo.displayName,
                 mailbox: replyTo.address
             ))
-        })
+        }
         builder.header.replyTo = replyToList
 
         builder.header.subject = message.subject
@@ -123,10 +123,10 @@ class Rfc822MessageDataProcessor {
         guard let data = builder.data() else {
             throw SudoEmailError.internalError("No data encoded")
         }
-        
+
         return data
     }
-    
+
     func transformMCOAttachments(_ mcoAttachments: [MCOAttachment]) -> [EmailAttachment] {
         var attachments: [EmailAttachment] = []
         for mcoAttachment in mcoAttachments {
@@ -165,12 +165,12 @@ class Rfc822MessageDataProcessor {
         if let mcoAttachments = parser.attachments() as NSArray? as? [MCOAttachment] {
             attachments = transformMCOAttachments(mcoAttachments)
         }
-        
+
         var inlineAttachments: [EmailAttachment]?
         if let mcoInlineAttachments = parser.htmlInlineAttachments() as NSArray? as? [MCOAttachment] {
             inlineAttachments = transformMCOAttachments(mcoInlineAttachments)
         }
-        
+
         // Inline attachments can be interpreted by the parser as either a regular attachment with the inline
         // flag set to true, or as an explicit inline attachment, so we need to cater for both scenarios
         var allInlineAttachments: [EmailAttachment] = []
@@ -181,10 +181,12 @@ class Rfc822MessageDataProcessor {
         let encryptionStatus = encryptionHeader == PLATFORM_ENCRYPTION ? EncryptionStatus.ENCRYPTED : EncryptionStatus.UNENCRYPTED
 
         var result = EmailMessageDetails(
-            from: [EmailAddressAndName(
-                address: from?.mailbox ?? "",
-                displayName: from?.displayName
-            )],
+            from: [
+                EmailAddressAndName(
+                    address: from?.mailbox ?? "",
+                    displayName: from?.displayName
+                )
+            ],
             to: to.map { EmailAddressAndName(
                 address: $0.mailbox ?? "",
                 displayName: $0.displayName

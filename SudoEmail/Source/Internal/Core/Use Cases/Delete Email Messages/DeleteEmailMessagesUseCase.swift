@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -11,14 +11,14 @@ class DeleteEmailMessagesUseCase {
 
     /// Email message repository to delete the record of the email message.
     let emailMessageRepository: EmailMessageRepository
-    
+
     /// Email configuration repository.
     let emailConfigRepository: EmailConfigurationDataRepository
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DeleteEmailMessagesUseCase`.
-    init (emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
+    init(emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
         self.emailMessageRepository = emailMessageRepository
         self.emailConfigRepository = emailConfigRepository
     }
@@ -42,7 +42,7 @@ class DeleteEmailMessagesUseCase {
             throw SudoEmailError.invalidArgument("Attempt to delete empty list of email messages")
         }
         let config = try await emailConfigRepository.getConfigurationData()
-        if (ids.count > config.deleteEmailMessagesLimit) {
+        if ids.count > config.deleteEmailMessagesLimit {
             throw SudoEmailError.limitExceeded("Cannot delete more than \(config.deleteEmailMessagesLimit) messages.")
         }
 
@@ -53,7 +53,7 @@ class DeleteEmailMessagesUseCase {
         let successIds = ids.filter { !failureIds.contains($0) }
 
         let status: BatchOperationResultStatus
-        if (successIds.count == ids.count) {
+        if successIds.count == ids.count {
             status = BatchOperationResultStatus.success
         } else if failureIds.count == ids.count {
             status = BatchOperationResultStatus.failure

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -28,9 +28,9 @@ extension Result where Failure: Error {
     ///   as the new success value if this instance represents a success.
     func mapThrowingSuccess<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Error> {
         switch self {
-        case let .failure(error):
+        case .failure(let error):
             return .failure(error)
-        case let .success(success):
+        case .success(let success):
             do {
                 let newSuccess = try transform(success)
                 return .success(newSuccess)

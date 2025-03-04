@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
+import Foundation
 import SudoApiClient
 import SudoLogging
 
@@ -21,7 +21,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
 
     /// App sync client for peforming operations against the email service.
     var appSyncClient: SudoApiClient
-    
+
     /// Cryptographic key worker for this device
     var deviceKeyWorker: DeviceKeyWorker
 
@@ -49,7 +49,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         let cachePolicy = input.cachePolicy ?? .remoteOnly
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue
@@ -73,12 +73,12 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             nextToken: fetchResult?.data?.listEmailFoldersForEmailAddressId.nextToken
         )
     }
-    
+
     func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolderEntity {
         let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
-        (deviceKeyWorker.generateNewCurrentSymmetricKey())
+            (deviceKeyWorker.generateNewCurrentSymmetricKey())
         let sealedCustomEmailFolderName = try deviceKeyWorker.sealString(input.customFolderName, withKeyId: symmetricKeyId)
-        
+
         let mutationInput = GraphQL.CreateCustomEmailFolderInput(
             customFolderName: .init(
                 algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
@@ -89,7 +89,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             emailAddressId: input.emailAddressId
         )
         let mutation = GraphQL.CreateCustomEmailFolderMutation(input: mutationInput)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -115,14 +115,14 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             throw error
         }
     }
-    
+
     func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolderEntity? {
         let mutationInput = GraphQL.DeleteCustomEmailFolderInput(
             emailAddressId: input.emailAddressId, emailFolderId: input.emailFolderId
         )
-        
+
         let mutation = GraphQL.DeleteCustomEmailFolderMutation(input: mutationInput)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -174,7 +174,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             )
         }
         let mutation = GraphQL.UpdateCustomEmailFolderMutation(input: updateCustomEmailAddressInput)
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -202,7 +202,6 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
     }
 
     func reset() throws {
-        try self.appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
+        try appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
     }
-
 }

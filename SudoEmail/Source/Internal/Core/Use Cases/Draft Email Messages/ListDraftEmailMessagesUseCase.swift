@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -7,7 +7,7 @@
 class ListDraftEmailMessagesUseCase {
 
     // MARK: - Properties
-    
+
     let emailAccountRepository: EmailAccountRepository
     let emailMessageRepository: EmailMessageRepository
 
@@ -24,12 +24,12 @@ class ListDraftEmailMessagesUseCase {
     // MARK: - Methods
 
     func execute() async throws -> [DraftEmailMessage] {
-        
+
         var result: [DraftEmailMessage] = []
 
-        var nextToken: String? = nil
+        var nextToken: String?
         repeat {
-            let emailAccounts = try await self.emailAccountRepository.list(limit: nil, nextToken: nextToken)
+            let emailAccounts = try await emailAccountRepository.list(limit: nil, nextToken: nextToken)
             nextToken = emailAccounts.nextToken
 
             try await withThrowingTaskGroup(of: [DraftEmailMessage].self) { group in
@@ -39,7 +39,10 @@ class ListDraftEmailMessagesUseCase {
                         let draftContent = try await withThrowingTaskGroup(of: DraftEmailMessage?.self) { innerGroup in
                             for m in metadata {
                                 innerGroup.addTask {
-                                    return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(id: m.id, emailAddressId: account.id))
+                                    return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
+                                        id: m.id,
+                                        emailAddressId: account.id
+                                    ))
                                 }
                             }
                             var drafts: [DraftEmailMessage?] = []

@@ -1,14 +1,14 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
+import Foundation
 import SudoApiClient
-import SudoLogging
 import SudoKeyManager
+import SudoLogging
 
 class DefaultEmailCryptoService: EmailCryptoService {
 
@@ -18,7 +18,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
 
     private let logger: Logger
 
-    private struct Constants {
+    private enum Constants {
         static let IV_SIZE = 16
         static let ENCRYPTION_ERROR_MSG = "Error while encrypting the email body and keys"
         static let DECRYPTION_ERROR_MSG = "Error while decrypting the email body"
@@ -102,8 +102,8 @@ class DefaultEmailCryptoService: EmailCryptoService {
             let secureBodyData = try SecureDataEntity.fromJson(decodedBodyData)
 
             // Iterate through the set of keyAttachments and search for the key belonging to the current recipient.
-            var keyComponents: SealedKeyComponentsEntity? = nil
-            try keyAttachments.forEach({ key in
+            var keyComponents: SealedKeyComponentsEntity?
+            try keyAttachments.forEach { key in
                 if !key.data.isEmpty {
                     var decodedKeyData = String(decoding: key.data, as: UTF8.self)
 
@@ -120,7 +120,7 @@ class DefaultEmailCryptoService: EmailCryptoService {
                         keyComponents = sealedKeyComponents
                     }
                 }
-            })
+            }
             guard let sealedKeyComponents = keyComponents else {
                 throw EmailCryptoServiceError.keyNotFoundError(Constants.DECRYPTION_KEY_NOT_FOUND_ERROR_MSG)
             }
@@ -133,10 +133,9 @@ class DefaultEmailCryptoService: EmailCryptoService {
             )
 
             return try deviceKeyWorker.decryptWithSymmetricKey(symmetricKeyData,
-                data: secureBodyData.encryptedData,
-                initVector: secureBodyData.initVectorKeyID
-            )
-        }  catch {
+                                                               data: secureBodyData.encryptedData,
+                                                               initVector: secureBodyData.initVectorKeyID)
+        } catch {
             let msg = "\(Constants.ENCRYPTION_ERROR_MSG): \(error.localizedDescription)"
             logger.error(msg)
             throw error as? EmailCryptoServiceError ?? SudoEmailError.internalError(msg)

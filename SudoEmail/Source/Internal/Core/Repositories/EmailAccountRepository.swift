@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -93,7 +93,7 @@ protocol EmailAccountRepository: AnyObject {
     /// Retrieve a list email address public info objects for provided email addresses.
     /// - Parameters:
     ///   - emailAddresses: A list of email address strings in format 'local-part@domain'.
-    ///   - cachePolicy: Determines how the public info will be fetched. Default usage is `remoteOnly`.   
+    ///   - cachePolicy: Determines how the public info will be fetched. Default usage is `remoteOnly`.
     ///   - Returns: The list of public info objects found, or empty if no email addresses or public keys were found.
     func lookupPublicInfo(
         emailAddresses: [String],

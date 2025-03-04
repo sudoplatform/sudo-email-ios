@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -10,11 +10,10 @@ struct BoolFilterEntityTransformer {
     /// Transform a input `BoolFilter` into a `BoolFilterEntity`.
     func transform(_ filter: BoolFilter) -> BoolFilterEntity {
         switch filter {
-        case let .equals(bool):
+        case .equals(let bool):
             return .equals(bool)
-        case let .notEquals(bool):
+        case .notEquals(let bool):
             return .notEquals(bool)
         }
     }
-
 }

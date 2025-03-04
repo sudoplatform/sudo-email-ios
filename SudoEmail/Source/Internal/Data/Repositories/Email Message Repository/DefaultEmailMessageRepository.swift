@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -28,7 +28,6 @@ struct DraftEmailMessageEncryptionMetadata: Equatable {
 ///
 /// Allows access and manipulation of email service via AppSync GraphQL and AWSS3.
 class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
-
 
     // MARK: - Supplementary
 
@@ -120,7 +119,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     // MARK: - SealedEmailMessageRepository
 
     private func performSendEmailMessageMutation<Mutation: GraphQLMutation>(_ mutation: Mutation) async throws -> Mutation.Data {
-        let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation)
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation)
         guard let result = performResult?.data else {
             if let error = performError {
                 switch error {
@@ -140,7 +139,6 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         return result
     }
 
-
     // Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
@@ -151,17 +149,17 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         // Upload message data
         let id = UUID().uuidString
         let key = "\(keyPrefix)/\(id)"
-        try await self.s3Worker.upload(
+        try await s3Worker.upload(
             data: data,
             contentType: sendContentType,
-            bucket: self.transientBucket,
+            bucket: transientBucket,
             key: key,
             metadata: nil
         )
         let s3EmailObjectInput = GraphQL.S3EmailObjectInput(
-            bucket: self.transientBucket,
+            bucket: transientBucket,
             key: key,
-            region: self.region
+            region: region
         )
 
         // Perform `SendEmailMessage` mutation (out-of-network)
@@ -178,7 +176,14 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     // Sends an in-network email message with E2E encryption.
     // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     // as i
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool, replyingMessageId: String? = nil, forwardingMessageId: String? = nil) async throws -> SendEmailMessageResult {
+    func sendEmailMessage(
+        withRFC822Data data: Data,
+        emailAccountId: String,
+        emailMessageHeader: InternetMessageFormatHeader,
+        hasAttachments: Bool,
+        replyingMessageId: String? = nil,
+        forwardingMessageId: String? = nil
+    ) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
         guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
             throw SudoEmailError.notSignedIn
@@ -187,27 +192,27 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         // Upload message data
         let id = UUID().uuidString
         let key = "\(keyPrefix)/\(id)"
-        try await self.s3Worker.upload(
+        try await s3Worker.upload(
             data: data,
             contentType: sendContentType,
-            bucket: self.transientBucket,
+            bucket: transientBucket,
             key: key,
             metadata: nil
         )
         let s3EmailObjectInput = GraphQL.S3EmailObjectInput(
-            bucket: self.transientBucket,
+            bucket: transientBucket,
             key: key,
-            region: self.region
+            region: region
         )
 
         var rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
-            bcc: emailMessageHeader.bcc.map { $0.description },
-            cc: emailMessageHeader.cc.map { $0.description },
+            bcc: emailMessageHeader.bcc.map(\.description),
+            cc: emailMessageHeader.cc.map(\.description),
             from: emailMessageHeader.from.description,
             hasAttachments: hasAttachments,
-            replyTo: emailMessageHeader.replyTo.map { $0.description },
+            replyTo: emailMessageHeader.replyTo.map(\.description),
             subject: emailMessageHeader.subject,
-            to: emailMessageHeader.to.map { $0.description }
+            to: emailMessageHeader.to.map(\.description)
         )
         // Reply/forward message ids needs to be explicitly added to the RFC822 header for E2E sending
         if let replyingMessageId = replyingMessageId {
@@ -236,7 +241,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         let input = GraphQL.DeleteEmailMessagesInput(messageIds: ids)
         let mutation = GraphQL.DeleteEmailMessagesMutation(input: input)
         do {
-            let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation)
+            let (performResult, performError) = try await appSyncClient.perform(mutation: mutation)
             if let error = performError {
                 switch error {
                 case ApiOperationError.graphQLError(let cause):
@@ -268,7 +273,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         )
         let mutation = GraphQL.UpdateEmailMessagesMutation(input: input)
         do {
-            let (performResult, performError) = try await self.appSyncClient.perform(mutation: mutation)
+            let (performResult, performError) = try await appSyncClient.perform(mutation: mutation)
             if let error = performError {
                 switch error {
                 case ApiOperationError.graphQLError(let cause):
@@ -283,8 +288,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             guard let result = performResult?.data else {
                 throw SudoEmailError.internalError("Missing data from API call")
             }
-            return BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>(
-                status: try UpdateEmailMessagesStatusApiTransformer().transform(result.updateEmailMessagesV2.status),
+            return try BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>(
+                status: UpdateEmailMessagesStatusApiTransformer().transform(result.updateEmailMessagesV2.status),
                 successItems: result.updateEmailMessagesV2.successMessages?.map {
                     UpdatedEmailMessageSuccess(
                         id: $0.id,
@@ -335,7 +340,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         )
         let draftMetadata = try await s3Worker.list(bucket: emailBucket, key: s3Key)
 
-        guard let updatedAt = draftMetadata.first?.lastModified   else {
+        guard let updatedAt = draftMetadata.first?.lastModified else {
             throw SudoEmailError.internalError("updatedAt not set for draft.")
         }
 
@@ -375,7 +380,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         let cachePolicy = input.cachePolicy ?? .remoteOnly
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy
         )
@@ -414,7 +419,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         let cachePolicy = input.cachePolicy ?? .remoteOnly
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy
         )
@@ -453,7 +458,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         let cachePolicy = input.cachePolicy ?? .remoteOnly
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy
         )
@@ -478,7 +483,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     }
 
     func fetchEmailMessageRFC822Data(_ id: String, emailAddressId: String) async throws -> S3ObjectEntity? {
-        guard let sealedEmailMessage = try await self.getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData) else {
+        guard let sealedEmailMessage = try await getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData) else {
             return nil
         }
         guard let s3Key = await getS3KeyForEmailMessageId(id, emailAddressId: emailAddressId, publicKeyId: sealedEmailMessage.keyId) else {
@@ -486,7 +491,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
 
         do {
-            let rfc822Object = try await self.s3Worker.getObject(bucket: emailBucket, key: s3Key)
+            let rfc822Object = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
             return rfc822Object
         } catch {
             logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
@@ -507,25 +512,26 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
 
         do {
-            let contentEncodingValues = (rfc822Object.contentEncoding?.split(separator: ",") ?? ["\(CRYPTO_CONTENT_ENCODING)", "\(BINARY_DATA_CONTENT_ENCODING)"])
+            let contentEncodingValues = (rfc822Object.contentEncoding?
+                .split(separator: ",") ?? ["\(CRYPTO_CONTENT_ENCODING)", "\(BINARY_DATA_CONTENT_ENCODING)"])
                 .reversed()
             var decodedData = rfc822Object.body
             do {
-                for (encodingValue) in contentEncodingValues {
+                for encodingValue in contentEncodingValues {
                     switch encodingValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
-                        case COMPRESSION_CONTENT_ENCODING:
-                            let base64Decoded = Data(base64Encoded: decodedData)
-                            decodedData = try (base64Decoded?.gunzipped())!
-                        case CRYPTO_CONTENT_ENCODING:
-                            decodedData = try unsealer.unsealEmailMessageRFC822Data(
-                                rfc822Object.body,
-                                withKeyId: emailMessage.keyId,
-                                algorithm: emailMessage.algorithm
-                            )
-                        case BINARY_DATA_CONTENT_ENCODING:
-                            break
-                        default:
-                            throw SudoEmailError.decodingError
+                    case COMPRESSION_CONTENT_ENCODING:
+                        let base64Decoded = Data(base64Encoded: decodedData)
+                        decodedData = try (base64Decoded?.gunzipped())!
+                    case CRYPTO_CONTENT_ENCODING:
+                        decodedData = try unsealer.unsealEmailMessageRFC822Data(
+                            rfc822Object.body,
+                            withKeyId: emailMessage.keyId,
+                            algorithm: emailMessage.algorithm
+                        )
+                    case BINARY_DATA_CONTENT_ENCODING:
+                        break
+                    default:
+                        throw SudoEmailError.decodingError
                     }
                 }
             }
@@ -537,22 +543,22 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
             if emailMessage.encryptionStatus == EncryptionStatus.ENCRYPTED {
                 var keyAttachments: Set<EmailAttachment> = []
-                var bodyAttachment: EmailAttachment? = nil
+                var bodyAttachment: EmailAttachment?
 
-                parsedMessage.attachments?.forEach({ attachment in
+                parsedMessage.attachments?.forEach { attachment in
                     let contentId = attachment.contentId ?? ""
                     let isKeyExchangeType = contentId.contains(SecureEmailAttachmentType.KEY_EXCHANGE.contentId()) ||
-                                             contentId.contains(SecureEmailAttachmentType.LEGACY_KEY_EXCHANGE_CONTENT_ID)
+                        contentId.contains(SecureEmailAttachmentType.LEGACY_KEY_EXCHANGE_CONTENT_ID)
                     if isKeyExchangeType {
                         keyAttachments.insert(attachment)
                     } else {
                         let isBodyType = contentId.contains(SecureEmailAttachmentType.BODY.contentId()) ||
-                                          contentId.contains(SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID)
+                            contentId.contains(SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID)
                         if isBodyType {
                             bodyAttachment = attachment
                         }
                     }
-                })
+                }
 
                 if keyAttachments.isEmpty {
                     throw SudoEmailError.keyAttachmentsNotFound
@@ -601,7 +607,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
 
         let updatedAt = downloaded.lastModified
-        let sealedData =  downloaded.body
+        let sealedData = downloaded.body
         guard let keyId = downloaded.metadata?[Defaults.keyIdMetadataName] else {
             throw SudoEmailError.decodingError
         }
@@ -749,7 +755,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             )
         }
     }
-    
+
     func subscribeToEmailMessageUpdated(
         withId id: String?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
@@ -823,7 +829,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             let graphQLResultWorker = GraphQLResultWorker()
             let result = graphQLResultWorker.convertToResult(result, error: error)
             switch result {
-            case let .success(data):
+            case .success(let data):
                 do {
                     guard let entity = try transform(data) else {
                         weakSelf.logger.warning("Email message subscription received with no data")
@@ -834,7 +840,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
                     weakSelf.logger.error(error.localizedDescription)
                     resultHandler(.failure(error))
                 }
-            case let .failure(error):
+            case .failure(let error):
                 weakSelf.logger.error(error.localizedDescription)
                 resultHandler(.failure(error))
             }
@@ -852,7 +858,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     ) -> SubscriptionStatusChangeHandler {
         return { [weak self] status in
             switch status {
-            case let .error(cause):
+            case .error(let cause):
                 let error = SudoEmailError.internalError(cause.errorDescription)
                 resultHandler(.failure(error))
             case .disconnected:
@@ -867,7 +873,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
     func getEmailMessageQuery(id: String, cachePolicy: AWSAppSync.CachePolicy) async throws -> SealedEmailMessageEntity? {
         let query = GraphQL.GetEmailMessageQuery(id: id)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(query: query, cachePolicy: cachePolicy)
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(query: query, cachePolicy: cachePolicy)
         guard let result = fetchResult?.data else {
             guard let error = fetchError else {
                 return nil
@@ -927,7 +933,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
     /// Generate an S3 key to use when sending an email message to the transient bucket.
     func getS3KeyForEmailAddressId(emailAddressId: String) async -> String? {
-        guard let identityId = await self.userClient.getIdentityId() else {
+        guard let identityId = await userClient.getIdentityId() else {
             logger.warning("Failed to get identity id")
             return nil
         }
@@ -942,5 +948,4 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
         return "\(keyPrefix)/\(id)-\(publicKeyId)"
     }
-
 }

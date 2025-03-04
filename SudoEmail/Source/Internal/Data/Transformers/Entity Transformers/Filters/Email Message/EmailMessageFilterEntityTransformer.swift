@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -21,55 +21,54 @@ struct EmailMessageFilterEntityTransformer {
     /// Utility to transform `EmailMessage.State` to `StateEntity`.
     let stringFilterTransformer = StringFilterEntityTransformer()
 
-     // MARK: - Methods
+    // MARK: - Methods
 
     /// Transform a input `EmailMessageFilter` into a `EmailMessageFilterEntity`.
     func transform(_ filter: EmailMessageFilter) -> EmailMessageFilterEntity {
         switch filter {
-        case let .id(idFilter):
+        case .id(let idFilter):
             let idFilter = stringFilterTransformer.transform(idFilter)
             /// This is not a typo - `id` maps to `messageId`
             return .messageId(idFilter)
-        case let .messageId(idFilter):
+        case .messageId(let idFilter):
             let idFilter = stringFilterTransformer.transform(idFilter)
             return .messageId(idFilter)
-        case let .algorithm(algorithmFilter):
+        case .algorithm(let algorithmFilter):
             let algorithmFilter = stringFilterTransformer.transform(algorithmFilter)
             return .algorithm(algorithmFilter)
-        case let .clientRefId(clientRefIdFilter):
+        case .clientRefId(let clientRefIdFilter):
             let clientRefIdFilter = stringFilterTransformer.transform(clientRefIdFilter)
             return .clientRefId(clientRefIdFilter)
-        case let .direction(directionFilter):
+        case .direction(let directionFilter):
             let directionFilter = directionFilterTransformer.transform(directionFilter)
             return .direction(directionFilter)
-        case let .state(stateFilter):
+        case .state(let stateFilter):
             let stateFilter = stateFilterTransformer.transform(stateFilter)
             return .state(stateFilter)
-        case let .seen(seenFilter):
+        case .seen(let seenFilter):
             let seenFilter = boolFilterTransformer.transform(seenFilter)
             return .seen(seenFilter)
-        case let .repliedTo(repliedToFilter):
+        case .repliedTo(let repliedToFilter):
             let repliedToFilter = boolFilterTransformer.transform(repliedToFilter)
             return .repliedTo(repliedToFilter)
-        case let .forwarded(forwardedFilter):
+        case .forwarded(let forwardedFilter):
             let forwardedFilter = boolFilterTransformer.transform(forwardedFilter)
             return .forwarded(forwardedFilter)
-        case let .keyId(keyIdFilter):
+        case .keyId(let keyIdFilter):
             let keyIdFilter = stringFilterTransformer.transform(keyIdFilter)
             return .keyId(keyIdFilter)
-        case let .folderId(folderIdFilter):
+        case .folderId(let folderIdFilter):
             let folderIdFilter = stringFilterTransformer.transform(folderIdFilter)
             return .folderId(folderIdFilter)
-        case let .not(emailMessageFilter):
+        case .not(let emailMessageFilter):
             let emailMessageFilter = transform(emailMessageFilter)
             return .not(emailMessageFilter)
-        case let .and(emailMessageFilters):
+        case .and(let emailMessageFilters):
             let emailMessageFilters = emailMessageFilters.map(transform(_:))
             return .and(emailMessageFilters)
-        case let .or(emailMessageFilters):
+        case .or(let emailMessageFilters):
             let emailMessageFilters = emailMessageFilters.map(transform(_:))
             return .or(emailMessageFilters)
         }
     }
-
 }

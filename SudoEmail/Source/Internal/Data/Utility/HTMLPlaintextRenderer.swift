@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -102,8 +102,7 @@ public class HTMLPlaintextRenderer: HTMLRenderer {
 
                 // replace only the new part
                 if let replacement = replacement,
-                   let newRange = Range(NSRange(location: match.range.lowerBound, length: cleanMatchText.count), in: out)
-                {
+                   let newRange = Range(NSRange(location: match.range.lowerBound, length: cleanMatchText.count), in: out) {
                     out.replaceSubrange(newRange, with: replacement)
                 }
 
@@ -146,4 +145,3 @@ public class HTMLPlaintextRenderer: HTMLRenderer {
         return out
     }
 }
-

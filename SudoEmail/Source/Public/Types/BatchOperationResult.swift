@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -13,16 +13,16 @@ public enum BatchOperationResultStatus {
 }
 
 /// Result type of an API that returns multiple records. Supports partial results.
-public struct BatchOperationResult<S,F> {
+public struct BatchOperationResult<S, F> {
 
     // MARK: - Properties
 
     /// The result status of the operation
     public var status: BatchOperationResultStatus
-    
+
     /// List of items with successful operations
     public var successItems: [S]?
-    
+
     /// List of items with failed operations
     public var failureItems: [F]?
 
@@ -58,6 +58,6 @@ public struct EmailMessageOperationFailureResult: Equatable {
 
     public static func == (lhs: EmailMessageOperationFailureResult, rhs: EmailMessageOperationFailureResult) -> Bool {
         return lhs.id == rhs.id &&
-               lhs.errorType == rhs.errorType
+            lhs.errorType == rhs.errorType
     }
 }

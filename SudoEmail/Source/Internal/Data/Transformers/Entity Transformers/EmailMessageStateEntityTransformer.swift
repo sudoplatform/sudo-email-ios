@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -24,13 +24,13 @@ struct EmailMessageStateEntityTransformer {
             return .received
         case .deleted:
             return .deleted
-        case let .unknown(state):
+        case .unknown(let state):
             throw SudoEmailError.internalError("Unsupported state: \(state)")
         }
     }
 
     /// Transform an API input `EmailMessage.Direction` into a `DirectionEntity`.
-        func transform(_ apiInput: EmailMessage.State) -> StateEntity {
+    func transform(_ apiInput: EmailMessage.State) -> StateEntity {
         switch apiInput {
         case .queued:
             return .queued
@@ -48,5 +48,4 @@ struct EmailMessageStateEntityTransformer {
             return .deleted
         }
     }
-
 }

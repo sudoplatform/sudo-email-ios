@@ -34,6 +34,39 @@ internal enum BlockedAddressHashAlgorithm: RawRepresentable, Equatable, JSONDeco
   }
 }
 
+internal enum BlockedAddressAction: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
+  internal typealias RawValue = String
+  case drop
+  case spam
+  /// Auto generated constant for unknown enum values
+  case unknown(RawValue)
+
+  internal init?(rawValue: RawValue) {
+    switch rawValue {
+      case "DROP": self = .drop
+      case "SPAM": self = .spam
+      default: self = .unknown(rawValue)
+    }
+  }
+
+  internal var rawValue: RawValue {
+    switch self {
+      case .drop: return "DROP"
+      case .spam: return "SPAM"
+      case .unknown(let value): return value
+    }
+  }
+
+  internal static func == (lhs: BlockedAddressAction, rhs: BlockedAddressAction) -> Bool {
+    switch (lhs, rhs) {
+      case (.drop, .drop): return true
+      case (.spam, .spam): return true
+      case (.unknown(let lhsValue), .unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+}
+
 internal enum UpdateBlockedAddressesStatus: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
   internal typealias RawValue = String
   case failed
@@ -736,8 +769,8 @@ internal struct EmailMessageUpdateValuesInput: GraphQLMapConvertible {
 internal struct BlockEmailAddressesInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(blockedAddresses: [BlockedEmailAddressInput], owner: GraphQLID) {
-    graphQLMap = ["blockedAddresses": blockedAddresses, "owner": owner]
+  internal init(blockedAddresses: [BlockedEmailAddressInput], emailAddressId: Optional<String?> = nil, owner: GraphQLID) {
+    graphQLMap = ["blockedAddresses": blockedAddresses, "emailAddressId": emailAddressId, "owner": owner]
   }
 
   internal var blockedAddresses: [BlockedEmailAddressInput] {
@@ -746,6 +779,15 @@ internal struct BlockEmailAddressesInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "blockedAddresses")
+    }
+  }
+
+  internal var emailAddressId: Optional<String?> {
+    get {
+      return graphQLMap["emailAddressId"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
     }
   }
 
@@ -762,8 +804,17 @@ internal struct BlockEmailAddressesInput: GraphQLMapConvertible {
 internal struct BlockedEmailAddressInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(hashAlgorithm: BlockedAddressHashAlgorithm, hashedBlockedValue: String, sealedValue: SealedAttributeInput) {
-    graphQLMap = ["hashAlgorithm": hashAlgorithm, "hashedBlockedValue": hashedBlockedValue, "sealedValue": sealedValue]
+  internal init(action: Optional<BlockedAddressAction?> = nil, hashAlgorithm: BlockedAddressHashAlgorithm, hashedBlockedValue: String, sealedValue: SealedAttributeInput) {
+    graphQLMap = ["action": action, "hashAlgorithm": hashAlgorithm, "hashedBlockedValue": hashedBlockedValue, "sealedValue": sealedValue]
+  }
+
+  internal var action: Optional<BlockedAddressAction?> {
+    get {
+      return graphQLMap["action"] as! Optional<BlockedAddressAction?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "action")
+    }
   }
 
   internal var hashAlgorithm: BlockedAddressHashAlgorithm {
@@ -10077,6 +10128,8 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("sealedValue", type: .nonNull(.object(SealedValue.selections))),
           GraphQLField("hashedBlockedValue", type: .nonNull(.scalar(String.self))),
+          GraphQLField("action", type: .scalar(BlockedAddressAction.self)),
+          GraphQLField("emailAddressId", type: .scalar(String.self)),
         ]
 
         internal var snapshot: Snapshot
@@ -10085,8 +10138,8 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(sealedValue: SealedValue, hashedBlockedValue: String) {
-          self.init(snapshot: ["__typename": "BlockedEmailAddress", "sealedValue": sealedValue.snapshot, "hashedBlockedValue": hashedBlockedValue])
+        internal init(sealedValue: SealedValue, hashedBlockedValue: String, action: BlockedAddressAction? = nil, emailAddressId: String? = nil) {
+          self.init(snapshot: ["__typename": "BlockedEmailAddress", "sealedValue": sealedValue.snapshot, "hashedBlockedValue": hashedBlockedValue, "action": action, "emailAddressId": emailAddressId])
         }
 
         internal var __typename: String {
@@ -10113,6 +10166,24 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "hashedBlockedValue")
+          }
+        }
+
+        internal var action: BlockedAddressAction? {
+          get {
+            return snapshot["action"] as? BlockedAddressAction
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "action")
+          }
+        }
+
+        internal var emailAddressId: String? {
+          get {
+            return snapshot["emailAddressId"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailAddressId")
           }
         }
 
@@ -14032,7 +14103,7 @@ internal final class OnEmailMessageUpdatedWithIdSubscription: GraphQLSubscriptio
 
 internal struct BlockedAddress: GraphQLFragment {
   internal static let fragmentString =
-    "fragment BlockedAddress on BlockedEmailAddress {\n  __typename\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  hashAlgorithm\n  hashedBlockedValue\n  sealedValue {\n    __typename\n    ...SealedAttribute\n  }\n}"
+    "fragment BlockedAddress on BlockedEmailAddress {\n  __typename\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  hashAlgorithm\n  hashedBlockedValue\n  sealedValue {\n    __typename\n    ...SealedAttribute\n  }\n  action\n  emailAddressId\n}"
 
   internal static let possibleTypes = ["BlockedEmailAddress"]
 
@@ -14046,6 +14117,8 @@ internal struct BlockedAddress: GraphQLFragment {
     GraphQLField("hashAlgorithm", type: .nonNull(.scalar(BlockedAddressHashAlgorithm.self))),
     GraphQLField("hashedBlockedValue", type: .nonNull(.scalar(String.self))),
     GraphQLField("sealedValue", type: .nonNull(.object(SealedValue.selections))),
+    GraphQLField("action", type: .scalar(BlockedAddressAction.self)),
+    GraphQLField("emailAddressId", type: .scalar(String.self)),
   ]
 
   internal var snapshot: Snapshot
@@ -14054,8 +14127,8 @@ internal struct BlockedAddress: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, hashAlgorithm: BlockedAddressHashAlgorithm, hashedBlockedValue: String, sealedValue: SealedValue) {
-    self.init(snapshot: ["__typename": "BlockedEmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "hashAlgorithm": hashAlgorithm, "hashedBlockedValue": hashedBlockedValue, "sealedValue": sealedValue.snapshot])
+  internal init(owner: GraphQLID, owners: [Owner], version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, hashAlgorithm: BlockedAddressHashAlgorithm, hashedBlockedValue: String, sealedValue: SealedValue, action: BlockedAddressAction? = nil, emailAddressId: String? = nil) {
+    self.init(snapshot: ["__typename": "BlockedEmailAddress", "owner": owner, "owners": owners.map { $0.snapshot }, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "hashAlgorithm": hashAlgorithm, "hashedBlockedValue": hashedBlockedValue, "sealedValue": sealedValue.snapshot, "action": action, "emailAddressId": emailAddressId])
   }
 
   internal var __typename: String {
@@ -14136,6 +14209,24 @@ internal struct BlockedAddress: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue.snapshot, forKey: "sealedValue")
+    }
+  }
+
+  internal var action: BlockedAddressAction? {
+    get {
+      return snapshot["action"] as? BlockedAddressAction
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "action")
+    }
+  }
+
+  internal var emailAddressId: String? {
+    get {
+      return snapshot["emailAddressId"] as? String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "emailAddressId")
     }
   }
 
@@ -14339,7 +14430,7 @@ internal struct BlockAddressesResult: GraphQLFragment {
 
 internal struct GetEmailAddressBlocklistResponse: GraphQLFragment {
   internal static let fragmentString =
-    "fragment GetEmailAddressBlocklistResponse on GetEmailAddressBlocklistResponse {\n  __typename\n  blockedAddresses {\n    __typename\n    sealedValue {\n      __typename\n      ...SealedAttribute\n    }\n    hashedBlockedValue\n  }\n}"
+    "fragment GetEmailAddressBlocklistResponse on GetEmailAddressBlocklistResponse {\n  __typename\n  blockedAddresses {\n    __typename\n    sealedValue {\n      __typename\n      ...SealedAttribute\n    }\n    hashedBlockedValue\n    action\n    emailAddressId\n  }\n}"
 
   internal static let possibleTypes = ["GetEmailAddressBlocklistResponse"]
 
@@ -14383,6 +14474,8 @@ internal struct GetEmailAddressBlocklistResponse: GraphQLFragment {
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
       GraphQLField("sealedValue", type: .nonNull(.object(SealedValue.selections))),
       GraphQLField("hashedBlockedValue", type: .nonNull(.scalar(String.self))),
+      GraphQLField("action", type: .scalar(BlockedAddressAction.self)),
+      GraphQLField("emailAddressId", type: .scalar(String.self)),
     ]
 
     internal var snapshot: Snapshot
@@ -14391,8 +14484,8 @@ internal struct GetEmailAddressBlocklistResponse: GraphQLFragment {
       self.snapshot = snapshot
     }
 
-    internal init(sealedValue: SealedValue, hashedBlockedValue: String) {
-      self.init(snapshot: ["__typename": "BlockedEmailAddress", "sealedValue": sealedValue.snapshot, "hashedBlockedValue": hashedBlockedValue])
+    internal init(sealedValue: SealedValue, hashedBlockedValue: String, action: BlockedAddressAction? = nil, emailAddressId: String? = nil) {
+      self.init(snapshot: ["__typename": "BlockedEmailAddress", "sealedValue": sealedValue.snapshot, "hashedBlockedValue": hashedBlockedValue, "action": action, "emailAddressId": emailAddressId])
     }
 
     internal var __typename: String {
@@ -14419,6 +14512,24 @@ internal struct GetEmailAddressBlocklistResponse: GraphQLFragment {
       }
       set {
         snapshot.updateValue(newValue, forKey: "hashedBlockedValue")
+      }
+    }
+
+    internal var action: BlockedAddressAction? {
+      get {
+        return snapshot["action"] as? BlockedAddressAction
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "action")
+      }
+    }
+
+    internal var emailAddressId: String? {
+      get {
+        return snapshot["emailAddressId"] as? String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "emailAddressId")
       }
     }
 

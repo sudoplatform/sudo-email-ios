@@ -1,10 +1,8 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-
-// swiftlint:disable type_name
 
 /// Utility class to transform email message direction entity filter data to the GraphQL input filter data.
 struct EmailMessageDirectionFilterInputGQLTransformer {
@@ -19,16 +17,12 @@ struct EmailMessageDirectionFilterInputGQLTransformer {
     /// Transform a `EmailMessageDirectionFilterEntity` filter rule into a GraphQL `EmailMessageDirectionFilterInput` filter rule.
     func transform(_ entity: EmailMessageDirectionFilterEntity) -> GraphQL.EmailMessageDirectionFilterInput {
         switch entity {
-        case let .equals(direction):
+        case .equals(let direction):
             let direction = directionTransformer.transform(direction)
             return GraphQL.EmailMessageDirectionFilterInput(eq: direction)
-        case let .notEquals(direction):
+        case .notEquals(let direction):
             let direction = directionTransformer.transform(direction)
             return GraphQL.EmailMessageDirectionFilterInput(ne: direction)
-
         }
     }
-
 }
-
-// swiftlint:enable type_name

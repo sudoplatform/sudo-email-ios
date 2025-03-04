@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import SudoUser
 import SudoLogging
+import SudoUser
 
 /// Generic type associated with API completion/closures. Generic type O is the expected output result in a
 /// success case.
@@ -153,7 +153,7 @@ public protocol SudoEmailClient: AnyObject {
     func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult>
-    
+
     /// Create a custom EmailFolder
     ///   - Parameters:
     ///     - input: Input parameters used to create a custom EmailFolder.
@@ -162,7 +162,7 @@ public protocol SudoEmailClient: AnyObject {
     func createCustomEmailFolder(
         withInput input: CreateCustomEmailFolderInput
     ) async throws -> EmailFolder
-    
+
     /// Delete a custom EmailFolder
     /// Any messages in the folder will be moved to TRASH
     ///   - Parameters:
@@ -172,7 +172,7 @@ public protocol SudoEmailClient: AnyObject {
     func deleteCustomEmailFolder(
         withInput input: DeleteCustomEmailFolderInput
     ) async throws -> EmailFolder?
-    
+
     /// Update a custom EmailFolder
     ///   - Parameters:
     ///     - input: Input parameters used to update a custom EmailFolder.
@@ -206,12 +206,13 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Success: Array of supported domains.
     ///   - Failure: `SudoEmailError`.
     func getSupportedEmailDomains(_ cachePolicy: CachePolicy) async throws -> [String]
-    
+
     /// Get a list of all of the configured domains. Primarily intended to be used as part of performing
     /// an email send operation in order to fetch all domains configured for the service so that appropriate
     /// encryption decisions can be made.
     /// - Parameters:
-    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of identical API calls.
+    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of identical API
+    /// calls.
     ///       API calls.
     /// - Returns:
     ///   - Success: Array of all configured domains.
@@ -245,7 +246,7 @@ public protocol SudoEmailClient: AnyObject {
     ) async throws -> ListOutput<EmailAddress>
 
     /// Get a list of public info objects associated with the provided email addresses.
-    /// 
+    ///
     /// If no email addresses or public keys can be found, an empty list will be returned.
     ///  - Parameters:
     ///    - emailAddresses: A list of email address strings in format 'local-part@domain'.
@@ -272,7 +273,7 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Success: Email message associated with `id`, or `nil` if the email message cannot be found.
     ///   - Failure: `SudoEmailError`.
     func getEmailMessage(withInput input: GetEmailMessageInput) async throws -> EmailMessage?
-    
+
     /// Get a list of all email messages for the user. If no email messages can be found, an empty list will be returned.
     /// - Parameters:
     ///   - input: Parameters used to retrieve a list of email messages.
@@ -324,13 +325,13 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - The data associated with the `EmailMessage` or null if the email message cannot be found.
     func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody?
-    
+
     /// Lists the metadata and content of all draft email messages for the user.
     ///
     /// - Returns:
     ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
     func listDraftEmailMessages() async throws -> [DraftEmailMessage]
-    
+
     /// Lists the metadata and content of all draft email messages for the specified email address identifier.
     ///
     /// - Parameters:
@@ -338,13 +339,13 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
     func listDraftEmailMessagesForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessage]
-    
+
     /// Lists the metadata of all draft messages for the user.
     ///
     /// - Returns:
     ///   - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
     func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata]
-    
+
     /// Lists the metadata of all draft messages for the user.
     ///
     /// - Parameters:
@@ -367,18 +368,25 @@ public protocol SudoEmailClient: AnyObject {
     ///
     /// - Returns: Key archive data.
     func exportKeys() throws -> Data
-    
+
     /// Blocks the addresses given from sending to the user
     ///
     ///  - Parameters:
     ///    - addresses: Array of addresses to block as strings
+    ///    - action: The action to take on incoming messages from the blocked address(es). Optional: defaults to DROP
+    ///    - emailAddressId: The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner's
+    /// addresses.
     ///  - Returns: The status of the blocking:
     ///     Success - All addresses were succesfully blocked.
     ///     Partial - Only a partial number of the addresses were blocked successfully. Includes a list of the
     ///           addresses that failed and succeeded to be blocked.
     ///     Failure - All addresses failed to be blocked.
-    func blockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String>
-    
+    func blockEmailAddresses(
+        addresses: [String],
+        action: UnsealedBlockedAddress.BlockedAddressAction,
+        emailAddressId: String?
+    ) async throws -> BatchOperationResult<String, String>
+
     /// Unblocks the addresses given from sending to the user
     ///
     ///  - Parameters:
@@ -389,7 +397,7 @@ public protocol SudoEmailClient: AnyObject {
     ///           addresses that failed and succeeded to be unblocked.
     ///     Failure - All addresses failed to be unblocked.
     func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String>
-    
+
     /// Unblocks the hashed addresses given from sending to the user
     ///
     ///  - Parameters:
@@ -400,7 +408,7 @@ public protocol SudoEmailClient: AnyObject {
     ///           addresses that failed and succeeded to be unblocked.
     ///     Failure - All addresses failed to be unblocked.
     func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String, String>
-    
+
     /// Get email address blocklist for logged in user
     ///
     /// - Returns: The list of blocked email addresses
@@ -430,7 +438,7 @@ public protocol SudoEmailClient: AnyObject {
         withId id: String?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken?
-    
+
     /// Subscribe to email message updated events.
     /// - Parameters:
     ///   - id: Identifier of a specific deletion event to watch for. If `nil`, all update events will be handled.
@@ -444,4 +452,22 @@ public protocol SudoEmailClient: AnyObject {
 
     /// Unsubscribe all subscribers from receiving sudo email notifications
     func unsubscribeAll()
+}
+
+public extension SudoEmailClient {
+
+    func blockEmailAddresses(
+        addresses: [String],
+        action: UnsealedBlockedAddress.BlockedAddressAction = .drop,
+        emailAddressId: String? = nil
+    ) async throws -> BatchOperationResult<String, String> {
+        try await blockEmailAddresses(addresses: addresses, action: action, emailAddressId: emailAddressId)
+    }
+//    func blockEmailAddresses(
+//        addresses: [String],
+//        action: UnsealedBlockedAddress.BlockedAddressAction = .drop,
+//        emailAddressId: String
+//    ) async throws -> BatchOperationResult<String, String> {
+//        try await blockEmailAddresses(addresses: addresses, action: action, emailAddressId: emailAddressId)
+//    }
 }

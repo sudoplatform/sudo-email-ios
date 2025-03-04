@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -23,7 +23,7 @@ public struct ListOutput<T> {
 
     /// Returns an empty ListOutput.
     static var empty: Self {
-        return Self.init(items: [])
+        return Self(items: [])
     }
 
     /// Initialize an instance of ListOutput.

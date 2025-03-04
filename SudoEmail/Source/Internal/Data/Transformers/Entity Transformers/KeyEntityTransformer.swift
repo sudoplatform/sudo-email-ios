@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -36,5 +36,4 @@ struct KeyEntityTransformer {
         let entity = KeyEntity(type: .publicKey, keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
         return entity
     }
-
 }

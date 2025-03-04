@@ -1,12 +1,12 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 import Foundation
 
-///Input object containing an email message identifier and email address identifier used to retrieve the email message data.
+/// Input object containing an email message identifier and email address identifier used to retrieve the email message data.
 public struct GetEmailMessageWithBodyInput: Equatable {
 
     /// Identifier of the email message body data to be retrieved.

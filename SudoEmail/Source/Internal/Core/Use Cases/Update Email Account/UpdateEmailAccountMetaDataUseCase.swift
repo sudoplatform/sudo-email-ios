@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -40,7 +40,7 @@ class UpdateEmailAccountMetadataUseCase {
     ///   - values: The new values for email account metadata.
     /// - Returns: The identifier of the email account that was updated.
     func execute(emailAccountId: String, values: UpdateEmailAddressMetadataValues) async throws -> String {
-        let updatedEmailAccountId = try await self.emailAccountRepository.updateMetadata(
+        let updatedEmailAccountId = try await emailAccountRepository.updateMetadata(
             id: emailAccountId,
             values: values
         )

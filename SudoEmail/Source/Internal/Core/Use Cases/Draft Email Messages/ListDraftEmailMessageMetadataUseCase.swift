@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -7,7 +7,7 @@
 class ListDraftEmailMessageMetadataUseCase {
 
     // MARK: - Properties
-    
+
     let emailAccountRepository: EmailAccountRepository
     let emailMessageRepository: EmailMessageRepository
 
@@ -24,15 +24,15 @@ class ListDraftEmailMessageMetadataUseCase {
     // MARK: - Methods
 
     func execute() async throws -> [DraftEmailMessageMetadata] {
-        
+
         var result: [DraftEmailMessageMetadataEntity] = []
 
-        var nextToken: String? = nil
+        var nextToken: String?
         repeat {
             do {
-                let emailAccounts = try await self.emailAccountRepository.list(limit: nil, nextToken: nextToken)
+                let emailAccounts = try await emailAccountRepository.list(limit: nil, nextToken: nextToken)
                 nextToken = emailAccounts.nextToken
-                
+
                 try await withThrowingTaskGroup(of: [DraftEmailMessageMetadataEntity].self) { group in
                     for account in emailAccounts.items {
                         group.addTask {

@@ -1,0 +1,9 @@
+--swiftversion 5.4
+--minversion 0.48.1
+--exclude Pods,Generated,build,SudoEmail/Source/Internal/GraphQLAPI.swift
+--allman false
+--indent 4
+--disable elseOnSameLine, blankLinesAtStartOfScope, unusedArguments, redundantReturn, redundantType, wrapMultilineStatementBraces
+--commas inline
+--patternlet inline
+--maxwidth 180

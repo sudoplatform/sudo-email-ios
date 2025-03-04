@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -41,7 +41,7 @@ class DefaultDomainRepsitory: DomainRepository {
     func fetchSupportedDomains() async throws -> [DomainEntity] {
         return try await performGetSupportedEmailDomainsQuery(cachePolicy: CachePolicy.remoteOnly)
     }
-    
+
     func getConfiguredDomains() async throws -> [DomainEntity] {
         return try await performGetConfiguredEmailDomainsQuery(cachePolicy: CachePolicy.cacheOnly)
     }
@@ -60,7 +60,7 @@ class DefaultDomainRepsitory: DomainRepository {
         let query = GraphQL.GetEmailDomainsQuery()
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue
@@ -74,7 +74,7 @@ class DefaultDomainRepsitory: DomainRepository {
         let transformer = DomainEntityTransformer()
         return result.getEmailDomains.domains.map(transformer.transform(_:))
     }
-    
+
     /// Perform a `GetConfiguredEmailDomainsQuery` with specified cache policy
     /// - Parameters:
     ///   - cachePolicy specifies whether to use local cache or get results from the server
@@ -83,7 +83,7 @@ class DefaultDomainRepsitory: DomainRepository {
         let query = GraphQL.GetConfiguredEmailDomainsQuery()
         let cachePolicyTransformer = CachePolicyAPITransformer()
         let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: queryCachePolicy,
             queue: dispatchQueue
@@ -97,5 +97,4 @@ class DefaultDomainRepsitory: DomainRepository {
         let transformer = DomainEntityTransformer()
         return result.getConfiguredEmailDomains.domains.map(transformer.transform(_:))
     }
-
 }

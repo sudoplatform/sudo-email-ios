@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
+import Foundation
 
 /// Status of a `PlatformSubscriptionStatus`.
 public enum PlatformSubscriptionStatus: Equatable {
@@ -23,7 +23,7 @@ public enum PlatformSubscriptionStatus: Equatable {
             self = .connected
         case .disconnected:
             self = .disconnected
-        case let .error(error):
+        case .error(let error):
             self = .error(error)
         }
     }
@@ -40,7 +40,7 @@ public enum PlatformSubscriptionStatus: Equatable {
             return true
         case (.disconnected, .disconnected):
             return true
-        case (let .error(lError), let .error(rError)):
+        case (let .error(lError), .error(let rError)):
             return String(reflecting: lError) == String(reflecting: rError)
         default:
             return false

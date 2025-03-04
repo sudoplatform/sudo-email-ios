@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -8,9 +8,9 @@ import Foundation
 import SudoNotification
 
 public class DefaultSudoEmailNotificationFilterClient: SudoNotificationFilterClient {
-    
+
     public let serviceName = Constants.serviceName
-    
+
     static let schema = NotificationMetaData(serviceName: Constants.serviceName, schema: [
         NotificationSchemaEntry(
             description: "Type of notification message",

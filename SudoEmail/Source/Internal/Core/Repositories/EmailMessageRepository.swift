@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,7 +25,14 @@ protocol EmailMessageRepository: AnyObject {
     ///   - replyingMessageId: Identifier of the email message being replied to.
     ///   - forwardingMessageId: Identifier of the email message being forwarded.
     /// - Returns: SendEmailMessageResult
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String, emailMessageHeader: InternetMessageFormatHeader, hasAttachments: Bool, replyingMessageId: String?, forwardingMessageId: String?) async throws -> SendEmailMessageResult
+    func sendEmailMessage(
+        withRFC822Data data: Data,
+        emailAccountId: String,
+        emailMessageHeader: InternetMessageFormatHeader,
+        hasAttachments: Bool,
+        replyingMessageId: String?,
+        forwardingMessageId: String?
+    ) async throws -> SendEmailMessageResult
 
     /// Delete an email message.
     /// - Parameters:
@@ -88,7 +95,7 @@ protocol EmailMessageRepository: AnyObject {
     ///   - id: Identifier of the email message to fetch.
     /// - Returns: on success, the sealed email message with the input identifier
     func fetchEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity?
-    
+
     /// List all sealed email messages for the user.
     /// - Parameters:
     ///   - input: input parameters for the list email messages query
@@ -158,7 +165,7 @@ protocol EmailMessageRepository: AnyObject {
         withId id: String?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken
-    
+
     /// Subscribe to all sealed email messages updated.
     /// - Parameters:
     ///   - id: The specific email message id to watch for update. If `nil`, all message updates will be watched.

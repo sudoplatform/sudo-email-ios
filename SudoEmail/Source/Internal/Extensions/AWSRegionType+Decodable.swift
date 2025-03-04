@@ -1,12 +1,12 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 import AWSCore
 
-/// Disables Cyclomatic Dependency for `AWSRegionType` as the kit has no control over `AWSRegionType`.
+// Disables Cyclomatic Dependency for `AWSRegionType` as the kit has no control over `AWSRegionType`.
 // swiftlint:disable cyclomatic_complexity
 
 extension AWSRegionType {
@@ -109,10 +109,11 @@ extension AWSRegionType: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let stringValue = try container.decode(String.self)
-        guard let value = AWSRegionType.init(string: stringValue) else {
+        guard let value = AWSRegionType(string: stringValue) else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Value not supported: \(stringValue)")
         }
         self = value
     }
-
 }
+
+// swiftlint:enable cyclomatic_complexity

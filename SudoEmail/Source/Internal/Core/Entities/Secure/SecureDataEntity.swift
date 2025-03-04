@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -64,5 +64,4 @@ struct SecureDataEntity: Codable {
         let jsonData = Data(jsonString.utf8)
         return try JSONDecoder().decode(SecureDataEntity.self, from: jsonData)
     }
-
 }

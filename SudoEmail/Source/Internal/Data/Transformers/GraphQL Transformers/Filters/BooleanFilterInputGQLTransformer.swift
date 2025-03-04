@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -10,9 +10,9 @@ struct BooleanFilterInputGQLTransformer {
     /// Transform a `BoolFilterEntity` filter rule into a GraphQL `BooleanFilterInput` filter rule.
     func transform(_ entity: BoolFilterEntity) -> GraphQL.BooleanFilterInput {
         switch entity {
-        case let .equals(bool):
+        case .equals(let bool):
             return GraphQL.BooleanFilterInput(eq: bool)
-        case let .notEquals(bool):
+        case .notEquals(let bool):
             return GraphQL.BooleanFilterInput(ne: bool)
         }
     }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -13,31 +13,31 @@ public enum EmailCryptoServiceError: Error, Equatable, LocalizedError {
     case secureDataDecryptionError(_ message: String? = nil, cause: String? = nil)
     case secureDataEncryptionError(_ message: String? = nil, cause: String? = nil)
     case secureDataParsingError(_ message: String? = nil, cause: String? = nil)
-    
+
     // MARK: - Conformace: LocalizedError
-    
+
     public var errorDescription: String? {
         switch self {
         case .encodingError(let message, cause: _),
-            .decodingError(let message, cause: _),
-            .invalidArgumentError(let message, cause: _),
-            .keyNotFoundError(let message, cause: _),
-            .secureDataDecryptionError(let message, cause: _),
-            .secureDataEncryptionError(let message, cause: _),
-            .secureDataParsingError(let message, cause: _):
+             .decodingError(let message, cause: _),
+             .invalidArgumentError(let message, cause: _),
+             .keyNotFoundError(let message, cause: _),
+             .secureDataDecryptionError(let message, cause: _),
+             .secureDataEncryptionError(let message, cause: _),
+             .secureDataParsingError(let message, cause: _):
             return message
         }
     }
-    
+
     public var failureReason: String? {
         switch self {
         case .encodingError(_, cause: let cause),
-            .decodingError(_, cause: let cause),
-            .invalidArgumentError(_, cause: let cause),
-            .keyNotFoundError(_, cause: let cause),
-            .secureDataDecryptionError(_, cause: let cause),
-            .secureDataEncryptionError(_, cause: let cause),
-            .secureDataParsingError(_, cause: let cause):
+             .decodingError(_, cause: let cause),
+             .invalidArgumentError(_, cause: let cause),
+             .keyNotFoundError(_, cause: let cause),
+             .secureDataDecryptionError(_, cause: let cause),
+             .secureDataEncryptionError(_, cause: let cause),
+             .secureDataParsingError(_, cause: let cause):
             return cause
         }
     }

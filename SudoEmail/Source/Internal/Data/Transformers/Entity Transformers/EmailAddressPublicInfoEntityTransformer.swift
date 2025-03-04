@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,5 +17,4 @@ struct EmailAddressPublicInfoEntityTransformer {
             return EmailAddressPublicInfoEntity(emailAddress: item.emailAddress, keyId: item.keyId, publicKey: item.publicKey)
         }
     }
-    
 }

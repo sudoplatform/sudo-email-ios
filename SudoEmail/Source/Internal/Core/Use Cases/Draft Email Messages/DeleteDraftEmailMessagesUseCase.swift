@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -22,11 +22,11 @@ class DeleteDraftEmailMessagesUseCase {
     ) {
         self.emailMessageRepository = emailMessageRepository
         self.emailAccountRepository = emailAccountRepository
-        self.logger = .emailSDKLogger
+        logger = .emailSDKLogger
     }
 
     // MARK: - Methods
-    
+
     /// Execute the use case.
     /// - Parameters:
     ///   - withInput: Input containing `ids` list and `emailAddressId` of the draft email messages to be deleted.
@@ -42,7 +42,7 @@ class DeleteDraftEmailMessagesUseCase {
     func execute(
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
-        guard (try await emailAccountRepository.fetchWithEmailAddressId(input.emailAddressId)) != nil else {
+        guard try (await emailAccountRepository.fetchWithEmailAddressId(input.emailAddressId)) != nil else {
             throw SudoEmailError.addressNotFound
         }
         if input.ids.isEmpty {
@@ -63,9 +63,9 @@ class DeleteDraftEmailMessagesUseCase {
                 deleteFailures.append(EmailMessageOperationFailureResult(id: id, errorType: error.localizedDescription))
             }
         }
-        
+
         let status: BatchOperationResultStatus
-        if (deleteSuccesses.count == input.ids.count) {
+        if deleteSuccesses.count == input.ids.count {
             status = BatchOperationResultStatus.success
         } else if deleteFailures.count == input.ids.count {
             status = BatchOperationResultStatus.failure

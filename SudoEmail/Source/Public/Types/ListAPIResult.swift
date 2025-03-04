@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,7 +25,7 @@ public enum ListAPIResult<T, P> {
         public var items: [T]
         public var nextToken: String?
 
-        public init (items: [T], nextToken: String? = nil) {
+        public init(items: [T], nextToken: String? = nil) {
             self.items = items
             self.nextToken = nextToken
         }
@@ -36,7 +36,7 @@ public enum ListAPIResult<T, P> {
         public var failed: [PartialResult<P>]
         public var nextToken: String?
 
-        public init (items: [T], failed: [PartialResult<P>], nextToken: String?) {
+        public init(items: [T], failed: [PartialResult<P>], nextToken: String?) {
             self.items = items
             self.failed = failed
             self.nextToken = nextToken

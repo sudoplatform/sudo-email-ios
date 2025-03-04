@@ -1,12 +1,12 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
 import AWSS3
+import Foundation
 
 /// Used to decode the file on disk. The config is stored in a nested JSON object `identityService`.
 struct FileConfig: Decodable {

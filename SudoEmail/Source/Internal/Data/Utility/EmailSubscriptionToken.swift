@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,7 +25,7 @@ class EmailSubscriptionToken: SubscriptionToken, Hashable {
     /// Initialize an instance of `EmailSubscriptionToken`.
     init(id: String = UUID().uuidString, cancellable: Cancellable, manager: SubscriptionManager) {
         self.id = id
-        self.subscriptionReference = cancellable
+        subscriptionReference = cancellable
         self.manager = manager
         manager.addSubscription(self)
     }

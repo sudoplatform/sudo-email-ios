@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -32,5 +32,4 @@ struct EmailAddressEntity: Equatable {
         self.displayName = displayName
         self.alias = alias
     }
-
 }

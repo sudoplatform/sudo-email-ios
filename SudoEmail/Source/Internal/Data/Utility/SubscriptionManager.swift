@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -34,7 +34,7 @@ class WeakEmailSubscriptionToken: Hashable {
 
     /// Initialize a Weak `EmailSubscriptionToken`.
     init(_ value: EmailSubscriptionToken) {
-        self.id = value.id
+        id = value.id
         self.value = value
     }
 
@@ -56,7 +56,6 @@ class WeakEmailSubscriptionToken: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-
 }
 
 /// Concrete implementation of the `SubscriptionManager`.
@@ -91,7 +90,7 @@ class DefaultSubscriptionManager: SubscriptionManager {
 
     func removeAllSubscriptions() {
         subscriptionQueue.sync {
-            subscriptions.forEach { subscription in
+            for subscription in subscriptions {
                 subscription.cancel()
             }
             subscriptions.removeAll()

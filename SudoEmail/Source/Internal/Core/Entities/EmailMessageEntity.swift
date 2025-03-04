@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -116,7 +116,7 @@ struct EmailMessageEntity: Equatable {
 
     /// The encryption status of the message
     var encryptionStatus: EncryptionStatus
-    
+
     /// Date timestamp of when the message was sent
     public var date: Date?
 }
@@ -181,11 +181,10 @@ struct PartialEmailMessageEntity: Equatable {
 
     /// The total size in bytes of this email message.
     var size: Double
-    
+
     /// The encryption status of the message
     var encryptionStatus: EncryptionStatus
-    
+
     /// Date timestamp of when the message was sent
     public var date: Date?
-
 }

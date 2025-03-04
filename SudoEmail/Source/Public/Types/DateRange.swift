@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,9 +25,8 @@ public struct DateRange: Equatable {
 
     func toGraphQL() -> GraphQL.DateRangeInput {
         return .init(
-            endDateEpochMs: floor(self.endDate.millisecondsSince1970),
-            startDateEpochMs: floor(self.startDate.millisecondsSince1970)
+            endDateEpochMs: floor(endDate.millisecondsSince1970),
+            startDateEpochMs: floor(startDate.millisecondsSince1970)
         )
     }
-
 }

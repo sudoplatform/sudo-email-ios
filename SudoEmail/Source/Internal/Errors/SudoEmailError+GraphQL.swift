@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -9,7 +9,7 @@ import Foundation
 import AWSAppSync
 import SudoApiClient
 
-internal extension SudoEmailError {
+extension SudoEmailError {
     // MARK: - Lifecycle
 
     /// Initialize a `SudoEmailError` from a `GraphQLError`.
@@ -70,14 +70,12 @@ internal extension SudoEmailError {
             self = .versionMismatch
         case "sudoplatform.UnknownTimezoneError":
             self = .unknownTimezone
-
         default:
             return nil
         }
     }
 
-
-    struct Constants {
+    enum Constants {
         static let errorType = "errorType"
     }
 

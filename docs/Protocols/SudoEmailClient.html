@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SudoEmail 18.4.2 Docs
+          SudoEmail 18.5.0 Docs
         </a>
         
       </p>
@@ -278,6 +278,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UnsealedBlockedAddress.html#/s:9SudoEmail22UnsealedBlockedAddressV0cdE6StatusO">– UnsealedBlockedAddressStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/UnsealedBlockedAddress/BlockedAddressAction.html">– BlockedAddressAction</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UpdateCustomEmailFolderInput.html">UpdateCustomEmailFolderInput</a>
@@ -1370,7 +1373,8 @@ encryption decisions can be made.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of identical API calls.
+                                  <p>Determines how the data is fetched. When using <code>cacheOnly</code>, please be aware that this will only return cached results of identical API
+calls.
 API calls.</p>
                                 </div>
                               </td>
@@ -2345,12 +2349,12 @@ Returns an empty list if no email messages can be found.</li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP05blockB9Addresses9addressesAA20BatchOperationResultVyS2SGSaySSG_tYaKF"></a>
-                    <a name="//apple_ref/swift/Method/blockEmailAddresses(addresses:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP05blockB9Addresses9addressesAA20BatchOperationResultVyS2SGSaySSG_tYaKF">blockEmailAddresses(addresses:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP05blockB9Addresses9addresses6action14emailAddressIdAA20BatchOperationResultVyS2SGSaySSG_AA015UnsealedBlockedI0V0oI6ActionOSSSgtYaKF"></a>
+                    <a name="//apple_ref/swift/Method/blockEmailAddresses(addresses:action:emailAddressId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP05blockB9Addresses9addresses6action14emailAddressIdAA20BatchOperationResultVyS2SGSaySSG_AA015UnsealedBlockedI0V0oI6ActionOSSSgtYaKF">blockEmailAddresses(addresses:<wbr>action:<wbr>emailAddressId:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
-                        Asynchronous
+                        Default implementation, asynchronous
                       </span>
                   </div>
                   <div class="height-container">
@@ -2361,11 +2365,19 @@ Returns an empty list if no email messages can be found.</li>
                         <p>Blocks the addresses given from sending to the user</p>
 
                       </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">blockEmailAddresses</span><span class="p">(</span><span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">blockEmailAddresses</span><span class="p">(</span>
+    <span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span>
+    <span class="nv">action</span><span class="p">:</span> <span class="kt"><a href="../Structs/UnsealedBlockedAddress.html">UnsealedBlockedAddress</a></span><span class="o">.</span><span class="kt">BlockedAddressAction</span><span class="p">,</span>
+    <span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -2382,6 +2394,31 @@ Returns an empty list if no email messages can be found.</li>
                               <td>
                                 <div>
                                   <p>Array of addresses to block as strings</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>action</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The action to take on incoming messages from the blocked address(es). Optional: defaults to DROP</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>emailAddressId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner&rsquo;s
+addresses.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2814,7 +2851,7 @@ Failure - All addresses failed to be unblocked.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2025-01-14)</p>
+      <p>&copy; 2025 <a class="link" href="https://sudoplatform.com" target="_blank" rel="external noopener">Sudo Platform Engineering</a>. All rights reserved. (Last updated: 2025-03-04)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

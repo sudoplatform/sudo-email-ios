@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -14,12 +14,12 @@ struct EmailAddressAPITransformer {
 
     /// Utility for transforming folders to/from `EmailFolderEntity`
     let folderTransformer: EmailFolderEntityTransformer
-    
+
     let deviceKeyWorker: DeviceKeyWorker!
-    
+
     init(deviceKeyWorker: DeviceKeyWorker) {
         self.deviceKeyWorker = deviceKeyWorker
-        self.folderTransformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        folderTransformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
     }
 
     func transform(_ entity: EmailAccountEntity?) -> EmailAddress? {

@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
+import Foundation
 import SudoApiClient
 import SudoLogging
 
@@ -35,7 +35,7 @@ class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository 
     func getConfigurationData() async throws -> EmailConfigurationDataEntity {
         let query = GraphQL.GetEmailConfigQuery()
         let cachePolicy: AWSAppSync.CachePolicy = AWSAppSync.CachePolicy.fetchIgnoringCacheData
-        let (fetchResult, fetchError) = try await self.appSyncClient.fetch(
+        let (fetchResult, fetchError) = try await appSyncClient.fetch(
             query: query,
             cachePolicy: cachePolicy,
             queue: dispatchQueue
@@ -64,5 +64,4 @@ class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository 
             throw error
         }
     }
-
 }

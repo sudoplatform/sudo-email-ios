@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -35,7 +35,15 @@ public struct SendEmailMessageInput: Equatable {
     /// If this property is set, `replyingMessageId` must not be set.
     public let forwardingMessageId: String?
 
-    public init(senderEmailAddressId: String, emailMessageHeader: InternetMessageFormatHeader, body: String, attachments: [EmailAttachment] = [], inlineAttachments: [EmailAttachment] = [], replyingMessageId: String? = nil, forwardingMessageId: String? = nil) {
+    public init(
+        senderEmailAddressId: String,
+        emailMessageHeader: InternetMessageFormatHeader,
+        body: String,
+        attachments: [EmailAttachment] = [],
+        inlineAttachments: [EmailAttachment] = [],
+        replyingMessageId: String? = nil,
+        forwardingMessageId: String? = nil
+    ) {
         self.senderEmailAddressId = senderEmailAddressId
         self.emailMessageHeader = emailMessageHeader
         self.body = body

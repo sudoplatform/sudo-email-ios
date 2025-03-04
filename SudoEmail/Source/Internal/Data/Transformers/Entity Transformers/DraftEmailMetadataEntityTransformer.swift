@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSS3
+import Foundation
 
 /// Utility class to transform data received from AWSS3 to the Core/Entity level of the SDK.
 struct DraftEmailMetadataEntityTransformer {

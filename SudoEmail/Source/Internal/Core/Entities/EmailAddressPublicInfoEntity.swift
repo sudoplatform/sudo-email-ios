@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -10,7 +10,7 @@ import Foundation
 struct EmailAddressPublicInfoEntity: Equatable {
     /// The email address in format 'local-part@domain'.
     let emailAddress: String
-    
+
     /// Identifier associated with the public key.
     let keyId: String
 

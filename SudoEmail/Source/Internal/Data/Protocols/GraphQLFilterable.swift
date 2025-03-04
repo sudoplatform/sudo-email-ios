@@ -1,11 +1,11 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import Foundation
 import AWSAppSync
+import Foundation
 
 /// Protocol that provides conformance for the ability to convert to a GraphQL Filter type.
 protocol GraphQLFilterable {
@@ -18,5 +18,4 @@ protocol GraphQLFilterable {
     /// - Returns: Converted GraphQL type, or nil if no suitable return object - this is
     ///     typically when all values are nil.
     func toGraphQLFilter() -> OutputType?
-
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2024 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -85,7 +85,7 @@ public struct EmailMessage: Equatable {
     /// The size, in bytes, of the encrypted RFC822 data stored in the backend. This value is used to
     /// calculate the total storage used by an email address or user and used to enforce email storage related
     public var size: Double
-    
+
     /// The encryption status of the message
     public var encryptionStatus: EncryptionStatus
 
@@ -111,7 +111,7 @@ public struct EmailMessage: Equatable {
 
     /// True if the email message includes one or more attachments.
     public var hasAttachments: Bool
-    
+
     /// Date timestamp of when the message was sent
     public var date: Date?
 
@@ -171,7 +171,6 @@ public struct EmailMessage: Equatable {
         self.encryptionStatus = encryptionStatus
         self.date = date
     }
-
 }
 
 /// Representation of an email message object without any unsealed attributes associated with a email message in Platform SDK.
@@ -225,13 +224,13 @@ public struct PartialEmailMessage: Equatable {
     /// The size, in bytes, of the encrypted RFC822 data stored in the backend. This value is used to
     /// calculate the total storage used by an email address or user and used to enforce email storage related
     public var size: Double
-    
+
     /// The encryption status of the message
     var encryptionStatus: EncryptionStatus
 
     /// Version of this entity, increments on update.
     public var version: Int
-    
+
     /// Date timestamp of when the message was sent
     public var date: Date?
 
