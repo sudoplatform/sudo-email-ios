@@ -43,3 +43,4 @@ DocBuild/
 
 .idea/
 .env
+.build

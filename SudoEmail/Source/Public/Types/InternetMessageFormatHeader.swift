@@ -5,7 +5,6 @@
 //
 
 import Foundation
-
 /// Representation of the email headers formatted under the RFC-6854 (supersedes RFC 822) standard.
 /// Some further rules (beyond RFC 6854) must also be applied to the data:
 ///   - At least one recipient must exist (to, cc, bcc).

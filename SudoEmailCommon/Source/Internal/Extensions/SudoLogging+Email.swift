@@ -5,8 +5,10 @@
 //
 
 import SudoLogging
+import Foundation
+import SudoLogging
 
-internal extension Logger {
+public extension Logger {
 
     /// Logger used internally in the SudoEmail.
     static let emailSDKLogger = Logger(identifier: "SudoEmail", driver: NSLogDriver(level: .debug))

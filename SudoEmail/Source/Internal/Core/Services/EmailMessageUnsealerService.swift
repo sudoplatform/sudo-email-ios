@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
+
 /// Core entity representation of a email message unsealer service used in business logic.
 ///
 /// Used to unseal email messages that are received, typically from a sealed email message repository.

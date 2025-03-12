@@ -6,6 +6,7 @@
 
 import AWSAppSync
 import AWSS3
+import Foundation
 import SudoApiClient
 import SudoLogging
 import SudoUser
@@ -80,13 +81,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ///   - userClient: SudoUserClient instance used for authentication.
     /// Throws:
     ///     - `SudoEmailError` if invalid config.
-    public convenience init(keyNamespace: String = SudoEmail.Constants.defaultKeyNamespace, userClient: SudoUserClient) throws {
+    public convenience init(keyNamespace: String = SudoEmailCommon.Constants.defaultKeyNamespace, userClient: SudoUserClient) throws {
         try self.init(config: nil, keyNamespace: keyNamespace, userClient: userClient)
     }
 
     convenience init(
         config: SudoEmailConfig?,
-        keyNamespace: String = SudoEmail.Constants.defaultKeyNamespace,
+        keyNamespace: String = SudoEmailCommon.Constants.defaultKeyNamespace,
         userClient: SudoUserClient
     ) throws {
         let graphQLClient: SudoApiClient

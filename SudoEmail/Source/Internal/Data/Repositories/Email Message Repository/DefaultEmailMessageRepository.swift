@@ -6,6 +6,7 @@
 
 import AWSAppSync
 import AWSS3
+import Foundation
 import SudoApiClient
 import SudoLogging
 import SudoUser

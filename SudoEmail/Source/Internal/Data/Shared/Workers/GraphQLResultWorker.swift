@@ -5,6 +5,7 @@
 //
 
 import AWSAppSync
+import Foundation
 
 /// Worker class to convert GraphQL Result and error to a Swift Result type.
 struct GraphQLResultWorker {

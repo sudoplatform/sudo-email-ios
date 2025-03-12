@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
 import Gzip
 
 /// Core use case representation of a operation to fetch the RFC 6854 (supersedes RFC 822) data of the email message remotely.

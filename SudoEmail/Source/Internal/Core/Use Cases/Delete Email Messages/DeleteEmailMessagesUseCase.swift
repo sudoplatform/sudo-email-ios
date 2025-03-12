@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
+
 /// Core use case representation of an operation to delete an email message associated with an id.
 class DeleteEmailMessagesUseCase {
 

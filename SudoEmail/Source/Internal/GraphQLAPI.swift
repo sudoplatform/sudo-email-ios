@@ -2,6 +2,7 @@
 //  This file was automatically generated and should not be edited.
 
 import AWSAppSync
+import Foundation
 
 struct GraphQL {
 

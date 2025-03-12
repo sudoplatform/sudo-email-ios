@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
+
 /// Core representation of secure data items that can be encoded and decoded to and from JSON.
 struct SecureDataEntity: Codable {
 

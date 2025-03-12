@@ -6,6 +6,7 @@
 
 @testable import SudoKeyManager
 @testable import SudoEmailNotificationExtension
+import Foundation
 
 class MockExtensionDeviceKeyWorker: DeviceKeyWorker {
 

@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
+
 /// List of possible errors thrown by `EmailCryptoService`.
 public enum EmailCryptoServiceError: Error, Equatable, LocalizedError {
     case encodingError(_ message: String? = nil, cause: String? = nil)

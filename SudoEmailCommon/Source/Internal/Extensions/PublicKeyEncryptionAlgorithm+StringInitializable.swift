@@ -7,7 +7,7 @@
 import Foundation
 import SudoKeyManager
 
-extension PublicKeyEncryptionAlgorithm {
+public extension PublicKeyEncryptionAlgorithm {
     init?(_ algorithm: String) {
         switch algorithm {
         case "RSAEncryptionOAEPAESCBC":

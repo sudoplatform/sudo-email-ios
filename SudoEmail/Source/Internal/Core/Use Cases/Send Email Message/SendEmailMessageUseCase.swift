@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
 import SudoLogging
 
 /// Core use case representation of a operation to send an email message via a user's account.

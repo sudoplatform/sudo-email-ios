@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+@_exported import SudoEmailCommon
+
 /// Core entity representation of a email message direction filter business rule. Depicts the rules for filtering email message directions.
 enum EmailMessageDirectionFilterEntity: Equatable {
     /// Filter by equality of `DirectionEntity`.

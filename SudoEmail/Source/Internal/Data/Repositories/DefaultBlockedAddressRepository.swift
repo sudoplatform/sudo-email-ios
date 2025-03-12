@@ -90,7 +90,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
                 )
             )
         }
-        
+
         let input: GraphQL.BlockEmailAddressesInput
         if let emailAddressId, !emailAddressId.isEmpty {
             input = GraphQL.BlockEmailAddressesInput(

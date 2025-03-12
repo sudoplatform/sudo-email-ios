@@ -5,7 +5,7 @@
 //
 
 import Foundation
-
+@_exported import SudoEmailCommon
 /// JSON decodable representation of polymporphic notification as encrypted in the push notification payload
 enum EmailServiceNotification: Decodable, Equatable {
 

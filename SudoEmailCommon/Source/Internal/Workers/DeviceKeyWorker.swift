@@ -8,7 +8,7 @@ import Foundation
 import SudoKeyManager
 import SudoLogging
 
-protocol DeviceKeyWorker: AnyObject {
+public protocol DeviceKeyWorker: AnyObject {
 
     /// Creates random data of size specified by `size` input.
     ///
@@ -130,41 +130,41 @@ protocol DeviceKeyWorker: AnyObject {
 
 }
 
-internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
+open class DefaultDeviceKeyWorker: DeviceKeyWorker {
 
     // MARK: - Supplementary
 
     /// Default values used within `DefaultDeviceKeyWorker`.
-    enum Defaults {
+    public enum Defaults {
         /// Key name for the current key pair id to access on the key manager.
-        static let currentKeyPairIdPointerName: String = "current"
+        public static let currentKeyPairIdPointerName: String = "current"
         /// Key name for the current symmetric key id to access on the key manager.
-        static let currentSymmetricKeyIdPointerName: String = "email-symmetric-key"
+        public static let currentSymmetricKeyIdPointerName: String = "email-symmetric-key"
         /// Tag name used for the key manager initialization.
-        static let keyManagerKeyTag = "com.sudoplatform"
+        public static let keyManagerKeyTag = "com.sudoplatform"
         /// Key ring service name used for the key manager initialization.
-        static let keyRingServiceName = "sudo-email"
+        public static let keyRingServiceName = "sudo-email"
         /// Size of the AES symmetric key in bits.
-        static let aesKeySize = 256
+        public static let aesKeySize = 256
         /// RSA block size in bytes.
-        static let rsaBlockSize = 256
+        public static let rsaBlockSize = 256
         /// algorithm used when creating/registering public keys.
-        static let algorithm = "RSAEncryptionOAEPAESCBC"
+        public static let algorithm = "RSAEncryptionOAEPAESCBC"
         /// algorithm used when encrypting/decrypting with symmetric keys.
-        static let symmetricAlgorithm = "AES/CBC/PKCS7Padding"
+        public static let symmetricAlgorithm = "AES/CBC/PKCS7Padding"
     }
 
     // MARK: - Properties
 
     /// Key manager for access and manipulation of keys on the local device.
-    var keyManager: SudoKeyManager
+    public var keyManager: SudoKeyManager
 
     /// Used to log diagnostic and error information.
-    var logger: Logger
+    public var logger: Logger
 
     // MARK: - Lifecycle
 
-    convenience init(
+    public convenience init(
         keyNamespace: String,
         logger: Logger = .emailSDKLogger
     ) {
@@ -172,18 +172,18 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         self.init(keyManager: keyManager, logger: logger)
     }
 
-    init(keyManager: SudoKeyManager, logger: Logger) {
+    public init(keyManager: SudoKeyManager, logger: Logger) {
         self.keyManager = keyManager
         self.logger = logger
     }
 
     // MARK: - DeviceKeyWorker
 
-    func createRandomData(_ size: Int) throws -> Data {
+    public func createRandomData(_ size: Int) throws -> Data {
         return try keyManager.createRandomData(size)
     }
 
-    func generateNewCurrentSymmetricKey() throws -> String {
+    public func generateNewCurrentSymmetricKey() throws -> String {
         let keyId = try keyManager.generateKeyId()
         // We need to delete any old key id information before adding a new key.
         try keyManager.deletePassword(Defaults.currentSymmetricKeyIdPointerName)
@@ -208,7 +208,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return keyId
     }
 
-    func generateRandomSymmetricKey() throws -> Data {
+    public func generateRandomSymmetricKey() throws -> Data {
         let keyId = try keyManager.generateKeyId()
         try keyManager.generateSymmetricKey(keyId)
 
@@ -220,7 +220,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return symmetricKey
     }
 
-    func getSymmetricKey(keyId: String) throws -> String? {
+    public func getSymmetricKey(keyId: String) throws -> String? {
         var symmetricKey: String
 
         do {
@@ -242,7 +242,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return symmetricKey
     }
 
-    func getCurrentSymmetricKeyId() throws -> String? {
+    public func getCurrentSymmetricKeyId() throws -> String? {
         guard let keyIdDataEncoded = try keyManager.getPassword(Defaults.currentSymmetricKeyIdPointerName) else {
             return nil
         }
@@ -253,17 +253,17 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return keyId
     }
 
-    func sealString(_ input: String, withKeyId keyId: String) throws -> String {
+    public func sealString(_ input: String, withKeyId keyId: String) throws -> String {
         return try sealString(Data(input.utf8), withKeyId: keyId)
     }
 
-    func sealString(_ payload: Data, withKeyId keyId: String) throws -> String {
+    public func sealString(_ payload: Data, withKeyId keyId: String) throws -> String {
         let cipherData = try keyManager.encryptWithSymmetricKey(keyId, data: payload)
         let base64EncodedText = cipherData.base64EncodedString()
         return base64EncodedText
     }
 
-    func unsealString(_ string: String, withKeyId keyId: String, algorithm: String) throws -> String {
+    public func unsealString(_ string: String, withKeyId keyId: String, algorithm: String) throws -> String {
         if let decodedAlgorithm = PublicKeyEncryptionAlgorithm(algorithm) {
             return try decryptWithKeyPair(string, withKeyId: keyId, algorithm: decodedAlgorithm)
         } else {
@@ -271,19 +271,19 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         }
     }
 
-    func encryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+    public func encryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
         return try keyManager.encryptWithPublicKey(keyId, data: data, algorithm: algorithm)
     }
 
-    func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+    public func decryptWithKeyPairId(_ keyId: String, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
         return try keyManager.decryptWithPrivateKey(keyId, data: data, algorithm: algorithm)
     }
 
-    func encryptWithPublicKey(_ publicKey: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+    public func encryptWithPublicKey(_ publicKey: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
         return try keyManager.encryptWithPublicKey(publicKey, data: data, algorithm: algorithm)
     }
 
-    func encryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
+    public func encryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
         if let iv = initVector {
             return try keyManager.encryptWithSymmetricKey(symmetricKey, data: data, iv: iv)
         } else {
@@ -291,7 +291,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         }
     }
 
-    func decryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
+    public func decryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
         if let iv = initVector {
             return try keyManager.decryptWithSymmetricKey(symmetricKey, data: data, iv: iv)
         } else {
@@ -299,7 +299,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         }
     }
 
-    func exportKeys() throws -> Data {
+    public func exportKeys() throws -> Data {
         let archive = SecureKeyArchiveImpl(keyManager: self.keyManager, zip: true)
         // exclude public keys to limit size of the archive
         archive.excludedKeyTypes = [KeyType.publicKey.rawValue]
@@ -307,7 +307,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return try archive.archive(nil)
     }
 
-    func importKeys(archiveData: Data) throws {
+    public func importKeys(archiveData: Data) throws {
         try self.keyManager.removeAllKeys()
         guard let archive = SecureKeyArchiveImpl(
             archiveData: archiveData,
@@ -320,7 +320,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         try archive.saveKeys()
     }
 
-    func removeAllKeys() throws {
+    public func removeAllKeys() throws {
         return try keyManager.removeAllKeys()
     }
 
@@ -336,7 +336,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
     ///         - If the input data cannot be encoded to a base 64 data object.
     ///         - If the decrypted data cannot be decoded to a string.
     ///     - `KeyManagerError` if the data cannot be decrypted.
-    func decryptWithKeyPair(_ input: String, withKeyId keyId: String, algorithm: PublicKeyEncryptionAlgorithm) throws -> String {
+    public func decryptWithKeyPair(_ input: String, withKeyId keyId: String, algorithm: PublicKeyEncryptionAlgorithm) throws -> String {
         guard let payload = Data(base64Encoded: input) else {
             throw SudoEmailError.internalError("Data is not base64")
         }
@@ -358,7 +358,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return string
     }
 
-    func decryptWithSymmetricKey(_ input: String, withKeyId keyId: String) throws -> String {
+    public func decryptWithSymmetricKey(_ input: String, withKeyId keyId: String) throws -> String {
         guard let encryptedData = Data(base64Encoded: input) else {
             throw SudoEmailError.internalError("Data is not base64")
         }
@@ -369,7 +369,7 @@ internal class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return decryptedString
     }
 
-    func keyExists(keyId: String, keyType: KeyType) -> Bool {
+    public func keyExists(keyId: String, keyType: KeyType) -> Bool {
         do {
             switch (keyType) {
                 case KeyType.symmetricKey:
