@@ -44,3 +44,4 @@ DocBuild/
 .idea/
 .env
 .build
+Package.resolved

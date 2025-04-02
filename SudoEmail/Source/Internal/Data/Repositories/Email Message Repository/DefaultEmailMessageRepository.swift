@@ -661,11 +661,16 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
     func subscribeToEmailMessageCreated(
         withDirection direction: DirectionEntity? = nil,
+        connectionHandler: (() -> Void)? = nil,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken {
         let subscriptionId = UUID().uuidString
         let userId = try getUserId()
-        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(subscriptionId, resultHandler: resultHandler)
+        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(
+            subscriptionId,
+            connectionHandler: connectionHandler,
+            resultHandler: resultHandler
+        )
         if let direction = direction {
             let directionTransformer = EmailMessageDirectionGQLTransformer()
             let graphQLDirection = directionTransformer.transform(direction)
@@ -711,11 +716,16 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
     func subscribeToEmailMessageDeleted(
         withId id: String?,
+        connectionHandler: (() -> Void)? = nil,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken {
         let subscriptionId = UUID().uuidString
         let userId = try getUserId()
-        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(subscriptionId, resultHandler: resultHandler)
+        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(
+            subscriptionId,
+            connectionHandler: connectionHandler,
+            resultHandler: resultHandler
+        )
         if let id = id {
             let graphQLSubscription = GraphQL.OnEmailMessageDeletedWithIdSubscription(owner: userId, id: id)
             let subscriptionResultHandler = constructSubscriptionResultHandler(
@@ -759,11 +769,16 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
 
     func subscribeToEmailMessageUpdated(
         withId id: String?,
+        connectionHandler: (() -> Void)? = nil,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken {
         let subscriptionId = UUID().uuidString
         let userId = try getUserId()
-        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(subscriptionId, resultHandler: resultHandler)
+        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(
+            subscriptionId,
+            connectionHandler: connectionHandler,
+            resultHandler: resultHandler
+        )
         if let id = id {
             let graphQLSubscription = GraphQL.OnEmailMessageUpdatedWithIdSubscription(owner: userId, id: id)
             let subscriptionResultHandler = constructSubscriptionResultHandler(
@@ -851,10 +866,12 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     /// Construct the status change handler for a subscription.
     /// - Parameters:
     ///   - subscriptionId: Identifier of the subscription.
+    ///   - connectionHandler: The callback to call when a connection has been established.
     ///   - resultHandler: Result handler of the
     /// - Returns: Result handler from the called method, inverted from the API layer via the core layer.
     func constructStatusChangeHandlerWithSubscriptionId(
         _ subscriptionId: String,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) -> SubscriptionStatusChangeHandler {
         return { [weak self] status in
@@ -864,6 +881,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
                 resultHandler(.failure(error))
             case .disconnected:
                 self?.subscriptionManager.removeSubscription(withId: subscriptionId)
+            case .connected:
+                connectionHandler?()
             default:
                 break
             }

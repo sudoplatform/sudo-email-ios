@@ -7,7 +7,7 @@
 import AWSAppSync
 import Foundation
 import SudoApiClient
-import SudoKeyManager
+import enum SudoKeyManager.KeyType
 import SudoLogging
 
 class DefaultEmailCryptoService: EmailCryptoService {
@@ -15,6 +15,8 @@ class DefaultEmailCryptoService: EmailCryptoService {
     // MARK: - Properties
 
     private var deviceKeyWorker: DeviceKeyWorker
+
+    private let publicKeyFormatTransformer = PublicKeyFormatAPITransformer()
 
     private let logger: Logger
 
@@ -58,13 +60,18 @@ class DefaultEmailCryptoService: EmailCryptoService {
             // Iterate through each public key for each recipient and encrypt the symmetric key with the public key
             var secureKeyAttachments: Set<EmailAttachment> = []
             for (index, key) in keys.enumerated() {
+                guard case .publicKey(let format) = key.type else {
+                    continue
+                }
                 let keyId = key.keyId
                 let publicKey = key.keyData
-                var sealedKey = SealedKeyEntity(publicKeyId: keyId, symmetricKey: symmetricKey)
+                var sealedKey = SealedKeyEntity(publicKeyId: keyId, symmetricKey: symmetricKey, format: format)
+                let publicKeyFormat: PublicKeyFormat = publicKeyFormatTransformer.transform(format)
                 let encryptedKeySealedKey = try deviceKeyWorker.encryptWithPublicKey(
                     publicKey,
                     data: sealedKey.symmetricKey,
-                    algorithm: sealedKey.algorithm
+                    algorithm: sealedKey.algorithm,
+                    format: publicKeyFormat
                 )
                 sealedKey.encryptedKey = encryptedKeySealedKey
                 let sealedKeyData = try sealedKey.toJson()

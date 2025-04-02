@@ -145,35 +145,44 @@ protocol EmailMessageRepository: AnyObject {
     func listDraftsMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadataEntity]
 
     /// Subscribe to all sealed email messages created events.
-    /// - Parameter direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be
+    /// - Parameters:
+    ///   - direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be
     ///     returned.
-    /// - Parameter resultHandler: Result handler for each incoming or outgoing email message.
+    ///   - connectionHandler: Block that is called when the subscription is connected.
+    ///   - resultHandler: Result handler for each incoming or outgoing email message.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
     /// - Returns: The token identifying this subscription
     func subscribeToEmailMessageCreated(
         withDirection direction: DirectionEntity?,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken
 
     /// Subscribe to all sealed email messages deleted.
     /// - Parameters:
     ///   - id: The specific email message id to watch for deletion. If `nil`, all message deletions will be watched.
+    ///     returned.
+    ///   - connectionHandler: Block that is called when the subscription is connected.
     ///   - resultHandler: Result handler for email message delete events.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
     /// - Returns: The token identifying this subscription
     func subscribeToEmailMessageDeleted(
         withId id: String?,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken
 
     /// Subscribe to all sealed email messages updated.
     /// - Parameters:
     ///   - id: The specific email message id to watch for update. If `nil`, all message updates will be watched.
+    ///     returned.
+    ///   - connectionHandler: Block that is called when the subscription is connected.
     ///   - resultHandler: Result handler for email message update events.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
     /// - Returns: The token identifying this subscription
     func subscribeToEmailMessageUpdated(
         withId id: String?,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
     ) async throws -> SubscriptionToken
 

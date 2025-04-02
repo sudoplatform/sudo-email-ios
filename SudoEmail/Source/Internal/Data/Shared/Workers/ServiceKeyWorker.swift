@@ -45,6 +45,8 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
         static let rsaBlockSize = 256
         /// algorithm used when creating/registering public keys.
         static let algorithm = "RSAEncryptionOAEPAESCBC"
+        /// The format to use when creating public keys.
+        static let publicKeyFormat = PublicKeyFormatEntity.rsaPublicKey
     }
 
     // MARK: - Properties
@@ -129,7 +131,12 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             throw SudoEmailError.internalError(msg)
         }
 
-        let keyEntity = KeyEntity(type: .publicKey, keyId: keyId, keyRingId: keyRingId, keyData: publicKey)
+        let keyEntity = KeyEntity(
+            type: .publicKey(format: Defaults.publicKeyFormat),
+            keyId: keyId,
+            keyRingId: keyRingId,
+            keyData: publicKey
+        )
         return keyEntity
     }
 
@@ -144,8 +151,18 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
     /// - Returns: Key pair entities.
     func createKeyPairWithKeyId(_ keyId: String, keyRingId: String, publicKeyData: Data, privateKeyData: Data) -> KeyPair {
         return KeyPair(
-            publicKey: KeyEntity(type: .publicKey, keyId: keyId, keyRingId: keyRingId, keyData: publicKeyData),
-            privateKey: KeyEntity(type: .privateKey, keyId: keyId, keyRingId: keyRingId, keyData: privateKeyData)
+            publicKey: KeyEntity(
+                type: .publicKey(format: Defaults.publicKeyFormat),
+                keyId: keyId,
+                keyRingId: keyRingId,
+                keyData: publicKeyData
+            ),
+            privateKey: KeyEntity(
+                type: .privateKey,
+                keyId: keyId,
+                keyRingId: keyRingId,
+                keyData: privateKeyData
+            )
         )
     }
 

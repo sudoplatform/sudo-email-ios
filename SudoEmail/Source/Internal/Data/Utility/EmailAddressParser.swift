@@ -6,7 +6,7 @@
 
 import Foundation
 
-class EmailAddressParser {
+enum EmailAddressParser {
     static func normalize(address: String) throws -> String {
         let parts = address.lowercased().split(separator: "@").map(String.init)
 

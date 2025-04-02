@@ -108,10 +108,17 @@ class MockKeyManager: SudoKeyManager {
     }
 
     var encryptWithDataPublicKeyCallCount = 0
+    var encryptWithDataPublicKeyParameterList: [(
+        key: Data,
+        data: Data,
+        format: PublicKeyFormat,
+        algorithm: PublicKeyEncryptionAlgorithm
+    )] = []
     var encryptWithDataPublicKeyResult: Data = Data()
 
-    func encryptWithPublicKey(_ key: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
+    func encryptWithPublicKey(_ key: Data, data: Data, format: PublicKeyFormat, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
         encryptWithDataPublicKeyCallCount += 1
+        encryptWithDataPublicKeyParameterList.append((key, data, format, algorithm))
         return encryptWithDataPublicKeyResult
     }
 

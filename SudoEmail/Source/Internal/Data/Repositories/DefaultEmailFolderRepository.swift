@@ -55,15 +55,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             queue: dispatchQueue
         )
         if let error = fetchError {
-            switch error {
-            case ApiOperationError.graphQLError(let cause):
-                guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-                throw sudoEmailError
-            default:
-                throw SudoEmailError.fromApiOperationError(error: error)
-            }
+            try RepositoryErrorUtil.processError(error: error, logger: logger)
         }
         let emailFolders = fetchResult?.data?.listEmailFoldersForEmailAddressId.items ?? []
         let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
@@ -92,17 +84,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
+                try RepositoryErrorUtil.processError(error: error, logger: logger)
             }
             throw SudoEmailError.internalError("Unexpected error")
         }
@@ -125,17 +107,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
+                try RepositoryErrorUtil.processError(error: error, logger: logger)
             }
             return nil
         }
@@ -177,17 +149,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
         guard let result = performResult?.data else {
             if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
+                try RepositoryErrorUtil.processError(error: error, logger: logger)
             }
             throw SudoEmailError.internalError("Unexpected error")
         }
@@ -199,6 +161,29 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             logger.error("UpdateCustomEmailFolder result transformation failed with \(error)")
             throw error
         }
+    }
+
+    func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String {
+        let mutationInput = input.hardDelete == nil ? GraphQL.DeleteMessagesByFolderIdInput(
+            emailAddressId: input.emailAddressId, folderId: input.emailFolderId
+        ) : GraphQL.DeleteMessagesByFolderIdInput(
+            emailAddressId: input.emailAddressId,
+            folderId: input.emailFolderId,
+            hardDelete: input.hardDelete
+        )
+
+        let mutation = GraphQL.DeleteMessagesByFolderIdMutation(input: mutationInput)
+
+        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
+
+        guard let result = performResult?.data else {
+            if let error = performError {
+                try RepositoryErrorUtil.processError(error: error, logger: logger)
+            }
+            logger.error("Unexpected error")
+            throw SudoEmailError.internalError("Unexpected error")
+        }
+        return result.deleteMessagesByFolderId
     }
 
     func reset() throws {

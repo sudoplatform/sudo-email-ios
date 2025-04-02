@@ -331,6 +331,7 @@ public protocol SudoEmailClient: AnyObject {
     ///
     /// - Returns:
     ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
+    @available(*, deprecated, message: "Use listDraftEmailMessageForEmailAddressId instead to reduce unneccessary network calls.")
     func listDraftEmailMessages() async throws -> [DraftEmailMessage]
 
     /// Lists the metadata and content of all draft email messages for the specified email address identifier.
@@ -345,6 +346,7 @@ public protocol SudoEmailClient: AnyObject {
     ///
     /// - Returns:
     ///   - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
+    @available(*, deprecated, message: "Use listDraftEmailMessageMetadataForEmailAddressId instead to reduce unneccessary network calls.")
     func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata]
 
     /// Lists the metadata of all draft messages for the user.
@@ -415,39 +417,54 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns: The list of blocked email addresses
     func getEmailAddressBlocklist() async throws -> [UnsealedBlockedAddress]
 
+    /// Delete all messages for in an email folder.
+    /// Deletion will be processed asynchronously since it may take a substantial amount of time.
+    /// This method does not wait for deletion to complete. To check for completion, listen for subscriptions or check list endpoints.
+    ///
+    /// - Parameters:
+    ///   - input: Input parameters needed to delete messages from a folder
+    /// - Returns: The id of the folder
+    func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String
+
     // MARK: - Subscriptions
 
     /// Subscribe to email message creation events.
     ///
     /// - Parameters:
     ///   - direction: Direction of the email message events to watch for. If `nil`, both directions will be watched.
+    ///   - connectionHandler: Optional block that is called when the subscription connects. Defaults to `nil`.
     ///   - resultHandler: Email message created event.
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
     func subscribeToEmailMessageCreated(
         withDirection direction: EmailMessage.Direction?,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken?
 
     /// Subscribe to email message deleted events.
     /// - Parameters:
     ///   - id: Identifier of a specific deletion event to watch for. If `nil`, all deletion events will be handled.
+    ///   - connectionHandler: Optional block that is called when the subscription connects. Defaults to `nil`.
     ///   - resultHandler: Email message deleted event.
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
     func subscribeToEmailMessageDeleted(
         withId id: String?,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken?
 
     /// Subscribe to email message updated events.
     /// - Parameters:
     ///   - id: Identifier of a specific deletion event to watch for. If `nil`, all update events will be handled.
+    ///   - connectionHandler: Optional block that is called when the subscription connects. Defaults to `nil`.
     ///   - resultHandler: Email message update event.
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
     func subscribeToEmailMessageUpdated(
         withId id: String?,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken?
 
@@ -464,11 +481,32 @@ public extension SudoEmailClient {
     ) async throws -> BatchOperationResult<String, String> {
         try await blockEmailAddresses(addresses: addresses, action: action, emailAddressId: emailAddressId)
     }
-//    func blockEmailAddresses(
-//        addresses: [String],
-//        action: UnsealedBlockedAddress.BlockedAddressAction = .drop,
-//        emailAddressId: String
-//    ) async throws -> BatchOperationResult<String, String> {
-//        try await blockEmailAddresses(addresses: addresses, action: action, emailAddressId: emailAddressId)
-//    }
+
+    func subscribeToEmailMessageCreated(
+        withDirection direction: EmailMessage.Direction? = nil,
+        connectionHandler: (() -> Void)? = nil,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) async throws -> SubscriptionToken? {
+        try await subscribeToEmailMessageCreated(
+            withDirection: direction,
+            connectionHandler: connectionHandler,
+            resultHandler: resultHandler
+        )
+    }
+
+    func subscribeToEmailMessageUpdated(
+        withId id: String? = nil,
+        connectionHandler: (() -> Void)? = nil,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) async throws -> SubscriptionToken? {
+        try await subscribeToEmailMessageUpdated(withId: id, connectionHandler: connectionHandler, resultHandler: resultHandler)
+    }
+
+    func subscribeToEmailMessageDeleted(
+        withId id: String? = nil,
+        connectionHandler: (() -> Void)? = nil,
+        resultHandler: @escaping ClientCompletion<EmailMessage>
+    ) async throws -> SubscriptionToken? {
+        try await subscribeToEmailMessageDeleted(withId: id, connectionHandler: connectionHandler, resultHandler: resultHandler)
+    }
 }

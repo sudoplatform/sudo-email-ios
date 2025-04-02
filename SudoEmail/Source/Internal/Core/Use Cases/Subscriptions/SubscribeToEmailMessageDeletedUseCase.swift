@@ -25,11 +25,20 @@ class SubscribeToEmailMessageDeletedUseCase {
     // MARK: - Methods
 
     /// Execute the use case.
-    /// - Parameter resultHandler: Result handler to return email messages on.
+    /// - Parameters:
+    ///   - connectionHandler: Optional block that is called when the subscription connects.
+    ///   - resultHandler: Result handler to return email messages on.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
-    func execute(id: String?, withResultHandler resultHandler: @escaping ClientCompletion<EmailMessageEntity>) async throws -> SubscriptionToken {
-        return try await emailMessageRepository.subscribeToEmailMessageDeleted(withId: id) { result in
+    func execute(
+        id: String?,
+        connectionHandler: (() -> Void)?,
+        resultHandler: @escaping ClientCompletion<EmailMessageEntity>
+    ) async throws -> SubscriptionToken {
+        try await emailMessageRepository.subscribeToEmailMessageDeleted(
+            withId: id,
+            connectionHandler: connectionHandler
+        ) { result in
             let result = result.mapThrowingSuccess(self.emailMessageUnsealerService.unsealEmailMessage(_:))
             resultHandler(result)
         }

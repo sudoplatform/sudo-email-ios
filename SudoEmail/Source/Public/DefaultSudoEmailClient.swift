@@ -667,6 +667,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return try await useCase.execute(withInput: input)
     }
 
+    public func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String {
+        let useCase = useCaseFactory.generateDeleteMessagesForFolderIdUseCase(
+            emailFolderRepository: emailFolderRepository
+        )
+        return try await useCase.execute(withInput: input)
+    }
+
     public func getConfigurationData() async throws -> ConfigurationData {
         let useCase = useCaseFactory.generateGetConfigurationDataUseCase(
             emailConfigurationDataRepository: emailConfigurationDataRepository
@@ -678,6 +685,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func subscribeToEmailMessageCreated(
         withDirection direction: EmailMessage.Direction? = nil,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken? {
         let useCase = useCaseFactory.generateSubscribeToEmailMessageCreatedUseCase(
@@ -688,6 +696,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let directionEntity = directionTransformer.transform(direction)
         let token = try await useCase.execute(
             withDirection: directionEntity,
+            connectionHandler: connectionHandler,
             resultHandler: resultHandler
         )
         return token
@@ -695,13 +704,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func subscribeToEmailMessageDeleted(
         withId id: String? = nil,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken? {
         let useCase = useCaseFactory.generateSubscribeToEmailMessageDeletedUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
-        let token = try await useCase.execute(id: id) { result in
+        let token = try await useCase.execute(id: id, connectionHandler: connectionHandler) { result in
             let transformer = EmailMessageAPITransformer()
             let result = result.map(transformer.transform(_:))
             resultHandler(result)
@@ -711,13 +721,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func subscribeToEmailMessageUpdated(
         withId id: String? = nil,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> (any SubscriptionToken)? {
         let useCase = useCaseFactory.generateSubscribeToEmailMessageUpdatedUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
-        let token = try await useCase.execute(id: id) { result in
+        let token = try await useCase.execute(id: id, connectionHandler: connectionHandler) { result in
             let transformer = EmailMessageAPITransformer()
             let result = result.map(transformer.transform(_:))
             resultHandler(result)

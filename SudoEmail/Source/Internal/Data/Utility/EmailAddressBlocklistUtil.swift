@@ -6,7 +6,7 @@
 
 import Foundation
 
-class EmailAddressBlocklistUtil {
+enum EmailAddressBlocklistUtil {
     static func generateAddressHash(plaintextAddress: String, prefix: String) throws -> String {
         return try StringHasher.hashString(stringToHash: "\(prefix)|\(plaintextAddress)")
     }

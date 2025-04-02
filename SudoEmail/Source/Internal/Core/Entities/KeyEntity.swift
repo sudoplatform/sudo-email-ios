@@ -7,9 +7,9 @@
 import Foundation
 
 /// Type of key entity.
-enum KeyEntityType {
+enum KeyEntityType: Equatable, Hashable {
     /// Public key type.
-    case publicKey
+    case publicKey(format: PublicKeyFormatEntity)
     /// Private key type.
     case privateKey
 }
@@ -20,16 +20,16 @@ struct KeyEntity: Equatable, Hashable {
     // MARK: - Properties
 
     /// Type of the key.
-    public let type: KeyEntityType
+    let type: KeyEntityType
 
     /// Id associated with the key pair.
-    public let keyId: String
+    let keyId: String
 
     /// Key ring id associated with the key pair.
-    public let keyRingId: String
+    let keyRingId: String
 
     /// Data of the key.
-    public let keyData: Data
+    let keyData: Data
 
     // MARK: - Lifecycle
 

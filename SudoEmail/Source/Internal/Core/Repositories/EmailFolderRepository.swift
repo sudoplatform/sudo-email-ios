@@ -35,4 +35,13 @@ protocol EmailFolderRepository: AnyObject {
     ///     - input: Parameters used to update a custom email folder
     /// - Returns: The updated email folder
     func updateCustomEmailFolder(withInput input: UpdateCustomEmailFolderInput) async throws -> EmailFolderEntity
+
+    /// Delete all messages for in an email folder.
+    /// Deletion will be processed asynchronously since it may take a substantial amount of time.
+    /// This method does not wait for deletion to complete. To check for completion, listen for subscriptions or check list endpoints.
+    ///
+    /// - Parameters:
+    ///   - input: Input parameters needed to delete messages from a folder
+    /// - Returns: The id of the folder
+    func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String
 }

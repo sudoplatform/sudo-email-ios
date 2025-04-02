@@ -7,7 +7,7 @@
 import CryptoKit
 import Foundation
 
-class StringHasher {
+enum StringHasher {
     static func hashString(stringToHash: String, algorithm: String = "SHA256") throws -> String {
         if let data = stringToHash.data(using: .utf8) {
             switch algorithm {

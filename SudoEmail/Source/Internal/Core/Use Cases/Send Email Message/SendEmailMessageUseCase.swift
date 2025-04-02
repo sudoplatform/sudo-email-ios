@@ -179,7 +179,13 @@ class SendEmailMessageUseCase {
         if encryptionStatus == EncryptionStatus.ENCRYPTED {
             // For each recipient, encrypt the rfc822 with the recipient's public key
             // and store the encrypted payload as an attachment
-            let keys = emailAddressesPublicInfo.map { KeyEntity(type: .publicKey, keyId: $0.keyId, keyData: Data($0.publicKey.utf8)) }
+            let keys = emailAddressesPublicInfo.map {
+                KeyEntity(
+                    type: .publicKey(format: $0.publicKeyDetails.keyFormat),
+                    keyId: $0.keyId,
+                    keyData: Data($0.publicKeyDetails.publicKey.utf8)
+                )
+            }
             let encryptedEmailMessage = try emailCryptoService.encrypt(data: rfc822Data, keys: Set(keys))
             let secureAttachments = encryptedEmailMessage.toList()
 

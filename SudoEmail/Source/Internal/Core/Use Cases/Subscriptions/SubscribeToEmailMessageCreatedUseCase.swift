@@ -27,15 +27,18 @@ class SubscribeToEmailMessageCreatedUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///  - direction: The direction, ie, inbound or outbound, of the email message
+    ///  - connectionHandler: Optional block that is called when the subscription connects.
     ///  - resultHandler: Result handler to return email messages on.
     /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
     /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
     func execute(
         withDirection direction: DirectionEntity? = nil,
+        connectionHandler: (() -> Void)?,
         resultHandler: @escaping ClientCompletion<EmailMessage>
     ) async throws -> SubscriptionToken? {
         return try await emailMessageRepository.subscribeToEmailMessageCreated(
-            withDirection: direction
+            withDirection: direction,
+            connectionHandler: connectionHandler
         ) { result in
             let emailMessageEntity = result.mapThrowingSuccess(self.emailMessageUnsealerService.unsealEmailMessage(_:))
             let transformer = EmailMessageAPITransformer()

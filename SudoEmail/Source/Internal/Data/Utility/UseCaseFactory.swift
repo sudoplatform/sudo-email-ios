@@ -336,6 +336,12 @@ class UseCaseFactory {
         )
     }
 
+    func generateDeleteMessagesForFolderIdUseCase(
+        emailFolderRepository: EmailFolderRepository
+    ) -> DeleteMessagesForFolderIdUseCase {
+        return DeleteMessagesForFolderIdUseCase(emailFolderRepository: emailFolderRepository)
+    }
+
     func generateGetConfigurationDataUseCase(
         emailConfigurationDataRepository: EmailConfigurationDataRepository
     ) -> GetEmailConfigurationDataUseCase {

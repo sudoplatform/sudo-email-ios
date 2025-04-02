@@ -52,8 +52,13 @@ class DefaultDeviceKeyWorkerTests: XCTestCase {
         XCTAssertEqual(keyPair.privateKey.keyData, privateKeyData, file: file, line: line)
         XCTAssertEqual(keyPair.privateKey.keyId, keyId, file: file, line: line)
         XCTAssertEqual(keyPair.privateKey.keyRingId, keyRingId, file: file, line: line)
-
-        XCTAssertEqual(keyPair.publicKey.type, .publicKey, "keyPair publicKey type not publicKey", file: file, line: line)
+        XCTAssertEqual(
+            keyPair.publicKey.type,
+            .publicKey(format: .rsaPublicKey),
+            "keyPair publicKey type not publicKey",
+            file: file,
+            line: line
+        )
         XCTAssertEqual(keyPair.publicKey.keyData, publicKeyData, file: file, line: line)
         XCTAssertEqual(keyPair.publicKey.keyId, keyId, file: file, line: line)
         XCTAssertEqual(keyPair.publicKey.keyRingId, keyRingId, file: file, line: line)
@@ -67,7 +72,13 @@ class DefaultDeviceKeyWorkerTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) {
-        XCTAssertEqual(keyEntity.type, .publicKey, "keyEntity publicKey type not publicKey", file: file, line: line)
+        XCTAssertEqual(
+            keyEntity.type,
+            .publicKey(format: .rsaPublicKey),
+            "keyPair publicKey type not publicKey",
+            file: file,
+            line: line
+        )        
         XCTAssertEqual(keyEntity.keyData, publicKeyData, file: file, line: line)
         XCTAssertEqual(keyEntity.keyId, keyId, file: file, line: line)
         XCTAssertEqual(keyEntity.keyRingId, keyRingId, file: file, line: line)

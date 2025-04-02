@@ -29,7 +29,7 @@ class ListDraftEmailMessagesUseCase {
 
         var nextToken: String?
         repeat {
-            let emailAccounts = try await emailAccountRepository.list(limit: nil, nextToken: nextToken)
+            let emailAccounts = try await emailAccountRepository.fetchList(limit: nil, nextToken: nextToken)
             nextToken = emailAccounts.nextToken
 
             try await withThrowingTaskGroup(of: [DraftEmailMessage].self) { group in

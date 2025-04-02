@@ -9,6 +9,13 @@ import Foundation
 /// Utility class to transform data received from GraphQL to the Core/Entity level of the SDK.
 struct KeyEntityTransformer {
 
+    // MARK: - Properties
+
+    /// Transforms public key format entities.
+    let keyFormatTranformer = PublicKeyFormatEntityTransformer()
+
+    // MARK: - Methods
+
     /// Transform the success result of `CreatePublicKeyForEmailMutation` from the service to a `KeyEntity` with `publicKey` type.
     /// - Parameter data: GraphQL data to transform.
     /// - Throws: `SudoEmailError`.
@@ -18,7 +25,8 @@ struct KeyEntityTransformer {
         guard let keyData = Data(base64Encoded: gqlKey.publicKey) else {
             throw SudoEmailError.internalError("Public key string not base 64 encoded")
         }
-        let entity = KeyEntity(type: .publicKey, keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
+        let format = keyFormatTranformer.transform(gqlKey.keyFormat)
+        let entity = KeyEntity(type: .publicKey(format: format), keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
         return entity
     }
 
@@ -33,7 +41,8 @@ struct KeyEntityTransformer {
         guard let keyData = Data(base64Encoded: gqlKey.publicKey) else {
             throw SudoEmailError.internalError("Public key string not base 64 encoded")
         }
-        let entity = KeyEntity(type: .publicKey, keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
+        let format = keyFormatTranformer.transform(gqlKey.keyFormat)
+        let entity = KeyEntity(type: .publicKey(format: format), keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
         return entity
     }
 }

@@ -86,9 +86,15 @@ public protocol DeviceKeyWorker: AnyObject {
     /// - Parameter publicKey: Public Key data used to encrypt the data.
     /// - Parameter data: The data to encrypt.
     /// - Parameter algorithm: Algorithm in plain text to use to encrypt.
+    /// - Parameter format: The format of the public key. This can be RSA Public Key or SPKI. Default: `rsaPublicKey`.
     /// - Returns: The encrypted data.
     /// - Throws: `KeyManagerError` if the data cannot be encrypted.
-    func encryptWithPublicKey(_ publicKey: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data
+    func encryptWithPublicKey(
+        _ publicKey: Data,
+        data: Data,
+        algorithm: PublicKeyEncryptionAlgorithm,
+        format: PublicKeyFormat
+    ) throws -> Data
 
     /// Encrypt the data using the Symmetric Key data.
     ///
@@ -128,6 +134,20 @@ public protocol DeviceKeyWorker: AnyObject {
     /// - Returns: True if key exists, otherwise false.
     func keyExists(keyId: String, keyType: KeyType) -> Bool
 
+}
+
+// MARK: - Default Parameters
+
+public extension DeviceKeyWorker {
+
+    func encryptWithPublicKey(
+        _ publicKey: Data,
+        data: Data,
+        algorithm: PublicKeyEncryptionAlgorithm,
+        format: PublicKeyFormat = .rsaPublicKey
+    ) throws -> Data {
+        try encryptWithPublicKey(publicKey, data: data, algorithm: algorithm, format: format)
+    }
 }
 
 open class DefaultDeviceKeyWorker: DeviceKeyWorker {
@@ -279,8 +299,18 @@ open class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return try keyManager.decryptWithPrivateKey(keyId, data: data, algorithm: algorithm)
     }
 
-    public func encryptWithPublicKey(_ publicKey: Data, data: Data, algorithm: PublicKeyEncryptionAlgorithm) throws -> Data {
-        return try keyManager.encryptWithPublicKey(publicKey, data: data, algorithm: algorithm)
+    public func encryptWithPublicKey(
+        _ publicKey: Data,
+        data: Data,
+        algorithm: PublicKeyEncryptionAlgorithm,
+        format: PublicKeyFormat
+    ) throws -> Data {
+        switch format {
+        case .rsaPublicKey:
+            return try keyManager.encryptWithPublicKey(publicKey, data: data, format: .rsaPublicKey, algorithm: algorithm)
+        case .spki:
+            return try keyManager.encryptWithPublicKey(publicKey, data: data, format: .spki, algorithm: algorithm)
+        }
     }
 
     public func encryptWithSymmetricKey(_ symmetricKey: Data, data: Data, initVector: Data? = nil) throws -> Data {
