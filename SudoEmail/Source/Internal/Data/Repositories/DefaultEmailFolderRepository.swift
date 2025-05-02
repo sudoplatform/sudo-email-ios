@@ -4,18 +4,15 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSAppSync
+import Amplify
 import Foundation
 import SudoApiClient
 import SudoLogging
 
-/// Queue to handle the result events from AWS.
-private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-handler-queue")
-
 /// Data implementation of the core `EmailFolderRepository`.
 ///
 /// Allows manipulation of data on the email service, via AppSync GraphQL.
-class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
+class DefaultEmailFolderRepository: EmailFolderRepository {
 
     // MARK: - Properties
 
@@ -26,12 +23,12 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
     var deviceKeyWorker: DeviceKeyWorker
 
     /// Used to log diagnostic and error information.
-    var logger: Logger
+    var logger: SudoLogging.Logger
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultEmailFolderRepository`.
-    init(appSyncClient: SudoApiClient, deviceKeyWorker: DeviceKeyWorker, logger: Logger = .emailSDKLogger) {
+    init(appSyncClient: SudoApiClient, deviceKeyWorker: DeviceKeyWorker, logger: SudoLogging.Logger = .emailSDKLogger) {
         self.appSyncClient = appSyncClient
         self.deviceKeyWorker = deviceKeyWorker
         self.logger = logger
@@ -46,23 +43,13 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             nextToken: input.nextToken
         )
         let query = GraphQL.ListEmailFoldersForEmailAddressIdQuery(input: graphQLInput)
-        let cachePolicy = input.cachePolicy ?? .remoteOnly
-        let cachePolicyTransformer = CachePolicyAPITransformer()
-        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(
-            query: query,
-            cachePolicy: queryCachePolicy,
-            queue: dispatchQueue
-        )
-        if let error = fetchError {
-            try RepositoryErrorUtil.processError(error: error, logger: logger)
-        }
-        let emailFolders = fetchResult?.data?.listEmailFoldersForEmailAddressId.items ?? []
+        let result = try await fetch(query)
+        let emailFolders = result.listEmailFoldersForEmailAddressId.items
         let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
         let emailFolderEntities = try emailFolders.map(transformer.transform(_:))
         return ListOutputEntity(
             items: emailFolderEntities,
-            nextToken: fetchResult?.data?.listEmailFoldersForEmailAddressId.nextToken
+            nextToken: result.listEmailFoldersForEmailAddressId.nextToken
         )
     }
 
@@ -81,13 +68,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             emailAddressId: input.emailAddressId
         )
         let mutation = GraphQL.CreateCustomEmailFolderMutation(input: mutationInput)
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-        guard let result = performResult?.data else {
-            if let error = performError {
-                try RepositoryErrorUtil.processError(error: error, logger: logger)
-            }
-            throw SudoEmailError.internalError("Unexpected error")
-        }
+        let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
             let entity = try transformer.transform(result.createCustomEmailFolder)
@@ -102,15 +83,8 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         let mutationInput = GraphQL.DeleteCustomEmailFolderInput(
             emailAddressId: input.emailAddressId, emailFolderId: input.emailFolderId
         )
-
         let mutation = GraphQL.DeleteCustomEmailFolderMutation(input: mutationInput)
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-        guard let result = performResult?.data else {
-            if let error = performError {
-                try RepositoryErrorUtil.processError(error: error, logger: logger)
-            }
-            return nil
-        }
+        let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
             guard let entity = result.deleteCustomEmailFolder else {
@@ -127,7 +101,6 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         guard let symmetricKeyId = try deviceKeyWorker.getCurrentSymmetricKeyId() else {
             throw SudoEmailError.keyNotFound
         }
-
         var updateCustomEmailAddressInput = GraphQL.UpdateCustomEmailFolderInput(
             emailAddressId: input.emailAddressId,
             emailFolderId: input.emailFolderId,
@@ -146,13 +119,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
             )
         }
         let mutation = GraphQL.UpdateCustomEmailFolderMutation(input: updateCustomEmailAddressInput)
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-        guard let result = performResult?.data else {
-            if let error = performError {
-                try RepositoryErrorUtil.processError(error: error, logger: logger)
-            }
-            throw SudoEmailError.internalError("Unexpected error")
-        }
+        let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
             let entity = try transformer.transform(result.updateCustomEmailFolder)
@@ -173,20 +140,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository, Resetable {
         )
 
         let mutation = GraphQL.DeleteMessagesByFolderIdMutation(input: mutationInput)
-
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-
-        guard let result = performResult?.data else {
-            if let error = performError {
-                try RepositoryErrorUtil.processError(error: error, logger: logger)
-            }
-            logger.error("Unexpected error")
-            throw SudoEmailError.internalError("Unexpected error")
-        }
+        let result = try await perform(mutation)
         return result.deleteMessagesByFolderId
-    }
-
-    func reset() throws {
-        try appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
     }
 }

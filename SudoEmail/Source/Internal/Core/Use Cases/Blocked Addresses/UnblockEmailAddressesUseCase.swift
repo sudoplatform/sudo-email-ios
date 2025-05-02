@@ -41,7 +41,7 @@ class UnblockEmailAddressesUseCase {
     ///   - addresses: A list of addresses to block in format `local-part@domain`.
     func execute(addresses: [String]) async throws -> BatchOperationResult<String, String> {
         log.debug("execute: \(addresses)")
-        let owner = try userClient.getSubject()
+        let owner = try await userClient.getSubject()
 
         if owner == nil {
             log.error("User not logged in")

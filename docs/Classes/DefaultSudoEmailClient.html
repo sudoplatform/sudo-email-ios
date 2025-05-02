@@ -48,9 +48,6 @@
             <a class="nav-group-name-link" href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes.html#/s:9SudoEmail18DefaultAWSS3WorkerC">DefaultAWSS3Worker</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/DefaultSudoEmailClient.html">DefaultSudoEmailClient</a>
               </li>
               <li class="nav-group-task">
@@ -94,9 +91,6 @@
                 <a class="nav-group-task-link" href="../Enums/BoolFilter.html">BoolFilter</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/CachePolicy.html">CachePolicy</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a>
               </li>
               <li class="nav-group-task">
@@ -129,13 +123,31 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/StringFilter.html">StringFilter</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SubscriptionConnectionState.html">SubscriptionConnectionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SubscriptionNotification.html">SubscriptionNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SubscriptionNotificationType.html">SubscriptionNotificationType</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/AWSRegionType.html">AWSRegionType</a>
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html">GraphQL</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html#/OnEmailMessageCreatedSubscription">– OnEmailMessageCreatedSubscription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html#/OnEmailMessageUpdatedSubscription">– OnEmailMessageUpdatedSubscription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html#/OnEmailMessageDeletedSubscription">– OnEmailMessageDeletedSubscription</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/NotificationConfiguration.html">NotificationConfiguration</a>
@@ -145,6 +157,9 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Subscriber.html">Subscriber</a>
+              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/SubscriptionToken.html">SubscriptionToken</a>
               </li>
@@ -435,10 +450,13 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP5resetyyKF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP5resetyyYaKF"></a>
                     <a name="//apple_ref/swift/Method/reset()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP5resetyyKF">reset()</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP5resetyyYaKF">reset()</a>
                     </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -451,7 +469,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reset</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reset</span><span class="p">()</span> <span class="n">async</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -943,9 +961,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP012getSupportedB7DomainsySaySSGAA11CachePolicyOYaKF"></a>
-                    <a name="//apple_ref/swift/Method/getSupportedEmailDomains(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP012getSupportedB7DomainsySaySSGAA11CachePolicyOYaKF">getSupportedEmailDomains(_:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP012getSupportedB7DomainsSaySSGyYaKF"></a>
+                    <a name="//apple_ref/swift/Method/getSupportedEmailDomains()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP012getSupportedB7DomainsSaySSGyYaKF">getSupportedEmailDomains()</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -962,7 +980,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getSupportedEmailDomains</span><span class="p">(</span><span class="n">_</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getSupportedEmailDomains</span><span class="p">()</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -972,9 +990,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP013getConfiguredB7DomainsySaySSGAA11CachePolicyOYaKF"></a>
-                    <a name="//apple_ref/swift/Method/getConfiguredEmailDomains(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP013getConfiguredB7DomainsySaySSGAA11CachePolicyOYaKF">getConfiguredEmailDomains(_:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP013getConfiguredB7DomainsSaySSGyYaKF"></a>
+                    <a name="//apple_ref/swift/Method/getConfiguredEmailDomains()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP013getConfiguredB7DomainsSaySSGyYaKF">getConfiguredEmailDomains()</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -991,7 +1009,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getConfiguredEmailDomains</span><span class="p">(</span><span class="n">_</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getConfiguredEmailDomains</span><span class="p">()</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -1078,9 +1096,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">listEmailAddressesForSudoId</span><span class="p">(</span>
-    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEmailAddressesForSudoIdInput.html">ListEmailAddressesForSudoIdInput</a></span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailAddress.html">EmailAddress</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">listEmailAddressesForSudoId</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEmailAddressesForSudoIdInput.html">ListEmailAddressesForSudoIdInput</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailAddress.html">EmailAddress</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1658,9 +1674,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13withDirection17connectionHandler06resultK0AA17SubscriptionToken_pSgAA0bF0V0I0OSg_yycSgys6ResultOyAKs5Error_pGctYaKF"></a>
-                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageCreated(withDirection:connectionHandler:resultHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageCreated13withDirection17connectionHandler06resultK0AA17SubscriptionToken_pSgAA0bF0V0I0OSg_yycSgys6ResultOyAKs5Error_pGctYaKF">subscribeToEmailMessageCreated(withDirection:<wbr>connectionHandler:<wbr>resultHandler:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP9subscribe2id16notificationType10subscriberySS_AA024SubscriptionNotificationG0OAA10Subscriber_ptYaKF"></a>
+                    <a name="//apple_ref/swift/Method/subscribe(id:notificationType:subscriber:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP9subscribe2id16notificationType10subscriberySS_AA024SubscriptionNotificationG0OAA10Subscriber_ptYaKF">subscribe(id:<wbr>notificationType:<wbr>subscriber:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -1677,11 +1693,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">subscribeToEmailMessageCreated</span><span class="p">(</span>
-    <span class="n">withDirection</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">.</span><span class="kt">Direction</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">connectionHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span>
-    <span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">subscribe</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">notificationType</span><span class="p">:</span> <span class="kt"><a href="../Enums/SubscriptionNotificationType.html">SubscriptionNotificationType</a></span><span class="p">,</span> <span class="nv">subscriber</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Subscriber.html">Subscriber</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1691,9 +1703,9 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageDeleted6withId17connectionHandler06resultK0AA17SubscriptionToken_pSgSSSg_yycSgys6ResultOyAA0bF0Vs5Error_pGctYaKF"></a>
-                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageDeleted(withId:connectionHandler:resultHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageDeleted6withId17connectionHandler06resultK0AA17SubscriptionToken_pSgSSSg_yycSgys6ResultOyAA0bF0Vs5Error_pGctYaKF">subscribeToEmailMessageDeleted(withId:<wbr>connectionHandler:<wbr>resultHandler:<wbr>)</a>
+                    <a name="/s:9SudoEmail0aB6ClientP11unsubscribe2idySS_tYaF"></a>
+                    <a name="//apple_ref/swift/Method/unsubscribe(id:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP11unsubscribe2idySS_tYaF">unsubscribe(id:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Asynchronous
@@ -1710,11 +1722,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">subscribeToEmailMessageDeleted</span><span class="p">(</span>
-    <span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">connectionHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span>
-    <span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span></code></pre>
 
                         </div>
                       </div>
@@ -1724,43 +1732,13 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP011subscribeToB14MessageUpdated6withId17connectionHandler06resultK0AA17SubscriptionToken_pSgSSSg_yycSgys6ResultOyAA0bF0Vs5Error_pGctYaKF"></a>
-                    <a name="//apple_ref/swift/Method/subscribeToEmailMessageUpdated(withId:connectionHandler:resultHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP011subscribeToB14MessageUpdated6withId17connectionHandler06resultK0AA17SubscriptionToken_pSgSSSg_yycSgys6ResultOyAA0bF0Vs5Error_pGctYaKF">subscribeToEmailMessageUpdated(withId:<wbr>connectionHandler:<wbr>resultHandler:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Asynchronous
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">subscribeToEmailMessageUpdated</span><span class="p">(</span>
-    <span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">connectionHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span>
-    <span class="nv">resultHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:9SudoEmail16ClientCompletiona">ClientCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailMessage.html">EmailMessage</a></span><span class="o">&gt;</span>
-<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">any</span> <span class="kt"><a href="../Protocols/SubscriptionToken.html">SubscriptionToken</a></span><span class="p">)?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9SudoEmail0aB6ClientP14unsubscribeAllyyF"></a>
+                    <a name="/s:9SudoEmail0aB6ClientP14unsubscribeAllyyYaF"></a>
                     <a name="//apple_ref/swift/Method/unsubscribeAll()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP14unsubscribeAllyyF">unsubscribeAll()</a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP14unsubscribeAllyyYaF">unsubscribeAll()</a>
                     </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1773,7 +1751,7 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unsubscribeAll</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unsubscribeAll</span><span class="p">()</span> <span class="n">async</span></code></pre>
 
                         </div>
                       </div>
@@ -1788,7 +1766,7 @@ Throws:</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2025-04-03)</p>
+      <p>&copy; 2025 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2025-05-02)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

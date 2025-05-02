@@ -39,7 +39,7 @@ class GetEmailAddressBlocklistUseCase {
     /// Execute the use case
     func execute() async throws -> [UnsealedBlockedAddress] {
         log.debug("execute")
-        let owner = try userClient.getSubject()
+        let owner = try await userClient.getSubject()
 
         if owner == nil {
             log.error("User not logged in")

@@ -12,14 +12,7 @@ public struct LookupEmailAddressesPublicInfoInput: Equatable {
     /// A list of email address strings in format 'local-part@domain'.
     public let emailAddresses: [String]
 
-    /// Determines how the data will be fetched. Default usage is `remoteOnly`.
-    public let cachePolicy: CachePolicy
-
-    public init(
-        emailAddresses: [String],
-        cachePolicy: CachePolicy = .remoteOnly
-    ) {
+    public init(emailAddresses: [String]) {
         self.emailAddresses = emailAddresses
-        self.cachePolicy = cachePolicy
     }
 }

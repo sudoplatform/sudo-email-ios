@@ -9,13 +9,10 @@ import SudoApiClient
 import SudoKeyManager
 import SudoLogging
 
-/// Queue to handle the result events from AWS.
-private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-handler-queue")
-
 /// Data implementation of the core `BlockedAddressRepository`
 ///
 /// Allows manipulation of data on the email service via AppSync GraphQL
-class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
+class DefaultBlockedAddressRepository: BlockedAddressRepository {
 
     // MARK: - Properties
 
@@ -36,10 +33,6 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
         self.appSyncClient = appSyncClient
         self.logger = logger
         self.keyWorker = keyWorker
-    }
-
-    func reset() throws {
-        try appSyncClient.clearCaches(options: .init(clearQueries: true, clearMutations: true, clearSubscriptions: true))
     }
 
     // MARK: - BlockedAddressRepository
@@ -102,40 +95,19 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
             input = GraphQL.BlockEmailAddressesInput(blockedAddresses: blockedAddresses, owner: owner)
         }
         let mutation = GraphQL.BlockEmailAddressesMutation(input: input)
-
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-
-        guard let result = performResult?.data else {
-            if let error = performError {
-                switch error {
-                case ApiOperationError.notSignedIn:
-                    logger.error("User not logged in")
-                    throw SudoEmailError.notSignedIn
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        logger.error("Unexpected error: \(String(describing: error))")
-                        throw SudoEmailError.internalError("Unexpected error?: \(String(describing: error))")
-                    }
-                    throw sudoEmailError
-                default:
-                    logger.error("Unexpected error: \(String(describing: error))")
-                    throw SudoEmailError.internalError("Unexpected error: \(String(describing: error))")
-                }
-            }
-            logger.error("Unexpected error")
-            throw SudoEmailError.internalError("Unexpected error")
-        }
+        let result = try await perform(mutation)
 
         var status: BatchOperationResultStatus
-        if result.blockEmailAddresses.status == .failed {
+        let resultStatus = result.blockEmailAddresses.getBlockedAddressesStatus()
+        if resultStatus == .failed {
             status = .failure
-        } else if result.blockEmailAddresses.status == .partial {
+        } else if resultStatus == .partial {
             status = .partial
-        } else if result.blockEmailAddresses.status == .success {
+        } else if resultStatus == .success {
             status = .success
         } else {
-            logger.error("Unknown status returned by BlockEmailAddresses mutation \(result.blockEmailAddresses.status)")
-            throw SudoEmailError.internalError("Unknown status returned by BlockEmailAddresses mutation \(result.blockEmailAddresses.status)")
+            logger.error("Unknown status returned by BlockEmailAddresses mutation \(resultStatus)")
+            throw SudoEmailError.internalError("Unknown status returned by BlockEmailAddresses mutation \(resultStatus)")
         }
         return BatchOperationResult<String, String>(
             status: status,
@@ -148,42 +120,20 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
         logger.debug("unblockAddresses init: \(hashedAddresses) \(owner)")
 
         let input = GraphQL.UnblockEmailAddressesInput(owner: owner, unblockedAddresses: hashedAddresses)
-
         let mutation = GraphQL.UnblockEmailAddressesMutation(input: input)
-
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation, queue: dispatchQueue)
-
-        guard let result = performResult?.data else {
-            if let error = performError {
-                switch error {
-                case ApiOperationError.notSignedIn:
-                    logger.error("User not logged in")
-                    throw SudoEmailError.notSignedIn
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        logger.error("Unexpected error: \(String(describing: error))")
-                        throw SudoEmailError.internalError("Unexpected error?: \(String(describing: error))")
-                    }
-                    throw sudoEmailError
-                default:
-                    logger.error("Unexpected error: \(String(describing: error))")
-                    throw SudoEmailError.internalError("Unexpected error: \(String(describing: error))")
-                }
-            }
-            logger.error("Unexpected error")
-            throw SudoEmailError.internalError("Unexpected error")
-        }
+        let result = try await perform(mutation)
 
         var status: BatchOperationResultStatus
-        if result.unblockEmailAddresses.status == .failed {
+        let resultStatus = result.unblockEmailAddresses.getBlockedAddressesStatus()
+        if resultStatus == .failed {
             status = .failure
-        } else if result.unblockEmailAddresses.status == .partial {
+        } else if resultStatus == .partial {
             status = .partial
-        } else if result.unblockEmailAddresses.status == .success {
+        } else if resultStatus == .success {
             status = .success
         } else {
-            logger.error("Unknown status returned by UnblockEmailAddresses mutation \(result.unblockEmailAddresses.status)")
-            throw SudoEmailError.internalError("Unknown status returned by UnblockEmailAddresses mutation \(result.unblockEmailAddresses.status)")
+            logger.error("Unknown status returned by UnblockEmailAddresses mutation \(resultStatus)")
+            throw SudoEmailError.internalError("Unknown status returned by UnblockEmailAddresses mutation \(resultStatus)")
         }
         return BatchOperationResult<String, String>(
             status: status,
@@ -209,39 +159,11 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository, Resetable {
 
     func getEmailAddressBlocklist(owner: String) async throws -> [UnsealedBlockedAddress] {
         let input = GraphQL.GetEmailAddressBlocklistInput(owner: owner)
-
         let query = GraphQL.GetEmailAddressBlocklistQuery(input: input)
-        let cachePolicy = CachePolicy.remoteOnly
-        let cachePolicyTransformer = CachePolicyAPITransformer()
-        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(
-            query: query,
-            cachePolicy: queryCachePolicy,
-            queue: dispatchQueue
-        )
-
-        guard let result = fetchResult?.data else {
-            if let error = fetchError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-            }
-            throw SudoEmailError.internalError("Unexpected error")
-        }
-
+        let result = try await fetch(query)
         if result.getEmailAddressBlocklist.blockedAddresses.isEmpty {
             return []
         }
-
         var unsealedBlockedAddresses: [UnsealedBlockedAddress] = []
         let transformer = BlockedEmailAddressTransformer(deviceKeyWorker: keyWorker)
         unsealedBlockedAddresses = try result.getEmailAddressBlocklist.blockedAddresses.map(transformer.transform(_:))

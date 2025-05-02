@@ -7,7 +7,7 @@
 import Foundation
 
 /// Core representation of an email folder repository used in business logic.
-protocol EmailFolderRepository: AnyObject {
+protocol EmailFolderRepository: Repository {
 
     /// Get the list of email folders for the specified email address.
     /// - Parameters:

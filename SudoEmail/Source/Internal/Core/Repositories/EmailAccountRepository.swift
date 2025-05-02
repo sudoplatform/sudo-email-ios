@@ -7,7 +7,7 @@
 import Foundation
 
 /// Core entity representation of a email account repository used in business logic. Used to perform CRUD operations for email accounts.
-protocol EmailAccountRepository: AnyObject {
+protocol EmailAccountRepository: Repository {
 
     /// Check the availability of a combination of email addresses
     /// - Parameters:
@@ -44,12 +44,6 @@ protocol EmailAccountRepository: AnyObject {
     /// - Returns: the identifier of the email account for which the metadata was updated.
     func updateMetadata(id: String, values: UpdateEmailAddressMetadataValues) async throws -> String
 
-    /// Get the email account that matches the input `emailAddress`. Fetches the account locally from the device.
-    /// - Parameters:
-    ///   - id: Identifier of the email address to match to a record to return from the service.
-    ///   - Returns on success, the record of the account, or `nil` if the address does not match any records. Returns failure on error.
-    func getWithEmailAddressId(_ id: String) async throws -> EmailAccountEntity?
-
     /// Get the email account that matches the input `emailAddress`. Fetches the account remotely from the email service.
     /// - Parameters:
     ///   - id: Identifier of the email address to match to a record to return from the service.
@@ -61,20 +55,7 @@ protocol EmailAccountRepository: AnyObject {
     ///   - limit: Limit of the results to return.
     ///   - nextToken: Next token to be used when accessing the next page of information.
     ///   - Returns a list of results with a next token if there are more results to fetch, or error on failure.
-    func fetchList(
-        limit: Int?,
-        nextToken: String?
-    ) async throws -> ListOutputEntity<EmailAccountEntity>
-
-    /// Get the list of email accounts from the device cache.
-    /// - Parameters:
-    ///   - limit: Limit of the results to return.
-    ///   - nextToken: Next token to be used when accessing the next page of information.
-    ///   - Returns a list of results with a next token if there are more results to fetch, or error on failure.
-    func list(
-        limit: Int?,
-        nextToken: String?
-    ) async throws -> ListOutputEntity<EmailAccountEntity>
+    func list(limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailAccountEntity>
 
     /// Get the list of email accounts for the specified sudo.
     /// - Parameters:
@@ -85,7 +66,6 @@ protocol EmailAccountRepository: AnyObject {
     ///   - Returns a list of results with a next token if there are more results to fetch, or error on failure.
     func listForSudoId(
         sudoId: String,
-        cachePolicy: CachePolicy?,
         limit: Int?,
         nextToken: String?
     ) async throws -> ListOutputEntity<EmailAccountEntity>
@@ -93,10 +73,6 @@ protocol EmailAccountRepository: AnyObject {
     /// Retrieve a list email address public info objects for provided email addresses.
     /// - Parameters:
     ///   - emailAddresses: A list of email address strings in format 'local-part@domain'.
-    ///   - cachePolicy: Determines how the public info will be fetched. Default usage is `remoteOnly`.
     ///   - Returns: The list of public info objects found, or empty if no email addresses or public keys were found.
-    func lookupPublicInfo(
-        emailAddresses: [String],
-        cachePolicy: CachePolicy?
-    ) async throws -> [EmailAddressPublicInfoEntity]
+    func lookupPublicInfo(emailAddresses: [String]) async throws -> [EmailAddressPublicInfoEntity]
 }

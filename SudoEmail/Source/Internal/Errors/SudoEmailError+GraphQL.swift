@@ -4,9 +4,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Amplify
 import Foundation
-
-import AWSAppSync
 import SudoApiClient
 
 extension SudoEmailError {
@@ -16,7 +15,7 @@ extension SudoEmailError {
     ///
     /// If the GraphQLError is unsupported, `nil` will be returned instead.
     init?(graphQLError error: GraphQLError) { // swiftlint:disable:this cyclomatic_complexity
-        guard let errorType = error["errorType"] as? String else {
+        guard let errorType = error.extensions?["errorType"]?.stringValue else {
             return nil
         }
         switch errorType {
@@ -80,6 +79,9 @@ extension SudoEmailError {
     }
 
     static func fromApiOperationError(error: Error) -> SudoEmailError {
+        if let sudoEmailError = error as? SudoEmailError {
+            return sudoEmailError
+        }
         switch error {
         case ApiOperationError.accountLocked:
             return .accountLocked
@@ -95,8 +97,13 @@ extension SudoEmailError {
             return .serviceError
         case ApiOperationError.versionMismatch:
             return .versionMismatch
+        case ApiOperationError.graphQLError(let underlyingError):
+            if let graphQLError = underlyingError as? GraphQLError, let sudoEmailError = SudoEmailError(graphQLError: graphQLError) {
+                return sudoEmailError
+            }
+            return .internalError("Unexpected API operation error: \(error))")
         default:
-            return .fatalError("Unexpected API operation error: \(error)")
+            return .internalError("Unexpected error: \(error)")
         }
     }
 }

@@ -24,7 +24,7 @@ class LookupEmailAddressesPublicInfoUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///   - emailAddresses: A list of email address strings in format 'local-part@domain'.
-    func execute(emailAddresses: [String], cachePolicy: CachePolicy) async throws -> [EmailAddressPublicInfoEntity] {
-        return try await emailAccountRepository.lookupPublicInfo(emailAddresses: emailAddresses, cachePolicy: cachePolicy)
+    func execute(emailAddresses: [String]) async throws -> [EmailAddressPublicInfoEntity] {
+        return try await emailAccountRepository.lookupPublicInfo(emailAddresses: emailAddresses)
     }
 }

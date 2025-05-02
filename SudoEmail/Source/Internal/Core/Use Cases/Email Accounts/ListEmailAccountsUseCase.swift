@@ -6,7 +6,7 @@
 
 /// Core use case representation of a operation to get a list of email accounts.
 ///
-/// Fetches the list of email accounts from the device cache.
+/// Fetches the list of email accounts from the server.
 class ListEmailAccountsUseCase {
 
     // MARK: - Properties

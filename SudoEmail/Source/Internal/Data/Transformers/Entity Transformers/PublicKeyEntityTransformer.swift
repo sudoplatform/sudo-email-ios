@@ -22,7 +22,7 @@ struct PublicKeyEntityTransformer {
     func transform(
         _ data: GraphQL.LookupEmailAddressesPublicInfoQuery.Data.LookupEmailAddressesPublicInfo.Item.PublicKeyDetail
     ) -> EmailAddressPublicKeyEntity {
-        let keyFormat = keyFormatTransformer.transform(data.keyFormat)
+        let keyFormat = keyFormatTransformer.transform(data.getKeyFormat())
         return EmailAddressPublicKeyEntity(publicKey: data.publicKey, keyFormat: keyFormat, algorithm: data.algorithm)
     }
 }

@@ -25,7 +25,7 @@ struct KeyEntityTransformer {
         guard let keyData = Data(base64Encoded: gqlKey.publicKey) else {
             throw SudoEmailError.internalError("Public key string not base 64 encoded")
         }
-        let format = keyFormatTranformer.transform(gqlKey.keyFormat)
+        let format = keyFormatTranformer.transform(gqlKey.getOptionalKeyFormat())
         let entity = KeyEntity(type: .publicKey(format: format), keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
         return entity
     }
@@ -41,7 +41,7 @@ struct KeyEntityTransformer {
         guard let keyData = Data(base64Encoded: gqlKey.publicKey) else {
             throw SudoEmailError.internalError("Public key string not base 64 encoded")
         }
-        let format = keyFormatTranformer.transform(gqlKey.keyFormat)
+        let format = keyFormatTranformer.transform(gqlKey.getOptionalKeyFormat())
         let entity = KeyEntity(type: .publicKey(format: format), keyId: gqlKey.keyId, keyRingId: gqlKey.keyRingId, keyData: keyData)
         return entity
     }

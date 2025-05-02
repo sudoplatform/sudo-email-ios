@@ -15,14 +15,14 @@ protocol ServiceKeyWorker: DeviceKeyWorker {
 
     /// Generate a key pair on the device. Returns the freshly generated key pair.
     /// Throws: `SudoEmailError`.
-    func generateKeyPair() throws -> KeyPair
+    func generateKeyPair() async throws -> KeyPair
 
     /// Get the Public Key matching the key id if it exists.
     ///
     /// - Parameter keyId: Identifier of the Public Key to retrieve.
     /// - Returns: The Public Key `KeyEntity` matching the provided key id, or nil
     /// - Throws: `SudoEmailError`.
-    func getPublicKeyWithId(keyId: String) throws -> KeyEntity?
+    func getPublicKeyWithId(keyId: String) async throws -> KeyEntity?
 }
 
 class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
@@ -72,8 +72,8 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
 
     // MARK: - ServiceKeyWorker
 
-    func generateKeyPair() throws -> KeyPair {
-        let keyRingId = try getKeyRingId()
+    func generateKeyPair() async throws -> KeyPair {
+        let keyRingId = try await getKeyRingId()
         let keyPairId = try keyManager.generateKeyId()
         guard let keyPairIdDataEncoded = keyPairId.data(using: .utf8) else {
             let msg = "Unable to encode key pair id on generation"
@@ -116,8 +116,8 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
         return keyPair
     }
 
-    func getPublicKeyWithId(keyId: String) throws -> KeyEntity? {
-        let keyRingId = try getKeyRingId()
+    func getPublicKeyWithId(keyId: String) async throws -> KeyEntity? {
+        let keyRingId = try await getKeyRingId()
         let publicKey: Data
 
         do {
@@ -169,8 +169,8 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
     /// Get the user's key ring id. If the user is not signed in, this will fail.
     /// - Throws: `SudoEmailError.notSignedIn`.
     /// - Returns: Key ring id of the user.
-    func getKeyRingId() throws -> String {
-        guard let userId = try userClient.getSubject() else {
+    func getKeyRingId() async throws -> String {
+        guard let userId = try await userClient.getSubject() else {
             throw SudoEmailError.notSignedIn
         }
         return "\(Defaults.keyRingServiceName).\(userId)"

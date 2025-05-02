@@ -12,9 +12,6 @@ public struct ListEmailFoldersForEmailAddressIdInput: Equatable {
     /// The unique identifier of email address to retrieve folders for.
     public let emailAddressId: String
 
-    /// Determines how the email folders will be fetched. Default usage is `remoteOnly`.
-    public let cachePolicy: CachePolicy?
-
     /// The number of items to return.  If omitted, the default of 10 will be used.
     public let limit: Int?
 
@@ -23,12 +20,10 @@ public struct ListEmailFoldersForEmailAddressIdInput: Equatable {
 
     public init(
         emailAddressId: String,
-        cachePolicy: CachePolicy? = .remoteOnly,
         limit: Int? = defaultEmailMessageLimit,
         nextToken: String? = nil
     ) {
         self.emailAddressId = emailAddressId
-        self.cachePolicy = cachePolicy
         self.limit = limit
         self.nextToken = nextToken
     }

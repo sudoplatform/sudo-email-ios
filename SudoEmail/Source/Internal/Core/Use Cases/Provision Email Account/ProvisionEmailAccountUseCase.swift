@@ -57,12 +57,12 @@ class ProvisionEmailAccountUseCase {
         var publicKey: KeyEntity
         do {
             if let keyId = keyId {
-                guard let pubKey = try keyWorker.getPublicKeyWithId(keyId: keyId) else {
+                guard let pubKey = try await keyWorker.getPublicKeyWithId(keyId: keyId) else {
                     throw SudoEmailError.keyNotFound
                 }
                 publicKey = pubKey
             } else {
-                let keyPair = try keyWorker.generateKeyPair()
+                let keyPair = try await keyWorker.generateKeyPair()
                 publicKey = keyPair.publicKey
             }
         } catch {

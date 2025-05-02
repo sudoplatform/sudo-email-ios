@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSAppSync
-import AWSS3
+import Amplify
 import Foundation
 import SudoApiClient
 import SudoLogging
@@ -16,19 +15,10 @@ let CRYPTO_CONTENT_ENCODING: String = "sudoplatform-crypto"
 let BINARY_DATA_CONTENT_ENCODING: String = "sudoplatform-binary-data"
 let COMPRESSION_CONTENT_ENCODING: String = "sudoplatform-compression"
 
-/// Metadata associated with draft email messages stored in S3
-struct DraftEmailMessageEncryptionMetadata: Equatable {
-    /// encryption algorithm
-    public var algorithm: String
-
-    /// symmetric key id
-    public var keyId: String
-}
-
 /// Data implementation of the core `EmailMessageRepository`.
 ///
 /// Allows access and manipulation of email service via AppSync GraphQL and AWSS3.
-class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
+class DefaultEmailMessageRepository: EmailMessageRepository {
 
     // MARK: - Supplementary
 
@@ -62,16 +52,13 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     let userClient: SudoUserClient
 
     /// Used to log diagnostic and error information.
-    let logger: Logger
+    let logger: SudoLogging.Logger
 
     /// Utility class to unseal email messages.
     let unsealer: EmailMessageUnsealerService
 
     /// Cryptographic key worker for this device
     let deviceKeyWorker: DeviceKeyWorker
-
-    /// Utility class to manage subscriptions.
-    let subscriptionManager: SubscriptionManager
 
     /// S3 client for uploading email messages to the user's S3 transient bucket.
     let s3Worker: AWSS3Worker
@@ -87,7 +74,6 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     /// Initialize an instance of `DefaultEmailMessageRepository`.
     init(
         unsealer: EmailMessageUnsealerService,
-        subscriptionManager: SubscriptionManager = DefaultSubscriptionManager(),
         appSyncClient: SudoApiClient,
         emailBucket: String,
         transientBucket: String,
@@ -97,10 +83,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         emailCryptoService: EmailCryptoService,
         rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
         deviceKeyWorker: DeviceKeyWorker,
-        logger: Logger = .emailSDKLogger
+        logger: SudoLogging.Logger = .emailSDKLogger
     ) {
         self.unsealer = unsealer
-        self.subscriptionManager = subscriptionManager
         self.appSyncClient = appSyncClient
         self.emailBucket = emailBucket
         self.transientBucket = transientBucket
@@ -113,32 +98,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         self.logger = logger
     }
 
-    func reset() {
-        subscriptionManager.removeAllSubscriptions()
-    }
-
     // MARK: - SealedEmailMessageRepository
-
-    private func performSendEmailMessageMutation<Mutation: GraphQLMutation>(_ mutation: Mutation) async throws -> Mutation.Data {
-        let (performResult, performError) = try await appSyncClient.perform(mutation: mutation)
-        guard let result = performResult?.data else {
-            if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-            }
-            throw SudoEmailError.internalError("Unexpected error")
-        }
-        return result
-    }
 
     // Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
@@ -169,8 +129,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             message: s3EmailObjectInput
         )
         let mutation = GraphQL.SendEmailMessageMutation(input: input)
-        let result = try await performSendEmailMessageMutation(mutation)
-
+        let result = try await perform(mutation)
         return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
@@ -230,7 +189,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             rfc822Header: rfc822HeaderInput
         )
         let mutation = GraphQL.SendEncryptedEmailMessageMutation(input: input)
-        let result = try await performSendEmailMessageMutation(mutation)
+        let result = try await perform(mutation)
 
         return SendEmailMessageResult(
             id: result.sendEncryptedEmailMessage.id,
@@ -241,27 +200,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
     func deleteEmailMessages(withIds ids: [String]) async throws -> [String] {
         let input = GraphQL.DeleteEmailMessagesInput(messageIds: ids)
         let mutation = GraphQL.DeleteEmailMessagesMutation(input: input)
-        do {
-            let (performResult, performError) = try await appSyncClient.perform(mutation: mutation)
-            if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                default:
-                    throw SudoEmailError.fromApiOperationError(error: error)
-                }
-            }
-
-            guard let result = performResult?.data else {
-                throw SudoEmailError.internalError("Missing data from API call")
-            }
-            return result.deleteEmailMessages
-        } catch let error as ApiOperationError {
-            throw SudoEmailError.fromApiOperationError(error: error)
-        }
+        let result = try await perform(mutation)
+        return result.deleteEmailMessages
     }
 
     func updateEmailMessages(
@@ -273,38 +213,20 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             values: transformer.transform(input.values)
         )
         let mutation = GraphQL.UpdateEmailMessagesMutation(input: input)
-        do {
-            let (performResult, performError) = try await appSyncClient.perform(mutation: mutation)
-            if let error = performError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                default:
-                    throw SudoEmailError.fromApiOperationError(error: error)
-                }
+        let result = try await perform(mutation)
+        return try BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>(
+            status: UpdateEmailMessagesStatusApiTransformer().transform(result.updateEmailMessagesV2.getUpdateEmailMessagesStatus()),
+            successItems: result.updateEmailMessagesV2.successMessages?.map {
+                UpdatedEmailMessageSuccess(
+                    id: $0.id,
+                    createdAt: Date(millisecondsSince1970: $0.createdAtEpochMs),
+                    updatedAt: Date(millisecondsSince1970: $0.updatedAtEpochMs)
+                )
+            },
+            failureItems: result.updateEmailMessagesV2.failedMessages?.map {
+                EmailMessageOperationFailureResult(id: $0.id, errorType: $0.errorType)
             }
-            guard let result = performResult?.data else {
-                throw SudoEmailError.internalError("Missing data from API call")
-            }
-            return try BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult>(
-                status: UpdateEmailMessagesStatusApiTransformer().transform(result.updateEmailMessagesV2.status),
-                successItems: result.updateEmailMessagesV2.successMessages?.map {
-                    UpdatedEmailMessageSuccess(
-                        id: $0.id,
-                        createdAt: Date(millisecondsSince1970: $0.createdAtEpochMs),
-                        updatedAt: Date(millisecondsSince1970: $0.updatedAtEpochMs)
-                    )
-                },
-                failureItems: result.updateEmailMessagesV2.failedMessages?.map {
-                    EmailMessageOperationFailureResult(id: $0.id, errorType: $0.errorType)
-                }
-            )
-        } catch let error as ApiOperationError {
-            throw SudoEmailError.fromApiOperationError(error: error)
-        }
+        )
     }
 
     func saveDraft(
@@ -327,11 +249,10 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         guard let sealedRfc822Data = sealedRfc822String.data(using: .utf8) else {
             throw SudoEmailError.decodingError
         }
-        let encryptionMetadata = DraftEmailMessageEncryptionMetadata(
-            algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
-            keyId: symmetricKeyId
-        )
-
+        let encryptionMetadata: [String: String] = [
+            Defaults.keyIdMetadataName: symmetricKeyId,
+            Defaults.algorithmMetadataName: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm
+        ]
         try await s3Worker.upload(
             data: sealedRfc822Data,
             contentType: draftContentType,
@@ -359,12 +280,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         return try await s3Worker.deleteObject(bucket: emailBucket, key: s3Key)
     }
 
-    func getEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity? {
-        return try await getEmailMessageQuery(id: id, cachePolicy: .returnCacheDataDontFetch)
-    }
-
     func fetchEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity? {
-        return try await getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData)
+        return try await getEmailMessageQuery(id: id)
     }
 
     func listEmailMessages(
@@ -378,30 +295,13 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             specifiedDateRange: input.dateRange?.toGraphQL()
         )
         let query = GraphQL.ListEmailMessagesQuery(input: graphQLInput)
-        let cachePolicy = input.cachePolicy ?? .remoteOnly
-        let cachePolicyTransformer = CachePolicyAPITransformer()
-        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(
-            query: query,
-            cachePolicy: queryCachePolicy
-        )
-        if let error = fetchError {
-            switch error {
-            case ApiOperationError.graphQLError(let cause):
-                guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-                throw sudoEmailError
-            default:
-                throw SudoEmailError.fromApiOperationError(error: error)
-            }
-        }
-        let sealedEmailMessages = fetchResult?.data?.listEmailMessages.items ?? []
+        let result = try await fetch(query)
+        let sealedEmailMessages = result.listEmailMessages.items
         let transformer = SealedEmailMessageEntityTransformer()
         let sealedEmailMessageEntities = try sealedEmailMessages.map(transformer.transform(_:))
         return ListOutputEntity(
             items: sealedEmailMessageEntities,
-            nextToken: fetchResult?.data?.listEmailMessages.nextToken
+            nextToken: result.listEmailMessages.nextToken
         )
     }
 
@@ -417,30 +317,13 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             specifiedDateRange: input.dateRange?.toGraphQL()
         )
         let query = GraphQL.ListEmailMessagesForEmailAddressIdQuery(input: graphQLInput)
-        let cachePolicy = input.cachePolicy ?? .remoteOnly
-        let cachePolicyTransformer = CachePolicyAPITransformer()
-        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(
-            query: query,
-            cachePolicy: queryCachePolicy
-        )
-        if let error = fetchError {
-            switch error {
-            case ApiOperationError.graphQLError(let cause):
-                guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-                throw sudoEmailError
-            default:
-                throw SudoEmailError.fromApiOperationError(error: error)
-            }
-        }
-        let sealedEmailMessages = fetchResult?.data?.listEmailMessagesForEmailAddressId.items ?? []
+        let result = try await fetch(query)
+        let sealedEmailMessages = result.listEmailMessagesForEmailAddressId.items
         let transformer = SealedEmailMessageEntityTransformer()
         let sealedEmailMessageEntities = try sealedEmailMessages.map(transformer.transform(_:))
         return ListOutputEntity(
             items: sealedEmailMessageEntities,
-            nextToken: fetchResult?.data?.listEmailMessagesForEmailAddressId.nextToken
+            nextToken: result.listEmailMessagesForEmailAddressId.nextToken
         )
     }
 
@@ -456,41 +339,23 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
             specifiedDateRange: input.dateRange?.toGraphQL()
         )
         let query = GraphQL.ListEmailMessagesForEmailFolderIdQuery(input: graphQLInput)
-        let cachePolicy = input.cachePolicy ?? .remoteOnly
-        let cachePolicyTransformer = CachePolicyAPITransformer()
-        let queryCachePolicy = cachePolicyTransformer.transform(cachePolicy)
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(
-            query: query,
-            cachePolicy: queryCachePolicy
-        )
-        if let error = fetchError {
-            switch error {
-            case ApiOperationError.graphQLError(let cause):
-                guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-                throw sudoEmailError
-            default:
-                throw SudoEmailError.fromApiOperationError(error: error)
-            }
-        }
-        let sealedEmailMessages = fetchResult?.data?.listEmailMessagesForEmailFolderId.items ?? []
+        let result = try await fetch(query)
+        let sealedEmailMessages = result.listEmailMessagesForEmailFolderId.items
         let transformer = SealedEmailMessageEntityTransformer()
         let sealedEmailMessageEntities = try sealedEmailMessages.map(transformer.transform(_:))
         return ListOutputEntity(
             items: sealedEmailMessageEntities,
-            nextToken: fetchResult?.data?.listEmailMessagesForEmailFolderId.nextToken
+            nextToken: result.listEmailMessagesForEmailFolderId.nextToken
         )
     }
 
     func fetchEmailMessageRFC822Data(_ id: String, emailAddressId: String) async throws -> S3ObjectEntity? {
-        guard let sealedEmailMessage = try await getEmailMessageQuery(id: id, cachePolicy: .fetchIgnoringCacheData) else {
+        guard let sealedEmailMessage = try await getEmailMessageQuery(id: id) else {
             return nil
         }
         guard let s3Key = await getS3KeyForEmailMessageId(id, emailAddressId: emailAddressId, publicKeyId: sealedEmailMessage.keyId) else {
             throw SudoEmailError.notSignedIn
         }
-
         do {
             let rfc822Object = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
             return rfc822Object
@@ -659,247 +524,11 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
     }
 
-    func subscribeToEmailMessageCreated(
-        withDirection direction: DirectionEntity? = nil,
-        connectionHandler: (() -> Void)? = nil,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) async throws -> SubscriptionToken {
-        let subscriptionId = UUID().uuidString
-        let userId = try getUserId()
-        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(
-            subscriptionId,
-            connectionHandler: connectionHandler,
-            resultHandler: resultHandler
-        )
-        if let direction = direction {
-            let directionTransformer = EmailMessageDirectionGQLTransformer()
-            let graphQLDirection = directionTransformer.transform(direction)
-            let graphQLSubscription = GraphQL.OnEmailMessageCreatedWithDirectionSubscription(owner: userId, direction: graphQLDirection)
-            let subscriptionResultHandler = constructSubscriptionResultHandler(
-                type: GraphQL.OnEmailMessageCreatedWithDirectionSubscription.self,
-                transform: { graphQL in
-                    guard let message = graphQL.onEmailMessageCreated else {
-                        return nil
-                    }
-                    let transformer = SealedEmailMessageEntityTransformer()
-                    return try transformer.transform(message)
-                },
-                resultHandler: resultHandler
-            )
-            return try await subscribeWithId(
-                subscriptionId,
-                subscription: graphQLSubscription,
-                statusChangeHandler: subscriptionStatusChangeHandler,
-                resultHandler: subscriptionResultHandler
-            )
-        } else {
-            let graphQLSubscription = GraphQL.OnEmailMessageCreatedSubscription(owner: userId)
-            let subscriptionResultHandler = constructSubscriptionResultHandler(
-                type: GraphQL.OnEmailMessageCreatedSubscription.self,
-                transform: { graphQL -> SealedEmailMessageEntity? in
-                    guard let message = graphQL.onEmailMessageCreated else {
-                        return nil
-                    }
-                    let transformer = SealedEmailMessageEntityTransformer()
-                    return try transformer.transform(message)
-                },
-                resultHandler: resultHandler
-            )
-            return try await subscribeWithId(
-                subscriptionId,
-                subscription: graphQLSubscription,
-                statusChangeHandler: subscriptionStatusChangeHandler,
-                resultHandler: subscriptionResultHandler
-            )
-        }
-    }
-
-    func subscribeToEmailMessageDeleted(
-        withId id: String?,
-        connectionHandler: (() -> Void)? = nil,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) async throws -> SubscriptionToken {
-        let subscriptionId = UUID().uuidString
-        let userId = try getUserId()
-        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(
-            subscriptionId,
-            connectionHandler: connectionHandler,
-            resultHandler: resultHandler
-        )
-        if let id = id {
-            let graphQLSubscription = GraphQL.OnEmailMessageDeletedWithIdSubscription(owner: userId, id: id)
-            let subscriptionResultHandler = constructSubscriptionResultHandler(
-                type: GraphQL.OnEmailMessageDeletedWithIdSubscription.self,
-                transform: { graphQL in
-                    guard let message = graphQL.onEmailMessageDeleted else {
-                        return nil
-                    }
-                    let transformer = SealedEmailMessageEntityTransformer()
-                    return try transformer.transform(message)
-                },
-                resultHandler: resultHandler
-            )
-            return try await subscribeWithId(
-                subscriptionId,
-                subscription: graphQLSubscription,
-                statusChangeHandler: subscriptionStatusChangeHandler,
-                resultHandler: subscriptionResultHandler
-            )
-        } else {
-            let graphQLSubscription = GraphQL.OnEmailMessageDeletedSubscription(owner: userId)
-            let subscriptionResultHandler = constructSubscriptionResultHandler(
-                type: GraphQL.OnEmailMessageDeletedSubscription.self,
-                transform: { graphQL in
-                    guard let message = graphQL.onEmailMessageDeleted else {
-                        return nil
-                    }
-                    let transformer = SealedEmailMessageEntityTransformer()
-                    return try transformer.transform(message)
-                },
-                resultHandler: resultHandler
-            )
-            return try await subscribeWithId(
-                subscriptionId,
-                subscription: graphQLSubscription,
-                statusChangeHandler: subscriptionStatusChangeHandler,
-                resultHandler: subscriptionResultHandler
-            )
-        }
-    }
-
-    func subscribeToEmailMessageUpdated(
-        withId id: String?,
-        connectionHandler: (() -> Void)? = nil,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) async throws -> SubscriptionToken {
-        let subscriptionId = UUID().uuidString
-        let userId = try getUserId()
-        let subscriptionStatusChangeHandler = constructStatusChangeHandlerWithSubscriptionId(
-            subscriptionId,
-            connectionHandler: connectionHandler,
-            resultHandler: resultHandler
-        )
-        if let id = id {
-            let graphQLSubscription = GraphQL.OnEmailMessageUpdatedWithIdSubscription(owner: userId, id: id)
-            let subscriptionResultHandler = constructSubscriptionResultHandler(
-                type: GraphQL.OnEmailMessageUpdatedWithIdSubscription.self,
-                transform: { graphQL in
-                    guard let message = graphQL.onEmailMessageUpdated else {
-                        return nil
-                    }
-                    let transformer = SealedEmailMessageEntityTransformer()
-                    return try transformer.transform(message)
-                },
-                resultHandler: resultHandler
-            )
-            return try await subscribeWithId(
-                subscriptionId,
-                subscription: graphQLSubscription,
-                statusChangeHandler: subscriptionStatusChangeHandler,
-                resultHandler: subscriptionResultHandler
-            )
-        } else {
-            let graphQLSubscription = GraphQL.OnEmailMessageUpdatedSubscription(owner: userId)
-            let subscriptionResultHandler = constructSubscriptionResultHandler(
-                type: GraphQL.OnEmailMessageUpdatedSubscription.self,
-                transform: { graphQL in
-                    guard let message = graphQL.onEmailMessageUpdated else {
-                        return nil
-                    }
-                    let transformer = SealedEmailMessageEntityTransformer()
-                    return try transformer.transform(message)
-                },
-                resultHandler: resultHandler
-            )
-            return try await subscribeWithId(
-                subscriptionId,
-                subscription: graphQLSubscription,
-                statusChangeHandler: subscriptionStatusChangeHandler,
-                resultHandler: subscriptionResultHandler
-            )
-        }
-    }
-
-    func unsubscribeAll() {
-        subscriptionManager.removeAllSubscriptions()
-    }
-
-    // MARK: - Helpers: Constructors - Subscriptions
-
-    /// Construct the result handler for a subscription that returns an email message object that can be transformed to `SealedEmailMessage`.
-    ///
-    /// Transforms the graphQL data to a `SealedEmailMessage` via the input `transform` function. If the result of `transform` is `nil`, then a log will be
-    /// warned, but nothing else will happen. If the `transform` function throws an error, the resultant error will be returned via the `resultHandler`.
-    /// - Parameters:
-    ///   - type: Type of the subscription that the result handler is being constructed for.
-    ///   - transform: Transformation function to transform the result data of the
-    ///   - resultHandler: Result handler from the called method, inverted from the API layer via the core layer.
-    /// - Returns: Subscription result handler to call the graphql appsync subscription with.
-    func constructSubscriptionResultHandler<S: GraphQLSubscription>(
-        type: S.Type,
-        transform: @escaping (S.Data) throws -> SealedEmailMessageEntity?,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) -> SubscriptionResultHandler<S> {
-        return { [weak self] result, _, error in
-            guard let weakSelf = self else { return }
-            let graphQLResultWorker = GraphQLResultWorker()
-            let result = graphQLResultWorker.convertToResult(result, error: error)
-            switch result {
-            case .success(let data):
-                do {
-                    guard let entity = try transform(data) else {
-                        weakSelf.logger.warning("Email message subscription received with no data")
-                        return
-                    }
-                    resultHandler(.success(entity))
-                } catch {
-                    weakSelf.logger.error(error.localizedDescription)
-                    resultHandler(.failure(error))
-                }
-            case .failure(let error):
-                weakSelf.logger.error(error.localizedDescription)
-                resultHandler(.failure(error))
-            }
-        }
-    }
-
-    /// Construct the status change handler for a subscription.
-    /// - Parameters:
-    ///   - subscriptionId: Identifier of the subscription.
-    ///   - connectionHandler: The callback to call when a connection has been established.
-    ///   - resultHandler: Result handler of the
-    /// - Returns: Result handler from the called method, inverted from the API layer via the core layer.
-    func constructStatusChangeHandlerWithSubscriptionId(
-        _ subscriptionId: String,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) -> SubscriptionStatusChangeHandler {
-        return { [weak self] status in
-            switch status {
-            case .error(let cause):
-                let error = SudoEmailError.internalError(cause.errorDescription)
-                resultHandler(.failure(error))
-            case .disconnected:
-                self?.subscriptionManager.removeSubscription(withId: subscriptionId)
-            case .connected:
-                connectionHandler?()
-            default:
-                break
-            }
-        }
-    }
-
     // MARK: - Helpers
 
-    func getEmailMessageQuery(id: String, cachePolicy: AWSAppSync.CachePolicy) async throws -> SealedEmailMessageEntity? {
+    func getEmailMessageQuery(id: String) async throws -> SealedEmailMessageEntity? {
         let query = GraphQL.GetEmailMessageQuery(id: id)
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(query: query, cachePolicy: cachePolicy)
-        guard let result = fetchResult?.data else {
-            guard let error = fetchError else {
-                return nil
-            }
-            throw SudoEmailError.internalError("\(error)")
-        }
+        let result = try await fetch(query)
         do {
             let transformer = SealedEmailMessageEntityTransformer()
             guard let emailMessage = result.getEmailMessage else {
@@ -913,47 +542,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository, Resetable {
         }
     }
 
-    func subscribeWithId<S: GraphQLSubscription>(
-        _ subscriptionId: String,
-        subscription: S,
-        statusChangeHandler: @escaping SubscriptionStatusChangeHandler,
-        resultHandler: @escaping SubscriptionResultHandler<S>
-    ) async throws -> SubscriptionToken {
-        do {
-            let optionalCancellable = try await appSyncClient.subscribe(
-                subscription: subscription,
-                statusChangeHandler: statusChangeHandler,
-                resultHandler: resultHandler
-            )
-            guard let cancellable = optionalCancellable else {
-                throw SudoEmailError.internalError("No Cancellable object returned from subscription for OnEmailMessageSubscription")
-            }
-            return EmailSubscriptionToken(id: subscriptionId, cancellable: cancellable, manager: subscriptionManager)
-        } catch {
-            throw SudoEmailError.internalError(error.localizedDescription)
-        }
-    }
-
-    /// Get the userId property from `SudoUserClient.`
-    /// - Throws: `SudoEmailError.notSignedIn` if cannot retrieve the subject.
-    /// - Returns: Owner property.
-    func getUserId() throws -> String {
-        let userId: String
-        do {
-            guard let uid = try userClient.getSubject() else {
-                throw SudoEmailError.internalError("user subject is nil")
-            }
-            userId = uid
-        } catch {
-            logger.error("Failed to get user subject: \(error.localizedDescription)")
-            throw SudoEmailError.notSignedIn
-        }
-        return userId
-    }
-
     /// Generate an S3 key to use when sending an email message to the transient bucket.
     func getS3KeyForEmailAddressId(emailAddressId: String) async -> String? {
-        guard let identityId = await userClient.getIdentityId() else {
+        guard let identityId = try? await userClient.getIdentityId(), !identityId.isEmpty else {
             logger.warning("Failed to get identity id")
             return nil
         }

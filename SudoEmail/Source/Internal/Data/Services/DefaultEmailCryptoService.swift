@@ -4,9 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSAppSync
 import Foundation
-import SudoApiClient
 import enum SudoKeyManager.KeyType
 import SudoLogging
 

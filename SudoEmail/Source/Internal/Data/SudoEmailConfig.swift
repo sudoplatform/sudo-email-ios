@@ -4,57 +4,28 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSAppSync
-import AWSS3
 import Foundation
 
 /// Used to decode the file on disk. The config is stored in a nested JSON object `identityService`.
 struct FileConfig: Decodable {
-    var identityService: IdentityServiceConfig
-    var emService: EmailServiceConfig
+    let identityService: IdentityServiceConfig
+    let emService: EmailServiceConfig
 }
 
 /// Configuration used to configure the client's S3 utility instance.
 struct IdentityServiceConfig: Decodable {
-    var poolId: String
-    var identityPoolId: String
+    let poolId: String
+    let identityPoolId: String
 }
 
 struct EmailServiceConfig: Decodable {
-    var region: String
-    var bucket: String
-    var transientBucket: String
+    let region: String
+    let bucket: String
+    let transientBucket: String
 }
 
 /// Configuration for connecting to the Sudo Email Service via AppSync.
-struct SudoEmailConfig: AWSAppSyncServiceConfigProvider {
-
-    // MARK: - Conformance: AWSAppSyncServiceConfigProvider
-
-    public var endpoint: URL
-
-    public var region: AWSRegionType
-
-    public var authType: AWSAppSyncAuthType = .amazonCognitoUserPools
-
-    public var apiKey: String?
-
-    public var clientDatabasePrefix: String?
-
-    // MARK: - Lifecycle
-
-    /// Initialize an instance of `SudoEmailConfig`.
-    public init(
-        endpoint: URL,
-        region: AWSRegionType,
-        authType: AWSAppSyncAuthType = .amazonCognitoUserPools,
-        apiKey: String? = nil,
-        clientDatabasePrefix: String? = nil
-    ) {
-        self.endpoint = endpoint
-        self.region = region
-        self.authType = authType
-        self.apiKey = apiKey
-        self.clientDatabasePrefix = clientDatabasePrefix
-    }
+struct SudoEmailConfig: Equatable {
+    let endpoint: String
+    let region: String
 }

@@ -10,6 +10,7 @@ import SudoUser
 
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
+
     func generateProvisionEmailAccountUseCase(
         keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
@@ -28,9 +29,7 @@ class UseCaseFactory {
         return DeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
     }
 
-    func generateUpdateEmailAccountMetadataUseCase(
-        emailAccountRepository: EmailAccountRepository
-    ) -> UpdateEmailAccountMetadataUseCase {
+    func generateUpdateEmailAccountMetadataUseCase(emailAccountRepository: EmailAccountRepository) -> UpdateEmailAccountMetadataUseCase {
         return UpdateEmailAccountMetadataUseCase(emailAccountRepository: emailAccountRepository)
     }
 
@@ -38,16 +37,8 @@ class UseCaseFactory {
         return FetchSupportedDomainsUseCase(domainRepository: domainRepository)
     }
 
-    func generateGetSupportedDomainsUseCase(domainRepository: DomainRepository) -> GetSupportedDomainsUseCase {
-        return GetSupportedDomainsUseCase(domainRepository: domainRepository)
-    }
-
     func generateFetchConfiguredDomainsUseCase(domainRepository: DomainRepository) -> FetchConfiguredDomainsUseCase {
         return FetchConfiguredDomainsUseCase(domainRepository: domainRepository)
-    }
-
-    func generateGetConfiguredDomainsUseCase(domainRepository: DomainRepository) -> GetConfiguredDomainsUseCase {
-        return GetConfiguredDomainsUseCase(domainRepository: domainRepository)
     }
 
     func generateSendEmailMessageUseCase(
@@ -133,9 +124,7 @@ class UseCaseFactory {
     func generateDeleteCustomEmailFolderUseCase(
         emailFolderRepository: EmailFolderRepository
     ) -> DeleteCustomEmailFolderUseCase {
-        return DeleteCustomEmailFolderUseCase(
-            emailFolderRepository: emailFolderRepository
-        )
+        return DeleteCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
     }
 
     func generateUpdateCustomEmailFolderUseCase(
@@ -144,29 +133,21 @@ class UseCaseFactory {
         return UpdateCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
     }
 
-    func generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: EmailAccountRepository) -> CheckEmailAddressAvailabilityUseCase {
+    func generateCheckEmailAddressAvailabilityUseCase(
+        emailAccountRepository: EmailAccountRepository
+    ) -> CheckEmailAddressAvailabilityUseCase {
         return CheckEmailAddressAvailabilityUseCase(emailAccountRepository: emailAccountRepository)
-    }
-
-    func generateGetEmailAccountUseCase(emailAccountRepository: EmailAccountRepository) -> GetEmailAccountUseCase {
-        return GetEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
     }
 
     func generateFetchEmailAccountUseCase(emailAccountRepository: EmailAccountRepository) -> FetchEmailAccountUseCase {
         return FetchEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
     }
 
-    func generateFetchListEmailAccountsUseCase(emailAccountRepository: EmailAccountRepository) -> FetchListEmailAccountsUseCase {
-        return FetchListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
-    }
-
     func generateListEmailAccountsUseCase(emailAccountRepository: EmailAccountRepository) -> ListEmailAccountsUseCase {
         return ListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
     }
 
-    func generateListEmailAccountsForSudoIdUseCase(
-        emailAccountRepository: EmailAccountRepository
-    ) -> ListEmailAccountsForSudoIdUseCase {
+    func generateListEmailAccountsForSudoIdUseCase(emailAccountRepository: EmailAccountRepository) -> ListEmailAccountsForSudoIdUseCase {
         return ListEmailAccountsForSudoIdUseCase(emailAccountRepository: emailAccountRepository)
     }
 
@@ -197,7 +178,11 @@ class UseCaseFactory {
         userClient: SudoUserClient,
         log: Logger
     ) -> UnblockEmailAddressesByHashedValueUseCase {
-        return UnblockEmailAddressesByHashedValueUseCase(blockedAddressRepository: blockedAddressRepository, userClient: userClient, log: log)
+        return UnblockEmailAddressesByHashedValueUseCase(
+            blockedAddressRepository: blockedAddressRepository,
+            userClient: userClient,
+            log: log
+        )
     }
 
     func generateGetEmailAddressBlocklistUseCase(
@@ -223,16 +208,6 @@ class UseCaseFactory {
         emailMessageUnsealerService: EmailMessageUnsealerService
     ) -> FetchEmailMessageUseCase {
         return FetchEmailMessageUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
-        )
-    }
-
-    func generateGetEmailMessageUseCase(
-        emailMessageRepository: EmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> GetEmailMessageUseCase {
-        return GetEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
         )
@@ -284,12 +259,8 @@ class UseCaseFactory {
         )
     }
 
-    func generateGetEmailMessageWithBodyUseCase(
-        emailMessageRepository: EmailMessageRepository
-    ) -> GetEmailMessageWithBodyUseCase {
-        return GetEmailMessageWithBodyUseCase(
-            emailMessageRepository: emailMessageRepository
-        )
+    func generateGetEmailMessageWithBodyUseCase(emailMessageRepository: EmailMessageRepository) -> GetEmailMessageWithBodyUseCase {
+        return GetEmailMessageWithBodyUseCase(emailMessageRepository: emailMessageRepository)
     }
 
     func generateListDraftEmailMessagesUseCase(
@@ -305,9 +276,7 @@ class UseCaseFactory {
     func generateListDraftEmailMessagesForEmailAddressIdUseCase(
         emailMessageRepository: EmailMessageRepository
     ) -> ListDraftEmailMessagesForEmailAddressIdUseCase {
-        return ListDraftEmailMessagesForEmailAddressIdUseCase(
-            emailMessageRepository: emailMessageRepository
-        )
+        return ListDraftEmailMessagesForEmailAddressIdUseCase(emailMessageRepository: emailMessageRepository)
     }
 
     func generateListDraftEmailMessageMetadataUseCase(
@@ -323,68 +292,20 @@ class UseCaseFactory {
     func generateListDraftEmailMessageMetadataForEmailAddressIdUseCase(
         emailMessageRepository: EmailMessageRepository
     ) -> ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
-        return ListDraftEmailMessageMetadataForEmailAddressIdUseCase(
-            emailMessageRepository: emailMessageRepository
-        )
+        return ListDraftEmailMessageMetadataForEmailAddressIdUseCase(emailMessageRepository: emailMessageRepository)
     }
 
-    func generateGetDraftEmailMessageUseCase(
-        emailMessageRepository: EmailMessageRepository
-    ) -> GetDraftEmailMessageUseCase {
-        return GetDraftEmailMessageUseCase(
-            emailMessageRepository: emailMessageRepository
-        )
+    func generateGetDraftEmailMessageUseCase(emailMessageRepository: EmailMessageRepository) -> GetDraftEmailMessageUseCase {
+        return GetDraftEmailMessageUseCase(emailMessageRepository: emailMessageRepository)
     }
 
-    func generateDeleteMessagesForFolderIdUseCase(
-        emailFolderRepository: EmailFolderRepository
-    ) -> DeleteMessagesForFolderIdUseCase {
+    func generateDeleteMessagesForFolderIdUseCase(emailFolderRepository: EmailFolderRepository) -> DeleteMessagesForFolderIdUseCase {
         return DeleteMessagesForFolderIdUseCase(emailFolderRepository: emailFolderRepository)
     }
 
     func generateGetConfigurationDataUseCase(
         emailConfigurationDataRepository: EmailConfigurationDataRepository
     ) -> GetEmailConfigurationDataUseCase {
-        return GetEmailConfigurationDataUseCase(
-            emailConfigurationDataRepository: emailConfigurationDataRepository
-        )
-    }
-
-    func generateSubscribeToEmailMessageCreatedUseCase(
-        emailMessageRepository: EmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> SubscribeToEmailMessageCreatedUseCase {
-        return SubscribeToEmailMessageCreatedUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
-        )
-    }
-
-    func generateSubscribeToEmailMessageDeletedUseCase(
-        emailMessageRepository: EmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> SubscribeToEmailMessageDeletedUseCase {
-        return SubscribeToEmailMessageDeletedUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
-        )
-    }
-
-    func generateSubscribeToEmailMessageUpdatedUseCase(
-        emailMessageRepository: EmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> SubscribeToEmailMessageUpdatedUseCase {
-        return SubscribeToEmailMessageUpdatedUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
-        )
-    }
-
-    func generateUnsubscribeAllUseCase(
-        emailMessageRepository: EmailMessageRepository
-    ) -> UnsubscribeAllUseCase {
-        return UnsubscribeAllUseCase(
-            emailMessageRepository: emailMessageRepository
-        )
+        return GetEmailConfigurationDataUseCase(emailConfigurationDataRepository: emailConfigurationDataRepository)
     }
 }

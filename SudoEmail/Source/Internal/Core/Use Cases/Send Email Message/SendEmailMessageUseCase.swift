@@ -92,10 +92,7 @@ class SendEmailMessageUseCase {
             // Lookup public key information for each internal recipient and sender
             var recipientsAndSender = allRecipients
             recipientsAndSender.append(emailMessageHeader.from.address)
-            let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(
-                emailAddresses: recipientsAndSender,
-                cachePolicy: .remoteOnly
-            )
+            let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(emailAddresses: recipientsAndSender)
 
             // Check whether internal recipient addresses and associated public keys exist in the platform
             let isInNetworkAddresses = allRecipients.allSatisfy { recipient in

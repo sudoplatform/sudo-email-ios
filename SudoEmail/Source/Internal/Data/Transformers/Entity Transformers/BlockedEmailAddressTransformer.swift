@@ -31,7 +31,7 @@ struct BlockedEmailAddressTransformer {
                 return UnsealedBlockedAddress(
                     hashedBlockedValue: data.hashedBlockedValue,
                     address: "",
-                    action: blockedEmailAddressActionTransformer.transform(data.action),
+                    action: blockedEmailAddressActionTransformer.transform(data.getBlockedAddressAction()),
                     status: UnsealedBlockedAddress.UnsealedBlockedAddressStatus.failed(cause: SudoEmailError.decodingError),
                     emailAddressId: data.emailAddressId
                 )
@@ -39,7 +39,7 @@ struct BlockedEmailAddressTransformer {
             return UnsealedBlockedAddress(
                 hashedBlockedValue: data.hashedBlockedValue,
                 address: address,
-                action: blockedEmailAddressActionTransformer.transform(data.action),
+                action: blockedEmailAddressActionTransformer.transform(data.getBlockedAddressAction()),
                 status: UnsealedBlockedAddress.UnsealedBlockedAddressStatus.completed,
                 emailAddressId: data.emailAddressId
             )
@@ -47,7 +47,7 @@ struct BlockedEmailAddressTransformer {
             return UnsealedBlockedAddress(
                 hashedBlockedValue: data.hashedBlockedValue,
                 address: "",
-                action: blockedEmailAddressActionTransformer.transform(data.action),
+                action: blockedEmailAddressActionTransformer.transform(data.getBlockedAddressAction()),
                 status: UnsealedBlockedAddress.UnsealedBlockedAddressStatus.failed(cause: SudoEmailError.keyNotFound),
                 emailAddressId: data.emailAddressId
             )

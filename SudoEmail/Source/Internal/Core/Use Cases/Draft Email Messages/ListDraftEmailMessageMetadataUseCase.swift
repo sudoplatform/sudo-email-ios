@@ -30,7 +30,7 @@ class ListDraftEmailMessageMetadataUseCase {
         var nextToken: String?
         repeat {
             do {
-                let emailAccounts = try await emailAccountRepository.fetchList(limit: nil, nextToken: nextToken)
+                let emailAccounts = try await emailAccountRepository.list(limit: nil, nextToken: nextToken)
                 nextToken = emailAccounts.nextToken
 
                 try await withThrowingTaskGroup(of: [DraftEmailMessageMetadataEntity].self) { group in

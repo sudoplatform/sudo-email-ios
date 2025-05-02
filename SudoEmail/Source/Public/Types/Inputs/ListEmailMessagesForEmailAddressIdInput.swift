@@ -17,9 +17,6 @@ public struct ListEmailMessagesForEmailAddressInput: Equatable {
     /// Email messages matching the specified date range inclusive will be fetched.
     public let dateRange: EmailMessageDateRange?
 
-    /// Determines how the email address will be fetched. Default usage is `remoteOnly`.
-    public let cachePolicy: CachePolicy?
-
     /// The direction in which the email messages are sorted. Defaults to descending.
     public let sortOrder: SortOrder?
 
@@ -35,7 +32,6 @@ public struct ListEmailMessagesForEmailAddressInput: Equatable {
     public init(
         emailAddressId: String,
         dateRange: EmailMessageDateRange? = nil,
-        cachePolicy: CachePolicy? = .remoteOnly,
         sortOrder: SortOrder? = nil,
         limit: Int? = defaultEmailMessageLimit,
         nextToken: String? = nil,
@@ -43,7 +39,6 @@ public struct ListEmailMessagesForEmailAddressInput: Equatable {
     ) {
         self.emailAddressId = emailAddressId
         self.dateRange = dateRange
-        self.cachePolicy = cachePolicy
         self.sortOrder = sortOrder
         self.limit = limit
         self.nextToken = nextToken

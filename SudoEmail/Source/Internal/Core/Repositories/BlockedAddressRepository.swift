@@ -7,7 +7,7 @@
 import Foundation
 
 /// Core entity representation of a blocked address repository used in business logic. Used to perform CRUD operations for blocked addresses.
-protocol BlockedAddressRepository: AnyObject {
+protocol BlockedAddressRepository: Repository {
 
     /// Block the addresses for the given user
     /// - Parameters:

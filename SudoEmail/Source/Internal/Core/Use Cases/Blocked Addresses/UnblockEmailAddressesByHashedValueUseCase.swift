@@ -41,7 +41,7 @@ class UnblockEmailAddressesByHashedValueUseCase {
     ///   - hashedValues: A list of hashed addresses to unblock
     func execute(hashedValues: [String]) async throws -> BatchOperationResult<String, String> {
         log.debug("execute: \(hashedValues)")
-        let owner = try userClient.getSubject()
+        let owner = try await userClient.getSubject()
 
         if owner == nil {
             log.error("User not logged in")

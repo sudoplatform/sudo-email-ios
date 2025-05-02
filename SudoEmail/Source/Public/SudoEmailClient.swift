@@ -30,7 +30,7 @@ public protocol SudoEmailClient: AnyObject {
     ///
     /// It is important to note that this will clear ALL cached data related to all
     /// sudo services.
-    func reset() throws
+    func reset() async throws
 
     // MARK: - Mutations
 
@@ -200,25 +200,18 @@ public protocol SudoEmailClient: AnyObject {
 
     /// Get a list of the supported email domains. Primarily intended to be used to perform a domain search
     /// which occurs prior to provisioning an email address.
-    /// - Parameters:
-    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of similar exact
-    ///       API calls.
     /// - Returns:
     ///   - Success: Array of supported domains.
     ///   - Failure: `SudoEmailError`.
-    func getSupportedEmailDomains(_ cachePolicy: CachePolicy) async throws -> [String]
+    func getSupportedEmailDomains() async throws -> [String]
 
     /// Get a list of all of the configured domains. Primarily intended to be used as part of performing
     /// an email send operation in order to fetch all domains configured for the service so that appropriate
     /// encryption decisions can be made.
-    /// - Parameters:
-    ///   - cachePolicy: Determines how the data is fetched. When using `cacheOnly`, please be aware that this will only return cached results of identical API
-    /// calls.
-    ///       API calls.
     /// - Returns:
     ///   - Success: Array of all configured domains.
     ///   - Failure: `SudoEmailError`.
-    func getConfiguredEmailDomains(_ cachePolicy: CachePolicy) async throws -> [String]
+    func getConfiguredEmailDomains() async throws -> [String]
 
     /// Get a `EmailAddress` record using the `id` parameter. If the email address cannot be found, `nil` will be returned.
     /// - Parameters:
@@ -428,48 +421,19 @@ public protocol SudoEmailClient: AnyObject {
 
     // MARK: - Subscriptions
 
-    /// Subscribe to email message creation events.
-    ///
+    /// Subscribes to be notified of changes to distributed vaults and members.
     /// - Parameters:
-    ///   - direction: Direction of the email message events to watch for. If `nil`, both directions will be watched.
-    ///   - connectionHandler: Optional block that is called when the subscription connects. Defaults to `nil`.
-    ///   - resultHandler: Email message created event.
-    /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
-    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
-    func subscribeToEmailMessageCreated(
-        withDirection direction: EmailMessage.Direction?,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<EmailMessage>
-    ) async throws -> SubscriptionToken?
+    ///   - id: Unique ID to be associated with the subscriber.
+    ///   - notificationType: Notification type to subscribe to.
+    ///   - subscriber: Subscriber to notify.
+    func subscribe(id: String, notificationType: SubscriptionNotificationType, subscriber: Subscriber) async throws
 
-    /// Subscribe to email message deleted events.
-    /// - Parameters:
-    ///   - id: Identifier of a specific deletion event to watch for. If `nil`, all deletion events will be handled.
-    ///   - connectionHandler: Optional block that is called when the subscription connects. Defaults to `nil`.
-    ///   - resultHandler: Email message deleted event.
-    /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
-    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
-    func subscribeToEmailMessageDeleted(
-        withId id: String?,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<EmailMessage>
-    ) async throws -> SubscriptionToken?
+    /// Unsubscribes the specified subscriber so that it no longer receives change notifications.
+    /// - Parameter id: Unique ID associated with the subscriber to unsubscribe.
+    func unsubscribe(id: String) async
 
-    /// Subscribe to email message updated events.
-    /// - Parameters:
-    ///   - id: Identifier of a specific deletion event to watch for. If `nil`, all update events will be handled.
-    ///   - connectionHandler: Optional block that is called when the subscription connects. Defaults to `nil`.
-    ///   - resultHandler: Email message update event.
-    /// - Returns: `SubscriptionToken` object to cancel the subscription. On denitialization, the subscription will be cancelled.
-    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial connection the subscription.
-    func subscribeToEmailMessageUpdated(
-        withId id: String?,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<EmailMessage>
-    ) async throws -> SubscriptionToken?
-
-    /// Unsubscribe all subscribers from receiving sudo email notifications
-    func unsubscribeAll()
+    /// Unsubscribe all subscribers from receiving notifications about changes to distributed vaults and members.
+    func unsubscribeAll() async
 }
 
 public extension SudoEmailClient {
@@ -480,33 +444,5 @@ public extension SudoEmailClient {
         emailAddressId: String? = nil
     ) async throws -> BatchOperationResult<String, String> {
         try await blockEmailAddresses(addresses: addresses, action: action, emailAddressId: emailAddressId)
-    }
-
-    func subscribeToEmailMessageCreated(
-        withDirection direction: EmailMessage.Direction? = nil,
-        connectionHandler: (() -> Void)? = nil,
-        resultHandler: @escaping ClientCompletion<EmailMessage>
-    ) async throws -> SubscriptionToken? {
-        try await subscribeToEmailMessageCreated(
-            withDirection: direction,
-            connectionHandler: connectionHandler,
-            resultHandler: resultHandler
-        )
-    }
-
-    func subscribeToEmailMessageUpdated(
-        withId id: String? = nil,
-        connectionHandler: (() -> Void)? = nil,
-        resultHandler: @escaping ClientCompletion<EmailMessage>
-    ) async throws -> SubscriptionToken? {
-        try await subscribeToEmailMessageUpdated(withId: id, connectionHandler: connectionHandler, resultHandler: resultHandler)
-    }
-
-    func subscribeToEmailMessageDeleted(
-        withId id: String? = nil,
-        connectionHandler: (() -> Void)? = nil,
-        resultHandler: @escaping ClientCompletion<EmailMessage>
-    ) async throws -> SubscriptionToken? {
-        try await subscribeToEmailMessageDeleted(withId: id, connectionHandler: connectionHandler, resultHandler: resultHandler)
     }
 }

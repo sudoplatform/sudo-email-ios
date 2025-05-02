@@ -26,18 +26,15 @@ class ListEmailAccountsForSudoIdUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///   - sudoId: Identifier of the sudo associated with the email accounts to list.
-    ///   - cachePolicy: Determines how the email accounts will be fetched. Default usage is `remoteOnly`.
     ///   - limit: Limit of the results to return.
     ///   - nextToken: Next token to be used when accessing the next page of information.
     func execute(
         sudoId: String,
-        cachePolicy: CachePolicy? = .remoteOnly,
         limit: Int?,
         nextToken: String?
     ) async throws -> ListOutputEntity<EmailAccountEntity> {
         return try await emailAccountRepository.listForSudoId(
             sudoId: sudoId,
-            cachePolicy: cachePolicy,
             limit: limit,
             nextToken: nextToken
         )

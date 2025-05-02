@@ -48,9 +48,6 @@
             <a class="nav-group-name-link" href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes.html#/s:9SudoEmail18DefaultAWSS3WorkerC">DefaultAWSS3Worker</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/DefaultSudoEmailClient.html">DefaultSudoEmailClient</a>
               </li>
               <li class="nav-group-task">
@@ -94,9 +91,6 @@
                 <a class="nav-group-task-link" href="../Enums/BoolFilter.html">BoolFilter</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/CachePolicy.html">CachePolicy</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/EmailAddressFilter.html">EmailAddressFilter</a>
               </li>
               <li class="nav-group-task">
@@ -129,13 +123,31 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/StringFilter.html">StringFilter</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SubscriptionConnectionState.html">SubscriptionConnectionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SubscriptionNotification.html">SubscriptionNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SubscriptionNotificationType.html">SubscriptionNotificationType</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/AWSRegionType.html">AWSRegionType</a>
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html">GraphQL</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html#/OnEmailMessageCreatedSubscription">– OnEmailMessageCreatedSubscription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html#/OnEmailMessageUpdatedSubscription">– OnEmailMessageUpdatedSubscription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/GraphQL.html#/OnEmailMessageDeletedSubscription">– OnEmailMessageDeletedSubscription</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/NotificationConfiguration.html">NotificationConfiguration</a>
@@ -145,6 +157,9 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Subscriber.html">Subscriber</a>
+              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/SubscriptionToken.html">SubscriptionToken</a>
               </li>
@@ -420,33 +435,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV11cachePolicyAA05CacheJ0OSgvp"></a>
-                    <a name="//apple_ref/swift/Property/cachePolicy" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV11cachePolicyAA05CacheJ0OSgvp">cachePolicy</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Determines how the email address will be fetched. Default usage is <code>remoteOnly</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9sortOrderAA04SortJ0OSgvp"></a>
                     <a name="//apple_ref/swift/Property/sortOrder" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV9sortOrderAA04SortJ0OSgvp">sortOrder</a>
@@ -555,9 +543,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange11cachePolicy9sortOrder5limit9nextToken014includeDeletedD0ACSS_AA0b11MessageDateK0VSgAA05CacheM0OSgAA04SortO0OSgSiSgSSSgSbSgtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(emailFolderId:dateRange:cachePolicy:sortOrder:limit:nextToken:includeDeletedMessages:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange11cachePolicy9sortOrder5limit9nextToken014includeDeletedD0ACSS_AA0b11MessageDateK0VSgAA05CacheM0OSgAA04SortO0OSgSiSgSSSgSbSgtcfc">init(emailFolderId:<wbr>dateRange:<wbr>cachePolicy:<wbr>sortOrder:<wbr>limit:<wbr>nextToken:<wbr>includeDeletedMessages:<wbr>)</a>
+                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange9sortOrder5limit9nextToken014includeDeletedD0ACSS_AA0b11MessageDateK0VSgAA04SortM0OSgSiSgSSSgSbSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(emailFolderId:dateRange:sortOrder:limit:nextToken:includeDeletedMessages:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange9sortOrder5limit9nextToken014includeDeletedD0ACSS_AA0b11MessageDateK0VSgAA04SortM0OSgSiSgSSSgSbSgtcfc">init(emailFolderId:<wbr>dateRange:<wbr>sortOrder:<wbr>limit:<wbr>nextToken:<wbr>includeDeletedMessages:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -574,7 +562,6 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
     <span class="nv">emailFolderId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">dateRange</span><span class="p">:</span> <span class="kt"><a href="../Structs/EmailMessageDateRange.html">EmailMessageDateRange</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CachePolicy.html">CachePolicy</a></span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">remoteOnly</span><span class="p">,</span>
     <span class="nv">sortOrder</span><span class="p">:</span> <span class="kt"><a href="../Enums/SortOrder.html">SortOrder</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Global%20Variables.html#/s:9SudoEmail07defaultB12MessageLimitSivp">defaultEmailMessageLimit</a></span><span class="p">,</span>
     <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
@@ -594,7 +581,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2025-04-03)</p>
+      <p>&copy; 2025 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2025-05-02)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

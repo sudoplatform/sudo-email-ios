@@ -7,7 +7,7 @@
 import Foundation
 
 /// Core entity representation of a email message repository used in business logic. Used to perform CRUD operations for sealed email messages.
-protocol EmailMessageRepository: AnyObject {
+protocol EmailMessageRepository: Repository {
 
     /// Send an email message.
     /// - Parameters:
@@ -84,12 +84,6 @@ protocol EmailMessageRepository: AnyObject {
         emailAddressId: String
     ) async throws -> EmailMessageWithBody?
 
-    /// Get the sealed email message by its identifier. Gets the message locally from the cache of the device.
-    /// - Parameters:
-    ///   - id: Identifier of the email message to get.
-    /// - Returns: on success, the sealed email message with the input identifier
-    func getEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity?
-
     /// Get the sealed email message by its identifier. Fetches the message remotely from the email service.
     /// - Parameters:
     ///   - id: Identifier of the email message to fetch.
@@ -99,9 +93,7 @@ protocol EmailMessageRepository: AnyObject {
     /// List all sealed email messages for the user.
     /// - Parameters:
     ///   - input: input parameters for the list email messages query
-    func listEmailMessages(
-        withInput input: ListEmailMessagesInput
-    ) async throws -> ListOutputEntity<SealedEmailMessageEntity>
+    func listEmailMessages(withInput input: ListEmailMessagesInput) async throws -> ListOutputEntity<SealedEmailMessageEntity>
 
     /// List sealed email messages for the specified email address ID.
     /// - Parameters:
@@ -143,49 +135,4 @@ protocol EmailMessageRepository: AnyObject {
     ///  - Returns:
     ///    - A list of draft email message metadata. Will be empty if no draft messages found.
     func listDraftsMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadataEntity]
-
-    /// Subscribe to all sealed email messages created events.
-    /// - Parameters:
-    ///   - direction: Direction of the email message create event (INBOUND or OUTBOUND). If `nil`, all events, irrespective of direction, will be
-    ///     returned.
-    ///   - connectionHandler: Block that is called when the subscription is connected.
-    ///   - resultHandler: Result handler for each incoming or outgoing email message.
-    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
-    /// - Returns: The token identifying this subscription
-    func subscribeToEmailMessageCreated(
-        withDirection direction: DirectionEntity?,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) async throws -> SubscriptionToken
-
-    /// Subscribe to all sealed email messages deleted.
-    /// - Parameters:
-    ///   - id: The specific email message id to watch for deletion. If `nil`, all message deletions will be watched.
-    ///     returned.
-    ///   - connectionHandler: Block that is called when the subscription is connected.
-    ///   - resultHandler: Result handler for email message delete events.
-    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
-    /// - Returns: The token identifying this subscription
-    func subscribeToEmailMessageDeleted(
-        withId id: String?,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) async throws -> SubscriptionToken
-
-    /// Subscribe to all sealed email messages updated.
-    /// - Parameters:
-    ///   - id: The specific email message id to watch for update. If `nil`, all message updates will be watched.
-    ///     returned.
-    ///   - connectionHandler: Block that is called when the subscription is connected.
-    ///   - resultHandler: Result handler for email message update events.
-    /// - Throws: `SudoEmailError` if an error occurs while setting up the initial subscription connection.
-    /// - Returns: The token identifying this subscription
-    func subscribeToEmailMessageUpdated(
-        withId id: String?,
-        connectionHandler: (() -> Void)?,
-        resultHandler: @escaping ClientCompletion<SealedEmailMessageEntity>
-    ) async throws -> SubscriptionToken
-
-    /// Unsubscribe from all email notifications.
-    func unsubscribeAll()
 }

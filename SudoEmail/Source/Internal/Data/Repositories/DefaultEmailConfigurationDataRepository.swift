@@ -4,13 +4,10 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSAppSync
+import Amplify
 import Foundation
 import SudoApiClient
 import SudoLogging
-
-/// Queue to handle the result events from AWS.
-private let dispatchQueue = DispatchQueue(label: "com.sudoplatform.query-result-handler-queue")
 
 class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository {
 
@@ -20,12 +17,12 @@ class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository 
     var appSyncClient: SudoApiClient
 
     /// Used to log diagnostic and error information.
-    var logger: Logger
+    var logger: SudoLogging.Logger
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultEmailConfigurationDataRepository`.
-    init(appSyncClient: SudoApiClient, logger: Logger = .emailSDKLogger) {
+    init(appSyncClient: SudoApiClient, logger: SudoLogging.Logger = .emailSDKLogger) {
         self.appSyncClient = appSyncClient
         self.logger = logger
     }
@@ -34,28 +31,7 @@ class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository 
 
     func getConfigurationData() async throws -> EmailConfigurationDataEntity {
         let query = GraphQL.GetEmailConfigQuery()
-        let cachePolicy: AWSAppSync.CachePolicy = AWSAppSync.CachePolicy.fetchIgnoringCacheData
-        let (fetchResult, fetchError) = try await appSyncClient.fetch(
-            query: query,
-            cachePolicy: cachePolicy,
-            queue: dispatchQueue
-        )
-        guard let result = fetchResult?.data else {
-            if let error = fetchError {
-                switch error {
-                case ApiOperationError.graphQLError(let cause):
-                    guard let sudoEmailError = SudoEmailError(graphQLError: cause) else {
-                        throw SudoEmailError.internalError("Unexpected error: \(error)")
-                    }
-                    throw sudoEmailError
-                case ApiOperationError.notSignedIn:
-                    throw SudoEmailError.notSignedIn
-                default:
-                    throw SudoEmailError.internalError("Unexpected error: \(error)")
-                }
-            }
-            throw SudoEmailError.internalError("Unexpected error")
-        }
+        let result = try await fetch(query)
         do {
             let transformer = EmailConfigurationDataEntityTransformer()
             return try transformer.transform(result.getEmailConfig)

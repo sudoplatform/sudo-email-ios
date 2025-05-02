@@ -48,7 +48,7 @@ class BlockEmailAddressesUseCase {
         emailAddressId: String?
     ) async throws -> BatchOperationResult<String, String> {
         log.debug("execute: \(addresses) \(action) \(emailAddressId ?? "")")
-        let owner = try userClient.getSubject()
+        let owner = try await userClient.getSubject()
 
         if owner == nil {
             log.error("User not logged in")
