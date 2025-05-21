@@ -8,7 +8,7 @@ import Foundation
 import SudoApiClient
 
 protocol Repository: AnyObject {
-    var appSyncClient: SudoApiClient { get }
+    var sudoApiClient: SudoApiClient { get }
     func perform<Mutation: GraphQLMutation>(_ mutation: Mutation) async throws -> Mutation.Data
     func fetch<Query: GraphQLQuery>(_ query: Query) async throws -> Query.Data
 }
@@ -17,7 +17,7 @@ extension Repository {
 
     func perform<Mutation: GraphQLMutation>(_ mutation: Mutation) async throws -> Mutation.Data {
         do {
-            return try await appSyncClient.perform(mutation: mutation)
+            return try await sudoApiClient.perform(mutation: mutation)
         } catch {
             throw SudoEmailError.fromApiOperationError(error: error)
         }
@@ -25,7 +25,7 @@ extension Repository {
 
     func fetch<Query: GraphQLQuery>(_ query: Query) async throws -> Query.Data {
         do {
-            return try await appSyncClient.fetch(query: query)
+            return try await sudoApiClient.fetch(query: query)
         } catch {
             throw SudoEmailError.fromApiOperationError(error: error)
         }

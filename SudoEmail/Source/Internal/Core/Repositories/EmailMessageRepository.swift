@@ -74,6 +74,33 @@ protocol EmailMessageRepository: Repository {
         emailAddressId: String
     ) async throws -> String
 
+    /// Schedule a draft message to be sent at a specified time in the future
+    ///  - Parameters:
+    ///    - input: The parameters needed to schedule send a draft message
+    ///  - Returns: On success, a record of the scheduled draft message
+    func scheduleSendDraftMessage(
+        withInput input: ScheduleSendDraftMessageInput
+    ) async throws -> ScheduledDraftMessageEntity
+
+    /// Cancel a scheduled draft message from being sent
+    /// - Parameters:
+    ///   - input: Input parameters used to cancel a scheduled draft message
+    /// - Returns:
+    ///   - The id of the draft message on success.
+    /// - Throws:
+    ///   - recordNotFound if no record of draft being scheduled is found
+    func cancelScheduledDraftMessage(
+        withInput input: CancelScheduledDraftMessageInput
+    ) async throws -> String
+
+    /// List scheduled draft messages for an email address id
+    /// - Parameters:
+    ///   - input: Input parameters used to list scheduled draft messages for an email address.
+    /// - Returns: a list of results with a next token if there are more results to fetch, or error on failure.
+    func listScheduledDraftMessagesForEmailAddressId(
+        withInput input: ListScheduledDraftMessagesForEmailAddressIdInput
+    ) async throws -> ListOutputEntity<ScheduledDraftMessageEntity>
+
     /// Get the message body and attachments of an email address.
     ///  - Parameters:
     ///    - messageId: The identifier of the email message to retrieve.

@@ -131,8 +131,8 @@ actor DefaultSubscriptionManager: SubscriptionManager {
         let subscribedTypes = Set(subscribers.map(\.notificationType))
         let unsubscribedTypes = Set(SubscriptionNotificationType.allCases).subtracting(subscribedTypes)
         let removedSubscriptions = unsubscribedTypes.compactMap { subscriptions.removeValue(forKey: $0) }
-        removedSubscriptions.forEach {
-            $0.value.cancel()
+        for removedSubscription in removedSubscriptions {
+            removedSubscription.value.cancel()
         }
     }
 
@@ -182,8 +182,8 @@ actor DefaultSubscriptionManager: SubscriptionManager {
 
     func notifySubscribers(connectionState: SubscriptionConnectionState, notificationType: SubscriptionNotificationType) {
         let subscribersToNotify = subscribers.filter { $0.notificationType == notificationType }
-        subscribersToNotify.forEach {
-            $0.subscriber?.connectionStatusChanged(state: connectionState)
+        for item in subscribersToNotify {
+            item.subscriber?.connectionStatusChanged(state: connectionState)
         }
     }
 
@@ -192,8 +192,8 @@ actor DefaultSubscriptionManager: SubscriptionManager {
         guard !subscribersToNotify.isEmpty, let notification = getNotification(from: data, notificationType: notificationType) else {
             return
         }
-        subscribersToNotify.forEach {
-            $0.subscriber?.notify(notification: notification)
+        for item in subscribersToNotify {
+            item.subscriber?.notify(notification: notification)
         }
     }
 

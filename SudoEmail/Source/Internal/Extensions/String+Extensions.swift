@@ -10,4 +10,8 @@ extension String {
     var nilIfEmpty: String? {
         isEmpty ? nil : self
     }
+
+    func suffixAfter(separator: Self.Element) -> String? {
+        return split(separator: separator).last.map { String($0) }
+    }
 }

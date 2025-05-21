@@ -138,6 +138,47 @@ internal enum KeyFormat: RawRepresentable, Equatable, JSONDecodable, JSONEncodab
   }
 }
 
+internal enum ScheduledDraftMessageState: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
+  internal typealias RawValue = String
+  case cancelled
+  case failed
+  case scheduled
+  case sent
+  /// Auto generated constant for unknown enum values
+  case unknown(RawValue)
+
+  internal init?(rawValue: RawValue) {
+    switch rawValue {
+      case "CANCELLED": self = .cancelled
+      case "FAILED": self = .failed
+      case "SCHEDULED": self = .scheduled
+      case "SENT": self = .sent
+      default: self = .unknown(rawValue)
+    }
+  }
+
+  internal var rawValue: RawValue {
+    switch self {
+      case .cancelled: return "CANCELLED"
+      case .failed: return "FAILED"
+      case .scheduled: return "SCHEDULED"
+      case .sent: return "SENT"
+      case .unknown(let value): return value
+    }
+  }
+
+  internal static func == (lhs: ScheduledDraftMessageState, rhs: ScheduledDraftMessageState) -> Bool {
+    switch (lhs, rhs) {
+      case (.cancelled, .cancelled): return true
+      case (.failed, .failed): return true
+      case (.scheduled, .scheduled): return true
+      case (.sent, .sent): return true
+      case (.unknown(let lhsValue), .unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+}
+
 internal enum EmailMessageDirection: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
   internal typealias RawValue = String
   case inbound
@@ -1007,6 +1048,76 @@ internal struct DeleteMessagesByFolderIdInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "hardDelete")
+    }
+  }
+}
+
+internal struct ScheduleSendDraftMessageInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(draftMessageKey: String, emailAddressId: GraphQLID, sendAtEpochMs: Double, symmetricKey: String) {
+    graphQLMap = ["draftMessageKey": draftMessageKey, "emailAddressId": emailAddressId, "sendAtEpochMs": sendAtEpochMs, "symmetricKey": symmetricKey]
+  }
+
+  internal var draftMessageKey: String {
+    get {
+      return graphQLMap["draftMessageKey"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "draftMessageKey")
+    }
+  }
+
+  internal var emailAddressId: GraphQLID {
+    get {
+      return graphQLMap["emailAddressId"] as! GraphQLID
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var sendAtEpochMs: Double {
+    get {
+      return graphQLMap["sendAtEpochMs"] as! Double
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "sendAtEpochMs")
+    }
+  }
+
+  internal var symmetricKey: String {
+    get {
+      return graphQLMap["symmetricKey"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "symmetricKey")
+    }
+  }
+}
+
+internal struct CancelScheduledDraftMessageInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(draftMessageKey: String, emailAddressId: String) {
+    graphQLMap = ["draftMessageKey": draftMessageKey, "emailAddressId": emailAddressId]
+  }
+
+  internal var draftMessageKey: String {
+    get {
+      return graphQLMap["draftMessageKey"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "draftMessageKey")
+    }
+  }
+
+  internal var emailAddressId: String {
+    get {
+      return graphQLMap["emailAddressId"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
     }
   }
 }
@@ -2098,6 +2209,138 @@ internal struct GetEmailAddressBlocklistInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "owner")
+    }
+  }
+}
+
+internal struct ListScheduledDraftMessagesForEmailAddressIdInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(emailAddressId: GraphQLID, filter: Optional<ScheduledDraftMessageFilterInput?> = nil, limit: Optional<Int?> = nil, nextToken: Optional<String?> = nil) {
+    graphQLMap = ["emailAddressId": emailAddressId, "filter": filter, "limit": limit, "nextToken": nextToken]
+  }
+
+  internal var emailAddressId: GraphQLID {
+    get {
+      return graphQLMap["emailAddressId"] as! GraphQLID
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var filter: Optional<ScheduledDraftMessageFilterInput?> {
+    get {
+      return graphQLMap["filter"] as! Optional<ScheduledDraftMessageFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "filter")
+    }
+  }
+
+  internal var limit: Optional<Int?> {
+    get {
+      return graphQLMap["limit"] as! Optional<Int?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "limit")
+    }
+  }
+
+  internal var nextToken: Optional<String?> {
+    get {
+      return graphQLMap["nextToken"] as! Optional<String?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "nextToken")
+    }
+  }
+}
+
+internal struct ScheduledDraftMessageFilterInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(and: Optional<[ScheduledDraftMessageFilterInput?]?> = nil, not: Optional<ScheduledDraftMessageFilterInput?> = nil, or: Optional<[ScheduledDraftMessageFilterInput?]?> = nil, state: Optional<ScheduledDraftMessageStateFilterInput?> = nil) {
+    graphQLMap = ["and": and, "not": not, "or": or, "state": state]
+  }
+
+  internal var and: Optional<[ScheduledDraftMessageFilterInput?]?> {
+    get {
+      return graphQLMap["and"] as! Optional<[ScheduledDraftMessageFilterInput?]?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "and")
+    }
+  }
+
+  internal var not: Optional<ScheduledDraftMessageFilterInput?> {
+    get {
+      return graphQLMap["not"] as! Optional<ScheduledDraftMessageFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "not")
+    }
+  }
+
+  internal var or: Optional<[ScheduledDraftMessageFilterInput?]?> {
+    get {
+      return graphQLMap["or"] as! Optional<[ScheduledDraftMessageFilterInput?]?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "or")
+    }
+  }
+
+  internal var state: Optional<ScheduledDraftMessageStateFilterInput?> {
+    get {
+      return graphQLMap["state"] as! Optional<ScheduledDraftMessageStateFilterInput?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "state")
+    }
+  }
+}
+
+internal struct ScheduledDraftMessageStateFilterInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(eq: Optional<ScheduledDraftMessageState?> = nil, `in`: Optional<[ScheduledDraftMessageState?]?> = nil, ne: Optional<ScheduledDraftMessageState?> = nil, notIn: Optional<[ScheduledDraftMessageState?]?> = nil) {
+    graphQLMap = ["eq": eq, "in": `in`, "ne": ne, "notIn": notIn]
+  }
+
+  internal var eq: Optional<ScheduledDraftMessageState?> {
+    get {
+      return graphQLMap["eq"] as! Optional<ScheduledDraftMessageState?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "eq")
+    }
+  }
+
+  internal var `in`: Optional<[ScheduledDraftMessageState?]?> {
+    get {
+      return graphQLMap["in"] as! Optional<[ScheduledDraftMessageState?]?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "in")
+    }
+  }
+
+  internal var ne: Optional<ScheduledDraftMessageState?> {
+    get {
+      return graphQLMap["ne"] as! Optional<ScheduledDraftMessageState?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "ne")
+    }
+  }
+
+  internal var notIn: Optional<[ScheduledDraftMessageState?]?> {
+    get {
+      return graphQLMap["notIn"] as! Optional<[ScheduledDraftMessageState?]?>
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "notIn")
     }
   }
 }
@@ -5049,6 +5292,269 @@ internal final class DeleteMessagesByFolderIdMutation: GraphQLMutation {
       }
       set {
         snapshot.updateValue(newValue, forKey: "deleteMessagesByFolderId")
+      }
+    }
+  }
+}
+
+internal final class ScheduleSendDraftMessageMutation: GraphQLMutation {
+  internal static let operationString =
+    "mutation ScheduleSendDraftMessage($input: ScheduleSendDraftMessageInput!) {\n  scheduleSendDraftMessage(input: $input) {\n    __typename\n    ...ScheduledDraftMessage\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(ScheduledDraftMessage.fragmentString) }
+
+  internal var input: ScheduleSendDraftMessageInput
+
+  internal init(input: ScheduleSendDraftMessageInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Mutation"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("scheduleSendDraftMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(ScheduleSendDraftMessage.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(scheduleSendDraftMessage: ScheduleSendDraftMessage) {
+      self.init(snapshot: ["__typename": "Mutation", "scheduleSendDraftMessage": scheduleSendDraftMessage.snapshot])
+    }
+
+    internal var scheduleSendDraftMessage: ScheduleSendDraftMessage {
+      get {
+        return ScheduleSendDraftMessage(snapshot: snapshot["scheduleSendDraftMessage"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "scheduleSendDraftMessage")
+      }
+    }
+
+    internal struct ScheduleSendDraftMessage: GraphQLSelectionSet {
+      internal static let possibleTypes = ["ScheduledDraftMessage"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("draftMessageKey", type: .nonNull(.scalar(String.self))),
+        GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("sendAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("state", type: .nonNull(.scalar(ScheduledDraftMessageState.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(draftMessageKey: String, emailAddressId: GraphQLID, sendAtEpochMs: Double, state: ScheduledDraftMessageState, createdAtEpochMs: Double, updatedAtEpochMs: Double, owner: GraphQLID, owners: [Owner]) {
+        self.init(snapshot: ["__typename": "ScheduledDraftMessage", "draftMessageKey": draftMessageKey, "emailAddressId": emailAddressId, "sendAtEpochMs": sendAtEpochMs, "state": state, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "owner": owner, "owners": owners.map { $0.snapshot }])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var draftMessageKey: String {
+        get {
+          return snapshot["draftMessageKey"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "draftMessageKey")
+        }
+      }
+
+      internal var emailAddressId: GraphQLID {
+        get {
+          return snapshot["emailAddressId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailAddressId")
+        }
+      }
+
+      internal var sendAtEpochMs: Double {
+        get {
+          return snapshot["sendAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "sendAtEpochMs")
+        }
+      }
+
+      internal var state: ScheduledDraftMessageState {
+        get {
+          return snapshot["state"]! as! ScheduledDraftMessageState
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "state")
+        }
+      }
+
+      internal var createdAtEpochMs: Double {
+        get {
+          return snapshot["createdAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+        }
+      }
+
+      internal var updatedAtEpochMs: Double {
+        get {
+          return snapshot["updatedAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+        }
+      }
+
+      internal var owner: GraphQLID {
+        get {
+          return snapshot["owner"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "owner")
+        }
+      }
+
+      internal var owners: [Owner] {
+        get {
+          return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var scheduledDraftMessage: ScheduledDraftMessage {
+          get {
+            return ScheduledDraftMessage(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+      }
+
+      internal struct Owner: GraphQLSelectionSet {
+        internal static let possibleTypes = ["Owner"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(String.self))),
+          GraphQLField("issuer", type: .nonNull(.scalar(String.self))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(id: String, issuer: String) {
+          self.init(snapshot: ["__typename": "Owner", "id": id, "issuer": issuer])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var id: String {
+          get {
+            return snapshot["id"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        internal var issuer: String {
+          get {
+            return snapshot["issuer"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "issuer")
+          }
+        }
+      }
+    }
+  }
+}
+
+internal final class CancelScheduledDraftMessageMutation: GraphQLMutation {
+  internal static let operationString =
+    "mutation CancelScheduledDraftMessage($input: CancelScheduledDraftMessageInput!) {\n  cancelScheduledDraftMessage(input: $input)\n}"
+
+  internal var input: CancelScheduledDraftMessageInput
+
+  internal init(input: CancelScheduledDraftMessageInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Mutation"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("cancelScheduledDraftMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.scalar(String.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(cancelScheduledDraftMessage: String) {
+      self.init(snapshot: ["__typename": "Mutation", "cancelScheduledDraftMessage": cancelScheduledDraftMessage])
+    }
+
+    internal var cancelScheduledDraftMessage: String {
+      get {
+        return snapshot["cancelScheduledDraftMessage"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "cancelScheduledDraftMessage")
       }
     }
   }
@@ -10441,6 +10947,274 @@ internal final class GetEmailAddressBlocklistQuery: GraphQLQuery {
               set {
                 snapshot += newValue.snapshot
               }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+internal final class ListScheduledDraftMessagesForEmailAddressIdQuery: GraphQLQuery {
+  internal static let operationString =
+    "query ListScheduledDraftMessagesForEmailAddressId($input: ListScheduledDraftMessagesForEmailAddressIdInput!) {\n  listScheduledDraftMessagesForEmailAddressId(input: $input) {\n    __typename\n    items {\n      __typename\n      ...ScheduledDraftMessage\n    }\n    nextToken\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(ScheduledDraftMessage.fragmentString) }
+
+  internal var input: ListScheduledDraftMessagesForEmailAddressIdInput
+
+  internal init(input: ListScheduledDraftMessagesForEmailAddressIdInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Query"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("listScheduledDraftMessagesForEmailAddressId", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(ListScheduledDraftMessagesForEmailAddressId.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(listScheduledDraftMessagesForEmailAddressId: ListScheduledDraftMessagesForEmailAddressId) {
+      self.init(snapshot: ["__typename": "Query", "listScheduledDraftMessagesForEmailAddressId": listScheduledDraftMessagesForEmailAddressId.snapshot])
+    }
+
+    internal var listScheduledDraftMessagesForEmailAddressId: ListScheduledDraftMessagesForEmailAddressId {
+      get {
+        return ListScheduledDraftMessagesForEmailAddressId(snapshot: snapshot["listScheduledDraftMessagesForEmailAddressId"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "listScheduledDraftMessagesForEmailAddressId")
+      }
+    }
+
+    internal struct ListScheduledDraftMessagesForEmailAddressId: GraphQLSelectionSet {
+      internal static let possibleTypes = ["ScheduledDraftMessageConnection"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("items", type: .nonNull(.list(.nonNull(.object(Item.selections))))),
+        GraphQLField("nextToken", type: .scalar(String.self)),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(items: [Item], nextToken: String? = nil) {
+        self.init(snapshot: ["__typename": "ScheduledDraftMessageConnection", "items": items.map { $0.snapshot }, "nextToken": nextToken])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var items: [Item] {
+        get {
+          return (snapshot["items"] as! [Snapshot]).map { Item(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "items")
+        }
+      }
+
+      internal var nextToken: String? {
+        get {
+          return snapshot["nextToken"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "nextToken")
+        }
+      }
+
+      internal struct Item: GraphQLSelectionSet {
+        internal static let possibleTypes = ["ScheduledDraftMessage"]
+
+        internal static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("draftMessageKey", type: .nonNull(.scalar(String.self))),
+          GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("sendAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("state", type: .nonNull(.scalar(ScheduledDraftMessageState.self))),
+          GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        ]
+
+        internal var snapshot: Snapshot
+
+        internal init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        internal init(draftMessageKey: String, emailAddressId: GraphQLID, sendAtEpochMs: Double, state: ScheduledDraftMessageState, createdAtEpochMs: Double, updatedAtEpochMs: Double, owner: GraphQLID, owners: [Owner]) {
+          self.init(snapshot: ["__typename": "ScheduledDraftMessage", "draftMessageKey": draftMessageKey, "emailAddressId": emailAddressId, "sendAtEpochMs": sendAtEpochMs, "state": state, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "owner": owner, "owners": owners.map { $0.snapshot }])
+        }
+
+        internal var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        internal var draftMessageKey: String {
+          get {
+            return snapshot["draftMessageKey"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "draftMessageKey")
+          }
+        }
+
+        internal var emailAddressId: GraphQLID {
+          get {
+            return snapshot["emailAddressId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailAddressId")
+          }
+        }
+
+        internal var sendAtEpochMs: Double {
+          get {
+            return snapshot["sendAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "sendAtEpochMs")
+          }
+        }
+
+        internal var state: ScheduledDraftMessageState {
+          get {
+            return snapshot["state"]! as! ScheduledDraftMessageState
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "state")
+          }
+        }
+
+        internal var createdAtEpochMs: Double {
+          get {
+            return snapshot["createdAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+          }
+        }
+
+        internal var updatedAtEpochMs: Double {
+          get {
+            return snapshot["updatedAtEpochMs"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+          }
+        }
+
+        internal var owner: GraphQLID {
+          get {
+            return snapshot["owner"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "owner")
+          }
+        }
+
+        internal var owners: [Owner] {
+          get {
+            return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+          }
+        }
+
+        internal var fragments: Fragments {
+          get {
+            return Fragments(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
+        }
+
+        internal struct Fragments {
+          internal var snapshot: Snapshot
+
+          internal var scheduledDraftMessage: ScheduledDraftMessage {
+            get {
+              return ScheduledDraftMessage(snapshot: snapshot)
+            }
+            set {
+              snapshot += newValue.snapshot
+            }
+          }
+        }
+
+        internal struct Owner: GraphQLSelectionSet {
+          internal static let possibleTypes = ["Owner"]
+
+          internal static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .nonNull(.scalar(String.self))),
+            GraphQLField("issuer", type: .nonNull(.scalar(String.self))),
+          ]
+
+          internal var snapshot: Snapshot
+
+          internal init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          internal init(id: String, issuer: String) {
+            self.init(snapshot: ["__typename": "Owner", "id": id, "issuer": issuer])
+          }
+
+          internal var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          internal var id: String {
+            get {
+              return snapshot["id"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          internal var issuer: String {
+            get {
+              return snapshot["issuer"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "issuer")
             }
           }
         }
@@ -16710,6 +17484,163 @@ internal struct PublicKey: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+    }
+  }
+}
+
+internal struct ScheduledDraftMessage: GraphQLFragment {
+  internal static let fragmentString =
+    "fragment ScheduledDraftMessage on ScheduledDraftMessage {\n  __typename\n  draftMessageKey\n  emailAddressId\n  sendAtEpochMs\n  state\n  createdAtEpochMs\n  updatedAtEpochMs\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n}"
+
+  internal static let possibleTypes = ["ScheduledDraftMessage"]
+
+  internal static let selections: [GraphQLSelection] = [
+    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+    GraphQLField("draftMessageKey", type: .nonNull(.scalar(String.self))),
+    GraphQLField("emailAddressId", type: .nonNull(.scalar(GraphQLID.self))),
+    GraphQLField("sendAtEpochMs", type: .nonNull(.scalar(Double.self))),
+    GraphQLField("state", type: .nonNull(.scalar(ScheduledDraftMessageState.self))),
+    GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+    GraphQLField("updatedAtEpochMs", type: .nonNull(.scalar(Double.self))),
+    GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
+    GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+  ]
+
+  internal var snapshot: Snapshot
+
+  internal init(snapshot: Snapshot) {
+    self.snapshot = snapshot
+  }
+
+  internal init(draftMessageKey: String, emailAddressId: GraphQLID, sendAtEpochMs: Double, state: ScheduledDraftMessageState, createdAtEpochMs: Double, updatedAtEpochMs: Double, owner: GraphQLID, owners: [Owner]) {
+    self.init(snapshot: ["__typename": "ScheduledDraftMessage", "draftMessageKey": draftMessageKey, "emailAddressId": emailAddressId, "sendAtEpochMs": sendAtEpochMs, "state": state, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "owner": owner, "owners": owners.map { $0.snapshot }])
+  }
+
+  internal var __typename: String {
+    get {
+      return snapshot["__typename"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  internal var draftMessageKey: String {
+    get {
+      return snapshot["draftMessageKey"]! as! String
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "draftMessageKey")
+    }
+  }
+
+  internal var emailAddressId: GraphQLID {
+    get {
+      return snapshot["emailAddressId"]! as! GraphQLID
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "emailAddressId")
+    }
+  }
+
+  internal var sendAtEpochMs: Double {
+    get {
+      return snapshot["sendAtEpochMs"]! as! Double
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "sendAtEpochMs")
+    }
+  }
+
+  internal var state: ScheduledDraftMessageState {
+    get {
+      return snapshot["state"]! as! ScheduledDraftMessageState
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "state")
+    }
+  }
+
+  internal var createdAtEpochMs: Double {
+    get {
+      return snapshot["createdAtEpochMs"]! as! Double
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+    }
+  }
+
+  internal var updatedAtEpochMs: Double {
+    get {
+      return snapshot["updatedAtEpochMs"]! as! Double
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "updatedAtEpochMs")
+    }
+  }
+
+  internal var owner: GraphQLID {
+    get {
+      return snapshot["owner"]! as! GraphQLID
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "owner")
+    }
+  }
+
+  internal var owners: [Owner] {
+    get {
+      return (snapshot["owners"] as! [Snapshot]).map { Owner(snapshot: $0) }
+    }
+    set {
+      snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+    }
+  }
+
+  internal struct Owner: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Owner"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(String.self))),
+      GraphQLField("issuer", type: .nonNull(.scalar(String.self))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(id: String, issuer: String) {
+      self.init(snapshot: ["__typename": "Owner", "id": id, "issuer": issuer])
+    }
+
+    internal var __typename: String {
+      get {
+        return snapshot["__typename"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    internal var id: String {
+      get {
+        return snapshot["id"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "id")
+      }
+    }
+
+    internal var issuer: String {
+      get {
+        return snapshot["issuer"]! as! String
+      }
+      set {
+        snapshot.updateValue(newValue, forKey: "issuer")
+      }
     }
   }
 }

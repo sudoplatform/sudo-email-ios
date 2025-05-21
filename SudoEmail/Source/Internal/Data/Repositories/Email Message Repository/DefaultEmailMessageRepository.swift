@@ -36,8 +36,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
 
     private let draftContentType = "application/octet-stream"
 
-    /// App sync client for peforming operations against the email service.
-    let appSyncClient: SudoApiClient
+    /// Api client for peforming operations against the email service.
+    let sudoApiClient: SudoApiClient
 
     /// Identifier of the bucket used for permanent storage of email messages.
     let emailBucket: String
@@ -74,7 +74,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     /// Initialize an instance of `DefaultEmailMessageRepository`.
     init(
         unsealer: EmailMessageUnsealerService,
-        appSyncClient: SudoApiClient,
+        sudoApiClient: SudoApiClient,
         emailBucket: String,
         transientBucket: String,
         region: String,
@@ -86,7 +86,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         logger: SudoLogging.Logger = .emailSDKLogger
     ) {
         self.unsealer = unsealer
-        self.appSyncClient = appSyncClient
+        self.sudoApiClient = sudoApiClient
         self.emailBucket = emailBucket
         self.transientBucket = transientBucket
         self.region = region
@@ -278,6 +278,92 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         }
         let s3Key = "\(s3KeyPrefix)/draft/\(id)"
         return try await s3Worker.deleteObject(bucket: emailBucket, key: s3Key)
+    }
+
+    func scheduleSendDraftMessage(
+        withInput input: ScheduleSendDraftMessageInput
+    ) async throws -> ScheduledDraftMessageEntity {
+        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: input.emailAddressId) else {
+            throw SudoEmailError.internalError("Unable to find identity id")
+        }
+        let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
+        var downloaded: S3ObjectEntity
+        do {
+            downloaded = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
+        } catch {
+            switch error {
+            case AWSS3WorkerError.noSuchKey:
+                logger.error("Could not draft message")
+                throw SudoEmailError.emailMessageNotFound
+            default:
+                throw error
+            }
+        }
+        guard let keyId = downloaded.metadata?[Defaults.keyIdMetadataName] else {
+            throw SudoEmailError.decodingError
+        }
+        guard (downloaded.metadata?[Defaults.algorithmMetadataName]) != nil else {
+            throw SudoEmailError.decodingError
+        }
+
+        guard let symmetricKey = try deviceKeyWorker.getSymmetricKey(keyId: keyId) else {
+            logger.error("Could not find symmetric key \(keyId)")
+            throw SudoEmailError.keyNotFound
+        }
+
+        let scheduleSendDraftMessageInput = GraphQL.ScheduleSendDraftMessageInput(
+            draftMessageKey: s3Key,
+            emailAddressId: input.emailAddressId,
+            sendAtEpochMs: input.sendAt.millisecondsSince1970,
+            symmetricKey: symmetricKey
+        )
+        let mutation = GraphQL.ScheduleSendDraftMessageMutation(input: scheduleSendDraftMessageInput)
+        let result = try await perform(mutation)
+        return try ScheduledDraftMessageEntityTransformer().transform(result.scheduleSendDraftMessage)
+    }
+
+    func cancelScheduledDraftMessage(
+        withInput input: CancelScheduledDraftMessageInput
+    ) async throws -> String {
+        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: input.emailAddressId) else {
+            throw SudoEmailError.internalError("Unable to find identity id")
+        }
+        let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
+
+        let cancelScheduledDraftMessageInput = GraphQL.CancelScheduledDraftMessageInput(
+            draftMessageKey: s3Key,
+            emailAddressId: input.emailAddressId
+        )
+
+        let mutation = GraphQL.CancelScheduledDraftMessageMutation(input: cancelScheduledDraftMessageInput)
+        let result = try await perform(mutation)
+        guard let id = result.cancelScheduledDraftMessage.suffixAfter(separator: "/") else {
+            throw SudoEmailError.internalError("Unable to parse draft message id")
+        }
+        return id
+    }
+
+    func listScheduledDraftMessagesForEmailAddressId(
+        withInput input: ListScheduledDraftMessagesForEmailAddressIdInput
+    ) async throws -> ListOutputEntity<ScheduledDraftMessageEntity> {
+        let listInput = try GraphQL.ListScheduledDraftMessagesForEmailAddressIdInput(
+            emailAddressId: input.emailAddressId,
+            filter:
+            ScheduledDraftMessageFilterGraphQLTransformer().transform(input.filter),
+            limit: input.limit,
+            nextToken: input.nextToken
+        )
+
+        let query = GraphQL.ListScheduledDraftMessagesForEmailAddressIdQuery(
+            input: listInput
+        )
+        let result = try await fetch(query)
+        let transformer = ScheduledDraftMessageEntityTransformer()
+        let transformedResults = try result.listScheduledDraftMessagesForEmailAddressId.items.map(transformer.transform(_:))
+        return ListOutputEntity(
+            items: transformedResults,
+            nextToken: result.listScheduledDraftMessagesForEmailAddressId.nextToken
+        )
     }
 
     func fetchEmailMessageById(_ id: String) async throws -> SealedEmailMessageEntity? {

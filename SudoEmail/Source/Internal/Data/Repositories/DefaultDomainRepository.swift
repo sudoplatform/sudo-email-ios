@@ -16,7 +16,7 @@ class DefaultDomainRepsitory: DomainRepository {
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
-    var appSyncClient: SudoApiClient
+    var sudoApiClient: SudoApiClient
 
     /// Used to log diagnostic and error information.
     var logger: Logger
@@ -25,7 +25,7 @@ class DefaultDomainRepsitory: DomainRepository {
 
     /// Initialize an instance of `DefaultEmailAccountRepository`.
     init(appSyncClient: SudoApiClient, logger: Logger = .emailSDKLogger) {
-        self.appSyncClient = appSyncClient
+        sudoApiClient = appSyncClient
         self.logger = logger
     }
 

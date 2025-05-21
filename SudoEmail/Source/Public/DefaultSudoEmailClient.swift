@@ -109,7 +109,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let awsS3Worker = try DefaultAWSS3Worker(region: s3Region)
         let emailMessageRepository = DefaultEmailMessageRepository(
             unsealer: emailMessageUnsealerService,
-            appSyncClient: graphQLClient,
+            sudoApiClient: graphQLClient,
             emailBucket: emailConfig.bucket,
             transientBucket: emailConfig.transientBucket,
             region: s3Region,
@@ -324,6 +324,38 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             failureItems: deleteResult.failureItems
         )
         return result
+    }
+
+    public func scheduleSendDraftMessage(
+        withInput input: ScheduleSendDraftMessageInput
+    ) async throws -> ScheduledDraftMessage {
+        let useCase = useCaseFactory.generateScheduleSendDraftMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+        let result = try await useCase.execute(withInput: input)
+        return ScheduledDraftMessageApiTransformer().transform(result)
+    }
+
+    public func cancelScheduledDraftMessage(
+        withInput input: CancelScheduledDraftMessageInput
+    ) async throws -> String {
+        let useCase = useCaseFactory.generateCancelScheduledDraftMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+        return try await useCase.execute(withInput: input)
+    }
+
+    public func listScheduledDraftMessagesForEmailAddressId(
+        withInput input: ListScheduledDraftMessagesForEmailAddressIdInput
+    ) async throws -> ListOutput<ScheduledDraftMessage> {
+        let useCase = useCaseFactory.generateListScheduledDraftMessagesForEmailAddressIdUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+        let result = try await useCase.execute(withInput: input)
+        let transformer = ListOutputAPITransformer(deviceKeyWorker: serviceKeyWorker)
+        return transformer.transformScheduledDraftMessages(result)
     }
 
     public func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolder {

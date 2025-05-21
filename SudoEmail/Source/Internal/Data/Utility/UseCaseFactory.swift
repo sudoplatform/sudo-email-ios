@@ -111,6 +111,34 @@ class UseCaseFactory {
         )
     }
 
+    func generateScheduleSendDraftMessageUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailAccountRepository: EmailAccountRepository
+    ) -> ScheduleSendDraftMessageUseCase {
+        return ScheduleSendDraftMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+    }
+
+    func generateCancelScheduledDraftMessageUseCase(
+        emailMessageRepository: EmailMessageRepository,
+        emailAccountRepository: EmailAccountRepository
+    ) -> CancelScheduledDraftMessageUseCase {
+        return CancelScheduledDraftMessageUseCase(
+            emailMessageRepository: emailMessageRepository,
+            emailAccountRepository: emailAccountRepository
+        )
+    }
+
+    func generateListScheduledDraftMessagesForEmailAddressIdUseCase(
+        emailMessageRepository: EmailMessageRepository
+    ) -> ListScheduledDraftMessagesForEmailAddressIdUseCase {
+        return ListScheduledDraftMessagesForEmailAddressIdUseCase(
+            emailMessageRepository: emailMessageRepository
+        )
+    }
+
     func generateCreateCustomEmailFolderUseCase(
         emailFolderRepository: EmailFolderRepository,
         emailAccountRepository: EmailAccountRepository

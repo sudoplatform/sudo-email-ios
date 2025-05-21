@@ -17,7 +17,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository {
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
-    var appSyncClient: SudoApiClient
+    var sudoApiClient: SudoApiClient
 
     /// Used to log diagnostic and error information.
     var logger: Logger
@@ -30,7 +30,7 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository {
 
     /// Initialize an instance of `DefaultBlockedAddressRepository`.
     init(appSyncClient: SudoApiClient, logger: Logger = .emailSDKLogger, keyWorker: DeviceKeyWorker) {
-        self.appSyncClient = appSyncClient
+        sudoApiClient = appSyncClient
         self.logger = logger
         self.keyWorker = keyWorker
     }

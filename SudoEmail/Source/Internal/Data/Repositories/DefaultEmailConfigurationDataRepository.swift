@@ -14,7 +14,7 @@ class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository 
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
-    var appSyncClient: SudoApiClient
+    var sudoApiClient: SudoApiClient
 
     /// Used to log diagnostic and error information.
     var logger: SudoLogging.Logger
@@ -23,7 +23,7 @@ class DefaultEmailConfigurationDataRepository: EmailConfigurationDataRepository 
 
     /// Initialize an instance of `DefaultEmailConfigurationDataRepository`.
     init(appSyncClient: SudoApiClient, logger: SudoLogging.Logger = .emailSDKLogger) {
-        self.appSyncClient = appSyncClient
+        sudoApiClient = appSyncClient
         self.logger = logger
     }
 

@@ -17,7 +17,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository {
     // MARK: - Properties
 
     /// App sync client for peforming operations against the email service.
-    var appSyncClient: SudoApiClient
+    var sudoApiClient: SudoApiClient
 
     /// Cryptographic key worker for this device
     var deviceKeyWorker: DeviceKeyWorker
@@ -29,7 +29,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository {
 
     /// Initialize an instance of `DefaultEmailFolderRepository`.
     init(appSyncClient: SudoApiClient, deviceKeyWorker: DeviceKeyWorker, logger: SudoLogging.Logger = .emailSDKLogger) {
-        self.appSyncClient = appSyncClient
+        sudoApiClient = appSyncClient
         self.deviceKeyWorker = deviceKeyWorker
         self.logger = logger
     }

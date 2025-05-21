@@ -18,6 +18,9 @@ struct ListOutputAPITransformer {
     /// Utility to transform email message entites to email messages.
     let emailMessageTransformer = EmailMessageAPITransformer()
 
+    /// Utility to transform scheduled draft message entities to scheduled draft messages.
+    let scheduledDraftMessageTransformer = ScheduledDraftMessageApiTransformer()
+
     let deviceKeyWorker: DeviceKeyWorker!
 
     init(deviceKeyWorker: DeviceKeyWorker) {
@@ -41,6 +44,12 @@ struct ListOutputAPITransformer {
 
     func transformEmailMessages(_ entities: ListOutputEntity<EmailMessageEntity>) -> ListOutput<EmailMessage> {
         let items = entities.items.map(emailMessageTransformer.transform(_:))
+        let nextToken = entities.nextToken
+        return ListOutput(items: items, nextToken: nextToken)
+    }
+
+    func transformScheduledDraftMessages(_ entities: ListOutputEntity<ScheduledDraftMessageEntity>) -> ListOutput<ScheduledDraftMessage> {
+        let items = entities.items.map(scheduledDraftMessageTransformer.transform(_:))
         let nextToken = entities.nextToken
         return ListOutput(items: items, nextToken: nextToken)
     }

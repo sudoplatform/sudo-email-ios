@@ -206,4 +206,23 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
+
+    /// Transform the success result of `ScheduleDraftMessage` owner from the service to a `OwnerEntity`.
+    func transform(
+        _ data: GraphQL.ScheduleSendDraftMessageMutation.Data.ScheduleSendDraftMessage.Owner
+    ) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `ListScheduledDraftMessagesForEmailAddressId` owner from the service to a `OwnerEntity`.
+    func transform(
+        _ data:
+        GraphQL.ListScheduledDraftMessagesForEmailAddressIdQuery.Data.ListScheduledDraftMessagesForEmailAddressId.Item.Owner
+    ) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
 }

@@ -247,11 +247,7 @@ open class DefaultDeviceKeyWorker: DeviceKeyWorker {
             guard let symmetricKeyData = try keyManager.getSymmetricKey(keyId) else {
                 return nil
             }
-            guard let symmetricKeyDataDecoded = String(data: symmetricKeyData, encoding: .utf8) else {
-                let msg = "Unable to decode symmetric key data"
-                logger.error(msg)
-                throw SudoEmailError.internalError(msg)
-            }
+            let symmetricKeyDataDecoded = symmetricKeyData.base64EncodedString()
             symmetricKey = symmetricKeyDataDecoded
         } catch {
             let msg = "Unable to get symmetric key with id: \(keyId). Error: \(error.localizedDescription)"

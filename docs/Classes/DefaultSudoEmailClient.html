@@ -118,6 +118,12 @@
                 <a class="nav-group-task-link" href="../Enums/PlatformSubscriptionStatus.html">PlatformSubscriptionStatus</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ScheduledDraftMessageState.html">ScheduledDraftMessageState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ScheduledDraftMessageStateFilter.html">ScheduledDraftMessageStateFilter</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/SortOrder.html">SortOrder</a>
               </li>
               <li class="nav-group-task">
@@ -173,6 +179,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/BatchOperationResult.html">BatchOperationResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CancelScheduledDraftMessageInput.html">CancelScheduledDraftMessageInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/CheckEmailAddressAvailabilityInput.html">CheckEmailAddressAvailabilityInput</a>
@@ -289,6 +298,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListOutput.html">ListOutput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListScheduledDraftMessagesForEmailAddressIdInput.html">ListScheduledDraftMessagesForEmailAddressIdInput</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/LookupEmailAddressesPublicInfoInput.html">LookupEmailAddressesPublicInfoInput</a>
               </li>
               <li class="nav-group-task">
@@ -302,6 +314,15 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ProvisionEmailAddressInput.html">ProvisionEmailAddressInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScheduleSendDraftMessageInput.html">ScheduleSendDraftMessageInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScheduledDraftMessage.html">ScheduledDraftMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScheduledDraftMessageFilter.html">ScheduledDraftMessageFilter</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SendEmailMessageInput.html">SendEmailMessageInput</a>
@@ -784,6 +805,99 @@ Throws:</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteDraftEmailMessages</span><span class="p">(</span>
     <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/DeleteDraftEmailMessagesInput.html">DeleteDraftEmailMessagesInput</a></span>
 <span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/BatchOperationResult.html">BatchOperationResult</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DeleteEmailMessageSuccessResult.html">DeleteEmailMessageSuccessResult</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/EmailMessageOperationFailureResult.html">EmailMessageOperationFailureResult</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP24scheduleSendDraftMessage9withInputAA09ScheduledfG0VAA08ScheduleefgI0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/scheduleSendDraftMessage(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP24scheduleSendDraftMessage9withInputAA09ScheduledfG0VAA08ScheduleefgI0V_tYaKF">scheduleSendDraftMessage(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">scheduleSendDraftMessage</span><span class="p">(</span>
+    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScheduleSendDraftMessageInput.html">ScheduleSendDraftMessageInput</a></span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ScheduledDraftMessage.html">ScheduledDraftMessage</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP27cancelScheduledDraftMessage9withInputSSAA06CancelefgI0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/cancelScheduledDraftMessage(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP27cancelScheduledDraftMessage9withInputSSAA06CancelefgI0V_tYaKF">cancelScheduledDraftMessage(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">cancelScheduledDraftMessage</span><span class="p">(</span>
+    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/CancelScheduledDraftMessageInput.html">CancelScheduledDraftMessageInput</a></span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP029listScheduledDraftMessagesForB9AddressId9withInputAA10ListOutputVyAA0eF7MessageVGAA0mefghbijL0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listScheduledDraftMessagesForEmailAddressId(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP029listScheduledDraftMessagesForB9AddressId9withInputAA10ListOutputVyAA0eF7MessageVGAA0mefghbijL0V_tYaKF">listScheduledDraftMessagesForEmailAddressId(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">listScheduledDraftMessagesForEmailAddressId</span><span class="p">(</span>
+    <span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListScheduledDraftMessagesForEmailAddressIdInput.html">ListScheduledDraftMessagesForEmailAddressIdInput</a></span>
+<span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ScheduledDraftMessage.html">ScheduledDraftMessage</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1766,7 +1880,7 @@ Throws:</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2025-05-02)</p>
+      <p>&copy; 2025 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2025-05-21)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

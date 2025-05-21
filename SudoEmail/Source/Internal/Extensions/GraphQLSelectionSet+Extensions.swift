@@ -104,6 +104,10 @@ extension GraphQLSelectionSet {
     func getSortOrder() -> GraphQL.SortOrder? {
         getDoubleOptionalEnumValue(GraphQL.SortOrder.self)
     }
+
+    func getScheduledDraftMessageState() -> GraphQL.ScheduledDraftMessageState {
+        getEnumValue(GraphQL.ScheduledDraftMessageState.self)
+    }
 }
 
 protocol GraphQLEnum: RawRepresentable {
@@ -169,6 +173,13 @@ extension GraphQL.UpdateEmailMessagesStatus: GraphQLEnum {
 
 extension GraphQL.SortOrder: GraphQLEnum {
     static var key: String { "status" }
+    static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
+        .unknown(rawValue ?? "")
+    }
+}
+
+extension GraphQL.ScheduledDraftMessageState: GraphQLEnum {
+    static var key: String { "state" }
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }

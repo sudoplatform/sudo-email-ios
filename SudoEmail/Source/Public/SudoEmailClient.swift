@@ -155,6 +155,26 @@ public protocol SudoEmailClient: AnyObject {
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult>
 
+    /// Schedule a draft email message to be sent at a specified point in the future.
+    /// - Parameters:
+    ///   - input: Input parameters used to schedule send a draft message
+    /// - Returns:
+    ///   - A record of the newly scheduled draft message
+    func scheduleSendDraftMessage(
+        withInput input: ScheduleSendDraftMessageInput
+    ) async throws -> ScheduledDraftMessage
+
+    /// Cancel a scheduled draft message from being sent
+    /// - Parameters:
+    ///   - input: Input parameters used to cancel a scheduled draft message
+    /// - Returns:
+    ///   - The id of the draft message on success.
+    /// - Throws:
+    ///   - recordNotFound if no record of draft being scheduled is found
+    func cancelScheduledDraftMessage(
+        withInput input: CancelScheduledDraftMessageInput
+    ) async throws -> String
+
     /// Create a custom EmailFolder
     ///   - Parameters:
     ///     - input: Input parameters used to create a custom EmailFolder.
@@ -356,6 +376,15 @@ public protocol SudoEmailClient: AnyObject {
     ///  - Returns:
     ///    - The draft email message identified by id or undefined if not found.
     func getDraftEmailMessage(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage?
+
+    /// List scheduled draft message for an email address.
+    ///  - Parameters:
+    ///    - input: Parameters used to list scheduled draft messages for an email address
+    ///  - Returns:
+    ///    - An array of scheduled draft messages, and nextToken for pagination if necessary.
+    func listScheduledDraftMessagesForEmailAddressId(
+        withInput input: ListScheduledDraftMessagesForEmailAddressIdInput
+    ) async throws -> ListOutput<ScheduledDraftMessage>
 
     /// Get the configuration data for the email service.
     func getConfigurationData() async throws -> ConfigurationData

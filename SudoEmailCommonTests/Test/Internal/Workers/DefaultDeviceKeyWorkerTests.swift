@@ -403,7 +403,7 @@ class DefaultDeviceKeyWorkerTests: XCTestCase {
     func test_getSymmetricKey_Success() {
         let keyId = "dummyKeyId"
         let symmetricKeyData = "dummySymmetricKey".data(using: .utf8)
-        let symmetricKey = String(data: symmetricKeyData!, encoding: .utf8)
+        let symmetricKey = symmetricKeyData?.base64EncodedString()
         mockKeyManager.getSymmetricKeyResult = symmetricKeyData
         do {
             let result = try deviceKeyWorker.getSymmetricKey(keyId: keyId)
