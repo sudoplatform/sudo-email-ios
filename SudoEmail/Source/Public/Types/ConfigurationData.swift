@@ -27,13 +27,17 @@ public struct ConfigurationData: Equatable {
     /// The maximum number of recipients for an in-network encrypted email message.
     public var encryptedEmailMessageRecipientsLimit: Int
 
+    /// The set of file extensions not permitted to be sent as attachments
+    public var prohibitedFileExtensions: [String]
+
     public init(
         deleteEmailMessagesLimit: Int,
         updateEmailMessagesLimit: Int,
         emailMessageMaxInboundMessageSize: Int,
         emailMessageMaxOutboundMessageSize: Int,
         emailMessageRecipientsLimit: Int,
-        encryptedEmailMessageRecipientsLimit: Int
+        encryptedEmailMessageRecipientsLimit: Int,
+        prohibitedFileExtensions: [String] = []
     ) {
         self.deleteEmailMessagesLimit = deleteEmailMessagesLimit
         self.updateEmailMessagesLimit = updateEmailMessagesLimit
@@ -41,5 +45,6 @@ public struct ConfigurationData: Equatable {
         self.emailMessageMaxOutboundMessageSize = emailMessageMaxOutboundMessageSize
         self.emailMessageRecipientsLimit = emailMessageRecipientsLimit
         self.encryptedEmailMessageRecipientsLimit = encryptedEmailMessageRecipientsLimit
+        self.prohibitedFileExtensions = prohibitedFileExtensions
     }
 }

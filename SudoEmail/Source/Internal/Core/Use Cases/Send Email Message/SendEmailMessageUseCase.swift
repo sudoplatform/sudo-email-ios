@@ -78,6 +78,8 @@ class SendEmailMessageUseCase {
 
         let config = try await emailConfigDataRepository.getConfigurationData()
 
+        try verifyAttachmentValidity(prohibitedExtensions: config.prohibitedFileExtensions, attachments: attachments, inlineAttachments: inlineAttachments)
+
         let domains = try await emailDomainRepository.fetchConfiguredDomains()
 
         let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address }
@@ -147,6 +149,21 @@ class SendEmailMessageUseCase {
                 withRFC822Data: rfc822Data,
                 emailAccountId: senderEmailAddressId
             )
+        }
+    }
+
+    private func verifyAttachmentValidity(
+        prohibitedExtensions: [String],
+        attachments: [EmailAttachment],
+        inlineAttachments: [EmailAttachment]
+    ) throws {
+        let attachmentExtensions = (attachments + inlineAttachments)
+            .compactMap(\.filename)
+            .map { URL(fileURLWithPath: $0).pathExtension }
+            .map { ".\($0.lowercased())" }
+
+        guard Set(attachmentExtensions).isDisjoint(with: prohibitedExtensions) else {
+            throw SudoEmailError.invalidEmailContents
         }
     }
 

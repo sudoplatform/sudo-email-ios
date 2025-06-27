@@ -5801,6 +5801,7 @@ internal final class GetEmailConfigQuery: GraphQLQuery {
         GraphQLField("emailMessageMaxOutboundMessageSize", type: .nonNull(.scalar(Int.self))),
         GraphQLField("emailMessageRecipientsLimit", type: .nonNull(.scalar(Int.self))),
         GraphQLField("encryptedEmailMessageRecipientsLimit", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("prohibitedFileExtensions", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
       ]
 
       internal var snapshot: Snapshot
@@ -5809,8 +5810,8 @@ internal final class GetEmailConfigQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int) {
-        self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit])
+      internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int, prohibitedFileExtensions: [String]) {
+        self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit, "prohibitedFileExtensions": prohibitedFileExtensions])
       }
 
       internal var __typename: String {
@@ -5873,6 +5874,15 @@ internal final class GetEmailConfigQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptedEmailMessageRecipientsLimit")
+        }
+      }
+
+      internal var prohibitedFileExtensions: [String] {
+        get {
+          return snapshot["prohibitedFileExtensions"]! as! [String]
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "prohibitedFileExtensions")
         }
       }
 
@@ -16733,7 +16743,7 @@ internal struct EmailAddressPublicInfo: GraphQLFragment {
 
 internal struct EmailConfigurationData: GraphQLFragment {
   internal static let fragmentString =
-    "fragment EmailConfigurationData on EmailConfigurationData {\n  __typename\n  deleteEmailMessagesLimit\n  updateEmailMessagesLimit\n  emailMessageMaxInboundMessageSize\n  emailMessageMaxOutboundMessageSize\n  emailMessageRecipientsLimit\n  encryptedEmailMessageRecipientsLimit\n}"
+    "fragment EmailConfigurationData on EmailConfigurationData {\n  __typename\n  deleteEmailMessagesLimit\n  updateEmailMessagesLimit\n  emailMessageMaxInboundMessageSize\n  emailMessageMaxOutboundMessageSize\n  emailMessageRecipientsLimit\n  encryptedEmailMessageRecipientsLimit\n  prohibitedFileExtensions\n}"
 
   internal static let possibleTypes = ["EmailConfigurationData"]
 
@@ -16745,6 +16755,7 @@ internal struct EmailConfigurationData: GraphQLFragment {
     GraphQLField("emailMessageMaxOutboundMessageSize", type: .nonNull(.scalar(Int.self))),
     GraphQLField("emailMessageRecipientsLimit", type: .nonNull(.scalar(Int.self))),
     GraphQLField("encryptedEmailMessageRecipientsLimit", type: .nonNull(.scalar(Int.self))),
+    GraphQLField("prohibitedFileExtensions", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
   ]
 
   internal var snapshot: Snapshot
@@ -16753,8 +16764,8 @@ internal struct EmailConfigurationData: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int) {
-    self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit])
+  internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int, prohibitedFileExtensions: [String]) {
+    self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit, "prohibitedFileExtensions": prohibitedFileExtensions])
   }
 
   internal var __typename: String {
@@ -16817,6 +16828,15 @@ internal struct EmailConfigurationData: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "encryptedEmailMessageRecipientsLimit")
+    }
+  }
+
+  internal var prohibitedFileExtensions: [String] {
+    get {
+      return snapshot["prohibitedFileExtensions"]! as! [String]
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "prohibitedFileExtensions")
     }
   }
 }

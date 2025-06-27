@@ -194,7 +194,7 @@ class DefaultAWSS3Worker: AWSS3Worker {
     }
 
     func list(bucket: String, key: String) async throws -> [S3ClientTypes.Object] {
-        let input = ListObjectsV2Input(bucket: bucket, maxKeys: 1, prefix: key)
+        let input = ListObjectsV2Input(bucket: bucket, prefix: key)
         do {
             let output = try await s3Client.listObjectsV2(input: input)
             return output.contents ?? []

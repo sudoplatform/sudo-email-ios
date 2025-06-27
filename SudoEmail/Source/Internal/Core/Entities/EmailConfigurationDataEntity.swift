@@ -26,4 +26,7 @@ struct EmailConfigurationDataEntity {
 
     /// The maximum number of recipients for an in-network encrypted email message.
     var encryptedEmailMessageRecipientsLimit: Int
+
+    /// The set of file extensions which are prohibited from being sent as attachments
+    var prohibitedFileExtensions: [String]
 }

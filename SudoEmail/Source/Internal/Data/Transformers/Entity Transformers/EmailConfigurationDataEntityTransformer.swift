@@ -19,7 +19,8 @@ struct EmailConfigurationDataEntityTransformer {
             emailMessageMaxInboundMessageSize: graphQLConfigurationData.emailMessageMaxInboundMessageSize,
             emailMessageMaxOutboundMessageSize: graphQLConfigurationData.emailMessageMaxOutboundMessageSize,
             emailMessageRecipientsLimit: graphQLConfigurationData.emailMessageRecipientsLimit,
-            encryptedEmailMessageRecipientsLimit: graphQLConfigurationData.encryptedEmailMessageRecipientsLimit
+            encryptedEmailMessageRecipientsLimit: graphQLConfigurationData.encryptedEmailMessageRecipientsLimit,
+            prohibitedFileExtensions: graphQLConfigurationData.prohibitedFileExtensions
         )
     }
 
@@ -31,7 +32,8 @@ struct EmailConfigurationDataEntityTransformer {
             emailMessageMaxInboundMessageSize: emailConfigurationDataEntity.emailMessageMaxInboundMessageSize,
             emailMessageMaxOutboundMessageSize: emailConfigurationDataEntity.emailMessageMaxOutboundMessageSize,
             emailMessageRecipientsLimit: emailConfigurationDataEntity.emailMessageRecipientsLimit,
-            encryptedEmailMessageRecipientsLimit: emailConfigurationDataEntity.encryptedEmailMessageRecipientsLimit
+            encryptedEmailMessageRecipientsLimit: emailConfigurationDataEntity.encryptedEmailMessageRecipientsLimit,
+            prohibitedFileExtensions: emailConfigurationDataEntity.prohibitedFileExtensions
         )
     }
 }
