@@ -235,6 +235,7 @@
 		9F372BAF2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BAE2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift */; };
 		9F372BB12B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */; };
 		9F372BB32B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */; };
+		9F3AD2282E38586C00FE22AF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9F3AD2272E38586500FE22AF /* README.md */; };
 		9F3B47F62CF973F000DBFE59 /* UpdateCustomEmailFolderIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3B47F52CF973F000DBFE59 /* UpdateCustomEmailFolderIntegrationTests.swift */; };
 		9F42BE772D6E8DE300505C43 /* Data+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE762D6E8DE300505C43 /* Data+Utility.swift */; };
 		9F42BE7B2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F42BE7A2D6FF11B00505C43 /* UnblockEmailAddressesByHashedValueTests.swift */; };
@@ -256,6 +257,9 @@
 		9F85E1CF2B71966500C70AF1 /* MockGetEmailAddressBlocklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F85E1CE2B71966500C70AF1 /* MockGetEmailAddressBlocklistUseCase.swift */; };
 		9F85E1D12B719E5700C70AF1 /* GetEmailAddressBlocklistUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F85E1D02B719E5700C70AF1 /* GetEmailAddressBlocklistUseCaseTests.swift */; };
 		9F85E1D32B71A5CE00C70AF1 /* GetEmailAddressBlocklistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F85E1D22B71A5CE00C70AF1 /* GetEmailAddressBlocklistTests.swift */; };
+		9F955CE42E275FEB0037086D /* MockSudoApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F955CE32E275FEB0037086D /* MockSudoApiClient.swift */; };
+		9F955CE62E27603D0037086D /* MockAWSS3Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F955CE52E27603D0037086D /* MockAWSS3Worker.swift */; };
+		9F955CE82E2760C00037086D /* PlatformInteropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F955CE72E2760C00037086D /* PlatformInteropTests.swift */; };
 		9F9EE4412B96A0C500BD3EC7 /* Rfc822MessageDataProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageDataProcessorTests.swift */; };
 		9FA45FCC2CF9664B00BEE223 /* MockUpdateCustomEmailFolderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA45FCB2CF9664B00BEE223 /* MockUpdateCustomEmailFolderUseCase.swift */; };
 		9FA45FCE2CF9698500BEE223 /* UpdateCustomEmailFolderUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA45FCD2CF9698500BEE223 /* UpdateCustomEmailFolderUseCaseTests.swift */; };
@@ -265,6 +269,20 @@
 		9FBBBC072DD5AACB005EF1A7 /* ListScheduledDraftMessagesForEmailAddressIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBBBC062DD5AACB005EF1A7 /* ListScheduledDraftMessagesForEmailAddressIdTests.swift */; };
 		9FBBBC092DD5ACED005EF1A7 /* MockListScheduledDraftMessagesForEmailAddressIdUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBBBC082DD5ACED005EF1A7 /* MockListScheduledDraftMessagesForEmailAddressIdUseCase.swift */; };
 		9FBBBC0B2DD5B0BA005EF1A7 /* ListScheduledDraftMessagesForEmailAddressIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBBBC0A2DD5B0BA005EF1A7 /* ListScheduledDraftMessagesForEmailAddressIntegrationTests.swift */; };
+		9FD921CA2E274A7F00A45992 /* Android_address.json in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921C92E274A7F00A45992 /* Android_address.json */; };
+		9FD921CC2E274A8600A45992 /* Android_draft_message.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921CB2E274A8600A45992 /* Android_draft_message.txt */; };
+		9FD921CE2E274A9600A45992 /* Android_key_archive.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921CD2E274A9600A45992 /* Android_key_archive.txt */; };
+		9FD921D02E274A9D00A45992 /* Android_message_encrypted_rfc.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921CF2E274A9D00A45992 /* Android_message_encrypted_rfc.txt */; };
+		9FD921D22E274AA300A45992 /* Android_message_encrypted.json in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921D12E274AA300A45992 /* Android_message_encrypted.json */; };
+		9FD921D42E274AA900A45992 /* Android_message_unencrypted_rfc.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921D32E274AA900A45992 /* Android_message_unencrypted_rfc.txt */; };
+		9FD921D62E274AB000A45992 /* Android_message_unencrypted.json in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921D52E274AB000A45992 /* Android_message_unencrypted.json */; };
+		9FD921D82E274AC100A45992 /* Desktop_address.json in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921D72E274AC100A45992 /* Desktop_address.json */; };
+		9FD921DA2E274AC700A45992 /* Desktop_draft_message.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921D92E274AC700A45992 /* Desktop_draft_message.txt */; };
+		9FD921DC2E274ACC00A45992 /* Desktop_key_archive.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921DB2E274ACC00A45992 /* Desktop_key_archive.txt */; };
+		9FD921DE2E274AD200A45992 /* Desktop_message_encrypted_rfc.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921DD2E274AD200A45992 /* Desktop_message_encrypted_rfc.txt */; };
+		9FD921E02E274AD700A45992 /* Desktop_message_encrypted.json in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921DF2E274AD700A45992 /* Desktop_message_encrypted.json */; };
+		9FD921E22E274ADC00A45992 /* Desktop_message_unencrypted_rfc.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921E12E274ADC00A45992 /* Desktop_message_unencrypted_rfc.txt */; };
+		9FD921E42E274AE100A45992 /* Desktop_message_unencrypted.json in Resources */ = {isa = PBXBuildFile; fileRef = 9FD921E32E274AE100A45992 /* Desktop_message_unencrypted.json */; };
 		9FDA6FC32DCB136B00D23746 /* CancelScheduledDraftMessageIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDA6FC22DCB136B00D23746 /* CancelScheduledDraftMessageIntegrationTests.swift */; };
 		9FDA6FC52DCB211E00D23746 /* CancelScheduledDraftMessageUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDA6FC42DCB211E00D23746 /* CancelScheduledDraftMessageUseCaseTests.swift */; };
 		9FDA6FC72DCB278400D23746 /* CancelScheduledDraftMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDA6FC62DCB278400D23746 /* CancelScheduledDraftMessageTests.swift */; };
@@ -556,7 +574,7 @@
 		8483151524B9A2E8004E89EA /* EmailMessageUnsealerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMessageUnsealerService.swift; sourceTree = "<group>"; };
 		8483151824B9A36D004E89EA /* DefaultEmailMessageUnsealerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEmailMessageUnsealerService.swift; sourceTree = "<group>"; };
 		8483151A24BBC828004E89EA /* SealedEmailMessageEntityTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SealedEmailMessageEntityTransformer.swift; sourceTree = "<group>"; };
-		8483151D24BC14E6004E89EA /* Result+ErrorMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+ErrorMap.swift"; sourceTree = "<group>"; };
+		8483151D24BC14E6004E89EA /* Result+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Extensions.swift"; sourceTree = "<group>"; };
 		8483151F24BC1514004E89EA /* Result+ErrorMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+ErrorMapTests.swift"; sourceTree = "<group>"; };
 		8483152324BD2065004E89EA /* DataFactoryNamespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFactoryNamespace.swift; sourceTree = "<group>"; };
 		8483152524BD2094004E89EA /* DataFactory+Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataFactory+Core.swift"; sourceTree = "<group>"; };
@@ -775,6 +793,7 @@
 		9F372BAE2B70A16F009FD8CC /* MockUnblockEmailAddressesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUnblockEmailAddressesUseCase.swift; sourceTree = "<group>"; };
 		9F372BB02B70A25C009FD8CC /* UnblockEmailAddressesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesUseCaseTests.swift; sourceTree = "<group>"; };
 		9F372BB22B70A5BD009FD8CC /* UnblockEmailAddressesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesTests.swift; sourceTree = "<group>"; };
+		9F3AD2272E38586500FE22AF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9F3B47F52CF973F000DBFE59 /* UpdateCustomEmailFolderIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCustomEmailFolderIntegrationTests.swift; sourceTree = "<group>"; };
 		9F42BE762D6E8DE300505C43 /* Data+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Utility.swift"; sourceTree = "<group>"; };
 		9F42BE782D6FC1D400505C43 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -817,6 +836,9 @@
 		9F92A0292BF5764F000C0CBD /* UpdateEmailMessagesStatusApiTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMessagesStatusApiTransformer.swift; sourceTree = "<group>"; };
 		9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddressBlocklistUtil.swift; sourceTree = "<group>"; };
 		9F949DDB2B842A8A009064FB /* BlockedEmailAddressTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedEmailAddressTransformer.swift; sourceTree = "<group>"; };
+		9F955CE32E275FEB0037086D /* MockSudoApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSudoApiClient.swift; sourceTree = "<group>"; };
+		9F955CE52E27603D0037086D /* MockAWSS3Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAWSS3Worker.swift; sourceTree = "<group>"; };
+		9F955CE72E2760C00037086D /* PlatformInteropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformInteropTests.swift; sourceTree = "<group>"; };
 		9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsealedBlockedAddress.swift; sourceTree = "<group>"; };
 		9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesByHashedValueUseCase.swift; sourceTree = "<group>"; };
 		9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageDataProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageDataProcessor.swift; sourceTree = "<group>"; };
@@ -840,6 +862,20 @@
 		9FBBBC082DD5ACED005EF1A7 /* MockListScheduledDraftMessagesForEmailAddressIdUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockListScheduledDraftMessagesForEmailAddressIdUseCase.swift; sourceTree = "<group>"; };
 		9FBBBC0A2DD5B0BA005EF1A7 /* ListScheduledDraftMessagesForEmailAddressIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScheduledDraftMessagesForEmailAddressIntegrationTests.swift; sourceTree = "<group>"; };
 		9FD48DCB2B9FE46E00838038 /* EmailMessageEncryptionStatusEntityTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMessageEncryptionStatusEntityTransformer.swift; sourceTree = "<group>"; };
+		9FD921C92E274A7F00A45992 /* Android_address.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Android_address.json; sourceTree = "<group>"; };
+		9FD921CB2E274A8600A45992 /* Android_draft_message.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Android_draft_message.txt; sourceTree = "<group>"; };
+		9FD921CD2E274A9600A45992 /* Android_key_archive.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Android_key_archive.txt; sourceTree = "<group>"; };
+		9FD921CF2E274A9D00A45992 /* Android_message_encrypted_rfc.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Android_message_encrypted_rfc.txt; sourceTree = "<group>"; };
+		9FD921D12E274AA300A45992 /* Android_message_encrypted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Android_message_encrypted.json; sourceTree = "<group>"; };
+		9FD921D32E274AA900A45992 /* Android_message_unencrypted_rfc.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Android_message_unencrypted_rfc.txt; sourceTree = "<group>"; };
+		9FD921D52E274AB000A45992 /* Android_message_unencrypted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Android_message_unencrypted.json; sourceTree = "<group>"; };
+		9FD921D72E274AC100A45992 /* Desktop_address.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Desktop_address.json; sourceTree = "<group>"; };
+		9FD921D92E274AC700A45992 /* Desktop_draft_message.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Desktop_draft_message.txt; sourceTree = "<group>"; };
+		9FD921DB2E274ACC00A45992 /* Desktop_key_archive.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Desktop_key_archive.txt; sourceTree = "<group>"; };
+		9FD921DD2E274AD200A45992 /* Desktop_message_encrypted_rfc.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Desktop_message_encrypted_rfc.txt; sourceTree = "<group>"; };
+		9FD921DF2E274AD700A45992 /* Desktop_message_encrypted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Desktop_message_encrypted.json; sourceTree = "<group>"; };
+		9FD921E12E274ADC00A45992 /* Desktop_message_unencrypted_rfc.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Desktop_message_unencrypted_rfc.txt; sourceTree = "<group>"; };
+		9FD921E32E274AE100A45992 /* Desktop_message_unencrypted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Desktop_message_unencrypted.json; sourceTree = "<group>"; };
 		9FDA6FC02DCB0C5C00D23746 /* CancelScheduledDraftMessageInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelScheduledDraftMessageInput.swift; sourceTree = "<group>"; };
 		9FDA6FC12DCB104000D23746 /* CancelScheduledDraftMessageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelScheduledDraftMessageUseCase.swift; sourceTree = "<group>"; };
 		9FDA6FC22DCB136B00D23746 /* CancelScheduledDraftMessageIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelScheduledDraftMessageIntegrationTests.swift; sourceTree = "<group>"; };
@@ -1446,7 +1482,7 @@
 				843064E6233C34E30083874D /* Date+MillisecondsSinceEpoch.swift */,
 				41C3D2522DA8D00900963BE5 /* GraphQLSelectionSet+Extensions.swift */,
 				1BDEB9D62C744FDE003FD274 /* MCOMessageParser+Extensions.swift */,
-				8483151D24BC14E6004E89EA /* Result+ErrorMap.swift */,
+				8483151D24BC14E6004E89EA /* Result+Extensions.swift */,
 				9F42BE782D6FC1D400505C43 /* String+Extensions.swift */,
 				5DDE24672C045AF300387540 /* SudoUser+getKeyRingId.swift */,
 			);
@@ -1456,6 +1492,7 @@
 		8436827B2320D8A5005F6D34 /* SudoEmailIntegrationTests */ = {
 			isa = PBXGroup;
 			children = (
+				9FD921C82E274A7100A45992 /* Data */,
 				84B2604524888BA500E99401 /* Extensions */,
 				84B2603A2488888300E99401 /* Tests */,
 				84B2604024888B2800E99401 /* Utility */,
@@ -2090,6 +2127,7 @@
 		84B2603A2488888300E99401 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				9FD921E52E274AED00A45992 /* Interoperability */,
 				84B2603B2488889000E99401 /* SudoEmailClient */,
 				9FFABE262C06CB2D006A3932 /* MailServiceInteroperabilityIntegrationTests.swift */,
 			);
@@ -2561,6 +2599,46 @@
 			path = "Blocked Addresses";
 			sourceTree = "<group>";
 		};
+		9F955CE22E275FD10037086D /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				9F955CE52E27603D0037086D /* MockAWSS3Worker.swift */,
+				9F955CE32E275FEB0037086D /* MockSudoApiClient.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		9FD921C82E274A7100A45992 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				9FD921C92E274A7F00A45992 /* Android_address.json */,
+				9FD921CB2E274A8600A45992 /* Android_draft_message.txt */,
+				9FD921CD2E274A9600A45992 /* Android_key_archive.txt */,
+				9FD921D12E274AA300A45992 /* Android_message_encrypted.json */,
+				9FD921CF2E274A9D00A45992 /* Android_message_encrypted_rfc.txt */,
+				9FD921D52E274AB000A45992 /* Android_message_unencrypted.json */,
+				9FD921D32E274AA900A45992 /* Android_message_unencrypted_rfc.txt */,
+				9FD921D72E274AC100A45992 /* Desktop_address.json */,
+				9FD921D92E274AC700A45992 /* Desktop_draft_message.txt */,
+				9FD921DB2E274ACC00A45992 /* Desktop_key_archive.txt */,
+				9FD921DF2E274AD700A45992 /* Desktop_message_encrypted.json */,
+				9FD921DD2E274AD200A45992 /* Desktop_message_encrypted_rfc.txt */,
+				9FD921E32E274AE100A45992 /* Desktop_message_unencrypted.json */,
+				9FD921E12E274ADC00A45992 /* Desktop_message_unencrypted_rfc.txt */,
+				9F3AD2272E38586500FE22AF /* README.md */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		9FD921E52E274AED00A45992 /* Interoperability */ = {
+			isa = PBXGroup;
+			children = (
+				9F955CE22E275FD10037086D /* Mocks */,
+				9F955CE72E2760C00037086D /* PlatformInteropTests.swift */,
+			);
+			path = Interoperability;
+			sourceTree = "<group>";
+		};
 		9FF182022BB4D7AA000EF217 /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -2762,6 +2840,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FD921CA2E274A7F00A45992 /* Android_address.json in Resources */,
+				9FD921CC2E274A8600A45992 /* Android_draft_message.txt in Resources */,
+				9FD921CE2E274A9600A45992 /* Android_key_archive.txt in Resources */,
+				9FD921D22E274AA300A45992 /* Android_message_encrypted.json in Resources */,
+				9FD921D02E274A9D00A45992 /* Android_message_encrypted_rfc.txt in Resources */,
+				9FD921D62E274AB000A45992 /* Android_message_unencrypted.json in Resources */,
+				9FD921D42E274AA900A45992 /* Android_message_unencrypted_rfc.txt in Resources */,
+				9FD921D82E274AC100A45992 /* Desktop_address.json in Resources */,
+				9FD921DA2E274AC700A45992 /* Desktop_draft_message.txt in Resources */,
+				9FD921DC2E274ACC00A45992 /* Desktop_key_archive.txt in Resources */,
+				9FD921E02E274AD700A45992 /* Desktop_message_encrypted.json in Resources */,
+				9FD921DE2E274AD200A45992 /* Desktop_message_encrypted_rfc.txt in Resources */,
+				9FD921E42E274AE100A45992 /* Desktop_message_unencrypted.json in Resources */,
+				9FD921E22E274ADC00A45992 /* Desktop_message_unencrypted_rfc.txt in Resources */,
+				9F3AD2282E38586C00FE22AF /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2950,6 +3043,9 @@
 				9FBBBC0B2DD5B0BA005EF1A7 /* ListScheduledDraftMessagesForEmailAddressIntegrationTests.swift in Sources */,
 				51A456852B557DBE0097DFF6 /* LookupEmailAddressesPublicInfo.swift in Sources */,
 				9FFABE272C06CB2D006A3932 /* MailServiceInteroperabilityIntegrationTests.swift in Sources */,
+				9F955CE62E27603D0037086D /* MockAWSS3Worker.swift in Sources */,
+				9F955CE42E275FEB0037086D /* MockSudoApiClient.swift in Sources */,
+				9F955CE82E2760C00037086D /* PlatformInteropTests.swift in Sources */,
 				84B2603D248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift in Sources */,
 				84B2604B24888DA700E99401 /* Result+Convenience.swift in Sources */,
 				84B260BC248F4BF100E99401 /* RFC822Generator.swift in Sources */,

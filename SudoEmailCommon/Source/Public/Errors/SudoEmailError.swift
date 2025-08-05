@@ -50,8 +50,6 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
     case emailAddressUnavailable
     /// Contents of an email message is of an invalid format.
     case invalidEmailContents
-    /// The requested record  could not be found
-    case recordNotFound
 
     // MARK: - Service
 
@@ -145,8 +143,6 @@ public enum SudoEmailError: Error, Equatable, LocalizedError {
             return msg ?? "Email message size exceeded"
         case let .inNetworkAddressNotFound(msg):
             return msg ?? "At least one email address does not exist in network"
-        case let .recordNotFound:
-            return "The requested record could not be found"
         }
     }
 }

@@ -37,8 +37,6 @@ extension SudoEmailError {
             self = .emailAddressUnavailable
         case "sudoplatform.email.InvalidEmailContents":
             self = .invalidEmailContents
-        case "sudoplatform.email.RecordNotFound":
-            self = .recordNotFound
         case "sudoplatform.AccountLockedError":
             self = .accountLocked
         case "sudoplatform.DecodingError":

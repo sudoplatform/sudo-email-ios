@@ -82,13 +82,12 @@ protocol EmailMessageRepository: Repository {
         withInput input: ScheduleSendDraftMessageInput
     ) async throws -> ScheduledDraftMessageEntity
 
-    /// Cancel a scheduled draft message from being sent
+    /// Cancel a scheduled draft message from being sent. If the draft message
+    //  is not currently scheduled, then this method will return success.
     /// - Parameters:
     ///   - input: Input parameters used to cancel a scheduled draft message
     /// - Returns:
     ///   - The id of the draft message on success.
-    /// - Throws:
-    ///   - recordNotFound if no record of draft being scheduled is found
     func cancelScheduledDraftMessage(
         withInput input: CancelScheduledDraftMessageInput
     ) async throws -> String

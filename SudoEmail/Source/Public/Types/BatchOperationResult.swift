@@ -36,7 +36,7 @@ public struct BatchOperationResult<S, F> {
 }
 
 /// Representation of the result of an unsuccessful operation performed on an email message
-public struct EmailMessageOperationFailureResult: Equatable {
+public struct EmailMessageOperationFailureResult: Error, Equatable {
 
     // MARK: - Properties
 
