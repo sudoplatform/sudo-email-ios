@@ -41,7 +41,8 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository {
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
         owner: String,
-        emailAddressId: String?
+        emailAddressId: String?,
+        blockLevel: BlockedEmailAddressLevel,
     ) async throws -> BatchOperationResult<String, String> {
         logger.debug("blockAddresses init: \(owner), \(addresses)")
         if addresses.isEmpty {
@@ -62,11 +63,21 @@ class DefaultBlockedAddressRepository: BlockedAddressRepository {
         let prefix = emailAddressId?.nilIfEmpty ?? owner
 
         try addresses.forEach { address in
-            let normalizedAddress = try EmailAddressParser.normalize(address: address)
-            if !normalizedAddresses.contains(normalizedAddress) {
-                normalizedAddresses.append(normalizedAddress)
-                try hashedBlockedAddresses.append(EmailAddressBlocklistUtil.generateAddressHash(plaintextAddress: normalizedAddress, prefix: prefix))
-                try sealedBlockedValues.append(self.keyWorker.sealString(normalizedAddress, withKeyId: symmetricKeyId!))
+            if EmailAddressParser.validate(email: address) {
+                let normalizedAddress = try EmailAddressParser.normalize(address: address)
+                let stringToHash = switch blockLevel {
+                case .address:
+                    normalizedAddress
+                case .domain:
+                    EmailAddressParser.getDomain(email: normalizedAddress)
+                }
+                if !normalizedAddresses.contains(stringToHash) {
+                    normalizedAddresses.append(stringToHash)
+                    try hashedBlockedAddresses.append(EmailAddressBlocklistUtil.generateAddressHash(plaintextAddress: stringToHash, prefix: prefix))
+                    try sealedBlockedValues.append(self.keyWorker.sealString(stringToHash, withKeyId: symmetricKeyId!))
+                }
+            } else {
+                throw SudoEmailError.invalidArgument("Invalid email address: \(address)")
             }
         }
 

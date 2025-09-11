@@ -14,14 +14,15 @@ protocol BlockedAddressRepository: Repository {
     ///  - addresses: A list of addresses to block in the format `local-part@domain`
     ///  - action: The action to take on incoming messages from the blocked address(es).
     ///  - owner: The user blocking the addresses
-    ///  - emailAddressId: The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner's
-    /// addresses.
+    ///  - emailAddressId: The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner's addresses.
+    ///  - blockLevel: The level at which to block the address(es).
     /// - Returns: BatchOperationResult with the results of the update
     func blockAddresses(
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
         owner: String,
-        emailAddressId: String?
+        emailAddressId: String?,
+        blockLevel: BlockedEmailAddressLevel,
     ) async throws -> BatchOperationResult<String, String>
 
     /// Unblock the addresses for the given user

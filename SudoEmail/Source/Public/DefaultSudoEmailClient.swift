@@ -453,7 +453,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func blockEmailAddresses(
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
-        emailAddressId: String?
+        emailAddressId: String?,
+        blockLevel: BlockedEmailAddressLevel,
     ) async throws -> BatchOperationResult<String, String> {
         logger.debug("blockEmailAddresses: \(addresses)")
         let useCase = useCaseFactory.generateBlockEmailAddressesUseCase(
@@ -461,7 +462,12 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             userClient: userClient,
             log: logger
         )
-        let result = try await useCase.execute(addresses: addresses, action: action, emailAddressId: emailAddressId)
+        let result = try await useCase.execute(
+            addresses: addresses,
+            action: action,
+            emailAddressId: emailAddressId,
+            blockLevel: blockLevel
+        )
         return result
     }
 

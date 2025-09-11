@@ -398,7 +398,8 @@ public protocol SudoEmailClient: AnyObject {
     ///  - Parameters:
     ///    - addresses: Array of addresses to block as strings
     ///    - action: The action to take on incoming messages from the blocked address(es). Optional: defaults to DROP
-    ///    - emailAddressId: The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner's
+    ///    - emailAddressId: The id of the email address for which the blocked address is blocked. If not present, blocked address cannot send to any of owner's email addresses
+    ///    - blockLevel: The level at which to block the address(es). Optional: defaults to ADDRESS
     /// addresses.
     ///  - Returns: The status of the blocking:
     ///     Success - All addresses were succesfully blocked.
@@ -408,7 +409,8 @@ public protocol SudoEmailClient: AnyObject {
     func blockEmailAddresses(
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
-        emailAddressId: String?
+        emailAddressId: String?,
+        blockLevel: BlockedEmailAddressLevel,
     ) async throws -> BatchOperationResult<String, String>
 
     /// Unblocks the addresses given from sending to the user
@@ -469,8 +471,14 @@ public extension SudoEmailClient {
     func blockEmailAddresses(
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction = .drop,
-        emailAddressId: String? = nil
+        emailAddressId: String? = nil,
+        blockLevel: BlockedEmailAddressLevel = .address
     ) async throws -> BatchOperationResult<String, String> {
-        try await blockEmailAddresses(addresses: addresses, action: action, emailAddressId: emailAddressId)
+        try await blockEmailAddresses(
+            addresses: addresses,
+            action: action,
+            emailAddressId: emailAddressId,
+            blockLevel: blockLevel
+        )
     }
 }
