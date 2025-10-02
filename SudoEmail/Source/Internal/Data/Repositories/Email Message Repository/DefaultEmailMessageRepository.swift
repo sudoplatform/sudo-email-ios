@@ -494,37 +494,14 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             var parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: internetMessageData)
 
             if emailMessage.encryptionStatus == EncryptionStatus.ENCRYPTED {
-                var keyAttachments: Set<EmailAttachment> = []
-                var bodyAttachment: EmailAttachment?
-
-                parsedMessage.attachments?.forEach { attachment in
-                    let contentId = attachment.contentId ?? ""
-                    let isKeyExchangeType = contentId.contains(SecureEmailAttachmentType.KEY_EXCHANGE.contentId()) ||
-                        contentId.contains(SecureEmailAttachmentType.LEGACY_KEY_EXCHANGE_CONTENT_ID)
-                    if isKeyExchangeType {
-                        keyAttachments.insert(attachment)
-                    } else {
-                        let isBodyType = contentId.contains(SecureEmailAttachmentType.BODY.contentId()) ||
-                            contentId.contains(SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID)
-                        if isBodyType {
-                            bodyAttachment = attachment
-                        }
-                    }
-                }
-
-                if keyAttachments.isEmpty {
-                    throw SudoEmailError.keyAttachmentsNotFound
-                }
-                guard let bodyAttachment = bodyAttachment else {
-                    throw SudoEmailError.bodyAttachmentNotFound
-                }
-
-                let securePackage = SecurePackageEntity(keyAttachments: keyAttachments, bodyAttachment: bodyAttachment)
-                let unencryptedMessageData = try emailCryptoService.decrypt(securePackage: securePackage)
-                guard let unencryptedMessageStr = String(data: unencryptedMessageData, encoding: .utf8) else {
-                    throw SudoEmailError.decodingError
-                }
-                parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: unencryptedMessageStr)
+                let emailMessageUtil = EmailMessageUtil(
+                    emailAccountRepository: nil,
+                    emailDomainRepository: nil,
+                    emailCryptoService: emailCryptoService,
+                    rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+                    logger: logger
+                )
+                parsedMessage = try emailMessageUtil.decryptInNetworkMessage(parsedMessage: parsedMessage)
             }
 
             return EmailMessageWithBody(
@@ -574,12 +551,39 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             withKeyId: keyId,
             algorithm: algorithm
         )
-        return DraftEmailMessage(
-            id: input.id,
-            emailAddressId: input.emailAddressId,
-            updatedAt: updatedAt,
-            rfc822Data: Data(unsealedString.utf8)
-        )
+
+        var parsedMessage = try rfc822MessageDataProcessor.decodeInternetMessageData(input: unsealedString)
+
+        let secureBodyAttachment = parsedMessage.attachments?.first(where: {
+            let contentId = $0.contentId ?? ""
+            return contentId.contains(SecureEmailAttachmentType.BODY.contentId()) ||
+                contentId.contains(SecureEmailAttachmentType.LEGACY_BODY_CONTENT_ID)
+        })
+
+        if secureBodyAttachment != nil {
+            let emailMessageUtil = EmailMessageUtil(
+                emailAccountRepository: nil,
+                emailDomainRepository: nil,
+                emailCryptoService: emailCryptoService,
+                rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+                logger: logger
+            )
+            parsedMessage = try emailMessageUtil.decryptInNetworkMessage(parsedMessage: parsedMessage)
+            let rfc822Data = try rfc822MessageDataProcessor.encodeToInternetMessageData(message: parsedMessage)
+            return DraftEmailMessage(
+                id: input.id,
+                emailAddressId: input.emailAddressId,
+                updatedAt: updatedAt,
+                rfc822Data: rfc822Data
+            )
+        } else {
+            return DraftEmailMessage(
+                id: input.id,
+                emailAddressId: input.emailAddressId,
+                updatedAt: updatedAt,
+                rfc822Data: Data(unsealedString.utf8)
+            )
+        }
     }
 
     func draftExists(id: String, emailAddressId: String) async throws -> Bool {

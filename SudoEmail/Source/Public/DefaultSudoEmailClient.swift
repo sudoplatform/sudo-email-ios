@@ -292,7 +292,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ) async throws -> DraftEmailMessageMetadata {
         let useCase = useCaseFactory.generateCreateDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailAccountRepository: emailAccountRepository
+            emailAccountRepository: emailAccountRepository,
+            emailDomainRepository: domainRepository,
+            emailConfigDataRepository: emailConfigurationDataRepository,
+            emailCryptoService: emailCryptoService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            logger: logger
         )
         return try await useCase.execute(withInput: input)
     }
@@ -302,7 +308,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ) async throws -> DraftEmailMessageMetadata {
         let useCase = useCaseFactory.generateUpdateDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailAccountRepository: emailAccountRepository
+            emailAccountRepository: emailAccountRepository,
+            emailDomainRepository: domainRepository,
+            emailConfigDataRepository: emailConfigurationDataRepository,
+            emailCryptoService: emailCryptoService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            logger: logger
         )
         return try await useCase.execute(withInput: input)
     }

@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import SudoLogging
 
 class UpdateDraftEmailMessageUseCase {
 
@@ -12,15 +13,33 @@ class UpdateDraftEmailMessageUseCase {
 
     let emailMessageRepository: EmailMessageRepository
     let emailAccountRepository: EmailAccountRepository
+    let emailDomainRepository: DomainRepository
+    let emailConfigDataRepository: EmailConfigurationDataRepository
+    let emailCryptoService: EmailCryptoService
+    let emailMessageUnsealerService: EmailMessageUnsealerService
+    let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
+    var logger: Logger
 
     // MARK: - Lifecycle
 
     init(
         emailMessageRepository: EmailMessageRepository,
-        emailAccountRepository: EmailAccountRepository
+        emailAccountRepository: EmailAccountRepository,
+        emailDomainRepository: DomainRepository,
+        emailConfigDataRepository: EmailConfigurationDataRepository,
+        emailCryptoService: EmailCryptoService,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
+        logger: Logger = .emailSDKLogger
     ) {
         self.emailMessageRepository = emailMessageRepository
         self.emailAccountRepository = emailAccountRepository
+        self.emailDomainRepository = emailDomainRepository
+        self.emailConfigDataRepository = emailConfigDataRepository
+        self.emailCryptoService = emailCryptoService
+        self.emailMessageUnsealerService = emailMessageUnsealerService
+        self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
+        self.logger = logger
     }
 
     // MARK: - Methods
@@ -39,8 +58,21 @@ class UpdateDraftEmailMessageUseCase {
         )) {
             throw SudoEmailError.emailMessageNotFound
         }
+
+        var rfc822Data = input.rfc822Data
+        let config = try await emailConfigDataRepository.getConfigurationData()
+        let emailMessageUtil = EmailMessageUtil(
+            emailAccountRepository: emailAccountRepository,
+            emailDomainRepository: emailDomainRepository,
+            emailCryptoService: emailCryptoService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            logger: logger
+        )
+
+        rfc822Data = try await emailMessageUtil.processMessageForUpload(data: rfc822Data, config: config)
+
         let metadata = try await emailMessageRepository.saveDraft(
-            rfc822Data: input.rfc822Data,
+            rfc822Data: rfc822Data,
             senderEmailAddressId: input.senderEmailAddressId,
             id: input.id
         )

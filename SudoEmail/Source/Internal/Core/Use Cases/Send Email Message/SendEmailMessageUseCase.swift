@@ -77,8 +77,19 @@ class SendEmailMessageUseCase {
         )
 
         let config = try await emailConfigDataRepository.getConfigurationData()
+        let emailMessageUtil = EmailMessageUtil(
+            emailAccountRepository: emailAccountRepository,
+            emailDomainRepository: emailDomainRepository,
+            emailCryptoService: emailCryptoService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            logger: logger
+        )
 
-        try verifyAttachmentValidity(prohibitedExtensions: config.prohibitedFileExtensions, attachments: attachments, inlineAttachments: inlineAttachments)
+        try emailMessageUtil.verifyAttachmentValidity(
+            prohibitedExtensions: config.prohibitedFileExtensions,
+            attachments: attachments,
+            inlineAttachments: inlineAttachments
+        )
 
         let domains = try await emailDomainRepository.fetchConfiguredDomains()
 
@@ -94,23 +105,13 @@ class SendEmailMessageUseCase {
             // Lookup public key information for each internal recipient and sender
             var recipientsAndSender = allRecipients
             recipientsAndSender.append(emailMessageHeader.from.address)
-            let emailAddressesPublicInfo = try await emailAccountRepository.lookupPublicInfo(emailAddresses: recipientsAndSender)
-
-            // Check whether internal recipient addresses and associated public keys exist in the platform
-            let isInNetworkAddresses = allRecipients.allSatisfy { recipient in
-                emailAddressesPublicInfo.contains { info in
-                    info.emailAddress == recipient
-                }
-            }
-            if !isInNetworkAddresses {
-                throw SudoEmailError.inNetworkAddressNotFound("At least one email address does not exist in network")
-            }
+            let emailAddressesPublicInfo = try await emailMessageUtil.retrieveAndVerifyPublicInfo(addresses: recipientsAndSender)
 
             if allRecipients.count > config.encryptedEmailMessageRecipientsLimit {
                 throw SudoEmailError.limitExceeded("Cannot send encrypted message to more than \(config.encryptedEmailMessageRecipientsLimit) recipients")
             }
             // Process encrypted email message
-            let encryptedRfc822Data = try await processAndBuildEmailMessage(
+            let encryptedRfc822Data = try await emailMessageUtil.processAndBuildEmailMessage(
                 emailMessageHeader: emailMessageHeader,
                 body: body,
                 attachments: attachments,
@@ -135,7 +136,7 @@ class SendEmailMessageUseCase {
                 throw SudoEmailError.limitExceeded("Cannot send message to more than \(config.emailMessageRecipientsLimit) recipients")
             }
             // Process non-encrypted email message
-            let rfc822Data = try await processAndBuildEmailMessage(
+            let rfc822Data = try await emailMessageUtil.processAndBuildEmailMessage(
                 emailMessageHeader: emailMessageHeader,
                 body: body,
                 attachments: attachments,
@@ -150,112 +151,5 @@ class SendEmailMessageUseCase {
                 emailAccountId: senderEmailAddressId
             )
         }
-    }
-
-    private func verifyAttachmentValidity(
-        prohibitedExtensions: [String],
-        attachments: [EmailAttachment],
-        inlineAttachments: [EmailAttachment]
-    ) throws {
-        let attachmentExtensions = (attachments + inlineAttachments)
-            .compactMap(\.filename)
-            .map { URL(fileURLWithPath: $0).pathExtension }
-            .map { ".\($0.lowercased())" }
-
-        guard Set(attachmentExtensions).isDisjoint(with: prohibitedExtensions) else {
-            throw SudoEmailError.invalidEmailContents
-        }
-    }
-
-    private func processAndBuildEmailMessage(
-        emailMessageHeader: InternetMessageFormatHeader,
-        body: String,
-        attachments: [EmailAttachment],
-        inlineAttachments: [EmailAttachment],
-        encryptionStatus: EncryptionStatus,
-        emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = [],
-        replyMessageId: String? = nil,
-        forwardMessageId: String? = nil,
-        emailMessageMaxOutboundMessageSize: Int
-    ) async throws -> Data {
-        // Generate unencrypted RFC822 email data
-        var rfc822Data = try buildMessageData(
-            emailMessageHeader: emailMessageHeader,
-            body: body,
-            attachments: attachments,
-            inlineAttachments: inlineAttachments,
-            isHtml: true,
-            encryptionStatus: EncryptionStatus.UNENCRYPTED,
-            replyMessageId: replyMessageId,
-            forwardMessageId: forwardMessageId
-        )
-
-        if encryptionStatus == EncryptionStatus.ENCRYPTED {
-            // For each recipient, encrypt the rfc822 with the recipient's public key
-            // and store the encrypted payload as an attachment
-            let keys = emailAddressesPublicInfo.map {
-                KeyEntity(
-                    type: .publicKey(format: $0.publicKeyDetails.keyFormat),
-                    keyId: $0.keyId,
-                    keyData: Data($0.publicKeyDetails.publicKey.utf8)
-                )
-            }
-            let encryptedEmailMessage = try emailCryptoService.encrypt(data: rfc822Data, keys: Set(keys))
-            let secureAttachments = encryptedEmailMessage.toList()
-
-            // Encode the RFC 822 data with the secureAttachments
-            rfc822Data = try buildMessageData(
-                emailMessageHeader: emailMessageHeader,
-                body: body,
-                attachments: secureAttachments,
-                inlineAttachments: inlineAttachments,
-                isHtml: false,
-                encryptionStatus: EncryptionStatus.ENCRYPTED,
-                replyMessageId: replyMessageId,
-                forwardMessageId: forwardMessageId
-            )
-        }
-
-        if rfc822Data.count > emailMessageMaxOutboundMessageSize {
-            logger.error("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
-            throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes")
-        }
-
-        return rfc822Data
-    }
-
-    private func buildMessageData(
-        emailMessageHeader: InternetMessageFormatHeader,
-        body: String,
-        attachments: [EmailAttachment],
-        inlineAttachments: [EmailAttachment],
-        isHtml: Bool,
-        encryptionStatus: EncryptionStatus,
-        replyMessageId: String? = nil,
-        forwardMessageId: String? = nil
-    ) throws -> Data {
-        let from = [EmailAddressAndName(address: emailMessageHeader.from.address, displayName: emailMessageHeader.from.displayName)]
-        let to = emailMessageHeader.to.map { EmailAddressAndName(address: $0.address, displayName: $0.displayName) }
-        let cc = emailMessageHeader.cc.map { EmailAddressAndName(address: $0.address, displayName: $0.displayName) }
-        let bcc = emailMessageHeader.bcc.map { EmailAddressAndName(address: $0.address, displayName: $0.displayName) }
-        var rfc822DataProperties = EmailMessageDetails(
-            from: from,
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: emailMessageHeader.subject,
-            body: body,
-            attachments: attachments,
-            inlineAttachments: inlineAttachments,
-            isHtml: isHtml,
-            encryptionStatus: encryptionStatus
-        )
-        if let forwardMessageId = forwardMessageId {
-            rfc822DataProperties.forwardMessageId = forwardMessageId
-        }
-        if let replyMessageId = replyMessageId {
-            rfc822DataProperties.replyMessageId = replyMessageId
-        }
-        return try rfc822MessageDataProcessor.encodeToInternetMessageData(message: rfc822DataProperties)
     }
 }

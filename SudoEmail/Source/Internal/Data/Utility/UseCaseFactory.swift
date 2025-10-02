@@ -83,21 +83,45 @@ class UseCaseFactory {
 
     func generateCreateDraftEmailMessageUseCase(
         emailMessageRepository: EmailMessageRepository,
-        emailAccountRepository: EmailAccountRepository
+        emailAccountRepository: EmailAccountRepository,
+        emailDomainRepository: DomainRepository,
+        emailConfigDataRepository: EmailConfigurationDataRepository,
+        emailCryptoService: EmailCryptoService,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
+        logger: Logger
     ) -> CreateDraftEmailMessageUseCase {
         return CreateDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailAccountRepository: emailAccountRepository
+            emailAccountRepository: emailAccountRepository,
+            emailDomainRepository: emailDomainRepository,
+            emailConfigDataRepository: emailConfigDataRepository,
+            emailCryptoService: emailCryptoService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            logger: logger
         )
     }
 
     func generateUpdateDraftEmailMessageUseCase(
         emailMessageRepository: EmailMessageRepository,
-        emailAccountRepository: EmailAccountRepository
+        emailAccountRepository: EmailAccountRepository,
+        emailDomainRepository: DomainRepository,
+        emailConfigDataRepository: EmailConfigurationDataRepository,
+        emailCryptoService: EmailCryptoService,
+        emailMessageUnsealerService: EmailMessageUnsealerService,
+        rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
+        logger: Logger
     ) -> UpdateDraftEmailMessageUseCase {
         return UpdateDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailAccountRepository: emailAccountRepository
+            emailAccountRepository: emailAccountRepository,
+            emailDomainRepository: emailDomainRepository,
+            emailConfigDataRepository: emailConfigDataRepository,
+            emailCryptoService: emailCryptoService,
+            emailMessageUnsealerService: emailMessageUnsealerService,
+            rfc822MessageDataProcessor: rfc822MessageDataProcessor,
+            logger: logger
         )
     }
 

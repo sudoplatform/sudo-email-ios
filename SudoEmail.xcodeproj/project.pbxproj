@@ -846,6 +846,7 @@
 		9F955CE32E275FEB0037086D /* MockSudoApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSudoApiClient.swift; sourceTree = "<group>"; };
 		9F955CE52E27603D0037086D /* MockAWSS3Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAWSS3Worker.swift; sourceTree = "<group>"; };
 		9F955CE72E2760C00037086D /* PlatformInteropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformInteropTests.swift; sourceTree = "<group>"; };
+		9F9AF7492E8A509100D106B2 /* EmailMessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMessageUtil.swift; sourceTree = "<group>"; };
 		9F9E7F882B82B12900C5F823 /* UnsealedBlockedAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsealedBlockedAddress.swift; sourceTree = "<group>"; };
 		9F9E7F8A2B82DA1600C5F823 /* UnblockEmailAddressesByHashedValueUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnblockEmailAddressesByHashedValueUseCase.swift; sourceTree = "<group>"; };
 		9F9EE43C2B96A07300BD3EC7 /* Rfc822MessageDataProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rfc822MessageDataProcessor.swift; sourceTree = "<group>"; };
@@ -2101,6 +2102,7 @@
 				41DFDA262DA7885B003C2934 /* CredentialIdentityResolver.swift */,
 				9F949DD92B8428D8009064FB /* EmailAddressBlocklistUtil.swift */,
 				9F8673AD2B6C962D00B9950E /* EmailAddressParser.swift */,
+				9F9AF7492E8A509100D106B2 /* EmailMessageUtil.swift */,
 				95388BF92849C85F004D971D /* EmailRFC822HeaderCodec.swift */,
 				1BDEB97C2C699CFB003FD274 /* HTMLPlaintextRenderer.swift */,
 				1BDEB97A2C699CC2003FD274 /* HTMLRenderer.swift */,
