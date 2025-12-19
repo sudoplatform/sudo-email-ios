@@ -35,9 +35,13 @@ class ListDraftEmailMessagesUseCase {
             try await withThrowingTaskGroup(of: [DraftEmailMessage].self) { group in
                 for account in emailAccounts.items {
                     group.addTask {
-                        let metadata = try await self.emailMessageRepository.listDraftsMetadataForEmailAddressId(emailAddressId: account.id)
+                        let metadataResult = try await self.emailMessageRepository.listDraftsMetadataForEmailAddressId(
+                            emailAddressId: account.id,
+                            limit: nil,
+                            nextToken: nil
+                        )
                         let draftContent = try await withThrowingTaskGroup(of: DraftEmailMessage?.self) { innerGroup in
-                            for m in metadata {
+                            for m in metadataResult.items {
                                 innerGroup.addTask {
                                     return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
                                         id: m.id,

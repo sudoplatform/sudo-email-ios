@@ -22,7 +22,7 @@ protocol BlockedAddressRepository: Repository {
         action: UnsealedBlockedAddress.BlockedAddressAction,
         owner: String,
         emailAddressId: String?,
-        blockLevel: BlockedEmailAddressLevel,
+        blockLevel: BlockedEmailAddressLevel
     ) async throws -> BatchOperationResult<String, String>
 
     /// Unblock the addresses for the given user

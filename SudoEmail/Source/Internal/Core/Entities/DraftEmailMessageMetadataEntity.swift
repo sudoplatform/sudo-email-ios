@@ -10,11 +10,11 @@ import Foundation
 struct DraftEmailMessageMetadataEntity: Equatable {
 
     /// Unique identifier of the draft email message.
-    public var id: String
+    var id: String
 
     /// Unique identifier of the email address associated with the draft email message.
-    public var emailAddressId: String
+    var emailAddressId: String
 
     /// Time at which the draft was last updated
-    public var updatedAt: Date
+    var updatedAt: Date
 }

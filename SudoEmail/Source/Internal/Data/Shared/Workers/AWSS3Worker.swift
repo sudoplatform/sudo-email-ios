@@ -24,16 +24,16 @@ public enum AWSS3WorkerError: Error {
 struct S3ObjectEntity: Equatable {
 
     /// The date / time of the last time this entity was modified
-    public var lastModified: Date
+    var lastModified: Date
 
     /// The body of the object
-    public var body: Data
+    var body: Data
 
     /// The metadata associated with the
-    public var metadata: [String: String]?
+    var metadata: [String: String]?
 
     // The content encoding value for the data
-    public var contentEncoding: String?
+    var contentEncoding: String?
 }
 
 /// S3 client wrapper protocol mainly used for providing an abstraction layer on top of
@@ -85,9 +85,11 @@ protocol AWSS3Worker: AnyObject {
     ///  - Parameters:
     ///    - bucket: Name of S3 bucket containing the objects to list.
     ///    - key: The key or key prefix of the objects to list.
+    ///    - limit: Maximum number of objects to return. If nil, returns all objects.
+    ///    - nextToken: Token to retrieve the next page of results. If nil, returns the first page.
     ///  - Returns:
-    ///    - The list of S3 objects matching key or empty if no objects match.
-    func list(bucket: String, key: String) async throws -> [S3ClientTypes.Object]
+    ///    - A tuple containing the list of S3 objects matching key and the next token for pagination.
+    func list(bucket: String, key: String, limit: Int?, nextToken: String?) async throws -> (objects: [S3ClientTypes.Object], nextToken: String?)
 
     /// Deletes n object (data + metadata) from AWS S3
     /// - Parameters:
@@ -193,13 +195,18 @@ class DefaultAWSS3Worker: AWSS3Worker {
         }
     }
 
-    func list(bucket: String, key: String) async throws -> [S3ClientTypes.Object] {
-        let input = ListObjectsV2Input(bucket: bucket, prefix: key)
+    func list(bucket: String, key: String, limit: Int?, nextToken: String?) async throws -> (objects: [S3ClientTypes.Object], nextToken: String?) {
+        let input = ListObjectsV2Input(
+            bucket: bucket,
+            continuationToken: nextToken,
+            maxKeys: limit ?? 10,
+            prefix: key
+        )
         do {
             let output = try await s3Client.listObjectsV2(input: input)
-            return output.contents ?? []
+            return (objects: output.contents ?? [], nextToken: output.nextContinuationToken)
         } catch is NoSuchKey {
-            return []
+            return (objects: [], nextToken: nil)
         } catch {
             throw AWSS3WorkerError.serviceError(cause: error)
         }

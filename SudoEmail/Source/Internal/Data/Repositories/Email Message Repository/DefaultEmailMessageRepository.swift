@@ -260,9 +260,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             key: s3Key,
             metadata: encryptionMetadata
         )
-        let draftMetadata = try await s3Worker.list(bucket: emailBucket, key: s3Key)
+        let draftMetadata = try await s3Worker.list(bucket: emailBucket, key: s3Key, limit: nil, nextToken: nil)
 
-        guard let updatedAt = draftMetadata.first?.lastModified else {
+        guard let updatedAt = draftMetadata.objects.first?.lastModified else {
             throw SudoEmailError.internalError("updatedAt not set for draft.")
         }
 
@@ -598,17 +598,22 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         }
     }
 
-    func listDraftsMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadataEntity] {
+    func listDraftsMetadataForEmailAddressId(
+        emailAddressId: String,
+        limit: Int?,
+        nextToken: String?
+    ) async throws -> ListOutputEntity<DraftEmailMessageMetadataEntity> {
         guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/"
         do {
-            let result = try await s3Worker.list(bucket: emailBucket, key: s3Key)
+            let result = try await s3Worker.list(bucket: emailBucket, key: s3Key, limit: limit, nextToken: nextToken)
             let transformer = DraftEmailMetadataEntityTransformer()
-            return try result.map { r in
+            let metadata = try result.objects.map { r in
                 return try transformer.transform(awsS3Object: r, s3KeyPrefix: s3Key, emailAddressId: emailAddressId)
             }
+            return ListOutputEntity(items: metadata, nextToken: result.nextToken)
         } catch {
             throw SudoEmailError.internalError(error.localizedDescription)
         }

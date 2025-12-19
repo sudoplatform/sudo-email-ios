@@ -466,7 +466,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
         emailAddressId: String?,
-        blockLevel: BlockedEmailAddressLevel,
+        blockLevel: BlockedEmailAddressLevel
     ) async throws -> BatchOperationResult<String, String> {
         logger.debug("blockEmailAddresses: \(addresses)")
         let useCase = useCaseFactory.generateBlockEmailAddressesUseCase(
@@ -615,14 +615,23 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository
         )
-        return try await useCase.execute()
+        let input = ListDraftEmailMessageMetadataUseCaseInput(limit: nil, nextToken: nil)
+        return try await useCase.execute(withInput: input).metadata
     }
 
-    public func listDraftEmailMessageMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadata] {
+    public func listDraftEmailMessageMetadataForEmailAddressId(
+        withInput input: ListDraftEmailMessageMetadataForEmailAddressIdInput
+    ) async throws -> ListOutput<DraftEmailMessageMetadata> {
         let useCase = useCaseFactory.generateListDraftEmailMessageMetadataForEmailAddressIdUseCase(
             emailMessageRepository: emailMessageRepository
         )
-        return try await useCase.execute(emailAddressId: emailAddressId)
+        let useCaseInput = ListDraftEmailMessageMetadataForEmailAddressIdUseCaseInput(
+            emailAddressId: input.emailAddressId,
+            limit: input.limit,
+            nextToken: input.nextToken
+        )
+        let result = try await useCase.execute(withInput: useCaseInput)
+        return ListOutput(items: result.metadata, nextToken: result.nextToken)
     }
 
     public func getDraftEmailMessage(

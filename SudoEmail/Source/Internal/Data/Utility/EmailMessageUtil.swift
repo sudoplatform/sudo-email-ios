@@ -101,7 +101,7 @@ class EmailMessageUtil {
     }
 
     func decryptInNetworkMessage(
-        parsedMessage: EmailMessageDetails,
+        parsedMessage: EmailMessageDetails
     ) throws -> EmailMessageDetails {
         var keyAttachments: Set<EmailAttachment> = []
         var bodyAttachment: EmailAttachment?

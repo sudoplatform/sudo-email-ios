@@ -47,7 +47,7 @@ class BlockEmailAddressesUseCase {
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
         emailAddressId: String?,
-        blockLevel: BlockedEmailAddressLevel,
+        blockLevel: BlockedEmailAddressLevel
     ) async throws -> BatchOperationResult<String, String> {
         log.debug("execute: \(addresses) \(action) \(emailAddressId ?? "")")
         let owner = try await userClient.getSubject()

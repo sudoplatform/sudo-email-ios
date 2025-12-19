@@ -361,13 +361,13 @@ public protocol SudoEmailClient: AnyObject {
     @available(*, deprecated, message: "Use listDraftEmailMessageMetadataForEmailAddressId instead to reduce unneccessary network calls.")
     func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata]
 
-    /// Lists the metadata of all draft messages for the user.
+    /// Lists the metadata of all draft messages for a specific email address with pagination support.
     ///
     /// - Parameters:
-    ///   - emailAddressId: The identifier of the email address associated with the draft email messages.
+    ///   - input: Parameters used to list draft email message metadata for an email address including pagination options.
     /// - Returns:
-    ///   - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
-    func listDraftEmailMessageMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadata]
+    ///   - A list output containing draft email message metadata and a next token for pagination.
+    func listDraftEmailMessageMetadataForEmailAddressId(withInput input: ListDraftEmailMessageMetadataForEmailAddressIdInput) async throws -> ListOutput<DraftEmailMessageMetadata>
 
     /// Get a draft email message that has been saved previously.
     ///  - Parameters:
@@ -410,7 +410,7 @@ public protocol SudoEmailClient: AnyObject {
         addresses: [String],
         action: UnsealedBlockedAddress.BlockedAddressAction,
         emailAddressId: String?,
-        blockLevel: BlockedEmailAddressLevel,
+        blockLevel: BlockedEmailAddressLevel
     ) async throws -> BatchOperationResult<String, String>
 
     /// Unblocks the addresses given from sending to the user

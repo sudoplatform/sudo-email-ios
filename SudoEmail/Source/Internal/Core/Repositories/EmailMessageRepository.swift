@@ -158,7 +158,13 @@ protocol EmailMessageRepository: Repository {
     /// List draft email message metadata for the specified email address identifier.
     ///  - Parameters:
     ///    - emailAddressId: Identifier of the email address associated with the draft email messages.
+    ///    - limit: Maximum number of results to return. If nil, defaults to 10.
+    ///    - nextToken: Token to retrieve the next page of results. If nil, returns the first page.
     ///  - Returns:
-    ///    - A list of draft email message metadata. Will be empty if no draft messages found.
-    func listDraftsMetadataForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessageMetadataEntity]
+    ///    - A list output containing draft email message metadata and a next token for pagination.
+    func listDraftsMetadataForEmailAddressId(
+        emailAddressId: String,
+        limit: Int?,
+        nextToken: String?
+    ) async throws -> ListOutputEntity<DraftEmailMessageMetadataEntity>
 }

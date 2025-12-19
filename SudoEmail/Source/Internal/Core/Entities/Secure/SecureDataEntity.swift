@@ -54,7 +54,7 @@ struct SecureDataEntity: Codable {
     // MARK: - Methods
 
     /// Encode the current `SecureDataEntity` instance into a JSON string.
-    public func toJson() throws -> String {
+    func toJson() throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let jsonData = try encoder.encode(self)

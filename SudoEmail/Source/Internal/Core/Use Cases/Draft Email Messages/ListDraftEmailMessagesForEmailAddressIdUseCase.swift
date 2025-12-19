@@ -20,12 +20,16 @@ class ListDraftEmailMessagesForEmailAddressIdUseCase {
 
     func execute(emailAddressId: String) async throws -> [DraftEmailMessage] {
         do {
-            let metadata = try await emailMessageRepository.listDraftsMetadataForEmailAddressId(emailAddressId: emailAddressId)
+            let metadataResult = try await emailMessageRepository.listDraftsMetadataForEmailAddressId(
+                emailAddressId: emailAddressId,
+                limit: nil,
+                nextToken: nil
+            )
 
             let result = try await withThrowingTaskGroup(of: DraftEmailMessage?.self) { group -> [DraftEmailMessage] in
                 var draftMessages: [DraftEmailMessage] = []
 
-                for m in metadata {
+                for m in metadataResult.items {
                     group.addTask {
                         do {
                             let draft = try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
