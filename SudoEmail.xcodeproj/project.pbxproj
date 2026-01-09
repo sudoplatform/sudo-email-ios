@@ -2965,7 +2965,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "sh ${PROJECT_DIR}/scripts/swiftFormat.sh\n";
+			shellScript = "sh ${PROJECT_DIR}/scripts/swiftFormat.sh --no_copyright_update\n";
 		};
 		9F9936512D7530F900CE5CAA /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;

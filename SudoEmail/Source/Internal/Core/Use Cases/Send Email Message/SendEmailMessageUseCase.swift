@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -93,7 +93,7 @@ class SendEmailMessageUseCase {
 
         let domains = try await emailDomainRepository.fetchConfiguredDomains()
 
-        let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address }
+        let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address.lowercased() }
 
         let allRecipientsInternal = !allRecipients.isEmpty && allRecipients.allSatisfy { recipient in
             domains.contains { domain in
