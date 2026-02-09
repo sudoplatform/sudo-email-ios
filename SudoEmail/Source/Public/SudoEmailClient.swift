@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -224,6 +224,12 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func getSupportedEmailDomains() async throws -> [String]
 
+    /// Get a list of all of the email domains on which email masks may be provisioned.
+    /// - Returns:
+    ///   - Success: Array of supported mask domains.
+    ///   - Failure: `SudoEmailError`.
+    func getEmailMaskDomains() async throws -> [String]
+
     /// Get a list of all of the configured domains. Primarily intended to be used as part of performing
     /// an email send operation in order to fetch all domains configured for the service so that appropriate
     /// encryption decisions can be made.
@@ -393,6 +399,47 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns: Key archive data.
     func exportKeys() throws -> Data
 
+    /// Provisions a new email mask with the specified configuration
+    ///
+    ///  - Parameters:
+    ///    - input: Input parameters used to provision an email mask
+    ///  - Returns:
+    ///    - The newly provisioned EmailMask
+    func provisionEmailMask(withInput input: ProvisionEmailMaskInput) async throws -> EmailMask
+
+    /// Deprovisions an email mask with the specified id
+    ///
+    ///  - Parameters:
+    ///    - input: Input parameters used to deprovision an email mask
+    ///  - Returns:
+    ///    - The deprovisioned EmailMask
+    func deprovisionEmailMask(withInput input: DeprovisionEmailMaskInput) async throws -> EmailMask
+
+    /// Updates or clears the metadata and/or expiration date of an email mask
+    ///
+    /// - Parameters:
+    ///   - input: Input parameters used to update an email mask
+    /// - Returns:
+    ///   - The updated EmailMask
+    func updateEmailMask(withInput input: UpdateEmailMaskInput) async throws -> EmailMask
+
+    /// Enables a previously disabled email mask with the specified input, permitting
+    /// it to forward emails again.
+    ///
+    ///  - Parameters:
+    ///    - input: Input parameters used to enable an email mask
+    ///  - Returns:
+    ///    - The enabled EmailMask
+    func enableEmailMask(withInput input: EnableEmailMaskInput) async throws -> EmailMask
+
+    /// Disables an active email mask with the specified input, preventing it from
+    /// forwarding any emails.
+    ///  - Parameters:
+    ///    - input: Input parameters used to disable an email mask
+    ///  - Returns:
+    ///    - The disabled EmailMask
+    func disableEmailMask(withInput input: DisableEmailMaskInput) async throws -> EmailMask
+
     /// Blocks the addresses given from sending to the user
     ///
     ///  - Parameters:
@@ -448,6 +495,15 @@ public protocol SudoEmailClient: AnyObject {
     ///   - input: Input parameters needed to delete messages from a folder
     /// - Returns: The id of the folder
     func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String
+
+    /// List email masks owned by the current user, with optional filtering and pagination
+    ///
+    /// - Parameters:
+    ///   - input: Input parameters for filtering and pagination
+    /// - Returns:
+    ///   - Success: Email masks associated with user, or empty list if no email mask can be found.
+    ///   - Failure: `SudoEmailError`.
+    func listEmailMasksForOwner(withInput input: ListEmailMasksForOwnerInput) async throws -> ListOutput<EmailMask>
 
     // MARK: - Subscriptions
 

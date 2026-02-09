@@ -100,7 +100,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
 
     // MARK: - SealedEmailMessageRepository
 
-    // Sends an out-of-network email message.
+    /// Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
         // Confirm user is signed in
         guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
@@ -133,9 +133,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
-    // Sends an in-network email message with E2E encryption.
-    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
-    // as i
+    /// Sends an in-network email message with E2E encryption.
+    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    /// as i
     func sendEmailMessage(
         withRFC822Data data: Data,
         emailAccountId: String,
@@ -443,8 +443,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.notSignedIn
         }
         do {
-            let rfc822Object = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
-            return rfc822Object
+            return try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
         } catch {
             logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
             throw error
@@ -629,8 +628,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             guard let emailMessage = result.getEmailMessage else {
                 return nil
             }
-            let entity = try transformer.transform(emailMessage)
-            return entity
+            return try transformer.transform(emailMessage)
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error

@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -50,6 +50,14 @@ struct ListOutputAPITransformer {
 
     func transformScheduledDraftMessages(_ entities: ListOutputEntity<ScheduledDraftMessageEntity>) -> ListOutput<ScheduledDraftMessage> {
         let items = entities.items.map(scheduledDraftMessageTransformer.transform(_:))
+        let nextToken = entities.nextToken
+        return ListOutput(items: items, nextToken: nextToken)
+    }
+
+    /// Transform an email mask entity list output to API list output of email masks.
+    func transformEmailMasks(_ entities: ListOutputEntity<EmailMaskEntity>) -> ListOutput<EmailMask> {
+        let transformer = EmailMaskAPITransformer()
+        let items = entities.items.map(transformer.transform(_:))
         let nextToken = entities.nextToken
         return ListOutput(items: items, nextToken: nextToken)
     }

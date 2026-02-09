@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -50,10 +50,9 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await fetch(query)
         do {
             let transformer = EmailAddressEntityTransformer()
-            let entities = try result.checkEmailAddressAvailability.addresses.map {
+            return try result.checkEmailAddressAvailability.addresses.map {
                 try transformer.transform($0, alias: nil)
             }
-            return entities
         } catch {
             logger.error("CheckEmailAddressAvailabilityQuery result transformation failed with \(error)")
             throw error
@@ -66,8 +65,14 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         ownershipProofToken: String
     ) async throws -> EmailAccountEntity {
         let publicKeyData = publicKey.keyData.base64EncodedString()
+        // Extract format from the public key and transform to GraphQL format
+        let keyFormatTransformer = KeyFormatGQLTransformer()
+        let publicKeyFormat = try publicKey.getPublicKeyFormat()
+        let graphQLKeyFormat = keyFormatTransformer.transform(publicKeyFormat)
+
         let createPublicKeyInput = GraphQL.ProvisionEmailAddressPublicKeyInput(
             algorithm: DefaultDeviceKeyWorker.Defaults.algorithm,
+            keyFormat: graphQLKeyFormat,
             keyId: publicKey.keyId,
             publicKey: publicKeyData
         )
@@ -102,8 +107,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            let entity = try transformer.transform(result)
-            return entity
+            return try transformer.transform(result)
         } catch {
             logger.error("ProvisionEmailAddressMutation result transformation failed with \(error)")
             throw error
@@ -119,17 +123,26 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
             id: id,
             values: .init()
         )
+
+        // Handle alias with proper triple-optional logic
         if let alias = values.alias {
-            let sealedAlias = try deviceKeyWorker.sealString(
-                alias,
-                withKeyId: symmetricKeyId
-            )
-            updateEmailAddressMetadataInput.values.alias = .init(
-                algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
-                base64EncodedSealedData: sealedAlias,
-                keyId: symmetricKeyId,
-                plainTextType: "string"
-            )
+            if alias.isEmpty {
+                // Empty string means clear existing alias - pass Optional(.some(nil))
+                updateEmailAddressMetadataInput.values.alias = GraphQL.SealedAttributeInput??.some(nil)
+            } else {
+                // Non-empty string - seal it and pass Optional(.some(sealedInput))
+                let sealedAlias = try deviceKeyWorker.sealString(
+                    alias,
+                    withKeyId: symmetricKeyId
+                )
+                let sealedInput = GraphQL.SealedAttributeInput(
+                    algorithm: DefaultDeviceKeyWorker.Defaults.symmetricAlgorithm,
+                    base64EncodedSealedData: sealedAlias,
+                    keyId: symmetricKeyId,
+                    plainTextType: "string"
+                )
+                updateEmailAddressMetadataInput.values.alias = GraphQL.SealedAttributeInput??.some(sealedInput)
+            }
         }
         let mutation = GraphQL.UpdateEmailAddressMetadataMutation(input: updateEmailAddressMetadataInput)
         let result = try await perform(mutation)
@@ -142,8 +155,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            let entity = try transformer.transform(result)
-            return entity
+            return try transformer.transform(result)
         } catch {
             logger.error("DeprovisionEmailAddressMutation result transformation failed with \(error)")
             throw error
@@ -158,8 +170,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
             guard let emailAddress = result.getEmailAddress else {
                 return nil
             }
-            let entity = try transformer.transform(emailAddress)
-            return entity
+            return try transformer.transform(emailAddress)
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error

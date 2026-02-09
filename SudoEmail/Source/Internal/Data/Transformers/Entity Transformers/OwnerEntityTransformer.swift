@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -221,6 +221,48 @@ struct OwnerEntityTransformer {
         _ data:
         GraphQL.ListScheduledDraftMessagesForEmailAddressIdQuery.Data.ListScheduledDraftMessagesForEmailAddressId.Item.Owner
     ) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `ProvisionEmailMask` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.ProvisionEmailMaskMutation.Data.ProvisionEmailMask.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `DeprovisionEmailMask` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.DeprovisionEmailMaskMutation.Data.DeprovisionEmailMask.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `UpdateEmailMask` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.UpdateEmailMaskMutation.Data.UpdateEmailMask.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `EnableEmailMask` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.EnableEmailMaskMutation.Data.EnableEmailMask.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `DisableEmailMask` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.DisableEmailMaskMutation.Data.DisableEmailMask.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `ListEmailMasksForOwner` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.ListEmailMasksForOwnerQuery.Data.ListEmailMasksForOwner.Item.Owner) -> OwnerEntity {
         let id = data.id
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)

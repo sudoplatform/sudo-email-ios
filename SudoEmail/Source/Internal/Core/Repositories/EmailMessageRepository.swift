@@ -83,7 +83,7 @@ protocol EmailMessageRepository: Repository {
     ) async throws -> ScheduledDraftMessageEntity
 
     /// Cancel a scheduled draft message from being sent. If the draft message
-    //  is not currently scheduled, then this method will return success.
+    ///  is not currently scheduled, then this method will return success.
     /// - Parameters:
     ///   - input: Input parameters used to cancel a scheduled draft message
     /// - Returns:

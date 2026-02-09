@@ -8,9 +8,9 @@ import Foundation
 
 public enum BlockedEmailAddressLevel {
 
-    // Block just the specific email address
+    /// Block just the specific email address
     case address
 
-    // Block all email addresses from the same domain
+    /// Block all email addresses from the same domain
     case domain
 }

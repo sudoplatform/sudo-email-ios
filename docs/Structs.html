@@ -100,6 +100,12 @@
                 <a class="nav-group-task-link" href="Enums/EmailCryptoServiceError.html">EmailCryptoServiceError</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/EmailMaskAddressTypeFilter.html">EmailMaskAddressTypeFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/EmailMaskStatusFilter.html">EmailMaskStatusFilter</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/EmailMessageDirectionFilter.html">EmailMessageDirectionFilter</a>
               </li>
               <li class="nav-group-task">
@@ -214,6 +220,12 @@
                 <a class="nav-group-task-link" href="Structs/DeleteMessagesForFolderIdInput.html">DeleteMessagesForFolderIdInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DeprovisionEmailMaskInput.html">DeprovisionEmailMaskInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DisableEmailMaskInput.html">DisableEmailMaskInput</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DraftEmailMessage.html">DraftEmailMessage</a>
               </li>
               <li class="nav-group-task">
@@ -238,6 +250,18 @@
                 <a class="nav-group-task-link" href="Structs.html#/s:9SudoEmail0B12FolderEntityV">EmailFolderEntity</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmailMask.html">EmailMask</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmailMask/EmailMaskStatus.html">– EmailMaskStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmailMask/RealAddressType.html">– RealAddressType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmailMaskFilter.html">EmailMaskFilter</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/EmailMessage.html">EmailMessage</a>
               </li>
               <li class="nav-group-task">
@@ -260,6 +284,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/EmailUnknownNotification.html">EmailUnknownNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EnableEmailMaskInput.html">EnableEmailMaskInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/GetDraftEmailMessageInput.html">GetDraftEmailMessageInput</a>
@@ -295,6 +322,9 @@
                 <a class="nav-group-task-link" href="Structs/ListEmailFoldersForEmailAddressIdInput.html">ListEmailFoldersForEmailAddressIdInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListEmailMasksForOwnerInput.html">ListEmailMasksForOwnerInput</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListEmailMessagesForEmailAddressInput.html">ListEmailMessagesForEmailAddressInput</a>
               </li>
               <li class="nav-group-task">
@@ -323,6 +353,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ProvisionEmailAddressInput.html">ProvisionEmailAddressInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ProvisionEmailMaskInput.html">ProvisionEmailMaskInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ScheduleSendDraftMessageInput.html">ScheduleSendDraftMessageInput</a>
@@ -362,6 +395,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/UpdateEmailAddressMetadataValues.html">UpdateEmailAddressMetadataValues</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/UpdateEmailMaskInput.html">UpdateEmailMaskInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/UpdateEmailMessagesInput.html">UpdateEmailMessagesInput</a>
@@ -763,6 +799,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0B4MaskV"></a>
+                    <a name="//apple_ref/swift/Struct/EmailMask" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0B4MaskV">EmailMask</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Representation of an Email Mask used in Sudo Email SDK.</p>
+
+                        <a href="Structs/EmailMask.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMask</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0B7MessageV"></a>
                     <a name="//apple_ref/swift/Struct/EmailMessage" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0B7MessageV">EmailMessage</a>
@@ -877,6 +941,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0B10MaskFilterV"></a>
+                    <a name="//apple_ref/swift/Struct/EmailMaskFilter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0B10MaskFilterV">EmailMaskFilter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                        <a href="Structs/EmailMaskFilter.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMaskFilter</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail27ScheduledDraftMessageFilterV"></a>
                     <a name="//apple_ref/swift/Struct/ScheduledDraftMessageFilter" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail27ScheduledDraftMessageFilterV">ScheduledDraftMessageFilter</a>
@@ -970,8 +1061,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Input object for creating a custom EmailFolder</p>
-
+                        
                         <a href="Structs/CreateCustomEmailFolderInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -998,8 +1088,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>input object for creating a draft email message using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
-
+                        
                         <a href="Structs/CreateDraftEmailMessageInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -1026,8 +1115,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Input object for deleting a custom EmailFolder</p>
-
+                        
                         <a href="Structs/DeleteCustomEmailFolderInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -1054,8 +1142,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>input object for deleting draft email messages using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
-
+                        
                         <a href="Structs/DeleteDraftEmailMessagesInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -1082,8 +1169,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Input object for deleting all messages in a folder</p>
-
+                        
                         <a href="Structs/DeleteMessagesForFolderIdInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -1091,6 +1177,90 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DeleteMessagesForFolderIdInput</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail011DeprovisionB9MaskInputV"></a>
+                    <a name="//apple_ref/swift/Struct/DeprovisionEmailMaskInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail011DeprovisionB9MaskInputV">DeprovisionEmailMaskInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object for deprovisioning an email mask using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+
+                        <a href="Structs/DeprovisionEmailMaskInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DeprovisionEmailMaskInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail07DisableB9MaskInputV"></a>
+                    <a name="//apple_ref/swift/Struct/DisableEmailMaskInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail07DisableB9MaskInputV">DisableEmailMaskInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object for disabling an email mask using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+
+                        <a href="Structs/DisableEmailMaskInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DisableEmailMaskInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail06EnableB9MaskInputV"></a>
+                    <a name="//apple_ref/swift/Struct/EnableEmailMaskInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail06EnableB9MaskInputV">EnableEmailMaskInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object for enabling an email mask using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+
+                        <a href="Structs/EnableEmailMaskInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EnableEmailMaskInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -1110,8 +1280,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>input object for getting a draft email message using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
-
+                        
                         <a href="Structs/GetDraftEmailMessageInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -1380,6 +1549,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail04ListB18MasksForOwnerInputV"></a>
+                    <a name="//apple_ref/swift/Struct/ListEmailMasksForOwnerInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04ListB18MasksForOwnerInputV">ListEmailMasksForOwnerInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object for listing email masks for owner using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+
+                        <a href="Structs/ListEmailMasksForOwnerInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListEmailMasksForOwnerInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail04Listb11MessagesForB12AddressInputV"></a>
                     <a name="//apple_ref/swift/Struct/ListEmailMessagesForEmailAddressInput" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB12AddressInputV">ListEmailMessagesForEmailAddressInput</a>
@@ -1548,6 +1745,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail09ProvisionB9MaskInputV"></a>
+                    <a name="//apple_ref/swift/Struct/ProvisionEmailMaskInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail09ProvisionB9MaskInputV">ProvisionEmailMaskInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object for provisioning an email mask using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+
+                        <a href="Structs/ProvisionEmailMaskInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ProvisionEmailMaskInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail29ScheduleSendDraftMessageInputV"></a>
                     <a name="//apple_ref/swift/Struct/ScheduleSendDraftMessageInput" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail29ScheduleSendDraftMessageInputV">ScheduleSendDraftMessageInput</a>
@@ -1670,8 +1895,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>input object for updating a draft email message using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
-
+                        
                         <a href="Structs/UpdateDraftEmailMessageInput.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -1735,6 +1959,34 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UpdateEmailAddressMetadataInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail06UpdateB9MaskInputV"></a>
+                    <a name="//apple_ref/swift/Struct/UpdateEmailMaskInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail06UpdateB9MaskInputV">UpdateEmailMaskInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input object for updating an email mask using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
+
+                        <a href="Structs/UpdateEmailMaskInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UpdateEmailMaskInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -2103,7 +2355,7 @@ has updated its Sudo Platform Email Notification Extension SDK</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-01-09)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-02-09)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -38,6 +38,20 @@ struct KeyEntity: Equatable, Hashable {
         self.keyId = keyId
         self.keyRingId = keyRingId
         self.keyData = keyData
+    }
+
+    // MARK: - Helper Methods
+
+    /// Extracts the PublicKeyFormatEntity from the key type if it's a public key.
+    /// - Returns: The PublicKeyFormatEntity for public keys.
+    /// - Throws: SudoEmailError.internalError if the key is not a public key.
+    func getPublicKeyFormat() throws -> PublicKeyFormatEntity {
+        switch type {
+        case .publicKey(let format):
+            return format
+        case .privateKey:
+            throw SudoEmailError.internalError("Cannot extract public key format from private key")
+        }
     }
 
     // MARK: - Conformance: Hashable

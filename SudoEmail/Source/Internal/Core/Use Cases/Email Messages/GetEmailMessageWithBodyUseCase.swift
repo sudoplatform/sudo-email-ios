@@ -30,10 +30,9 @@ class GetEmailMessageWithBodyUseCase {
     func execute(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
         let messageId = input.id
         let emailAddressId = input.emailAddressId
-        let emailMessageWithBody = try await emailMessageRepository.getEmailMessageWithBody(
+        return try await emailMessageRepository.getEmailMessageWithBody(
             messageId: messageId,
             emailAddressId: emailAddressId
         )
-        return emailMessageWithBody
     }
 }

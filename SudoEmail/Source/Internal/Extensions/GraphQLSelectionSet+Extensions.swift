@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -108,6 +108,22 @@ extension GraphQLSelectionSet {
     func getScheduledDraftMessageState() -> GraphQL.ScheduledDraftMessageState {
         getEnumValue(GraphQL.ScheduledDraftMessageState.self)
     }
+
+    func getEmailMaskRealAddressType() -> GraphQL.EmailMaskRealAddressType {
+        getEnumValue(GraphQL.EmailMaskRealAddressType.self)
+    }
+
+    func getOptionalEmailMaskRealAddressType() -> GraphQL.EmailMaskRealAddressType? {
+        getOptionalEnumValue(GraphQL.EmailMaskRealAddressType.self)
+    }
+
+    func getEmailMaskStatus() -> GraphQL.EmailMaskStatus {
+        getEnumValue(GraphQL.EmailMaskStatus.self)
+    }
+
+    func getOptionalEmailMaskStatus() -> GraphQL.EmailMaskStatus? {
+        getOptionalEnumValue(GraphQL.EmailMaskStatus.self)
+    }
 }
 
 protocol GraphQLEnum: RawRepresentable {
@@ -116,70 +132,120 @@ protocol GraphQLEnum: RawRepresentable {
 }
 
 extension GraphQL.BlockedAddressHashAlgorithm: GraphQLEnum {
-    static var key: String { "hashAlgorithm" }
+    static var key: String {
+        "hashAlgorithm"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.BlockedAddressAction: GraphQLEnum {
-    static var key: String { "action" }
+    static var key: String {
+        "action"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.UpdateBlockedAddressesStatus: GraphQLEnum {
-    static var key: String { "status" }
+    static var key: String {
+        "status"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.KeyFormat: GraphQLEnum {
-    static var key: String { "keyFormat" }
+    static var key: String {
+        "keyFormat"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.EmailMessageDirection: GraphQLEnum {
-    static var key: String { "direction" }
+    static var key: String {
+        "direction"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.EmailMessageState: GraphQLEnum {
-    static var key: String { "state" }
+    static var key: String {
+        "state"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.EmailMessageEncryptionStatus: GraphQLEnum {
-    static var key: String { "encryptionStatus" }
+    static var key: String {
+        "encryptionStatus"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.UpdateEmailMessagesStatus: GraphQLEnum {
-    static var key: String { "status" }
+    static var key: String {
+        "status"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.SortOrder: GraphQLEnum {
-    static var key: String { "status" }
+    static var key: String {
+        "status"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }
 }
 
 extension GraphQL.ScheduledDraftMessageState: GraphQLEnum {
-    static var key: String { "state" }
+    static var key: String {
+        "state"
+    }
+
+    static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
+        .unknown(rawValue ?? "")
+    }
+}
+
+extension GraphQL.EmailMaskRealAddressType: GraphQLEnum {
+    static var key: String {
+        "realAddressType"
+    }
+
+    static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
+        .unknown(rawValue ?? "")
+    }
+}
+
+extension GraphQL.EmailMaskStatus: GraphQLEnum {
+    static var key: String {
+        "status"
+    }
+
     static func getDefaultValue(from rawValue: Self.RawValue?) -> Self {
         .unknown(rawValue ?? "")
     }

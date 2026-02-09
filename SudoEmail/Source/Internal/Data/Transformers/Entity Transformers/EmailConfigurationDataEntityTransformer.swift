@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -20,7 +20,9 @@ struct EmailConfigurationDataEntityTransformer {
             emailMessageMaxOutboundMessageSize: graphQLConfigurationData.emailMessageMaxOutboundMessageSize,
             emailMessageRecipientsLimit: graphQLConfigurationData.emailMessageRecipientsLimit,
             encryptedEmailMessageRecipientsLimit: graphQLConfigurationData.encryptedEmailMessageRecipientsLimit,
-            prohibitedFileExtensions: graphQLConfigurationData.prohibitedFileExtensions
+            prohibitedFileExtensions: graphQLConfigurationData.prohibitedFileExtensions,
+            emailMasksEnabled: graphQLConfigurationData.emailMasksEnabled,
+            externalEmailMasksEnabled: graphQLConfigurationData.externalEmailMasksEnabled
         )
     }
 
@@ -33,7 +35,9 @@ struct EmailConfigurationDataEntityTransformer {
             emailMessageMaxOutboundMessageSize: emailConfigurationDataEntity.emailMessageMaxOutboundMessageSize,
             emailMessageRecipientsLimit: emailConfigurationDataEntity.emailMessageRecipientsLimit,
             encryptedEmailMessageRecipientsLimit: emailConfigurationDataEntity.encryptedEmailMessageRecipientsLimit,
-            prohibitedFileExtensions: emailConfigurationDataEntity.prohibitedFileExtensions
+            prohibitedFileExtensions: emailConfigurationDataEntity.prohibitedFileExtensions,
+            emailMasksEnabled: emailConfigurationDataEntity.emailMasksEnabled,
+            externalEmailMasksEnabled: emailConfigurationDataEntity.externalEmailMasksEnabled
         )
     }
 }

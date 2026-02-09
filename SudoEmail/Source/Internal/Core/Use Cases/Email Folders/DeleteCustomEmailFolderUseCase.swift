@@ -7,7 +7,7 @@
 import Foundation
 import SudoLogging
 
-/// Core use case representing an operation to delete a custom email folder
+// Core use case representing an operation to delete a custom email folder
 
 class DeleteCustomEmailFolderUseCase {
 
@@ -36,12 +36,11 @@ class DeleteCustomEmailFolderUseCase {
     ///     - emailAddressId: The id of the email address associate with the folder
     /// - Returns: The deleted folder, or nil if it was not found
     func execute(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolderEntity? {
-        let emailFolder = try await emailFolderRepository.deleteCustomEmailFolder(
+        return try await emailFolderRepository.deleteCustomEmailFolder(
             withInput: DeleteCustomEmailFolderInput(
                 emailFolderId: input.emailFolderId,
                 emailAddressId: input.emailAddressId
             )
         )
-        return emailFolder
     }
 }

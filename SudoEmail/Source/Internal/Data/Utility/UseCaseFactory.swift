@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -39,6 +39,10 @@ class UseCaseFactory {
 
     func generateFetchConfiguredDomainsUseCase(domainRepository: DomainRepository) -> FetchConfiguredDomainsUseCase {
         return FetchConfiguredDomainsUseCase(domainRepository: domainRepository)
+    }
+
+    func generateFetchEmailMaskDomainsUseCase(domainRepository: DomainRepository) -> FetchEmailMaskDomainsUseCase {
+        return FetchEmailMaskDomainsUseCase(domainRepository: domainRepository)
     }
 
     func generateSendEmailMessageUseCase(
@@ -359,5 +363,67 @@ class UseCaseFactory {
         emailConfigurationDataRepository: EmailConfigurationDataRepository
     ) -> GetEmailConfigurationDataUseCase {
         return GetEmailConfigurationDataUseCase(emailConfigurationDataRepository: emailConfigurationDataRepository)
+    }
+
+    func generateProvisionEmailMaskUseCase(
+        keyWorker: ServiceKeyWorker,
+        emailMaskRepository: EmailMaskRepository,
+        domainRepository: DomainRepository,
+        logger: Logger
+    ) -> ProvisionEmailMaskUseCase {
+        return ProvisionEmailMaskUseCase(
+            keyWorker: keyWorker,
+            emailMaskRepository: emailMaskRepository,
+            domainRepository: domainRepository,
+            logger: logger
+        )
+    }
+
+    func generateDeprovisionEmailMaskUseCase(
+        emailMaskRepository: EmailMaskRepository,
+        logger: Logger
+    ) -> DeprovisionEmailMaskUseCase {
+        return DeprovisionEmailMaskUseCase(
+            emailMaskRepository: emailMaskRepository,
+            logger: logger
+        )
+    }
+
+    func generateUpdateEmailMaskUseCase(
+        emailMaskRepository: EmailMaskRepository,
+        logger: Logger
+    ) -> UpdateEmailMaskUseCase {
+        return UpdateEmailMaskUseCase(
+            emailMaskRepository: emailMaskRepository,
+            logger: logger
+        )
+    }
+
+    func generateEnableEmailMaskUseCase(
+        emailMaskRepository: EmailMaskRepository,
+        logger: Logger
+    ) -> EnableEmailMaskUseCase {
+        return EnableEmailMaskUseCase(
+            emailMaskRepository: emailMaskRepository,
+            logger: logger
+        )
+    }
+
+    func generateDisableEmailMaskUseCase(
+        emailMaskRepository: EmailMaskRepository,
+        logger: Logger
+    ) -> DisableEmailMaskUseCase {
+        return DisableEmailMaskUseCase(
+            emailMaskRepository: emailMaskRepository,
+            logger: logger
+        )
+    }
+
+    func generateListEmailMasksForOwnerUseCase(
+        emailMaskRepository: EmailMaskRepository,
+        logger: Logger
+    ) -> ListEmailMasksForOwnerUseCase {
+        return ListEmailMasksForOwnerUseCase(emailMaskRepository: emailMaskRepository,
+                                             logger: logger)
     }
 }

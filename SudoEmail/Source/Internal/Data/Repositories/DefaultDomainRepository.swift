@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -11,7 +11,7 @@ import SudoLogging
 /// Data implementation of the core `DomainRepository`.
 ///
 /// Allows access of data from the email service and device cache, via AppSync GraphQL.
-class DefaultDomainRepsitory: DomainRepository {
+class DefaultDomainRepository: DomainRepository {
 
     // MARK: - Properties
 
@@ -43,5 +43,12 @@ class DefaultDomainRepsitory: DomainRepository {
         let result = try await fetch(query)
         let transformer = DomainEntityTransformer()
         return result.getConfiguredEmailDomains.domains.map(transformer.transform(_:))
+    }
+
+    func fetchEmailMaskDomains() async throws -> [DomainEntity] {
+        let query = GraphQL.GetEmailMaskDomainsQuery()
+        let result = try await fetch(query)
+        let transformer = DomainEntityTransformer()
+        return result.getEmailMaskDomains.domains.map(transformer.transform(_:))
     }
 }

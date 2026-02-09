@@ -40,10 +40,9 @@ class UpdateEmailAccountMetadataUseCase {
     ///   - values: The new values for email account metadata.
     /// - Returns: The identifier of the email account that was updated.
     func execute(emailAccountId: String, values: UpdateEmailAddressMetadataValues) async throws -> String {
-        let updatedEmailAccountId = try await emailAccountRepository.updateMetadata(
+        return try await emailAccountRepository.updateMetadata(
             id: emailAccountId,
             values: values
         )
-        return updatedEmailAccountId
     }
 }

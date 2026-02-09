@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -30,6 +30,15 @@ public struct ConfigurationData: Equatable {
     /// The set of file extensions not permitted to be sent as attachments
     public var prohibitedFileExtensions: [String]
 
+    /// Whether or not email masks are enabled in this environment. The basic level of support
+    /// for masked emails allows masking internal (in-network) addresses only.
+    public var emailMasksEnabled: Bool
+
+    /// Whether or not external email masks are enabled in this environment. The above emailMasksEnabled
+    /// value must be true in order to permit the additional functionality of using external
+    /// addresses as masked destinations.
+    public var externalEmailMasksEnabled: Bool
+
     public init(
         deleteEmailMessagesLimit: Int,
         updateEmailMessagesLimit: Int,
@@ -37,7 +46,9 @@ public struct ConfigurationData: Equatable {
         emailMessageMaxOutboundMessageSize: Int,
         emailMessageRecipientsLimit: Int,
         encryptedEmailMessageRecipientsLimit: Int,
-        prohibitedFileExtensions: [String] = []
+        prohibitedFileExtensions: [String] = [],
+        emailMasksEnabled: Bool,
+        externalEmailMasksEnabled: Bool
     ) {
         self.deleteEmailMessagesLimit = deleteEmailMessagesLimit
         self.updateEmailMessagesLimit = updateEmailMessagesLimit
@@ -46,5 +57,7 @@ public struct ConfigurationData: Equatable {
         self.emailMessageRecipientsLimit = emailMessageRecipientsLimit
         self.encryptedEmailMessageRecipientsLimit = encryptedEmailMessageRecipientsLimit
         self.prohibitedFileExtensions = prohibitedFileExtensions
+        self.emailMasksEnabled = emailMasksEnabled
+        self.externalEmailMasksEnabled = externalEmailMasksEnabled
     }
 }
