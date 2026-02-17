@@ -25,7 +25,7 @@ let package = Package(
         .package(url: "https://github.com/sudoplatform/sudo-notification-ios", from: "5.0.1"),
         .package(url: "https://github.com/sudoplatform/sudo-user-ios", from: "18.0.0"),
         .package(url: "https://github.com/aws-amplify/amplify-swift", from: "2.45.4"),
-        .package(url: "https://github.com/anonyome/mailcore2", from: "1.0.0"),
+        .package(url: "https://github.com/anonyome/mailcore2", revision: "fb92f4cee28de966b0f2a4fc4c34a8e5149abd4c"),
         .package(url: "https://github.com/1024jp/GzipSwift", from: "5.0.0")
     ],
     targets: [
