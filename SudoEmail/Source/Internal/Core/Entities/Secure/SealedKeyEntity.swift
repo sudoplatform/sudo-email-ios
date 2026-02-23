@@ -62,6 +62,16 @@ struct SealedKeyEntity: Encodable, Equatable, Hashable {
         try container.encode(format.rawValue, forKey: .format)
     }
 
+    // MARK: - Conformance: Equatable
+
+    static func == (lhs: SealedKeyEntity, rhs: SealedKeyEntity) -> Bool {
+        return lhs.publicKeyId == rhs.publicKeyId &&
+            lhs.symmetricKey == rhs.symmetricKey &&
+            lhs.algorithm == rhs.algorithm &&
+            lhs.encryptedKey == rhs.encryptedKey &&
+            lhs.format == rhs.format
+    }
+
     // MARK: - Conformance: Hashable
 
     func hash(into hasher: inout Hasher) {

@@ -26,6 +26,9 @@ struct SealedEmailMessageEntity {
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
 
+    /// Email mask identity that sent/received this message, if any.
+    var emailMaskId: String?
+
     /// Unique identifier of the associated decryption/encryption key.
     var keyId: String
 

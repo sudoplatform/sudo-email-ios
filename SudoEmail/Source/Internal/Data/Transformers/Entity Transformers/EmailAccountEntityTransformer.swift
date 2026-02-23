@@ -259,13 +259,12 @@ struct EmailAccountEntityTransformer {
         )
     }
 
-    /// Transform an `EmailAccountEntity` to an `EmailAddress`
+    // Transform an `EmailAccountEntity` to an `EmailAddress`
     func transform(_ emailAccountEntity: EmailAccountEntity) throws -> EmailAddress {
         let id = emailAccountEntity.id
         let owner = emailAccountEntity.owner
         let owners = emailAccountEntity.owners.map(ownerTransformer.transform(_:))
         let identityId = emailAccountEntity.identityId
-        let keyRingId = emailAccountEntity.keyRingId
         let keyIds = emailAccountEntity.keyIds
         let emailAddress = emailAccountEntity.emailAddress.emailAddress
         let folders = emailAccountEntity.folders.map(folderTransformer.transform(_:))
@@ -280,7 +279,6 @@ struct EmailAccountEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
-            keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
             folders: folders,

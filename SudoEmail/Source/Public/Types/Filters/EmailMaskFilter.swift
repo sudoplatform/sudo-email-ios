@@ -33,7 +33,7 @@ public struct EmailMaskFilter: Equatable {
     /// Filter by `status` property
     public var status: EmailMaskStatusFilter?
 
-    /// filter by realAddressType property
+    // filter by realAddressType property
     public var realAddressType: EmailMaskAddressTypeFilter?
 
     public init(

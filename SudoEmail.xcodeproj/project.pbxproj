@@ -318,6 +318,8 @@
 		AD27E78F2F2885950070F79F /* DisableEmailMaskUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD27E7882F2885950070F79F /* DisableEmailMaskUseCaseTests.swift */; };
 		AD27E7902F2885950070F79F /* UpdateEmailMaskUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD27E78B2F2885950070F79F /* UpdateEmailMaskUseCaseTests.swift */; };
 		AD27E7912F2885950070F79F /* ProvisionEmailMaskUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD27E78A2F2885950070F79F /* ProvisionEmailMaskUseCaseTests.swift */; };
+		AD498A932F42CFB700EAE545 /* SendMaskedEmailMessageIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD498A922F42CFB700EAE545 /* SendMaskedEmailMessageIntegrationTests.swift */; };
+		AD498A952F42FB7800EAE545 /* ExternalTestAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD498A942F42FB7800EAE545 /* ExternalTestAccount.swift */; };
 		ADFCB3D62F30236400CD6876 /* DefaultEmailMaskRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFCB3D42F30236400CD6876 /* DefaultEmailMaskRepositoryTests.swift */; };
 		ADFCB3E42F305E5F00CD6876 /* GetEmailMaskDomainsIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFCB3E22F305E5F00CD6876 /* GetEmailMaskDomainsIntegrationTests.swift */; };
 		ADFCB3E52F305E5F00CD6876 /* ProvisionEmailMasksIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFCB3E32F305E5F00CD6876 /* ProvisionEmailMasksIntegrationTests.swift */; };
@@ -955,6 +957,10 @@
 		AD27E7892F2885950070F79F /* EnableEmailMaskUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableEmailMaskUseCaseTests.swift; sourceTree = "<group>"; };
 		AD27E78A2F2885950070F79F /* ProvisionEmailMaskUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisionEmailMaskUseCaseTests.swift; sourceTree = "<group>"; };
 		AD27E78B2F2885950070F79F /* UpdateEmailMaskUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailMaskUseCaseTests.swift; sourceTree = "<group>"; };
+		AD498A922F42CFB700EAE545 /* SendMaskedEmailMessageIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMaskedEmailMessageIntegrationTests.swift; sourceTree = "<group>"; };
+		AD498A942F42FB7800EAE545 /* ExternalTestAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalTestAccount.swift; sourceTree = "<group>"; };
+		AD8EBF8E2F47EAD500212E11 /* EmailMaskEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMaskEntity.swift; sourceTree = "<group>"; };
+		AD8EBF8F2F47EB2300212E11 /* EmailMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMask.swift; sourceTree = "<group>"; };
 		ADFCB3D42F30236400CD6876 /* DefaultEmailMaskRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEmailMaskRepositoryTests.swift; sourceTree = "<group>"; };
 		ADFCB3D72F3025D100CD6876 /* EmailMaskEntityTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMaskEntityTransformer.swift; sourceTree = "<group>"; };
 		ADFCB3D92F30283B00CD6876 /* EmailMaskFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailMaskFilter.swift; sourceTree = "<group>"; };
@@ -1614,6 +1620,7 @@
 				41EC162F2D9390D900A9923D /* EmailAddressPublicKeyEntity.swift */,
 				958DC12B291A0BBE003562C8 /* EmailConfigurationDataEntity.swift */,
 				95388BF528458236004D971D /* EmailFolderEntity.swift */,
+				AD8EBF8E2F47EAD500212E11 /* EmailMaskEntity.swift */,
 				844D99212496DCC100B942F2 /* EmailMessageEntity.swift */,
 				84B2600624862E0200E99401 /* KeyEntity.swift */,
 				84B260DE2490B67100E99401 /* ListOutputEntity.swift */,
@@ -1962,6 +1969,7 @@
 				41EC16302D9390FC00A9923D /* EmailAddressPublicKey.swift */,
 				9F12DE932B96C48E00575E52 /* EmailAttachment.swift */,
 				95A1A78728BC222100AAC84B /* EmailFolder.swift */,
+				AD8EBF8F2F47EB2300212E11 /* EmailMask.swift */,
 				845C4CD52372345E00AC8B99 /* EmailMessage.swift */,
 				0C4C09B12B91940200A82096 /* EmailMessageDateRange.swift */,
 				51A06DB72BC2FA930002B1F3 /* EmailMessageWithBody.swift */,
@@ -2262,6 +2270,7 @@
 				ADFCB3E32F305E5F00CD6876 /* ProvisionEmailMasksIntegrationTests.swift */,
 				9F7CCA902DA6123200C428D5 /* ScheduleSendDraftMessageIntegrationTests.swift */,
 				84B260B9248F405400E99401 /* SendEmailMessageIntegrationTests.swift */,
+				AD498A922F42CFB700EAE545 /* SendMaskedEmailMessageIntegrationTests.swift */,
 				84F652A024A994CA009EDD3A /* SubscribeToEmailMessageIntegrationTests.swift */,
 				84B2603E248888C400E99401 /* SudoEmailClientTestCase.swift */,
 				9F145D332E6EA04A00581994 /* UnblockEmailAddressesByHashedValueIntegrationTests.swift */,
@@ -2276,6 +2285,7 @@
 		84B2604024888B2800E99401 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				AD498A942F42FB7800EAE545 /* ExternalTestAccount.swift */,
 				84B260BB248F4BF100E99401 /* RFC822Generator.swift */,
 				41EC16372D94F12700A9923D /* SubscriptionUtilities.swift */,
 			);
@@ -3166,6 +3176,7 @@
 				95E7385F2905F7D000DDD547 /* DraftEmailMessageIntegrationTests.swift in Sources */,
 				5106CFE22BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift in Sources */,
 				ADFCB3E72F31819B00CD6876 /* EnableDisableEmailMasksIntegrationTests.swift in Sources */,
+				AD498A952F42FB7800EAE545 /* ExternalTestAccount.swift in Sources */,
 				958DC140291B53B0003562C8 /* GetConfigurationDataIntegrationTests.swift in Sources */,
 				0CCA5B0F2C7EE81C0045F1CA /* GetConfiguredEmailDomainsIntegrationTests.swift in Sources */,
 				9F145D362E6EA05C00581994 /* GetEmailAddressBlocklistIntegrationTests.swift in Sources */,
@@ -3192,6 +3203,7 @@
 				84B260BC248F4BF100E99401 /* RFC822Generator.swift in Sources */,
 				9F7CCA912DA6123200C428D5 /* ScheduleSendDraftMessageIntegrationTests.swift in Sources */,
 				84B260BA248F405400E99401 /* SendEmailMessageIntegrationTests.swift in Sources */,
+				AD498A932F42CFB700EAE545 /* SendMaskedEmailMessageIntegrationTests.swift in Sources */,
 				84F652A124A994CA009EDD3A /* SubscribeToEmailMessageIntegrationTests.swift in Sources */,
 				41EC16382D94F12700A9923D /* SubscriptionUtilities.swift in Sources */,
 				84B2603F248888C400E99401 /* SudoEmailClientTestCase.swift in Sources */,
@@ -3495,7 +3507,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "TestApp copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3520,7 +3532,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "TestApp copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3546,7 +3558,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sudoplatform.SudoEmailNotificationExtensionTests;
@@ -3573,7 +3585,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sudoplatform.SudoEmailNotificationExtensionTests;
@@ -3598,7 +3610,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = TestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3623,7 +3635,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = TestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3646,7 +3658,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				INFOPLIST_FILE = SudoEmailIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3673,7 +3685,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				INFOPLIST_FILE = SudoEmailIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3746,7 +3758,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -3805,7 +3817,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -3825,7 +3837,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = SudoEmailTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3853,7 +3865,7 @@
 				DEVELOPMENT_TEAM = 33X5MJEM2D;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = SudoEmailTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

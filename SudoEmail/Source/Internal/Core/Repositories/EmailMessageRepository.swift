@@ -34,6 +34,26 @@ protocol EmailMessageRepository: Repository {
         forwardingMessageId: String?
     ) async throws -> SendEmailMessageResult
 
+    /// Send an email message from a mask email address.
+    /// - Parameters:
+    ///   - data: RFC 6854 (supersedes RFC 822) data to be sent representing the email message.
+    ///   - emailMaskId: Identifier of the email mask to send the email message from. The user must own this mask.
+    ///   - emailMessageHeader: Message headers used for E2E encryption.
+    ///   - hasAttachments: Indicates whether or not the encrypted data contains email attachments.
+    ///   - encryptionStatus: The encryption status of the email message to be sent.
+    ///   - replyingMessageId: Identifier of the email message being replied to.
+    ///   - forwardingMessageId: Identifier of the email message being forwarded.
+    /// - Returns: SendEmailMessageResult
+    func sendEmailMessageFromMask(
+        withRFC822Data data: Data,
+        emailMaskId: String,
+        emailMessageHeader: InternetMessageFormatHeader,
+        hasAttachments: Bool,
+        encryptionStatus: EncryptionStatus,
+        replyingMessageId: String?,
+        forwardingMessageId: String?
+    ) async throws -> SendEmailMessageResult
+
     /// Delete an email message.
     /// - Parameters:
     ///   - id: Unique Identifier of the email message to be deleted.
@@ -83,7 +103,7 @@ protocol EmailMessageRepository: Repository {
     ) async throws -> ScheduledDraftMessageEntity
 
     /// Cancel a scheduled draft message from being sent. If the draft message
-    ///  is not currently scheduled, then this method will return success.
+    //  is not currently scheduled, then this method will return success.
     /// - Parameters:
     ///   - input: Input parameters used to cancel a scheduled draft message
     /// - Returns:

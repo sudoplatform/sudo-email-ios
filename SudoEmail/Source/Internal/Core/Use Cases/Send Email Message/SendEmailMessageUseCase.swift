@@ -66,8 +66,8 @@ class SendEmailMessageUseCase {
     ///   - input: Input parameters used to send email message.
     /// - Returns: SendEmailMessageResult
     func execute(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
-        let (senderEmailAddressId, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (
-            input.senderEmailAddressId,
+        let (senderIdentification, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (
+            input.senderIdentification,
             input.emailMessageHeader,
             input.body,
             input.attachments,
@@ -91,21 +91,19 @@ class SendEmailMessageUseCase {
             inlineAttachments: inlineAttachments
         )
 
-        let domains = try await emailDomainRepository.fetchConfiguredDomains()
-
         let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address.lowercased() }
 
-        let allRecipientsInternal = !allRecipients.isEmpty && allRecipients.allSatisfy { recipient in
-            domains.contains { domain in
-                recipient.contains(domain.name)
-            }
-        }
-
+        let allRecipientsInternal = try await areAllRecipientsInternal(config: config, recipients: allRecipients)
         if allRecipientsInternal {
             // Lookup public key information for each internal recipient and sender
             var recipientsAndSender = allRecipients
             recipientsAndSender.append(emailMessageHeader.from.address)
             let emailAddressesPublicInfo = try await emailMessageUtil.retrieveAndVerifyPublicInfo(addresses: recipientsAndSender)
+
+            // TODO: Check to see that emailAddressesPublicInfo contains entries for all recipients and sender.
+            // If any are missing, this is likely indicative of an email mask masking an external
+            // email address; in this situation we should not be encrypting the message.
+            // This requires PEMC-1638
 
             if allRecipients.count > config.encryptedEmailMessageRecipientsLimit {
                 throw SudoEmailError.limitExceeded("Cannot send encrypted message to more than \(config.encryptedEmailMessageRecipientsLimit) recipients")
@@ -123,33 +121,100 @@ class SendEmailMessageUseCase {
                 emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
             )
             let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
-            return try await emailMessageRepository.sendEmailMessage(
-                withRFC822Data: encryptedRfc822Data,
-                emailAccountId: senderEmailAddressId,
+
+            // Check if we're sending from a mask and use the appropriate repository method
+            switch senderIdentification {
+            case .maskId(let maskId):
+                return try await emailMessageRepository.sendEmailMessageFromMask(
+                    withRFC822Data: encryptedRfc822Data,
+                    emailMaskId: maskId,
+                    emailMessageHeader: emailMessageHeader,
+                    hasAttachments: hasAttachments,
+                    encryptionStatus: EncryptionStatus.ENCRYPTED,
+                    replyingMessageId: replyingMessageId,
+                    forwardingMessageId: forwardingMessageId
+                )
+            case .emailAddressId(let emailAddressId):
+                return try await emailMessageRepository.sendEmailMessage(
+                    withRFC822Data: encryptedRfc822Data,
+                    emailAccountId: emailAddressId,
+                    emailMessageHeader: emailMessageHeader,
+                    hasAttachments: hasAttachments,
+                    replyingMessageId: replyingMessageId,
+                    forwardingMessageId: forwardingMessageId
+                )
+            }
+        }
+
+        // All recipients are not internal, so the email message will be sent unencrypted.
+        // Verify that the number of recipients does not exceed the unencrypted recipient limit.
+        if allRecipients.count > config.emailMessageRecipientsLimit {
+            throw SudoEmailError.limitExceeded("Cannot send message to more than \(config.emailMessageRecipientsLimit) recipients")
+        }
+        let rfc822Data = try await emailMessageUtil.processAndBuildEmailMessage(
+            emailMessageHeader: emailMessageHeader,
+            body: body,
+            attachments: attachments,
+            inlineAttachments: inlineAttachments,
+            encryptionStatus: EncryptionStatus.UNENCRYPTED,
+            replyMessageId: replyingMessageId,
+            forwardMessageId: forwardingMessageId,
+            emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
+        )
+
+        switch senderIdentification {
+        case .maskId(let maskId):
+            let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
+            return try await emailMessageRepository.sendEmailMessageFromMask(
+                withRFC822Data: rfc822Data,
+                emailMaskId: maskId,
                 emailMessageHeader: emailMessageHeader,
                 hasAttachments: hasAttachments,
+                encryptionStatus: EncryptionStatus.UNENCRYPTED,
                 replyingMessageId: replyingMessageId,
                 forwardingMessageId: forwardingMessageId
             )
-        } else {
-            if allRecipients.count > config.emailMessageRecipientsLimit {
-                throw SudoEmailError.limitExceeded("Cannot send message to more than \(config.emailMessageRecipientsLimit) recipients")
-            }
-            // Process non-encrypted email message
-            let rfc822Data = try await emailMessageUtil.processAndBuildEmailMessage(
-                emailMessageHeader: emailMessageHeader,
-                body: body,
-                attachments: attachments,
-                inlineAttachments: inlineAttachments,
-                encryptionStatus: EncryptionStatus.UNENCRYPTED,
-                replyMessageId: replyingMessageId,
-                forwardMessageId: forwardingMessageId,
-                emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
-            )
+        case .emailAddressId(let emailAddressId):
             return try await emailMessageRepository.sendEmailMessage(
                 withRFC822Data: rfc822Data,
-                emailAccountId: senderEmailAddressId
+                emailAccountId: emailAddressId
             )
+        }
+    }
+
+    /// Returns the set of internal domains, including configured domains and email mask domains if enabled.
+    /// - Parameter config: The email configuration data
+    /// - Returns: Array of domain entities representing all valid domains
+    private func getInternalDomains(config: EmailConfigurationDataEntity) async throws -> [DomainEntity] {
+        var domains = try await emailDomainRepository.fetchConfiguredDomains()
+
+        if config.emailMasksEnabled {
+            let maskDomains = try await emailDomainRepository.fetchEmailMaskDomains()
+            domains.append(contentsOf: maskDomains)
+        }
+
+        return domains
+    }
+
+    /// Checks whether all recipients are internal (belong to internal domains).
+    /// Note that if the list of recipients is empty, this function returns false,
+    // as there are no recipients to be considered internal.
+    ///
+    /// - Parameters:
+    ///   - config: The email configuration data
+    ///   - recipients: Array of recipient email addresses
+    /// - Returns: True if all recipients are internal, false otherwise
+    private func areAllRecipientsInternal(config: EmailConfigurationDataEntity, recipients: [String]) async throws -> Bool {
+        guard !recipients.isEmpty else {
+            return false
+        }
+
+        let internalDomains = try await getInternalDomains(config: config)
+
+        return recipients.allSatisfy { recipient in
+            internalDomains.contains { domain in
+                recipient.contains(domain.name)
+            }
         }
     }
 }

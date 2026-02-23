@@ -52,6 +52,9 @@ public struct EmailMessage: Equatable {
     /// Email address id that is associated with the account of the email message - which account sent/received this message.
     public var emailAddressId: String
 
+    /// Email mask id that sent/received this message (if any)
+    public var emailMaskId: String?
+
     /// Unique identifier of the email folder which the message is assigned to.
     public var folderId: String
 
@@ -122,6 +125,7 @@ public struct EmailMessage: Equatable {
         owner: String,
         owners: [Owner],
         emailAddressId: String,
+        emailMaskId: String?,
         folderId: String,
         previousFolderId: String?,
         createdAt: Date,
@@ -152,6 +156,7 @@ public struct EmailMessage: Equatable {
         self.updatedAt = updatedAt
         self.sortDate = sortDate
         self.emailAddressId = emailAddressId
+        self.emailMaskId = emailMaskId
         self.folderId = folderId
         self.previousFolderId = previousFolderId
         self.seen = seen
@@ -190,6 +195,9 @@ public struct PartialEmailMessage: Equatable {
 
     /// Email address id that is associated with the account of the email message - which account sent/received this message.
     public var emailAddressId: String
+
+    /// Emask mask id that sent/received this message (if any)
+    public var emailMaskId: String?
 
     /// Unique identifier of the email folder which the message is assigned to.
     public var folderId: String
@@ -241,6 +249,7 @@ public struct PartialEmailMessage: Equatable {
         owner: String,
         owners: [Owner],
         emailAddressId: String,
+        emailMaskId: String?,
         folderId: String,
         previousFolderId: String?,
         createdAt: Date,
@@ -264,6 +273,7 @@ public struct PartialEmailMessage: Equatable {
         self.updatedAt = updatedAt
         self.sortDate = sortDate
         self.emailAddressId = emailAddressId
+        self.emailMaskId = emailMaskId
         self.folderId = folderId
         self.previousFolderId = previousFolderId
         self.seen = seen

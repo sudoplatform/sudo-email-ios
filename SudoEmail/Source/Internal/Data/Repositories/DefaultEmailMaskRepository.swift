@@ -98,20 +98,24 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         let result = try await perform(mutation)
 
         let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func deprovisionEmailMask(emailMaskId: String) async throws -> EmailMaskEntity {
         logger.debug("Deprovisioning email mask with ID: \(emailMaskId)")
         let deprovisionEmailMaskInput = GraphQL.DeprovisionEmailMaskInput(
-            emailMaskId: emailMaskId
+            emailMaskId: emailMaskId,
         )
 
         let mutation = GraphQL.DeprovisionEmailMaskMutation(input: deprovisionEmailMaskInput)
         let result = try await perform(mutation)
 
         let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func updateEmailMask(
@@ -163,33 +167,39 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         let result = try await perform(mutation)
 
         let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func enableEmailMask(emailMaskId: String) async throws -> EmailMaskEntity {
         logger.debug("Enabling email mask with ID: \(emailMaskId)")
         let enableEmailMaskInput = GraphQL.EnableEmailMaskInput(
-            emailMaskId: emailMaskId
+            emailMaskId: emailMaskId,
         )
 
         let mutation = GraphQL.EnableEmailMaskMutation(input: enableEmailMaskInput)
         let result = try await perform(mutation)
 
         let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func disableEmailMask(emailMaskId: String) async throws -> EmailMaskEntity {
         logger.debug("Disabling email mask with ID: \(emailMaskId)")
         let disableEmailMaskInput = GraphQL.DisableEmailMaskInput(
-            emailMaskId: emailMaskId
+            emailMaskId: emailMaskId,
         )
 
         let mutation = GraphQL.DisableEmailMaskMutation(input: disableEmailMaskInput)
         let result = try await perform(mutation)
 
         let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func listEmailMasksForOwner(filter: EmailMaskFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailMaskEntity> {

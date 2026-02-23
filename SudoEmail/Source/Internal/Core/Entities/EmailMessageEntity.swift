@@ -51,6 +51,9 @@ struct EmailMessageEntity: Equatable {
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
 
+    /// Email mask identifier that sent/received this message, if any.
+    var emailMaskId: String?
+
     /// Unique identifier associated with this entity for its key encryption/decryption.
     var keyId: String
 
@@ -139,6 +142,9 @@ struct PartialEmailMessageEntity: Equatable {
     ///
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
+
+    /// Email mask identifier that sent/received this message, if any.
+    var emailMaskId: String?
 
     /// Unique identifier associated with this entity for its key encryption/decryption.
     var keyId: String

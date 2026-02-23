@@ -6,7 +6,7 @@
 
 import Foundation
 
-// Input object for deleting a custom EmailFolder
+/// Input object for deleting a custom EmailFolder
 
 public struct DeleteCustomEmailFolderInput {
 

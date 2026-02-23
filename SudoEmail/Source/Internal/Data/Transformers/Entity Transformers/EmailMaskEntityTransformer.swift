@@ -25,6 +25,7 @@ struct EmailMaskEntityTransformer {
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
         let maskAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
         let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
@@ -63,6 +64,7 @@ struct EmailMaskEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
+            keyRingId: keyRingId,
             maskAddress: maskAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
@@ -88,6 +90,7 @@ struct EmailMaskEntityTransformer {
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
         let maskAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
         let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
@@ -126,6 +129,7 @@ struct EmailMaskEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
+            keyRingId: keyRingId,
             maskAddress: maskAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
@@ -151,6 +155,7 @@ struct EmailMaskEntityTransformer {
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
         let maskAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
         let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
@@ -189,6 +194,7 @@ struct EmailMaskEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
+            keyRingId: keyRingId,
             maskAddress: maskAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
@@ -214,6 +220,7 @@ struct EmailMaskEntityTransformer {
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
         let maskAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
         let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
@@ -252,6 +259,7 @@ struct EmailMaskEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
+            keyRingId: keyRingId,
             maskAddress: maskAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
@@ -277,6 +285,7 @@ struct EmailMaskEntityTransformer {
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
         let maskAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
         let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
@@ -315,6 +324,7 @@ struct EmailMaskEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
+            keyRingId: keyRingId,
             maskAddress: maskAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
@@ -339,6 +349,7 @@ struct EmailMaskEntityTransformer {
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
         let maskAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
         let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
@@ -377,6 +388,7 @@ struct EmailMaskEntityTransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
+            keyRingId: keyRingId,
             maskAddress: maskAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,

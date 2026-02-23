@@ -25,11 +25,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.GetEmailMessageQuery.Data.GetEmailMessage
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -46,13 +47,14 @@ struct SealedEmailMessageEntityTransformer {
         let version = graphQLMessage.version
         let size = graphQLMessage.size
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -77,11 +79,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.ListEmailMessagesQuery.Data.ListEmailMessage.Item
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -98,13 +101,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -129,11 +133,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.ListEmailMessagesForEmailAddressIdQuery.Data.ListEmailMessagesForEmailAddressId.Item
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -150,13 +155,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -181,11 +187,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.ListEmailMessagesForEmailFolderIdQuery.Data.ListEmailMessagesForEmailFolderId.Item
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -202,13 +209,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -235,6 +243,7 @@ struct SealedEmailMessageEntityTransformer {
         let owner = sealedEmailMessage.owner
         let owners = sealedEmailMessage.owners
         let emailAddressId = sealedEmailMessage.emailAddressId
+        let emailMaskId = sealedEmailMessage.emailMaskId
         let keyId = sealedEmailMessage.keyId
         let folderId = sealedEmailMessage.folderId
         let previousFolderId = sealedEmailMessage.previousFolderId
@@ -255,6 +264,7 @@ struct SealedEmailMessageEntityTransformer {
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             folderId: folderId,
             previousFolderId: previousFolderId,
@@ -277,11 +287,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageCreatedSubscription.Data.OnEmailMessageCreated
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -298,13 +309,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -329,11 +341,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageCreatedWithDirectionSubscription.Data.OnEmailMessageCreated
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -350,13 +363,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -381,11 +395,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageDeletedSubscription.Data.OnEmailMessageDeleted
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -402,13 +417,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -433,11 +449,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageDeletedWithIdSubscription.Data.OnEmailMessageDeleted
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -454,13 +471,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -485,11 +503,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageUpdatedSubscription.Data.OnEmailMessageUpdated
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -506,13 +525,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,
@@ -537,11 +557,12 @@ struct SealedEmailMessageEntityTransformer {
     func transform(
         _ graphQLMessage: GraphQL.OnEmailMessageUpdatedWithIdSubscription.Data.OnEmailMessageUpdated
     ) throws -> SealedEmailMessageEntity {
-        // Transform GraphQL properties.
+        /// Transform GraphQL properties.
         let id = graphQLMessage.id
         let owner = graphQLMessage.owner
         let owners = graphQLMessage.owners.map(ownerTransformer.transform(_:))
         let emailAddressId = graphQLMessage.emailAddressId
+        let emailMaskId = graphQLMessage.emailMaskId
         let keyId = graphQLMessage.rfc822Header.keyId
         let algorithm = graphQLMessage.rfc822Header.algorithm
         let folderId = graphQLMessage.folderId
@@ -558,13 +579,14 @@ struct SealedEmailMessageEntityTransformer {
         let direction = try directionTransformer.transform(graphQLMessage.getEmailMessageDirection())
         let state = try stateTransformer.transform(graphQLMessage.getEmailMessageState())
         let encryptionStatus = try encryptionStatusTransformer.transform(graphQLMessage.getEncryptionStatus())
-        // Sealed Attributes.
+        /// Sealed Attributes.
         let rfc822Header = graphQLMessage.rfc822Header.base64EncodedSealedData
         return SealedEmailMessageEntity(
             id: id,
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
+            emailMaskId: emailMaskId,
             keyId: keyId,
             algorithm: algorithm,
             folderId: folderId,

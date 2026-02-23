@@ -53,4 +53,11 @@ public struct EmailMessageOperationFailureResult: Error, Equatable {
         self.id = id
         self.errorType = errorType
     }
+
+    // MARK: - Conformance: Equatable
+
+    public static func == (lhs: EmailMessageOperationFailureResult, rhs: EmailMessageOperationFailureResult) -> Bool {
+        return lhs.id == rhs.id &&
+            lhs.errorType == rhs.errorType
+    }
 }

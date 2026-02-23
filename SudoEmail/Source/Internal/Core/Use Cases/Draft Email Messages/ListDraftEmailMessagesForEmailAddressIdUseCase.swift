@@ -26,16 +26,17 @@ class ListDraftEmailMessagesForEmailAddressIdUseCase {
                 nextToken: nil
             )
 
-            return try await withThrowingTaskGroup(of: DraftEmailMessage?.self) { group -> [DraftEmailMessage] in
+            let result = try await withThrowingTaskGroup(of: DraftEmailMessage?.self) { group -> [DraftEmailMessage] in
                 var draftMessages: [DraftEmailMessage] = []
 
                 for m in metadataResult.items {
                     group.addTask {
                         do {
-                            return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
+                            let draft = try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
                                 id: m.id,
                                 emailAddressId: emailAddressId
                             ))
+                            return draft
                         } catch {
                             throw error
                         }
@@ -48,6 +49,7 @@ class ListDraftEmailMessagesForEmailAddressIdUseCase {
                 }
                 return draftMessages
             }
+            return result
         } catch {
             throw error
         }

@@ -1388,6 +1388,50 @@ internal struct DisableEmailMaskInput: GraphQLMapConvertible {
   }
 }
 
+internal struct SendMaskedEmailMessageInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(emailMaskId: GraphQLID, encryptionStatus: EmailMessageEncryptionStatus, message: S3EmailObjectInput, rfc822Header: Rfc822HeaderInput) {
+    graphQLMap = ["emailMaskId": emailMaskId, "encryptionStatus": encryptionStatus, "message": message, "rfc822Header": rfc822Header]
+  }
+
+  internal var emailMaskId: GraphQLID {
+    get {
+      return graphQLMap["emailMaskId"] as! GraphQLID
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "emailMaskId")
+    }
+  }
+
+  internal var encryptionStatus: EmailMessageEncryptionStatus {
+    get {
+      return graphQLMap["encryptionStatus"] as! EmailMessageEncryptionStatus
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "encryptionStatus")
+    }
+  }
+
+  internal var message: S3EmailObjectInput {
+    get {
+      return graphQLMap["message"] as! S3EmailObjectInput
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "message")
+    }
+  }
+
+  internal var rfc822Header: Rfc822HeaderInput {
+    get {
+      return graphQLMap["rfc822Header"] as! Rfc822HeaderInput
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "rfc822Header")
+    }
+  }
+}
+
 internal struct CreatePublicKeyInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
@@ -6053,6 +6097,7 @@ internal final class ProvisionEmailMaskMutation: GraphQLMutation {
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -6077,8 +6122,8 @@ internal final class ProvisionEmailMaskMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
       }
 
       internal var __typename: String {
@@ -6114,6 +6159,15 @@ internal final class ProvisionEmailMaskMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
         }
       }
 
@@ -6474,6 +6528,7 @@ internal final class DeprovisionEmailMaskMutation: GraphQLMutation {
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -6498,8 +6553,8 @@ internal final class DeprovisionEmailMaskMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
       }
 
       internal var __typename: String {
@@ -6535,6 +6590,15 @@ internal final class DeprovisionEmailMaskMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
         }
       }
 
@@ -6895,6 +6959,7 @@ internal final class UpdateEmailMaskMutation: GraphQLMutation {
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -6919,8 +6984,8 @@ internal final class UpdateEmailMaskMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
       }
 
       internal var __typename: String {
@@ -6956,6 +7021,15 @@ internal final class UpdateEmailMaskMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
         }
       }
 
@@ -7316,6 +7390,7 @@ internal final class EnableEmailMaskMutation: GraphQLMutation {
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -7340,8 +7415,8 @@ internal final class EnableEmailMaskMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
       }
 
       internal var __typename: String {
@@ -7377,6 +7452,15 @@ internal final class EnableEmailMaskMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
         }
       }
 
@@ -7737,6 +7821,7 @@ internal final class DisableEmailMaskMutation: GraphQLMutation {
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+        GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
         GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -7761,8 +7846,8 @@ internal final class DisableEmailMaskMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
       }
 
       internal var __typename: String {
@@ -7798,6 +7883,15 @@ internal final class DisableEmailMaskMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+        }
+      }
+
+      internal var keyRingId: GraphQLID {
+        get {
+          return snapshot["keyRingId"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "keyRingId")
         }
       }
 
@@ -8100,6 +8194,120 @@ internal final class DisableEmailMaskMutation: GraphQLMutation {
             set {
               snapshot += newValue.snapshot
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+internal final class SendMaskedEmailMessageMutation: GraphQLMutation {
+  internal static let operationString =
+    "mutation SendMaskedEmailMessage($input: SendMaskedEmailMessageInput!) {\n  sendMaskedEmailMessage(input: $input) {\n    __typename\n    ...SendEmailMessageResult\n  }\n}"
+
+  internal static var requestString: String { return operationString.appending(SendEmailMessageResult.fragmentString) }
+
+  internal var input: SendMaskedEmailMessageInput
+
+  internal init(input: SendMaskedEmailMessageInput) {
+    self.input = input
+  }
+
+  internal var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  internal struct Data: GraphQLSelectionSet {
+    internal static let possibleTypes = ["Mutation"]
+
+    internal static let selections: [GraphQLSelection] = [
+      GraphQLField("sendMaskedEmailMessage", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(SendMaskedEmailMessage.selections))),
+    ]
+
+    internal var snapshot: Snapshot
+
+    internal init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    internal init(sendMaskedEmailMessage: SendMaskedEmailMessage) {
+      self.init(snapshot: ["__typename": "Mutation", "sendMaskedEmailMessage": sendMaskedEmailMessage.snapshot])
+    }
+
+    internal var sendMaskedEmailMessage: SendMaskedEmailMessage {
+      get {
+        return SendMaskedEmailMessage(snapshot: snapshot["sendMaskedEmailMessage"]! as! Snapshot)
+      }
+      set {
+        snapshot.updateValue(newValue.snapshot, forKey: "sendMaskedEmailMessage")
+      }
+    }
+
+    internal struct SendMaskedEmailMessage: GraphQLSelectionSet {
+      internal static let possibleTypes = ["SendEmailMessageResult"]
+
+      internal static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("createdAtEpochMs", type: .nonNull(.scalar(Double.self))),
+      ]
+
+      internal var snapshot: Snapshot
+
+      internal init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      internal init(id: GraphQLID, createdAtEpochMs: Double) {
+        self.init(snapshot: ["__typename": "SendEmailMessageResult", "id": id, "createdAtEpochMs": createdAtEpochMs])
+      }
+
+      internal var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      internal var id: GraphQLID {
+        get {
+          return snapshot["id"]! as! GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      internal var createdAtEpochMs: Double {
+        get {
+          return snapshot["createdAtEpochMs"]! as! Double
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "createdAtEpochMs")
+        }
+      }
+
+      internal var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      internal struct Fragments {
+        internal var snapshot: Snapshot
+
+        internal var sendEmailMessageResult: SendEmailMessageResult {
+          get {
+            return SendEmailMessageResult(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
           }
         }
       }
@@ -11677,6 +11885,7 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -11685,8 +11894,8 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -11866,6 +12075,15 @@ internal final class GetEmailMessageQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -12121,6 +12339,7 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+          GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
         ]
 
         internal var snapshot: Snapshot
@@ -12129,8 +12348,8 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
         }
 
         internal var __typename: String {
@@ -12310,6 +12529,15 @@ internal final class ListEmailMessagesQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "encryptionStatus")
+          }
+        }
+
+        internal var emailMaskId: GraphQLID? {
+          get {
+            return snapshot["emailMaskId"] as? GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailMaskId")
           }
         }
 
@@ -12566,6 +12794,7 @@ internal final class ListEmailMessagesForEmailAddressIdQuery: GraphQLQuery {
           GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+          GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
         ]
 
         internal var snapshot: Snapshot
@@ -12574,8 +12803,8 @@ internal final class ListEmailMessagesForEmailAddressIdQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
         }
 
         internal var __typename: String {
@@ -12755,6 +12984,15 @@ internal final class ListEmailMessagesForEmailAddressIdQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "encryptionStatus")
+          }
+        }
+
+        internal var emailMaskId: GraphQLID? {
+          get {
+            return snapshot["emailMaskId"] as? GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailMaskId")
           }
         }
 
@@ -13011,6 +13249,7 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
           GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
           GraphQLField("size", type: .nonNull(.scalar(Double.self))),
           GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+          GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
         ]
 
         internal var snapshot: Snapshot
@@ -13019,8 +13258,8 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+          self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
         }
 
         internal var __typename: String {
@@ -13200,6 +13439,15 @@ internal final class ListEmailMessagesForEmailFolderIdQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "encryptionStatus")
+          }
+        }
+
+        internal var emailMaskId: GraphQLID? {
+          get {
+            return snapshot["emailMaskId"] as? GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "emailMaskId")
           }
         }
 
@@ -13440,6 +13688,7 @@ internal final class ListEmailMasksForOwnerQuery: GraphQLQuery {
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+          GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
           GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -13464,8 +13713,8 @@ internal final class ListEmailMasksForOwnerQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-          self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+        internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+          self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
         }
 
         internal var __typename: String {
@@ -13501,6 +13750,15 @@ internal final class ListEmailMasksForOwnerQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+          }
+        }
+
+        internal var keyRingId: GraphQLID {
+          get {
+            return snapshot["keyRingId"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "keyRingId")
           }
         }
 
@@ -15833,6 +16091,7 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -15841,8 +16100,8 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -16022,6 +16281,15 @@ internal final class OnEmailMessageCreatedSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -16233,6 +16501,7 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -16241,8 +16510,8 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -16422,6 +16691,15 @@ internal final class OnEmailMessageCreatedWithDirectionSubscription: GraphQLSubs
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -16631,6 +16909,7 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -16639,8 +16918,8 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -16820,6 +17099,15 @@ internal final class OnEmailMessageDeletedSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -17031,6 +17319,7 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -17039,8 +17328,8 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -17220,6 +17509,15 @@ internal final class OnEmailMessageDeletedWithIdSubscription: GraphQLSubscriptio
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -17429,6 +17727,7 @@ internal final class OnEmailMessageUpdatedSubscription: GraphQLSubscription {
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -17437,8 +17736,8 @@ internal final class OnEmailMessageUpdatedSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -17618,6 +17917,15 @@ internal final class OnEmailMessageUpdatedSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -17829,6 +18137,7 @@ internal final class OnEmailMessageUpdatedWithIdSubscription: GraphQLSubscriptio
         GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
         GraphQLField("size", type: .nonNull(.scalar(Double.self))),
         GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+        GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
       ]
 
       internal var snapshot: Snapshot
@@ -17837,8 +18146,8 @@ internal final class OnEmailMessageUpdatedWithIdSubscription: GraphQLSubscriptio
         self.snapshot = snapshot
       }
 
-      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+      internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+        self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
       }
 
       internal var __typename: String {
@@ -18018,6 +18327,15 @@ internal final class OnEmailMessageUpdatedWithIdSubscription: GraphQLSubscriptio
         }
         set {
           snapshot.updateValue(newValue, forKey: "encryptionStatus")
+        }
+      }
+
+      internal var emailMaskId: GraphQLID? {
+        get {
+          return snapshot["emailMaskId"] as? GraphQLID
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "emailMaskId")
         }
       }
 
@@ -20257,7 +20575,7 @@ internal struct EmailFolder: GraphQLFragment {
 
 internal struct EmailMask: GraphQLFragment {
   internal static let fragmentString =
-    "fragment EmailMask on EmailMask {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  identityId\n  maskAddress\n  realAddress\n  realAddressType\n  status\n  inboundReceived\n  inboundDelivered\n  outboundReceived\n  outboundDelivered\n  spamCount\n  virusCount\n  metadata {\n    __typename\n    ...SealedAttribute\n  }\n  expiresAtEpochSec\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n}"
+    "fragment EmailMask on EmailMask {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  keyRingId\n  identityId\n  maskAddress\n  realAddress\n  realAddressType\n  status\n  inboundReceived\n  inboundDelivered\n  outboundReceived\n  outboundDelivered\n  spamCount\n  virusCount\n  metadata {\n    __typename\n    ...SealedAttribute\n  }\n  expiresAtEpochSec\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n}"
 
   internal static let possibleTypes = ["EmailMask"]
 
@@ -20266,6 +20584,7 @@ internal struct EmailMask: GraphQLFragment {
     GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
     GraphQLField("owner", type: .nonNull(.scalar(GraphQLID.self))),
     GraphQLField("owners", type: .nonNull(.list(.nonNull(.object(Owner.selections))))),
+    GraphQLField("keyRingId", type: .nonNull(.scalar(GraphQLID.self))),
     GraphQLField("identityId", type: .nonNull(.scalar(GraphQLID.self))),
     GraphQLField("maskAddress", type: .nonNull(.scalar(String.self))),
     GraphQLField("realAddress", type: .nonNull(.scalar(String.self))),
@@ -20290,8 +20609,8 @@ internal struct EmailMask: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
-    self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
+  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], keyRingId: GraphQLID, identityId: GraphQLID, maskAddress: String, realAddress: String, realAddressType: EmailMaskRealAddressType, status: EmailMaskStatus, inboundReceived: Int, inboundDelivered: Int, outboundReceived: Int, outboundDelivered: Int, spamCount: Int, virusCount: Int, metadata: Metadatum? = nil, expiresAtEpochSec: Int? = nil, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double) {
+    self.init(snapshot: ["__typename": "EmailMask", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "keyRingId": keyRingId, "identityId": identityId, "maskAddress": maskAddress, "realAddress": realAddress, "realAddressType": realAddressType, "status": status, "inboundReceived": inboundReceived, "inboundDelivered": inboundDelivered, "outboundReceived": outboundReceived, "outboundDelivered": outboundDelivered, "spamCount": spamCount, "virusCount": virusCount, "metadata": metadata.flatMap { $0.snapshot }, "expiresAtEpochSec": expiresAtEpochSec, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs])
   }
 
   internal var __typename: String {
@@ -20327,6 +20646,15 @@ internal struct EmailMask: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "owners")
+    }
+  }
+
+  internal var keyRingId: GraphQLID {
+    get {
+      return snapshot["keyRingId"]! as! GraphQLID
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "keyRingId")
     }
   }
 
@@ -21221,7 +21549,7 @@ internal struct SealedAttribute: GraphQLFragment {
 
 internal struct SealedEmailMessage: GraphQLFragment {
   internal static let fragmentString =
-    "fragment SealedEmailMessage on SealedEmailMessage {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  emailAddressId\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  sortDateEpochMs\n  folderId\n  previousFolderId\n  direction\n  seen\n  repliedTo\n  forwarded\n  state\n  clientRefId\n  rfc822Header {\n    __typename\n    algorithm\n    keyId\n    plainTextType\n    base64EncodedSealedData\n  }\n  size\n  encryptionStatus\n}"
+    "fragment SealedEmailMessage on SealedEmailMessage {\n  __typename\n  id\n  owner\n  owners {\n    __typename\n    id\n    issuer\n  }\n  emailAddressId\n  version\n  createdAtEpochMs\n  updatedAtEpochMs\n  sortDateEpochMs\n  folderId\n  previousFolderId\n  direction\n  seen\n  repliedTo\n  forwarded\n  state\n  clientRefId\n  rfc822Header {\n    __typename\n    algorithm\n    keyId\n    plainTextType\n    base64EncodedSealedData\n  }\n  size\n  encryptionStatus\n  emailMaskId\n}"
 
   internal static let possibleTypes = ["SealedEmailMessage"]
 
@@ -21246,6 +21574,7 @@ internal struct SealedEmailMessage: GraphQLFragment {
     GraphQLField("rfc822Header", type: .nonNull(.object(Rfc822Header.selections))),
     GraphQLField("size", type: .nonNull(.scalar(Double.self))),
     GraphQLField("encryptionStatus", type: .scalar(EmailMessageEncryptionStatus.self)),
+    GraphQLField("emailMaskId", type: .scalar(GraphQLID.self)),
   ]
 
   internal var snapshot: Snapshot
@@ -21254,8 +21583,8 @@ internal struct SealedEmailMessage: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil) {
-    self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus])
+  internal init(id: GraphQLID, owner: GraphQLID, owners: [Owner], emailAddressId: GraphQLID, version: Int, createdAtEpochMs: Double, updatedAtEpochMs: Double, sortDateEpochMs: Double, folderId: GraphQLID, previousFolderId: GraphQLID? = nil, direction: EmailMessageDirection, seen: Bool, repliedTo: Bool, forwarded: Bool, state: EmailMessageState, clientRefId: String? = nil, rfc822Header: Rfc822Header, size: Double, encryptionStatus: EmailMessageEncryptionStatus? = nil, emailMaskId: GraphQLID? = nil) {
+    self.init(snapshot: ["__typename": "SealedEmailMessage", "id": id, "owner": owner, "owners": owners.map { $0.snapshot }, "emailAddressId": emailAddressId, "version": version, "createdAtEpochMs": createdAtEpochMs, "updatedAtEpochMs": updatedAtEpochMs, "sortDateEpochMs": sortDateEpochMs, "folderId": folderId, "previousFolderId": previousFolderId, "direction": direction, "seen": seen, "repliedTo": repliedTo, "forwarded": forwarded, "state": state, "clientRefId": clientRefId, "rfc822Header": rfc822Header.snapshot, "size": size, "encryptionStatus": encryptionStatus, "emailMaskId": emailMaskId])
   }
 
   internal var __typename: String {
@@ -21435,6 +21764,15 @@ internal struct SealedEmailMessage: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "encryptionStatus")
+    }
+  }
+
+  internal var emailMaskId: GraphQLID? {
+    get {
+      return snapshot["emailMaskId"] as? GraphQLID
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "emailMaskId")
     }
   }
 

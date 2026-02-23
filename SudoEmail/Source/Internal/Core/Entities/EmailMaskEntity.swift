@@ -21,6 +21,9 @@ struct EmailMaskEntity: Equatable {
     /// Unique identifier of the identity of the email mask.
     var identityId: String
 
+    /// Unique identifier of the key ring associated with the email mask.
+    var keyRingId: String
+
     /// The publicly visible email address that serves as the mask.
     var maskAddress: String
 

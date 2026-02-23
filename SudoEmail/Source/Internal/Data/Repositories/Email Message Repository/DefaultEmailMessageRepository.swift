@@ -69,6 +69,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     /// RFC 822 Message Processor used to handle the encoding and parsing of the email message content.
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
+    /// Transformer for converting EncryptionStatus to GraphQL EmailMessageEncryptionStatus
+    let encryptionStatusTransformer = EmailMessageEncryptionStatusGQLTransformer()
+
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultEmailMessageRepository`.
@@ -98,12 +101,15 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         self.logger = logger
     }
 
-    // MARK: - SealedEmailMessageRepository
+    // MARK: - Helper Methods
 
-    /// Sends an out-of-network email message.
-    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
-        // Confirm user is signed in
-        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
+    /// Builds an S3 email object by uploading data and creating the GraphQL input
+    /// - Parameters:
+    ///   - data: The RFC822 email data to upload
+    ///   - senderId: The identifier of the sender (email address ID or mask ID)
+    /// - Returns: S3EmailObjectInput for GraphQL mutations
+    private func buildS3EmailObject(data: Data, senderId: String) async throws -> GraphQL.S3EmailObjectInput {
+        guard let keyPrefix = await getS3KeyForSenderId(senderId: senderId) else {
             throw SudoEmailError.notSignedIn
         }
 
@@ -117,11 +123,19 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             key: key,
             metadata: nil
         )
-        let s3EmailObjectInput = GraphQL.S3EmailObjectInput(
+
+        return GraphQL.S3EmailObjectInput(
             bucket: transientBucket,
             key: key,
             region: region
         )
+    }
+
+    // MARK: - SealedEmailMessageRepository
+
+    // Sends an out-of-network email message.
+    func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
+        let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailAccountId)
 
         // Perform `SendEmailMessage` mutation (out-of-network)
         let input = GraphQL.SendEmailMessageInput(
@@ -133,9 +147,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
-    /// Sends an in-network email message with E2E encryption.
-    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
-    /// as i
+    // Sends an in-network email message with E2E encryption.
+    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessage(
         withRFC822Data data: Data,
         emailAccountId: String,
@@ -144,26 +157,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         replyingMessageId: String? = nil,
         forwardingMessageId: String? = nil
     ) async throws -> SendEmailMessageResult {
-        // Confirm user is signed in
-        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAccountId) else {
-            throw SudoEmailError.notSignedIn
-        }
-
-        // Upload message data
-        let id = UUID().uuidString
-        let key = "\(keyPrefix)/\(id)"
-        try await s3Worker.upload(
-            data: data,
-            contentType: sendContentType,
-            bucket: transientBucket,
-            key: key,
-            metadata: nil
-        )
-        let s3EmailObjectInput = GraphQL.S3EmailObjectInput(
-            bucket: transientBucket,
-            key: key,
-            region: region
-        )
+        let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailAccountId)
 
         var rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
             bcc: emailMessageHeader.bcc.map(\.description),
@@ -194,6 +188,51 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return SendEmailMessageResult(
             id: result.sendEncryptedEmailMessage.id,
             createdAt: Date(millisecondsSince1970: result.sendEncryptedEmailMessage.createdAtEpochMs)
+        )
+    }
+
+    // Sends an email message from a masked email address
+    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    func sendEmailMessageFromMask(
+        withRFC822Data data: Data,
+        emailMaskId: String,
+        emailMessageHeader: InternetMessageFormatHeader,
+        hasAttachments: Bool,
+        encryptionStatus: EncryptionStatus,
+        replyingMessageId: String? = nil,
+        forwardingMessageId: String? = nil
+    ) async throws -> SendEmailMessageResult {
+        let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailMaskId)
+
+        var rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
+            bcc: emailMessageHeader.bcc.map(\.description),
+            cc: emailMessageHeader.cc.map(\.description),
+            from: emailMessageHeader.from.description,
+            hasAttachments: hasAttachments,
+            replyTo: emailMessageHeader.replyTo.map(\.description),
+            subject: emailMessageHeader.subject,
+            to: emailMessageHeader.to.map(\.description)
+        )
+        // Reply/forward message ids needs to be explicitly added to the RFC822 header for E2E sending
+        if let replyingMessageId = replyingMessageId {
+            rfc822HeaderInput.inReplyTo = replyingMessageId
+        }
+        if let forwardingMessageId = forwardingMessageId {
+            rfc822HeaderInput.references = [forwardingMessageId]
+        }
+
+        let input = GraphQL.SendMaskedEmailMessageInput(
+            emailMaskId: emailMaskId,
+            encryptionStatus: encryptionStatusTransformer.transform(encryptionStatus),
+            message: s3EmailObjectInput,
+            rfc822Header: rfc822HeaderInput
+        )
+        let mutation = GraphQL.SendMaskedEmailMessageMutation(input: input)
+        let result = try await perform(mutation)
+
+        return SendEmailMessageResult(
+            id: result.sendMaskedEmailMessage.id,
+            createdAt: Date(millisecondsSince1970: result.sendMaskedEmailMessage.createdAtEpochMs)
         )
     }
 
@@ -237,7 +276,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         guard let symmetricKeyId = try deviceKeyWorker.getCurrentSymmetricKeyId() else {
             throw SudoEmailError.keyNotFound
         }
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: senderEmailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: senderEmailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let draftId = id ?? UUID().uuidString
@@ -273,7 +312,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         id: String,
         emailAddressId: String
     ) async throws -> String {
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/\(id)"
@@ -283,7 +322,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     func scheduleSendDraftMessage(
         withInput input: ScheduleSendDraftMessageInput
     ) async throws -> ScheduledDraftMessageEntity {
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: input.emailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
@@ -325,7 +364,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     func cancelScheduledDraftMessage(
         withInput input: CancelScheduledDraftMessageInput
     ) async throws -> String {
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: input.emailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
@@ -443,7 +482,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.notSignedIn
         }
         do {
-            return try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
+            let rfc822Object = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
+            return rfc822Object
         } catch {
             logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
             throw error
@@ -516,7 +556,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     }
 
     func getDraft(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage? {
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: input.emailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
@@ -586,7 +626,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     }
 
     func draftExists(id: String, emailAddressId: String) async throws -> Bool {
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/\(id)"
@@ -602,7 +642,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         limit: Int?,
         nextToken: String?
     ) async throws -> ListOutputEntity<DraftEmailMessageMetadataEntity> {
-        guard let s3KeyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAddressId) else {
+        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         let s3Key = "\(s3KeyPrefix)/draft/"
@@ -628,7 +668,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             guard let emailMessage = result.getEmailMessage else {
                 return nil
             }
-            return try transformer.transform(emailMessage)
+            let entity = try transformer.transform(emailMessage)
+            return entity
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error
@@ -636,18 +677,18 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     }
 
     /// Generate an S3 key to use when sending an email message to the transient bucket.
-    func getS3KeyForEmailAddressId(emailAddressId: String) async -> String? {
+    func getS3KeyForSenderId(senderId: String) async -> String? {
         guard let identityId = try? await userClient.getIdentityId(), !identityId.isEmpty else {
             logger.warning("Failed to get identity id")
             return nil
         }
-        return "\(identityId)/email/\(emailAddressId)"
+        return "\(identityId)/email/\(senderId)"
     }
 
     /// Get the key to access items in the email S3 bucket.
     /// - Returns: S3 key identifier if the user is signed in, otherwise `nil`.
     func getS3KeyForEmailMessageId(_ id: String, emailAddressId: String, publicKeyId: String) async -> String? {
-        guard let keyPrefix = await getS3KeyForEmailAddressId(emailAddressId: emailAddressId) else {
+        guard let keyPrefix = await getS3KeyForSenderId(senderId: emailAddressId) else {
             return nil
         }
         return "\(keyPrefix)/\(id)-\(publicKeyId)"

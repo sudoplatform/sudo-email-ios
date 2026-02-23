@@ -6,7 +6,7 @@
 
 import Foundation
 
-// Input object for deleting all messages in a folder
+/// Input object for deleting all messages in a folder
 
 public struct DeleteMessagesForFolderIdInput {
 

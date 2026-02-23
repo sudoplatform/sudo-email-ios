@@ -6,7 +6,7 @@
 
 import Foundation
 
-// input object for creating a draft email message using `SudoEmailClient`
+/// input object for creating a draft email message using `SudoEmailClient`
 
 public struct CreateDraftEmailMessageInput {
 

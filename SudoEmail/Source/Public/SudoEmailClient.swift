@@ -72,6 +72,15 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
 
+    /// Send an email message using [RFC 6854] supersedes [RFC 822] (https://tools.ietf.org/html/rfc6854) data from a masked email address.
+    /// Email messages sent to in-network recipients (i.e. email addresses that exist within the Sudo Platform) will be sent end-to-end encrypted.
+    /// - Parameters:
+    ///   - input: Parameters used to send an email message with a masked email address
+    /// - Returns:
+    ///   - Success: SendEmailMessageResult
+    ///   - Failure: `SudoEmailError`.
+    func sendMaskedEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
+
     /// Delete multiple email messages using a list of identifiers.
     ///
     /// Email Messages can only be deleted in batches of 100 or less. Anything greater will throw

@@ -36,7 +36,6 @@ struct EmailAddressAPITransformer {
         let id = entity.id
         let owner = entity.owner
         let owners = entity.owners.map(ownerTransformer.transform(_:))
-        let keyRingId = entity.keyRingId
         let keyIds = entity.keyIds
         let identityId = entity.identityId
         let emailAddress = entity.emailAddress.emailAddress
@@ -52,7 +51,6 @@ struct EmailAddressAPITransformer {
             owner: owner,
             owners: owners,
             identityId: identityId,
-            keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
             folders: folders,

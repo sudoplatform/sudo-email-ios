@@ -133,6 +133,9 @@
                 <a class="nav-group-task-link" href="../Enums/ScheduledDraftMessageStateFilter.html">ScheduledDraftMessageStateFilter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SenderIdentification.html">SenderIdentification</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/SortOrder.html">SortOrder</a>
               </li>
               <li class="nav-group-task">
@@ -447,6 +450,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail04SendB12MessageInputV20senderIdentificationAA06SenderG0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/senderIdentification" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV20senderIdentificationAA06SenderG0Ovp">senderIdentification</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The identification of the sender used to send the email.
+This can be either an email address ID or a mask ID, but not both.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">senderIdentification</span><span class="p">:</span> <span class="kt"><a href="../Enums/SenderIdentification.html">SenderIdentification</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail04SendB12MessageInputV06senderB9AddressIdSSvp"></a>
                     <a name="//apple_ref/swift/Property/senderEmailAddressId" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV06senderB9AddressIdSSvp">senderEmailAddressId</a>
@@ -465,7 +496,35 @@ The identifier must match the identifier of the email address of the <code>from<
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">senderEmailAddressId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">senderEmailAddressId</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04SendB12MessageInputV12senderMaskIdSSvp"></a>
+                    <a name="//apple_ref/swift/Property/senderMaskId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV12senderMaskIdSSvp">senderMaskId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The identifier of the email mask used to send the email.
+The identifier must match the identifier of the mask of the <code>from</code> field in the RFC 6854 data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">senderMaskId</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -641,6 +700,40 @@ If this property is set, <code><a href="../Structs/SendEmailMessageInput.html#/s
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail04SendB12MessageInputV20senderIdentification05emailD6Header4body11attachments17inlineAttachments08replyingD2Id010forwardingdO0AcA06SenderG0O_AA08Internetd6FormatI0VSSSayAA0B10AttachmentVGAQSSSgARtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(senderIdentification:emailMessageHeader:body:attachments:inlineAttachments:replyingMessageId:forwardingMessageId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV20senderIdentification05emailD6Header4body11attachments17inlineAttachments08replyingD2Id010forwardingdO0AcA06SenderG0O_AA08Internetd6FormatI0VSSSayAA0B10AttachmentVGAQSSSgARtcfc">init(senderIdentification:<wbr>emailMessageHeader:<wbr>body:<wbr>attachments:<wbr>inlineAttachments:<wbr>replyingMessageId:<wbr>forwardingMessageId:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">senderIdentification</span><span class="p">:</span> <span class="kt"><a href="../Enums/SenderIdentification.html">SenderIdentification</a></span><span class="p">,</span>
+    <span class="nv">emailMessageHeader</span><span class="p">:</span> <span class="kt"><a href="../Structs/InternetMessageFormatHeader.html">InternetMessageFormatHeader</a></span><span class="p">,</span>
+    <span class="nv">body</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">attachments</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/EmailAttachment.html">EmailAttachment</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">inlineAttachments</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/EmailAttachment.html">EmailAttachment</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">replyingMessageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">forwardingMessageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail04SendB12MessageInputV06senderB9AddressId05emailD6Header4body11attachments17inlineAttachments08replyingdH0010forwardingdH0ACSS_AA08Internetd6FormatJ0VSSSayAA0B10AttachmentVGAOSSSgAPtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(senderEmailAddressId:emailMessageHeader:body:attachments:inlineAttachments:replyingMessageId:forwardingMessageId:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV06senderB9AddressId05emailD6Header4body11attachments17inlineAttachments08replyingdH0010forwardingdH0ACSS_AA08Internetd6FormatJ0VSSSayAA0B10AttachmentVGAOSSSgAPtcfc">init(senderEmailAddressId:<wbr>emailMessageHeader:<wbr>body:<wbr>attachments:<wbr>inlineAttachments:<wbr>replyingMessageId:<wbr>forwardingMessageId:<wbr>)</a>
@@ -672,6 +765,40 @@ If this property is set, <code><a href="../Structs/SendEmailMessageInput.html#/s
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04SendB12MessageInputV12senderMaskId05emailD6Header4body11attachments17inlineAttachments08replyingdH0010forwardingdH0ACSS_AA08Internetd6FormatJ0VSSSayAA0B10AttachmentVGAOSSSgAPtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(senderMaskId:emailMessageHeader:body:attachments:inlineAttachments:replyingMessageId:forwardingMessageId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04SendB12MessageInputV12senderMaskId05emailD6Header4body11attachments17inlineAttachments08replyingdH0010forwardingdH0ACSS_AA08Internetd6FormatJ0VSSSayAA0B10AttachmentVGAOSSSgAPtcfc">init(senderMaskId:<wbr>emailMessageHeader:<wbr>body:<wbr>attachments:<wbr>inlineAttachments:<wbr>replyingMessageId:<wbr>forwardingMessageId:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">senderMaskId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">emailMessageHeader</span><span class="p">:</span> <span class="kt"><a href="../Structs/InternetMessageFormatHeader.html">InternetMessageFormatHeader</a></span><span class="p">,</span>
+    <span class="nv">body</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">attachments</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/EmailAttachment.html">EmailAttachment</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">inlineAttachments</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/EmailAttachment.html">EmailAttachment</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">replyingMessageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">forwardingMessageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -680,7 +807,7 @@ If this property is set, <code><a href="../Structs/SendEmailMessageInput.html#/s
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-02-17)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-02-23)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

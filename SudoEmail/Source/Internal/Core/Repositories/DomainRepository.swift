@@ -17,7 +17,7 @@ protocol DomainRepository: Repository {
     /// - Parameter completion: Returns an array of the configured domains, or failure on error.
     func fetchConfiguredDomains() async throws -> [DomainEntity]
 
-    /// Get the set of domains configured for mask creation. Fetches the domains remotely from the email service.
+    // Get the set of domains configured for mask creation. Fetches the domains remotely from the email service.
     /// - Parameter completion: Returns an array of the mask domains, or failure on error.
     func fetchEmailMaskDomains() async throws -> [DomainEntity]
 }

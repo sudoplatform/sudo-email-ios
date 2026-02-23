@@ -22,9 +22,6 @@ public struct EmailAddress: Equatable {
     /// Unique identifier of the identity associated with the email address.
     public let identityId: String
 
-    /// Unique identifier of the key ring associated with the email address.
-    public let keyRingId: String
-
     /// List of unique identifiers of the key ring associated with the email address.
     public let keyIds: [String]
 
@@ -61,7 +58,6 @@ public struct EmailAddress: Equatable {
         owner: String,
         owners: [Owner],
         identityId: String,
-        keyRingId: String,
         keyIds: [String],
         emailAddress: String,
         folders: [EmailFolder],
@@ -77,7 +73,6 @@ public struct EmailAddress: Equatable {
         self.owner = owner
         self.owners = owners
         self.identityId = identityId
-        self.keyRingId = keyRingId
         self.keyIds = keyIds
         self.emailAddress = emailAddress
         self.folders = folders
