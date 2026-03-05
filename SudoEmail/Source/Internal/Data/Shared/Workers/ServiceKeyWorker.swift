@@ -112,8 +112,7 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             throw SudoEmailError.internalError(msg)
         }
 
-        let keyPair = createKeyPairWithKeyId(keyPairId, keyRingId: keyRingId, publicKeyData: publicKey, privateKeyData: privateKey)
-        return keyPair
+        return createKeyPairWithKeyId(keyPairId, keyRingId: keyRingId, publicKeyData: publicKey, privateKeyData: privateKey)
     }
 
     func getPublicKeyWithId(keyId: String) async throws -> KeyEntity? {
@@ -131,13 +130,12 @@ class DefaultServiceKeyWorker: DefaultDeviceKeyWorker, ServiceKeyWorker {
             throw SudoEmailError.internalError(msg)
         }
 
-        let keyEntity = KeyEntity(
+        return KeyEntity(
             type: .publicKey(format: Defaults.publicKeyFormat),
             keyId: keyId,
             keyRingId: keyRingId,
             keyData: publicKey
         )
-        return keyEntity
     }
 
     // MARK: - Helpers

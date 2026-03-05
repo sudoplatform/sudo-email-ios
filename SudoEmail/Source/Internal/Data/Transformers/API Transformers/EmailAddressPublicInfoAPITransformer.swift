@@ -21,7 +21,12 @@ struct EmailAddressPublicInfoAPITransformer {
     /// - Returns: Email address public info object as an entity.
     func transform(_ data: EmailAddressPublicInfoEntity) -> EmailAddressPublicInfo {
         let publicKeyDetails = publicKeyTransformer.transform(data.publicKeyDetails)
-        return EmailAddressPublicInfo(emailAddress: data.emailAddress, keyId: data.keyId, publicKeyDetails: publicKeyDetails)
+        return EmailAddressPublicInfo(
+            emailAddress: data.emailAddress,
+            keyId: data.keyId,
+            publicKeyDetails: publicKeyDetails,
+            enableEncryption: data.enableEncryption
+        )
     }
 
     /// Transform a list of entity type`EmailAddressPublicInfoEntity` to list of API type `EmailAddressPublicInfo`.

@@ -21,7 +21,6 @@ class GetDraftEmailMessageUseCase {
     // MARK: - Methods
 
     func execute(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage? {
-        let draftEmailMessage = try await emailMessageRepository.getDraft(withInput: input)
-        return draftEmailMessage
+        return try await emailMessageRepository.getDraft(withInput: input)
     }
 }

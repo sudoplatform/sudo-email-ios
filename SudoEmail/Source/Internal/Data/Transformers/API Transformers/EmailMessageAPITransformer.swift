@@ -81,7 +81,7 @@ struct EmailMessageAPITransformer {
 
     /// Transform a email message entity into an email message result of the SDK.
     func transform(_ entity: EmailMessageEntity) -> EmailMessage {
-        /// Mapping to messageId is correct as the internal `id` is used internally only.
+        // Mapping to messageId is correct as the internal `id` is used internally only.
         let id = entity.id
         let clientRefid = entity.clientRefId
         let owner = entity.owner
@@ -142,7 +142,7 @@ struct EmailMessageAPITransformer {
 
     /// Transform a partial email message entity into a partial email message result of the SDK.
     func transform(_ entity: PartialEmailMessageEntity) -> PartialEmailMessage {
-        /// Mapping to messageId is correct as the internal `id` is used internally only.
+        // Mapping to messageId is correct as the internal `id` is used internally only.
         let id = entity.id
         let clientRefid = entity.clientRefId
         let owner = entity.owner

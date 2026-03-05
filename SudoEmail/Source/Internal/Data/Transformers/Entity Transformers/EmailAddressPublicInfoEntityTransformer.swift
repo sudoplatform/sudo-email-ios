@@ -22,7 +22,12 @@ struct EmailAddressPublicInfoEntityTransformer {
     func transform(_ data: GraphQL.LookupEmailAddressesPublicInfoQuery.Data) -> [EmailAddressPublicInfoEntity] {
         return data.lookupEmailAddressesPublicInfo.items.map { item in
             let publicKeyDetails = publicKeyTransformer.transform(item.publicKeyDetails)
-            return EmailAddressPublicInfoEntity(emailAddress: item.emailAddress, keyId: item.keyId, publicKeyDetails: publicKeyDetails)
+            return EmailAddressPublicInfoEntity(
+                emailAddress: item.emailAddress,
+                keyId: item.keyId,
+                publicKeyDetails: publicKeyDetails,
+                enableEncryption: item.enableEncryption ?? true
+            )
         }
     }
 }

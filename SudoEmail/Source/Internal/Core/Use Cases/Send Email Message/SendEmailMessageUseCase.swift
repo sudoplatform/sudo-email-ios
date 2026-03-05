@@ -94,21 +94,26 @@ class SendEmailMessageUseCase {
         let allRecipients = (emailMessageHeader.to + emailMessageHeader.cc + emailMessageHeader.bcc).map { it in it.address.lowercased() }
 
         let allRecipientsInternal = try await areAllRecipientsInternal(config: config, recipients: allRecipients)
+
+        var canSendEncrypted = false
+        var emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = []
+
         if allRecipientsInternal {
-            // Lookup public key information for each internal recipient and sender
+            // Lookup public key information for all internal recipients and sender
+            // and verify that they support encryption
             var recipientsAndSender = allRecipients
             recipientsAndSender.append(emailMessageHeader.from.address)
-            let emailAddressesPublicInfo = try await emailMessageUtil.retrieveAndVerifyPublicInfo(addresses: recipientsAndSender)
+            emailAddressesPublicInfo = try await emailMessageUtil.retrieveAndVerifyPublicInfo(addresses: recipientsAndSender)
 
-            // TODO: Check to see that emailAddressesPublicInfo contains entries for all recipients and sender.
-            // If any are missing, this is likely indicative of an email mask masking an external
-            // email address; in this situation we should not be encrypting the message.
-            // This requires PEMC-1638
+            canSendEncrypted = emailAddressesPublicInfo.allSatisfy(\.enableEncryption)
+        }
 
+        // Process encrypted email message
+        if canSendEncrypted {
             if allRecipients.count > config.encryptedEmailMessageRecipientsLimit {
                 throw SudoEmailError.limitExceeded("Cannot send encrypted message to more than \(config.encryptedEmailMessageRecipientsLimit) recipients")
             }
-            // Process encrypted email message
+
             let encryptedRfc822Data = try await emailMessageUtil.processAndBuildEmailMessage(
                 emailMessageHeader: emailMessageHeader,
                 body: body,
@@ -122,7 +127,6 @@ class SendEmailMessageUseCase {
             )
             let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
 
-            // Check if we're sending from a mask and use the appropriate repository method
             switch senderIdentification {
             case .maskId(let maskId):
                 return try await emailMessageRepository.sendEmailMessageFromMask(
@@ -146,7 +150,8 @@ class SendEmailMessageUseCase {
             }
         }
 
-        // All recipients are not internal, so the email message will be sent unencrypted.
+        // Not all recipients are internal, or at least one doesn't support encryption,
+        // so the email message will be sent unencrypted.
         // Verify that the number of recipients does not exceed the unencrypted recipient limit.
         if allRecipients.count > config.emailMessageRecipientsLimit {
             throw SudoEmailError.limitExceeded("Cannot send message to more than \(config.emailMessageRecipientsLimit) recipients")
@@ -198,7 +203,7 @@ class SendEmailMessageUseCase {
 
     /// Checks whether all recipients are internal (belong to internal domains).
     /// Note that if the list of recipients is empty, this function returns false,
-    // as there are no recipients to be considered internal.
+    /// as there are no recipients to be considered internal.
     ///
     /// - Parameters:
     ///   - config: The email configuration data

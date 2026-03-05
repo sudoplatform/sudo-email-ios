@@ -55,8 +55,7 @@ class ListDraftEmailMessagesUseCase {
                             }
                             return drafts
                         }
-                        let draftMessages = draftContent.compactMap { $0 }
-                        return draftMessages
+                        return draftContent.compactMap { $0 }
                     }
                 }
                 for try await drafts in group {

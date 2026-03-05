@@ -103,7 +103,7 @@ protocol EmailMessageRepository: Repository {
     ) async throws -> ScheduledDraftMessageEntity
 
     /// Cancel a scheduled draft message from being sent. If the draft message
-    //  is not currently scheduled, then this method will return success.
+    ///  is not currently scheduled, then this method will return success.
     /// - Parameters:
     ///   - input: Input parameters used to cancel a scheduled draft message
     /// - Returns:
@@ -158,9 +158,9 @@ protocol EmailMessageRepository: Repository {
     /// Fetch the sealed email message RFC 6854 (supersedes RFC 822) data remotely.
     /// - Parameters:
     ///   - sealedId: Identifier of the email message to fetch.
-    ///   - emailAddressId: Identifier of the email address that owns the sealed email message.
+    ///   - rfc822DataAttributes: S3 bucket and key attributes for the RFC 822 data.
     /// - Returns: The RFC822 S3Object for the email message.
-    func fetchEmailMessageRFC822Data(_ sealedId: String, emailAddressId: String) async throws -> S3ObjectEntity?
+    func fetchEmailMessageRFC822Data(_ sealedId: String, rfc822DataAttributes: SealedEmailMessageEntity.Rfc822DataAttributes) async throws -> S3ObjectEntity?
 
     /// Get a saved draft email message.
     ///  - Parameters:

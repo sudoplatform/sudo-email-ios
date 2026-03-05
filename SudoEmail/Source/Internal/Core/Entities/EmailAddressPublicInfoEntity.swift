@@ -17,4 +17,7 @@ struct EmailAddressPublicInfoEntity: Equatable {
 
     /// The details of the public key for the email address.
     let publicKeyDetails: EmailAddressPublicKeyEntity
+
+    /// Indicates whether encryption is enabled for this email address.
+    let enableEncryption: Bool
 }

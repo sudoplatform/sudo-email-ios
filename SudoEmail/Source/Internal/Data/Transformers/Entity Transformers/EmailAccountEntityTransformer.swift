@@ -259,7 +259,7 @@ struct EmailAccountEntityTransformer {
         )
     }
 
-    // Transform an `EmailAccountEntity` to an `EmailAddress`
+    /// Transform an `EmailAccountEntity` to an `EmailAddress`
     func transform(_ emailAccountEntity: EmailAccountEntity) throws -> EmailAddress {
         let id = emailAccountEntity.id
         let owner = emailAccountEntity.owner

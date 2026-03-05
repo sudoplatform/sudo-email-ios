@@ -219,8 +219,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             ownershipProofToken: input.ownershipProofToken
         )
         let apiTransformer = EmailAddressAPITransformer(deviceKeyWorker: serviceKeyWorker)
-        let emailAddress = apiTransformer.transform(emailAccount)
-        return emailAddress
+        return apiTransformer.transform(emailAccount)
     }
 
     public func deprovisionEmailAddress(_ id: String) async throws -> EmailAddress {
@@ -228,16 +227,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailAccount = try await useCase.execute(emailAccountId: id)
 
         let apiTransformer = EmailAddressAPITransformer(deviceKeyWorker: serviceKeyWorker)
-        let emailAddress = apiTransformer.transform(emailAccount)
-        return emailAddress
+        return apiTransformer.transform(emailAccount)
     }
 
     public func updateEmailAddressMetadata(withInput input: UpdateEmailAddressMetadataInput) async throws -> String {
         let useCase = useCaseFactory.generateUpdateEmailAccountMetadataUseCase(
             emailAccountRepository: emailAccountRepository
         )
-        let emailAccountId = try await useCase.execute(emailAccountId: input.id, values: input.values)
-        return emailAccountId
+        return try await useCase.execute(emailAccountId: input.id, values: input.values)
     }
 
     public func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
@@ -274,12 +271,11 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         )
         let deleteResult = try await useCase.execute(withIds: ids)
         let successItems = deleteResult.successItems != nil ? deleteResult.successItems?.map { DeleteEmailMessageSuccessResult(id: $0) } : []
-        let result = BatchOperationResult(
+        return BatchOperationResult(
             status: deleteResult.status,
             successItems: successItems,
             failureItems: deleteResult.failureItems
         )
-        return result
     }
 
     public func deleteEmailMessage(withId id: String) async throws -> DeleteEmailMessageSuccessResult? {
@@ -349,12 +345,11 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let deleteResult = try await useCase.execute(withInput: input)
         let successItems = deleteResult.successItems != nil ? deleteResult.successItems?.map { DeleteEmailMessageSuccessResult(id: $0) } : []
 
-        let result = BatchOperationResult(
+        return BatchOperationResult(
             status: deleteResult.status,
             successItems: successItems,
             failureItems: deleteResult.failureItems
         )
-        return result
     }
 
     public func scheduleSendDraftMessage(
@@ -397,8 +392,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let input = CreateCustomEmailFolderInput(emailAddressId: input.emailAddressId, customFolderName: input.customFolderName)
         let result = try await useCase.execute(withInput: input)
         let apiTransformer = EmailFolderAPITransformer()
-        let customFolder = apiTransformer.transform(result)
-        return customFolder
+        return apiTransformer.transform(result)
     }
 
     public func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolder? {
@@ -406,16 +400,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let input = DeleteCustomEmailFolderInput(emailFolderId: input.emailFolderId, emailAddressId: input.emailAddressId)
         let result = try await useCase.execute(withInput: input)
         let apiTransformer = EmailFolderAPITransformer()
-        let customFolder = apiTransformer.transform(result)
-        return customFolder
+        return apiTransformer.transform(result)
     }
 
     public func updateCustomEmailFolder(withInput input: UpdateCustomEmailFolderInput) async throws -> EmailFolder {
         let useCase = useCaseFactory.generateUpdateCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
         let result = try await useCase.execute(withInput: input)
         let apiTransformer = EmailFolderAPITransformer()
-        let customFolder = apiTransformer.transform(result)
-        return customFolder
+        return apiTransformer.transform(result)
     }
 
     public func importKeys(archiveData: Data) throws {
@@ -499,13 +491,12 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             userClient: userClient,
             log: logger
         )
-        let result = try await useCase.execute(
+        return try await useCase.execute(
             addresses: addresses,
             action: action,
             emailAddressId: emailAddressId,
             blockLevel: blockLevel
         )
-        return result
     }
 
     public func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String> {
@@ -515,8 +506,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             userClient: userClient,
             log: logger
         )
-        let result = try await useCase.execute(addresses: addresses)
-        return result
+        return try await useCase.execute(addresses: addresses)
     }
 
     public func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String, String> {
@@ -526,8 +516,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             userClient: userClient,
             log: logger
         )
-        let result = try await useCase.execute(hashedValues: hashedValues)
-        return result
+        return try await useCase.execute(hashedValues: hashedValues)
     }
 
     public func getEmailAddressBlocklist() async throws -> [UnsealedBlockedAddress] {
@@ -537,8 +526,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             userClient: userClient,
             log: logger
         )
-        let result = try await useCase.execute()
-        return result
+        return try await useCase.execute()
     }
 
     public func listEmailFoldersForEmailAddressId(

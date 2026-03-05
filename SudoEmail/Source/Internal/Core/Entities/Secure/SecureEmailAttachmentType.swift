@@ -40,9 +40,15 @@ enum SecureEmailAttachmentType {
         }
     }
 
-    func fileName() -> String { getValues().fileName }
+    func fileName() -> String {
+        getValues().fileName
+    }
 
-    func mimeType() -> String { getValues().mimeType }
+    func mimeType() -> String {
+        getValues().mimeType
+    }
 
-    func contentId() -> String { getValues().contentId }
+    func contentId() -> String {
+        getValues().contentId
+    }
 }

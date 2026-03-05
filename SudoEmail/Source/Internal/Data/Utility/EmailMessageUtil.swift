@@ -67,12 +67,21 @@ class EmailMessageUtil {
             }
         }
 
+        // Determine if we should encrypt
+        var shouldEncrypt = false
+        var emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = []
+
         if allRecipientsInternal {
             // Lookup public key information for each internal recipient and sender
             var recipientsAndSender = allRecipients
             recipientsAndSender.append(parsedDraft.from[0].address)
-            let emailAddressesPublicInfo = try await retrieveAndVerifyPublicInfo(addresses: recipientsAndSender)
+            emailAddressesPublicInfo = try await retrieveAndVerifyPublicInfo(addresses: recipientsAndSender)
 
+            shouldEncrypt = emailAddressesPublicInfo.allSatisfy(\.enableEncryption)
+        }
+
+        // Process encrypted email message
+        if shouldEncrypt {
             if allRecipients.count > config.encryptedEmailMessageRecipientsLimit {
                 throw SudoEmailError.limitExceeded("Cannot send encrypted message to more than \(config.encryptedEmailMessageRecipientsLimit) recipients")
             }

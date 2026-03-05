@@ -28,7 +28,7 @@ struct EmailMessageFilterEntityTransformer {
         switch filter {
         case .id(let idFilter):
             let idFilter = stringFilterTransformer.transform(idFilter)
-            /// This is not a typo - `id` maps to `messageId`
+            // This is not a typo - `id` maps to `messageId`
             return .messageId(idFilter)
         case .messageId(let idFilter):
             let idFilter = stringFilterTransformer.transform(idFilter)

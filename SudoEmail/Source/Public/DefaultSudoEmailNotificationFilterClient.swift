@@ -41,5 +41,7 @@ public class DefaultSudoEmailNotificationFilterClient: SudoNotificationFilterCli
 
     public init() {}
 
-    public func getSchema() -> NotificationMetaData { return DefaultSudoEmailNotificationFilterClient.schema }
+    public func getSchema() -> NotificationMetaData {
+        return DefaultSudoEmailNotificationFilterClient.schema
+    }
 }

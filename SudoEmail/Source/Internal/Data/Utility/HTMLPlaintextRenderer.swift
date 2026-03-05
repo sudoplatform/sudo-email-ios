@@ -23,7 +23,7 @@ public class HTMLPlaintextRenderer: HTMLRenderer {
 
     // MARK: - Methods
 
-    // Attempts to convert the HTML given into one that has links added
+    /// Attempts to convert the HTML given into one that has links added
     public func mcoAbstractMessage(_ msg: MCOAbstractMessage!, filterHTMLForMessage html: String!) -> String! {
 
         // upgrade URLS to <a> and emails to mailto
@@ -117,8 +117,8 @@ public class HTMLPlaintextRenderer: HTMLRenderer {
 
     // MARK: - Helpers
 
-    // this is a limited html unescaper that is done to just to fix the amperstands so that urls work
-    // slashdot is a good example of why we do this, the gt can be assumed to be part of the url
+    /// this is a limited html unescaper that is done to just to fix the amperstands so that urls work
+    /// slashdot is a good example of why we do this, the gt can be assumed to be part of the url
     func htmlUnescape(_ orig: String) -> String {
 
         let swaps: [String: String] = ["&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": "\"", "&apos;": "'"]
@@ -131,7 +131,7 @@ public class HTMLPlaintextRenderer: HTMLRenderer {
         return out
     }
 
-    // gets the proper URL based on html
+    /// gets the proper URL based on html
     func cutURL(_ orig: String) -> String {
 
         // Removes &aaa when not followed by a ; (look that we get to the end without finding a ;)

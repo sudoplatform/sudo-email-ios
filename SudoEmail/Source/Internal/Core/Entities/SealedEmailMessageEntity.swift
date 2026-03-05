@@ -71,6 +71,9 @@ struct SealedEmailMessageEntity {
     /// Date timestamp when the email message was last updated on the service.
     var updatedAt: Date
 
+    /// S3 bucket and key attributes for the RFC 822 data of the email message.
+    var rfc822DataAttributes: Rfc822DataAttributes
+
     /// Size, in bytes, of this email message
     var size: Double
 
@@ -81,4 +84,16 @@ struct SealedEmailMessageEntity {
 
     /// SEALED - RFC 822 header data for the email message. Contains the recipients and subject matter.
     var rfc822Header: String
+}
+
+// MARK: - Nested Types
+
+extension SealedEmailMessageEntity {
+    struct Rfc822DataAttributes {
+        /// S3 bucket name where the RFC 822 data is stored.
+        var bucket: String
+
+        /// S3 key path where the RFC 822 data is stored.
+        var key: String
+    }
 }

@@ -31,7 +31,7 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
         do {
             let unsealedRFC822Header = try deviceKeyWorker.unsealString(message.rfc822Header, withKeyId: keyId, algorithm: algorithm)
             let headers = try EmailRFC822HeaderCodec().decode(header: unsealedRFC822Header)
-            let emailMessageEntity = EmailMessageEntity(
+            return EmailMessageEntity(
                 id: message.id,
                 owner: message.owner,
                 owners: message.owners,
@@ -61,7 +61,6 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
                 encryptionStatus: message.encryptionStatus,
                 date: headers.date
             )
-            return emailMessageEntity
         } catch {
             throw SudoEmailError.internalError("Failed to unseal email message (ID: \(message.id), Key ID: \(keyId)")
         }
@@ -89,7 +88,6 @@ class DefaultEmailMessageUnsealerService: EmailMessageUnsealerService {
     func unsealEmailAddress(_ sealedEmailAddress: String, withKeyId keyId: String, algorithm: String) throws -> EmailAddressEntity {
         let addressString = try deviceKeyWorker.unsealString(sealedEmailAddress, withKeyId: keyId, algorithm: algorithm)
         let transformer = EmailAddressEntityTransformer()
-        let address = try transformer.transform(addressString, alias: nil)
-        return address
+        return try transformer.transform(addressString, alias: nil)
     }
 }

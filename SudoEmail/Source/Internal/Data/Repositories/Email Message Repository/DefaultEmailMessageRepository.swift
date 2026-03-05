@@ -133,7 +133,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
 
     // MARK: - SealedEmailMessageRepository
 
-    // Sends an out-of-network email message.
+    /// Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
         let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailAccountId)
 
@@ -147,8 +147,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
-    // Sends an in-network email message with E2E encryption.
-    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    /// Sends an in-network email message with E2E encryption.
+    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessage(
         withRFC822Data data: Data,
         emailAccountId: String,
@@ -191,8 +191,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         )
     }
 
-    // Sends an email message from a masked email address
-    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    /// Sends an email message from a masked email address
+    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessageFromMask(
         withRFC822Data data: Data,
         emailMaskId: String,
@@ -474,16 +474,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         )
     }
 
-    func fetchEmailMessageRFC822Data(_ id: String, emailAddressId: String) async throws -> S3ObjectEntity? {
-        guard let sealedEmailMessage = try await getEmailMessageQuery(id: id) else {
-            return nil
-        }
-        guard let s3Key = await getS3KeyForEmailMessageId(id, emailAddressId: emailAddressId, publicKeyId: sealedEmailMessage.keyId) else {
-            throw SudoEmailError.notSignedIn
-        }
+    func fetchEmailMessageRFC822Data(_ id: String, rfc822DataAttributes: SealedEmailMessageEntity.Rfc822DataAttributes) async throws -> S3ObjectEntity? {
         do {
-            let rfc822Object = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
-            return rfc822Object
+            return try await s3Worker.getObject(bucket: rfc822DataAttributes.bucket, key: rfc822DataAttributes.key)
         } catch {
             logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
             throw error
@@ -491,14 +484,12 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     }
 
     func getEmailMessageWithBody(messageId: String, emailAddressId: String) async throws -> EmailMessageWithBody? {
-        // Start tasks concurrently
-        async let emailMessageTask = fetchEmailMessageById(messageId)
-        async let rfc822ObjectTask = fetchEmailMessageRFC822Data(messageId, emailAddressId: emailAddressId)
-
-        guard let emailMessage = try await emailMessageTask else {
+        guard let emailMessage = try await fetchEmailMessageById(messageId),
+              emailMessage.emailAddressId == emailAddressId else {
             return nil
         }
-        guard let rfc822Object = try await rfc822ObjectTask else {
+
+        guard let rfc822Object = try await fetchEmailMessageRFC822Data(messageId, rfc822DataAttributes: emailMessage.rfc822DataAttributes) else {
             throw SudoEmailError.noEmailMessageRFC822Available
         }
 
@@ -668,8 +659,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             guard let emailMessage = result.getEmailMessage else {
                 return nil
             }
-            let entity = try transformer.transform(emailMessage)
-            return entity
+            return try transformer.transform(emailMessage)
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error

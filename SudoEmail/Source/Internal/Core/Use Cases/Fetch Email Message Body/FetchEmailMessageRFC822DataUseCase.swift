@@ -35,10 +35,11 @@ class FetchEmailMessageRFC822DataUseCase {
     ///   - id: Identifier of the email message to be accessed.
     ///   - completion: Body of the email message associated with `id`, or error on failure.
     func execute(withMessageId id: String, emailAddressId: String) async throws -> Data {
-        guard let emailMessage = try await emailMessageRepository.fetchEmailMessageById(id) else {
+        guard let emailMessage = try await emailMessageRepository.fetchEmailMessageById(id),
+              emailMessage.emailAddressId == emailAddressId else {
             throw SudoEmailError.noEmailMessageRFC822Available
         }
-        guard let rfc822Object = try await emailMessageRepository.fetchEmailMessageRFC822Data(id, emailAddressId: emailAddressId) else {
+        guard let rfc822Object = try await emailMessageRepository.fetchEmailMessageRFC822Data(id, rfc822DataAttributes: emailMessage.rfc822DataAttributes) else {
             throw SudoEmailError.noEmailMessageRFC822Available
         }
         let contentEncodingValues = (rfc822Object.contentEncoding?.split(separator: ",") ?? ["sudoplatform-crypto", "sudoplatform-binary-data"]).reversed()
