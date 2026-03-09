@@ -65,6 +65,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     let subscriptionManager: SubscriptionManager
 
+    // MARK: - Properties: Sign-In Guard
+
+    private let signInGuard: SignInGuard
+
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DefaultSudoEmailClient`. It uses configuration parameters defined in `sudoplatformconfig.json` file located in the app
@@ -177,6 +181,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     ) {
         self.graphQLClient = graphQLClient
         self.userClient = userClient
+        signInGuard = SignInGuard(userClient: userClient)
         self.logger = logger
         self.useCaseFactory = useCaseFactory
         self.emailAccountRepository = emailAccountRepository
@@ -202,9 +207,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     // MARK: - SudoEmailClient
 
+    public func setSignInDelegate(_ delegate: SudoPlatformSignInDelegate?) async {
+        await signInGuard.setDelegate(delegate)
+    }
+
     public func provisionEmailAddress(
         withInput input: ProvisionEmailAddressInput
     ) async throws -> EmailAddress {
+        try await ensureSignedIn()
         let provisionEmailAccountUseCase = useCaseFactory.generateProvisionEmailAccountUseCase(
             keyWorker: serviceKeyWorker,
             emailAccountRepository: emailAccountRepository,
@@ -223,6 +233,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deprovisionEmailAddress(_ id: String) async throws -> EmailAddress {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
         let emailAccount = try await useCase.execute(emailAccountId: id)
 
@@ -231,6 +242,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func updateEmailAddressMetadata(withInput input: UpdateEmailAddressMetadataInput) async throws -> String {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateUpdateEmailAccountMetadataUseCase(
             emailAccountRepository: emailAccountRepository
         )
@@ -238,6 +250,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository,
@@ -251,6 +264,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func sendMaskedEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository,
@@ -265,6 +279,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func deleteEmailMessages(withIds ids: [String]) async throws
         -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
             emailConfigRepository: emailConfigurationDataRepository
@@ -279,6 +294,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deleteEmailMessage(withId id: String) async throws -> DeleteEmailMessageSuccessResult? {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
             emailConfigRepository: emailConfigurationDataRepository
@@ -295,6 +311,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func updateEmailMessages(
         withInput input: UpdateEmailMessagesInput
     ) async throws -> BatchOperationResult<UpdatedEmailMessageSuccess, EmailMessageOperationFailureResult> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateUpdateEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
             emailConfigRepository: emailConfigurationDataRepository
@@ -305,6 +322,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func createDraftEmailMessage(
         withInput input: CreateDraftEmailMessageInput
     ) async throws -> DraftEmailMessageMetadata {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateCreateDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository,
@@ -321,6 +339,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func updateDraftEmailMessage(
         withInput input: UpdateDraftEmailMessageInput
     ) async throws -> DraftEmailMessageMetadata {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateUpdateDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository,
@@ -337,6 +356,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func deleteDraftEmailMessages(
         withInput input: DeleteDraftEmailMessagesInput
     ) async throws -> BatchOperationResult<DeleteEmailMessageSuccessResult, EmailMessageOperationFailureResult> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteDraftEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository
@@ -355,6 +375,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func scheduleSendDraftMessage(
         withInput input: ScheduleSendDraftMessageInput
     ) async throws -> ScheduledDraftMessage {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateScheduleSendDraftMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository
@@ -366,6 +387,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func cancelScheduledDraftMessage(
         withInput input: CancelScheduledDraftMessageInput
     ) async throws -> String {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateCancelScheduledDraftMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailAccountRepository: emailAccountRepository
@@ -376,6 +398,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func listScheduledDraftMessagesForEmailAddressId(
         withInput input: ListScheduledDraftMessagesForEmailAddressIdInput
     ) async throws -> ListOutput<ScheduledDraftMessage> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListScheduledDraftMessagesForEmailAddressIdUseCase(
             emailMessageRepository: emailMessageRepository
         )
@@ -385,6 +408,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func createCustomEmailFolder(withInput input: CreateCustomEmailFolderInput) async throws -> EmailFolder {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateCreateCustomEmailFolderUseCase(
             emailFolderRepository: emailFolderRepository,
             emailAccountRepository: emailAccountRepository
@@ -396,6 +420,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deleteCustomEmailFolder(withInput input: DeleteCustomEmailFolderInput) async throws -> EmailFolder? {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
         let input = DeleteCustomEmailFolderInput(emailFolderId: input.emailFolderId, emailAddressId: input.emailAddressId)
         let result = try await useCase.execute(withInput: input)
@@ -404,6 +429,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func updateCustomEmailFolder(withInput input: UpdateCustomEmailFolderInput) async throws -> EmailFolder {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateUpdateCustomEmailFolderUseCase(emailFolderRepository: emailFolderRepository)
         let result = try await useCase.execute(withInput: input)
         let apiTransformer = EmailFolderAPITransformer()
@@ -422,6 +448,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func checkEmailAddressAvailability(withInput input: CheckEmailAddressAvailabilityInput) async throws -> [String] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateCheckEmailAddressAvailabilityUseCase(emailAccountRepository: emailAccountRepository)
         let domainTransformer = DomainEntityTransformer()
         let domainEntities = input.domains.map { $0.map(domainTransformer.transform(_:)) }
@@ -430,24 +457,28 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func getSupportedEmailDomains() async throws -> [String] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchSupportedDomainsUseCase(domainRepository: domainRepository)
         let domainEntities = try await useCase.execute()
         return domainEntities.map { String($0.name) }
     }
 
     public func getConfiguredEmailDomains() async throws -> [String] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchConfiguredDomainsUseCase(domainRepository: domainRepository)
         let domainEntities = try await useCase.execute()
         return domainEntities.map { String($0.name) }
     }
 
     public func getEmailMaskDomains() async throws -> [String] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchEmailMaskDomainsUseCase(domainRepository: domainRepository)
         let domainEntities = try await useCase.execute()
         return domainEntities.map { String($0.name) }
     }
 
     public func getEmailAddress(withInput input: GetEmailAddressInput) async throws -> EmailAddress? {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
         let emailAccount = try await useCase.execute(withEmailAddressId: input.id)
         let transformer = EmailAccountEntityTransformer(deviceKeyWorker: serviceKeyWorker)
@@ -455,6 +486,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func listEmailAddresses(withInput input: ListEmailAddressesInput) async throws -> ListOutput<EmailAddress> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListEmailAccountsUseCase(emailAccountRepository: emailAccountRepository)
         let emailAccounts = try await useCase.execute(limit: input.limit, nextToken: input.nextToken)
         let transformer = ListOutputAPITransformer(deviceKeyWorker: serviceKeyWorker)
@@ -462,6 +494,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func listEmailAddressesForSudoId(withInput input: ListEmailAddressesForSudoIdInput) async throws -> ListOutput<EmailAddress> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListEmailAccountsForSudoIdUseCase(emailAccountRepository: emailAccountRepository)
         let emailAccounts = try await useCase.execute(
             sudoId: input.sudoId,
@@ -473,6 +506,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func lookupEmailAddressesPublicInfo(withInput input: LookupEmailAddressesPublicInfoInput) async throws -> [EmailAddressPublicInfo] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateLookupEmailAddressesPublicInfoUseCase(emailAccountRepository: emailAccountRepository)
         let publicInfo = try await useCase.execute(emailAddresses: input.emailAddresses)
         let transformer = EmailAddressPublicInfoAPITransformer()
@@ -485,6 +519,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         emailAddressId: String?,
         blockLevel: BlockedEmailAddressLevel
     ) async throws -> BatchOperationResult<String, String> {
+        try await ensureSignedIn()
         logger.debug("blockEmailAddresses: \(addresses)")
         let useCase = useCaseFactory.generateBlockEmailAddressesUseCase(
             blockedAddressRepository: blockedAddressRepository,
@@ -500,6 +535,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String> {
+        try await ensureSignedIn()
         logger.debug("unblockEmailAddresses: \(addresses)")
         let useCase = useCaseFactory.generateUnblockEmailAddressesUseCase(
             blockedAddressRepository: blockedAddressRepository,
@@ -510,6 +546,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func unblockEmailAddressesByHashedValue(hashedValues: [String]) async throws -> BatchOperationResult<String, String> {
+        try await ensureSignedIn()
         logger.debug("unblockEmailAddressesByHashedValue: \(hashedValues)")
         let useCase = useCaseFactory.generateUnblockEmailAddressesByHashedValueUseCase(
             blockedAddressRepository: blockedAddressRepository,
@@ -520,6 +557,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func getEmailAddressBlocklist() async throws -> [UnsealedBlockedAddress] {
+        try await ensureSignedIn()
         logger.debug("getEmailAddressBlocklist init")
         let useCase = useCaseFactory.generateGetEmailAddressBlocklistUseCase(
             blockedAddressRepository: blockedAddressRepository,
@@ -532,6 +570,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func listEmailFoldersForEmailAddressId(
         withInput input: ListEmailFoldersForEmailAddressIdInput
     ) async throws -> ListOutput<EmailFolder> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListEmailFoldersForEmailAddressIdUseCase(
             emailFolderRepository: emailFolderRepository
         )
@@ -541,6 +580,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func getEmailMessage(withInput input: GetEmailMessageInput) async throws -> EmailMessage? {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
@@ -553,6 +593,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func listEmailMessages(
         withInput input: ListEmailMessagesInput
     ) async throws -> ListAPIResult<EmailMessage, PartialEmailMessage> {
+        try await ensureSignedIn()
         let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
         let useCase = useCaseFactory.generateListEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
@@ -567,6 +608,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func listEmailMessagesForEmailAddressId(
         withInput input: ListEmailMessagesForEmailAddressInput
     ) async throws -> ListAPIResult<EmailMessage, PartialEmailMessage> {
+        try await ensureSignedIn()
         let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
         let useCase = useCaseFactory.generateListEmailMessagesForEmailAddressIdUseCase(
             emailMessageRepository: emailMessageRepository,
@@ -581,6 +623,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func listEmailMessagesForEmailFolderId(
         withInput input: ListEmailMessagesForEmailFolderIdInput
     ) async throws -> ListAPIResult<EmailMessage, PartialEmailMessage> {
+        try await ensureSignedIn()
         let sealedEmailMessageEntityTransformer = SealedEmailMessageEntityTransformer()
         let useCase = useCaseFactory.generateListEmailMessagesForEmailFolderIdUseCase(
             emailMessageRepository: emailMessageRepository,
@@ -594,6 +637,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     @available(*, deprecated, message: "Use getEmailMessageWithBody instead to retrieve email message data")
     public func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchEmailMessageRFC822DataUseCase(
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService
@@ -602,6 +646,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateGetEmailMessageWithBodyUseCase(
             emailMessageRepository: emailMessageRepository
         )
@@ -609,6 +654,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func listDraftEmailMessages() async throws -> [DraftEmailMessage] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListDraftEmailMessagesUseCase(
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository
@@ -617,6 +663,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func listDraftEmailMessagesForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessage] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListDraftEmailMessagesForEmailAddressIdUseCase(
             emailMessageRepository: emailMessageRepository
         )
@@ -624,6 +671,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata] {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListDraftEmailMessageMetadataUseCase(
             emailAccountRepository: emailAccountRepository,
             emailMessageRepository: emailMessageRepository
@@ -635,6 +683,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func listDraftEmailMessageMetadataForEmailAddressId(
         withInput input: ListDraftEmailMessageMetadataForEmailAddressIdInput
     ) async throws -> ListOutput<DraftEmailMessageMetadata> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListDraftEmailMessageMetadataForEmailAddressIdUseCase(
             emailMessageRepository: emailMessageRepository
         )
@@ -650,6 +699,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     public func getDraftEmailMessage(
         withInput input: GetDraftEmailMessageInput
     ) async throws -> DraftEmailMessage? {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateGetDraftEmailMessageUseCase(
             emailMessageRepository: emailMessageRepository
         )
@@ -657,6 +707,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteMessagesForFolderIdUseCase(
             emailFolderRepository: emailFolderRepository
         )
@@ -664,6 +715,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func getConfigurationData() async throws -> ConfigurationData {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateGetConfigurationDataUseCase(
             emailConfigurationDataRepository: emailConfigurationDataRepository
         )
@@ -673,6 +725,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func provisionEmailMask(withInput input: ProvisionEmailMaskInput) async throws -> EmailMask {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateProvisionEmailMaskUseCase(
             keyWorker: serviceKeyWorker,
             emailMaskRepository: emailMaskRepository,
@@ -692,6 +745,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func deprovisionEmailMask(withInput input: DeprovisionEmailMaskInput) async throws -> EmailMask {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeprovisionEmailMaskUseCase(
             emailMaskRepository: emailMaskRepository,
             logger: logger
@@ -702,6 +756,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func updateEmailMask(withInput input: UpdateEmailMaskInput) async throws -> EmailMask {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateUpdateEmailMaskUseCase(
             emailMaskRepository: emailMaskRepository,
             logger: logger
@@ -712,6 +767,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func enableEmailMask(withInput input: EnableEmailMaskInput) async throws -> EmailMask {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateEnableEmailMaskUseCase(
             emailMaskRepository: emailMaskRepository,
             logger: logger
@@ -722,6 +778,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func disableEmailMask(withInput input: DisableEmailMaskInput) async throws -> EmailMask {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateDisableEmailMaskUseCase(
             emailMaskRepository: emailMaskRepository,
             logger: logger
@@ -732,6 +789,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     }
 
     public func listEmailMasksForOwner(withInput input: ListEmailMasksForOwnerInput) async throws -> ListOutput<EmailMask> {
+        try await ensureSignedIn()
         let useCase = useCaseFactory.generateListEmailMasksForOwnerUseCase(
             emailMaskRepository: emailMaskRepository,
             logger: logger
@@ -761,5 +819,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func unsubscribeAll() async {
         await subscriptionManager.unsubscribeAll()
+    }
+
+    /// Checks if user is signed in and invokes delegate if needed.
+    /// Only performs check if delegate is configured.
+    ///
+    /// - Throws: Any error thrown by the sign-in delegate
+    private func ensureSignedIn() async throws {
+        try await signInGuard.ensureSignedIn()
     }
 }
