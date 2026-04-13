@@ -15,12 +15,16 @@ public struct ScheduleSendDraftMessageInput {
     /// The identifier of the email address to send the message from
     public var emailAddressId: String
 
+    /// The identifier of the email mask used to send the message, if applicable
+    public var emailMaskId: String?
+
     /// The timestamp of when to send the message
     public var sendAt: Date
 
-    public init(id: String, emailAddressId: String, sendAt: Date) {
+    public init(id: String, emailAddressId: String, emailMaskId: String? = nil, sendAt: Date) {
         self.id = id
         self.emailAddressId = emailAddressId
+        self.emailMaskId = emailMaskId
         self.sendAt = sendAt
     }
 }

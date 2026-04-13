@@ -57,6 +57,14 @@ protocol EmailMaskRepository: Repository {
     /// - Returns: The disabled email mask entity.
     func disableEmailMask(emailMaskId: String) async throws -> EmailMaskEntity
 
+    /// Verify an external email address for use with email masking.
+    /// - Parameters:
+    ///   - emailAddress: The external email address to verify.
+    ///   - emailMaskId: The unique identifier of the email mask.
+    ///   - verificationCode: Optional verification code.
+    /// - Returns: The verification result entity.
+    func verifyExternalEmailAddress(emailAddress: String, emailMaskId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity
+
     /// List email masks owned by the current user with optional filtering and pagination.
     /// - Parameters:
     ///   - filter: Optional filter to apply to the email masks being listed.

@@ -22,6 +22,7 @@ struct EmailServiceConfig: Decodable {
     let region: String
     let bucket: String
     let transientBucket: String
+    let testSentEmailBucket: String?
 }
 
 /// Configuration for connecting to the Sudo Email Service via AppSync.

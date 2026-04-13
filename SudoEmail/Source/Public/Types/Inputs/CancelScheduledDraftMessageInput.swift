@@ -15,8 +15,12 @@ public struct CancelScheduledDraftMessageInput {
     /// The identifier of the email address that owns the message.
     public var emailAddressId: String
 
-    public init(id: String, emailAddressId: String) {
+    /// The identifier of the email mask used to send the message, if applicable
+    public var emailMaskId: String?
+
+    public init(id: String, emailAddressId: String, emailMaskId: String? = nil) {
         self.id = id
         self.emailAddressId = emailAddressId
+        self.emailMaskId = emailMaskId
     }
 }

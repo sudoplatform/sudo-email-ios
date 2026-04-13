@@ -54,7 +54,8 @@ class UpdateDraftEmailMessageUseCase {
         }
         if try !(await emailMessageRepository.draftExists(
             id: input.id,
-            emailAddressId: input.senderEmailAddressId
+            emailAddressId: input.senderEmailAddressId,
+            emailMaskId: input.emailMaskId
         )) {
             throw SudoEmailError.emailMessageNotFound
         }
@@ -74,12 +75,14 @@ class UpdateDraftEmailMessageUseCase {
         let metadata = try await emailMessageRepository.saveDraft(
             rfc822Data: rfc822Data,
             senderEmailAddressId: input.senderEmailAddressId,
-            id: input.id
+            id: input.id,
+            emailMaskId: input.emailMaskId
         )
         return DraftEmailMessageMetadata(
             id: metadata.id,
             emailAddressId: metadata.emailAddressId,
-            updatedAt: metadata.updatedAt
+            updatedAt: metadata.updatedAt,
+            emailMaskId: metadata.emailMaskId
         )
     }
 }

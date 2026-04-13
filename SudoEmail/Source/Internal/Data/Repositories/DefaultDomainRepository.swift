@@ -51,4 +51,11 @@ class DefaultDomainRepository: DomainRepository {
         let transformer = DomainEntityTransformer()
         return result.getEmailMaskDomains.domains.map(transformer.transform(_:))
     }
+
+    func listEmailDomains() async throws -> [EmailDomainEntity] {
+        let query = GraphQL.ListEmailDomainsQuery()
+        let result = try await fetch(query)
+        let transformer = DomainEntityTransformer()
+        return try result.listEmailDomains.map(transformer.transform(_:))
+    }
 }

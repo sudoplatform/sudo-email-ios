@@ -25,6 +25,9 @@ struct ScheduledDraftMessageEntity: Equatable {
     /// The identifier of the email address to send the message from
     var emailAddressId: String
 
+    /// The identifier of the email mask used to send the message, if applicable
+    var emailMaskId: String?
+
     /// The timestamp of when to send the message
     var sendAt: Date
 

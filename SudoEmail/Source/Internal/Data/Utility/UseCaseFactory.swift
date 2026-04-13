@@ -45,6 +45,10 @@ class UseCaseFactory {
         return FetchEmailMaskDomainsUseCase(domainRepository: domainRepository)
     }
 
+    func generateListEmailDomainsUseCase(domainRepository: DomainRepository) -> ListEmailDomainsUseCase {
+        return ListEmailDomainsUseCase(domainRepository: domainRepository)
+    }
+
     func generateSendEmailMessageUseCase(
         emailAccountRepository: EmailAccountRepository,
         emailMessageRepository: EmailMessageRepository,
@@ -414,6 +418,16 @@ class UseCaseFactory {
         logger: Logger
     ) -> DisableEmailMaskUseCase {
         return DisableEmailMaskUseCase(
+            emailMaskRepository: emailMaskRepository,
+            logger: logger
+        )
+    }
+
+    func generateVerifyExternalEmailAddressUseCase(
+        emailMaskRepository: EmailMaskRepository,
+        logger: Logger
+    ) -> VerifyExternalEmailAddressUseCase {
+        return VerifyExternalEmailAddressUseCase(
             emailMaskRepository: emailMaskRepository,
             logger: logger
         )

@@ -231,13 +231,22 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - Success: Array of supported domains.
     ///   - Failure: `SudoEmailError`.
-    func getSupportedEmailDomains() async throws -> [String]
+    @available(*, deprecated, message: "Use listEmailDomains instead to retrieve domain data")
+    func getSupportedEmailDomains() async throws -> [String] //
 
     /// Get a list of all of the email domains on which email masks may be provisioned.
     /// - Returns:
     ///   - Success: Array of supported mask domains.
     ///   - Failure: `SudoEmailError`.
+    @available(*, deprecated, message: "Use listEmailDomains instead to retrieve domain data")
     func getEmailMaskDomains() async throws -> [String]
+
+    /// Get a list of all supported email domains that can be used for provisioning email addresses and email masks, along with metadata about each domain.
+    ///
+    /// - Returns:
+    ///  -  Success: Array of supported email domains with associated metadata.
+    ///  - Failure: `SudoEmailError`.
+    func listEmailDomains() async throws -> [EmailDomain]
 
     /// Get a list of all of the configured domains. Primarily intended to be used as part of performing
     /// an email send operation in order to fetch all domains configured for the service so that appropriate
@@ -448,6 +457,13 @@ public protocol SudoEmailClient: AnyObject {
     ///  - Returns:
     ///    - The disabled EmailMask
     func disableEmailMask(withInput input: DisableEmailMaskInput) async throws -> EmailMask
+
+    /// Verifies an external email address for use with email masking.
+    ///  - Parameters:
+    ///    - input: Input parameters containing the email address, mask ID, and optional verification code
+    ///  - Returns:
+    ///    - The verification result indicating success or failure
+    func verifyExternalEmailAddress(withInput input: VerifyExternalEmailAddressInput) async throws -> VerifyExternalEmailAddressResult
 
     /// Blocks the addresses given from sending to the user
     ///

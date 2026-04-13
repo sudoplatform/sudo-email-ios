@@ -16,8 +16,12 @@ public struct GetDraftEmailMessageInput {
     /// The identifier of the email address associated with the draft email message.
     public var emailAddressId: String
 
-    public init(id: String, emailAddressId: String) {
+    /// The identifier of the email mask associated with the draft email message.
+    public var emailMaskId: String?
+
+    public init(id: String, emailAddressId: String, emailMaskId: String? = nil) {
         self.id = id
         self.emailAddressId = emailAddressId
+        self.emailMaskId = emailMaskId
     }
 }

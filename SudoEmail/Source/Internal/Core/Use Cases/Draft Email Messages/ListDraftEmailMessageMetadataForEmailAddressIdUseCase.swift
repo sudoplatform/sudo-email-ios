@@ -25,7 +25,6 @@ struct ListDraftEmailMessageMetadataForEmailAddressIdUseCaseOutput {
     let nextToken: String?
 }
 
-// swiftlint:disable type_name
 class ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
 
     // MARK: - Properties
@@ -56,5 +55,3 @@ class ListDraftEmailMessageMetadataForEmailAddressIdUseCase {
         )
     }
 }
-
-// swiftlint:enable type_name

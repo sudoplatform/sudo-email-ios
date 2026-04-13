@@ -30,6 +30,9 @@ public struct ScheduledDraftMessage: Equatable {
     /// The identifier of the email address to send the message from
     public let emailAddressId: String
 
+    /// The identifier of the email mask used to send the message, if applicable
+    public let emailMaskId: String?
+
     /// The timestamp of when to send the message
     public let sendAt: Date
 

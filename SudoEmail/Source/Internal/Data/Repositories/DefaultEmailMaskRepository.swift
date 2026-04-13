@@ -192,6 +192,36 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         return try transformer.transform(result)
     }
 
+    func verifyExternalEmailAddress(emailAddress: String, emailMaskId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity {
+        logger.debug("Verifying external email address for mask ID: \(emailMaskId)")
+
+        // Use double optional pattern: .none means don't include field, .some(value) means include it
+        let verificationCodeInput: String?? = verificationCode.map { .some($0) } ?? .none
+
+        let verifyInput = GraphQL.VerifyExternalEmailAddressInput(
+            emailAddress: emailAddress,
+            emailMaskId: emailMaskId,
+            verificationCode: verificationCodeInput
+        )
+
+        let mutation = GraphQL.VerifyExternalEmailAddressMutation(input: verifyInput)
+        let result = try await perform(mutation)
+
+        // If response is nil/undefined, it means verification email was sent
+        // Return a result indicating not yet verified
+        guard let verifyResult = result.verifyExternalEmailAddress else {
+            return VerifyExternalEmailAddressResultEntity(
+                isVerified: false,
+                reason: "Verification email sent"
+            )
+        }
+
+        return VerifyExternalEmailAddressResultEntity(
+            isVerified: verifyResult.isVerified,
+            reason: verifyResult.reason
+        )
+    }
+
     func listEmailMasksForOwner(filter: EmailMaskFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailMaskEntity> {
         logger.debug("Listing email masks for owner with limit: \(limit ?? -1), nextToken: \(nextToken ?? "nil")")
 

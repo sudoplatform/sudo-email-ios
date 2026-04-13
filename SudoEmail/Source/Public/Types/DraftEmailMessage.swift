@@ -21,15 +21,20 @@ public struct DraftEmailMessage: Equatable {
     /// The RFC 822 formatted draft email message content.
     public var rfc822Data: Data
 
+    /// Unique identifier of the email mask associated with the draft email message, if any.
+    public var emailMaskId: String?
+
     public init(
         id: String,
         emailAddressId: String,
         updatedAt: Date,
-        rfc822Data: Data
+        rfc822Data: Data,
+        emailMaskId: String? = nil
     ) {
         self.id = id
         self.emailAddressId = emailAddressId
         self.updatedAt = updatedAt
         self.rfc822Data = rfc822Data
+        self.emailMaskId = emailMaskId
     }
 }

@@ -247,6 +247,9 @@
                 <a class="nav-group-task-link" href="../Structs/EmailAttachment.html">EmailAttachment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailDomain.html">EmailDomain</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/EmailFolder.html">EmailFolder</a>
               </li>
               <li class="nav-group-task">
@@ -411,6 +414,12 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UpdatedEmailMessageSuccess.html">UpdatedEmailMessageSuccess</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VerifyExternalEmailAddressInput.html">VerifyExternalEmailAddressInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VerifyExternalEmailAddressResult.html">VerifyExternalEmailAddressResult</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -558,9 +567,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail05DraftB7MessageV2id14emailAddressId9updatedAt10rfc822DataACSS_SS10Foundation4DateVAH0L0Vtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(id:emailAddressId:updatedAt:rfc822Data:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail05DraftB7MessageV2id14emailAddressId9updatedAt10rfc822DataACSS_SS10Foundation4DateVAH0L0Vtcfc">init(id:<wbr>emailAddressId:<wbr>updatedAt:<wbr>rfc822Data:<wbr>)</a>
+                    <a name="/s:9SudoEmail05DraftB7MessageV11emailMaskIdSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/emailMaskId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail05DraftB7MessageV11emailMaskIdSSSgvp">emailMaskId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Unique identifier of the email mask associated with the draft email message, if any.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">emailMaskId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail05DraftB7MessageV2id14emailAddressId9updatedAt10rfc822Data0f4MaskH0ACSS_SS10Foundation4DateVAI0L0VSSSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(id:emailAddressId:updatedAt:rfc822Data:emailMaskId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail05DraftB7MessageV2id14emailAddressId9updatedAt10rfc822Data0f4MaskH0ACSS_SS10Foundation4DateVAI0L0VSSSgtcfc">init(id:<wbr>emailAddressId:<wbr>updatedAt:<wbr>rfc822Data:<wbr>emailMaskId:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -578,7 +614,8 @@
     <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">emailAddressId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">updatedAt</span><span class="p">:</span> <span class="kt">Date</span><span class="p">,</span>
-    <span class="nv">rfc822Data</span><span class="p">:</span> <span class="kt">Data</span>
+    <span class="nv">rfc822Data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span>
+    <span class="nv">emailMaskId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -594,7 +631,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-03-09)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-04-13)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

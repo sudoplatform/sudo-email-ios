@@ -64,12 +64,14 @@ class CreateDraftEmailMessageUseCase {
         let metadata = try await emailMessageRepository.saveDraft(
             rfc822Data: rfc822Data,
             senderEmailAddressId: input.senderEmailAddressId,
-            id: nil
+            id: nil,
+            emailMaskId: input.emailMaskId
         )
         return DraftEmailMessageMetadata(
             id: metadata.id,
             emailAddressId: metadata.emailAddressId,
-            updatedAt: metadata.updatedAt
+            updatedAt: metadata.updatedAt,
+            emailMaskId: metadata.emailMaskId
         )
     }
 }

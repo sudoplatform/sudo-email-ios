@@ -34,7 +34,8 @@ class ListDraftEmailMessagesForEmailAddressIdUseCase {
                         do {
                             return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
                                 id: m.id,
-                                emailAddressId: emailAddressId
+                                emailAddressId: emailAddressId,
+                                emailMaskId: m.emailMaskId
                             ))
                         } catch {
                             throw error

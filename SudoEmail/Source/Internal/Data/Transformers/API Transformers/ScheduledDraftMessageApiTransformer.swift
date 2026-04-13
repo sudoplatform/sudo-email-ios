@@ -16,6 +16,7 @@ struct ScheduledDraftMessageApiTransformer {
         return ScheduledDraftMessage(
             id: entity.id,
             emailAddressId: entity.emailAddressId,
+            emailMaskId: entity.emailMaskId,
             sendAt: entity.sendAt,
             owner: entity.owner,
             owners: entity.owners.map(ownerTransformer.transform(_:)),

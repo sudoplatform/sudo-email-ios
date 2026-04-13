@@ -15,16 +15,22 @@ struct DraftEmailMetadataEntityTransformer {
         s3KeyPrefix: String,
         emailAddressId: String
     ) throws -> DraftEmailMessageMetadataEntity {
+        var fullS3KeyPrefix = s3KeyPrefix
         guard let key = awsS3Object.key else {
             throw SudoEmailError.internalError("draft email message has no id")
         }
         guard let updatedAt = awsS3Object.lastModified else {
             throw SudoEmailError.internalError("draft email message has no last modified date")
         }
+        let emailMaskId = extractEmailMaskIdFromDraftMessageS3Key(key: key)
+        if let emailMaskId, !emailMaskId.isEmpty {
+            fullS3KeyPrefix += "mask/\(emailMaskId)/"
+        }
         return DraftEmailMessageMetadataEntity(
-            id: key.replacingOccurrences(of: s3KeyPrefix, with: ""),
+            id: key.replacingOccurrences(of: fullS3KeyPrefix, with: ""),
             emailAddressId: emailAddressId,
-            updatedAt: updatedAt
+            updatedAt: updatedAt,
+            emailMaskId: emailMaskId
         )
     }
 
@@ -32,7 +38,25 @@ struct DraftEmailMetadataEntityTransformer {
         return DraftEmailMessageMetadata(
             id: entity.id,
             emailAddressId: entity.emailAddressId,
-            updatedAt: entity.updatedAt
+            updatedAt: entity.updatedAt,
+            emailMaskId: entity.emailMaskId
         )
+    }
+
+    /// Extracts the email mask ID from a draft message S3 key.
+    /// - Parameter key: The S3 key string
+    /// - Returns: The email mask ID if found, otherwise `nil`
+    private func extractEmailMaskIdFromDraftMessageS3Key(key: String) -> String? {
+        let pattern = #"/mask/([^/]+)/"# // matches '/mask/{emailMaskId}/'
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return nil
+        }
+        let nsRange = NSRange(key.startIndex ..< key.endIndex, in: key)
+        guard let match = regex.firstMatch(in: key, options: [], range: nsRange),
+              match.numberOfRanges > 1,
+              let range = Range(match.range(at: 1), in: key) else {
+            return nil
+        }
+        return String(key[range])
     }
 }

@@ -77,21 +77,25 @@ protocol EmailMessageRepository: Repository {
     ///   - rfc822Data: The RFC822 data of the draft email message
     ///   - senderEmailAddressId: The id of the sender's email address
     ///   - id: The id of the draft email message to save
+    ///   - emailMaskId - The id of the email mask associated with the draft message
     ///   - Returns: On success, the metadata associated with the saved draft email message
     func saveDraft(
         rfc822Data: Data,
         senderEmailAddressId: String,
-        id: String?
+        id: String?,
+        emailMaskId: String?
     ) async throws -> DraftEmailMessageMetadataEntity
 
     /// Delete a draft email message.
     ///  - Parameters:
     ///    - id: The identifier of the draft email message to delete.
     ///    - emailAddressId: The email address id associated with the draft email message to delete.
+    ///    - emailMaskId - The id of the email mask associated with the draft message
     ///  - Returns: The identifier of the deleted email message.
     func deleteDraft(
         id: String,
-        emailAddressId: String
+        emailAddressId: String,
+        emailMaskId: String?
     ) async throws -> String
 
     /// Schedule a draft message to be sent at a specified time in the future
@@ -172,8 +176,9 @@ protocol EmailMessageRepository: Repository {
     ///  - Parameters:
     ///    - id: The identifier of the draft email message to check.
     ///    - emailAddressId: Identifier of the email address associated with the draft email message.
+    ///    - emailMaskId: Identifier of the email mask associated with this draft email message.
     ///  - Returns: true if the draft email message exists, false otherwise.
-    func draftExists(id: String, emailAddressId: String) async throws -> Bool
+    func draftExists(id: String, emailAddressId: String, emailMaskId: String?) async throws -> Bool
 
     /// List draft email message metadata for the specified email address identifier.
     ///  - Parameters:

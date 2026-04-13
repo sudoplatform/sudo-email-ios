@@ -247,6 +247,9 @@
                 <a class="nav-group-task-link" href="../Structs/EmailAttachment.html">EmailAttachment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailDomain.html">EmailDomain</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/EmailFolder.html">EmailFolder</a>
               </li>
               <li class="nav-group-task">
@@ -410,6 +413,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UpdatedEmailMessageSuccess.html">UpdatedEmailMessageSuccess</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VerifyExternalEmailAddressInput.html">VerifyExternalEmailAddressInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VerifyExternalEmailAddressResult.html">VerifyExternalEmailAddressResult</a>
               </li>
             </ul>
           </li>
@@ -1200,7 +1209,8 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getSupportedEmailDomains</span><span class="p">()</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Use listEmailDomains instead to retrieve domain data"</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">getSupportedEmailDomains</span><span class="p">()</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -1258,7 +1268,37 @@ Throws:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getEmailMaskDomains</span><span class="p">()</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Use listEmailDomains instead to retrieve domain data"</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">getEmailMaskDomains</span><span class="p">()</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP04listB7DomainsSayAA0B6DomainVGyYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listEmailDomains()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB7DomainsSayAA0B6DomainVGyYaKF">listEmailDomains()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">listEmailDomains</span><span class="p">()</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/EmailDomain.html">EmailDomain</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -2071,6 +2111,35 @@ Throws:</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0aB6ClientP014verifyExternalB7Address9withInputAA06VerifyebF6ResultVAA0iebfH0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/verifyExternalEmailAddress(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP014verifyExternalB7Address9withInputAA06VerifyebF6ResultVAA0iebfH0V_tYaKF">verifyExternalEmailAddress(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">verifyExternalEmailAddress</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/VerifyExternalEmailAddressInput.html">VerifyExternalEmailAddressInput</a></span><span class="p">)</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/VerifyExternalEmailAddressResult.html">VerifyExternalEmailAddressResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP04listB13MasksForOwner9withInputAA10ListOutputVyAA0B4MaskVGAA0jbefgI0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/listEmailMasksForOwner(withInput:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB13MasksForOwner9withInputAA10ListOutputVyAA0B4MaskVGAA0jbefgI0V_tYaKF">listEmailMasksForOwner(withInput:<wbr>)</a>
@@ -2192,7 +2261,7 @@ Throws:</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-03-09)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-04-13)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

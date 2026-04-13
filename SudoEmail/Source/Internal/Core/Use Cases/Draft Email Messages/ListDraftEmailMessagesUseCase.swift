@@ -45,7 +45,8 @@ class ListDraftEmailMessagesUseCase {
                                 innerGroup.addTask {
                                     return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
                                         id: m.id,
-                                        emailAddressId: account.id
+                                        emailAddressId: account.id,
+                                        emailMaskId: m.emailMaskId
                                     ))
                                 }
                             }

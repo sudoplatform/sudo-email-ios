@@ -23,9 +23,9 @@ public struct ListScheduledDraftMessagesForEmailAddressIdInput {
 
     public init(
         emailAddressId: String,
-        limit: Int?,
-        nextToken: String?,
-        filter: ScheduledDraftMessageFilter?
+        limit: Int? = nil,
+        nextToken: String? = nil,
+        filter: ScheduledDraftMessageFilter? = nil
     ) {
         self.emailAddressId = emailAddressId
         self.limit = limit

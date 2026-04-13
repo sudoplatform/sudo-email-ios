@@ -477,6 +477,14 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return domainEntities.map { String($0.name) }
     }
 
+    public func listEmailDomains() async throws -> [EmailDomain] {
+        try await ensureSignedIn()
+        let useCase = useCaseFactory.generateListEmailDomainsUseCase(domainRepository: domainRepository)
+        let domainEntities = try await useCase.execute()
+        let transformer = EmailDomainAPITransformer()
+        return domainEntities.map(transformer.transform(_:))
+    }
+
     public func getEmailAddress(withInput input: GetEmailAddressInput) async throws -> EmailAddress? {
         try await ensureSignedIn()
         let useCase = useCaseFactory.generateFetchEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
@@ -786,6 +794,23 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let result = try await useCase.execute(emailMaskId: input.emailMaskId)
         let transformer = EmailMaskAPITransformer()
         return transformer.transform(result)
+    }
+
+    public func verifyExternalEmailAddress(withInput input: VerifyExternalEmailAddressInput) async throws -> VerifyExternalEmailAddressResult {
+        try await ensureSignedIn()
+        let useCase = useCaseFactory.generateVerifyExternalEmailAddressUseCase(
+            emailMaskRepository: emailMaskRepository,
+            logger: logger
+        )
+        let resultEntity = try await useCase.execute(
+            emailAddress: input.emailAddress,
+            emailMaskId: input.emailMaskId,
+            verificationCode: input.verificationCode
+        )
+        return VerifyExternalEmailAddressResult(
+            isVerified: resultEntity.isVerified,
+            reason: resultEntity.reason
+        )
     }
 
     public func listEmailMasksForOwner(withInput input: ListEmailMasksForOwnerInput) async throws -> ListOutput<EmailMask> {

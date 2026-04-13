@@ -22,6 +22,7 @@ struct ScheduledDraftMessageEntityTransformer {
         return ScheduledDraftMessageEntity(
             id: id,
             emailAddressId: scheduledDraftMessage.emailAddressId,
+            emailMaskId: scheduledDraftMessage.emailMaskId,
             sendAt: Date(millisecondsSince1970: scheduledDraftMessage.sendAtEpochMs),
             owner: scheduledDraftMessage.owner,
             owners: scheduledDraftMessage.owners.map(ownerTransformer.transform(_:)),
@@ -44,6 +45,7 @@ struct ScheduledDraftMessageEntityTransformer {
         return ScheduledDraftMessageEntity(
             id: id,
             emailAddressId: scheduledDraftMessage.emailAddressId,
+            emailMaskId: scheduledDraftMessage.emailMaskId,
             sendAt: Date(millisecondsSince1970: scheduledDraftMessage.sendAtEpochMs),
             owner: scheduledDraftMessage.owner,
             owners: scheduledDraftMessage.owners.map(ownerTransformer.transform(_:)),
