@@ -7,7 +7,7 @@
 import Foundation
 
 /// Status of a `PlatformSubscriptionStatus`.
-public enum PlatformSubscriptionStatus: Equatable {
+public enum PlatformSubscriptionStatus: Equatable, Sendable {
     case connected
     case disconnected
 }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum SortOrder: Equatable {
+public enum SortOrder: Equatable, Sendable {
 
     /// Sort the list of results in ascending order.
     case asc

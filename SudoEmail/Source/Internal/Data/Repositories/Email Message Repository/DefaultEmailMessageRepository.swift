@@ -69,6 +69,9 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     /// RFC 822 Message Processor used to handle the encoding and parsing of the email message content.
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
 
+    /// Cache for sealed email message bodies.
+    let emailMessageBodyCache: EmailMessageBodyCache
+
     /// Transformer for converting EncryptionStatus to GraphQL EmailMessageEncryptionStatus
     let encryptionStatusTransformer = EmailMessageEncryptionStatusGQLTransformer()
 
@@ -86,6 +89,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         emailCryptoService: EmailCryptoService,
         rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
         deviceKeyWorker: DeviceKeyWorker,
+        emailMessageBodyCache: EmailMessageBodyCache,
         logger: SudoLogging.Logger = .emailSDKLogger
     ) {
         self.unsealer = unsealer
@@ -98,6 +102,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         self.emailCryptoService = emailCryptoService
         self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
         self.deviceKeyWorker = deviceKeyWorker
+        self.emailMessageBodyCache = emailMessageBodyCache
         self.logger = logger
     }
 
@@ -463,7 +468,15 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     func listEmailMessagesForEmailFolderId(
         withInput input: ListEmailMessagesForEmailFolderIdInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity> {
+        var graphQLFilter: GraphQL.EmailMessageFilterInput?
+        if let filter = input.filter {
+            let filterEntityTransformer = EmailMessageFilterEntityTransformer()
+            let filterEntity = filterEntityTransformer.transform(filter)
+            let filterGQLTransformer = EmailMessageFilterInputGQLTransformer()
+            graphQLFilter = filterGQLTransformer.transform(filterEntity)
+        }
         let graphQLInput = GraphQL.ListEmailMessagesForEmailFolderIdInput(
+            filter: graphQLFilter,
             folderId: input.emailFolderId,
             includeDeletedMessages: input.includeDeletedMessages,
             limit: input.limit,
@@ -482,30 +495,48 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         )
     }
 
-    func fetchEmailMessageRFC822Data(_ id: String, rfc822DataAttributes: SealedEmailMessageEntity.Rfc822DataAttributes) async throws -> S3ObjectEntity? {
-        do {
-            return try await s3Worker.getObject(bucket: rfc822DataAttributes.bucket, key: rfc822DataAttributes.key)
-        } catch {
-            logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
-            throw error
-        }
-    }
-
     func getEmailMessageWithBody(messageId: String, emailAddressId: String) async throws -> EmailMessageWithBody? {
         guard let emailMessage = try await fetchEmailMessageById(messageId),
               emailMessage.emailAddressId == emailAddressId else {
             return nil
         }
 
-        guard let rfc822Object = try await fetchEmailMessageRFC822Data(messageId, rfc822DataAttributes: emailMessage.rfc822DataAttributes) else {
-            throw SudoEmailError.noEmailMessageRFC822Available
+        // Check cache first
+        let cacheSizeLimit = await emailMessageBodyCache.getCacheSizeLimit()
+        let sealedData: Data
+        let contentEncoding: String?
+
+        if cacheSizeLimit > 0, let cacheResult = await emailMessageBodyCache.get(messageId: messageId) {
+            sealedData = cacheResult.sealedBlob
+            contentEncoding = cacheResult.contentEncoding
+        } else {
+            // Cache miss — fetch from S3
+            do {
+                let rfc822Object = try await s3Worker.getObject(bucket: emailMessage.rfc822DataAttributes.bucket, key: emailMessage.rfc822DataAttributes.key)
+                sealedData = rfc822Object.body
+                contentEncoding = rfc822Object.contentEncoding
+            } catch {
+                logger.error("Failed to fetch email message RFC822 data: \(error.localizedDescription)")
+                throw error
+            }
+
+            // Populate cache
+            if cacheSizeLimit > 0 {
+                await emailMessageBodyCache.put(entry: CacheItem(
+                    messageId: messageId,
+                    sudoId: emailMessage.sudoId,
+                    emailAddressId: emailMessage.emailAddressId,
+                    sealedBlob: sealedData,
+                    contentEncoding: contentEncoding
+                ))
+            }
         }
 
         do {
-            let contentEncodingValues = (rfc822Object.contentEncoding?
+            let contentEncodingValues = (contentEncoding?
                 .split(separator: ",") ?? ["\(CRYPTO_CONTENT_ENCODING)", "\(BINARY_DATA_CONTENT_ENCODING)"])
                 .reversed()
-            var decodedData = rfc822Object.body
+            var decodedData = sealedData
             do {
                 for encodingValue in contentEncodingValues {
                     switch encodingValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
@@ -514,7 +545,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
                         decodedData = try (base64Decoded?.gunzipped())!
                     case CRYPTO_CONTENT_ENCODING:
                         decodedData = try unsealer.unsealEmailMessageRFC822Data(
-                            rfc822Object.body,
+                            decodedData,
                             withKeyId: emailMessage.keyId,
                             algorithm: emailMessage.algorithm
                         )

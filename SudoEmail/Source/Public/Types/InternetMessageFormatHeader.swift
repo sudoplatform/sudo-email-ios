@@ -15,7 +15,7 @@ import Foundation
 ///     - Input domain parts (domain separated by `.`) must not exceed 63 characters.
 ///     - Address must match standard email address pattern:
 ///        `^[a-zA-Z0-9](\.?[-_a-zA-Z0-9])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$`.
-public struct InternetMessageFormatHeader: Equatable {
+public struct InternetMessageFormatHeader: Equatable, Sendable {
 
     /// The email address belonging to the sender.
     public let from: EmailAddressAndName

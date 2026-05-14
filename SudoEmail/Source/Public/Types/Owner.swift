@@ -9,7 +9,7 @@ import Foundation
 /// Representation of an Owner object from the Email Service.
 ///
 /// This represents the relationship of a unique identifier (`id`) with the `issuer`.
-public struct Owner: Hashable {
+public struct Owner: Hashable, Sendable {
 
     // MARK: - Properties
 

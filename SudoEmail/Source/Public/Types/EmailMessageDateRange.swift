@@ -9,7 +9,7 @@ import Foundation
 /// Representation of an email message date range used in the Sudo Platform Email SDK.
 ///
 /// Note that both timestamps cannot be specified otherwise an `InvalidArgumentError` will occur.
-public struct EmailMessageDateRange: Equatable {
+public struct EmailMessageDateRange: Equatable, Sendable {
 
     /// The specification of the sortDate timestamp to perform the date range query on.
     public let sortDate: DateRange?

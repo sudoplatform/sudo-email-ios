@@ -7,7 +7,7 @@
 import Foundation
 
 /// Representation of public key details associated with an email address in the Platform SDK.
-public struct EmailAddressPublicKey: Equatable {
+public struct EmailAddressPublicKey: Equatable, Sendable {
 
     // MARK: - Properties
 

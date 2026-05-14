@@ -45,3 +45,5 @@ DocBuild/
 .build
 Package.resolved
 graphql/.yarn/
+
+.kiro/

@@ -7,7 +7,7 @@
 import Foundation
 
 /// Errors that occur in SudoEmail.
-public enum SudoEmailError: Error, Equatable, LocalizedError {
+public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
 
     // MARK: - Client
 

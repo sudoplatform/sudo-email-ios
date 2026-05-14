@@ -112,6 +112,9 @@
                 <a class="nav-group-task-link" href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/EmailMessageMailboxType.html">EmailMessageMailboxType</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/EmailMessageStateFilter.html">EmailMessageStateFilter</a>
               </li>
               <li class="nav-group-task">
@@ -295,6 +298,9 @@
                 <a class="nav-group-task-link" href="../Structs/EnableEmailMaskInput.html">EnableEmailMaskInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlushMessageBodyCacheInput.html">FlushMessageBodyCacheInput</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/GetDraftEmailMessageInput.html">GetDraftEmailMessageInput</a>
               </li>
               <li class="nav-group-task">
@@ -302,9 +308,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/GetEmailMessageInput.html">GetEmailMessageInput</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GetEmailMessageRfc822DataInput.html">GetEmailMessageRfc822DataInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/GetEmailMessageWithBodyInput.html">GetEmailMessageWithBodyInput</a>
@@ -347,6 +350,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/LookupEmailAddressesPublicInfoInput.html">LookupEmailAddressesPublicInfoInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/MailboxIdsFilter.html">MailboxIdsFilter</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Owner.html">Owner</a>
@@ -621,9 +627,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange9sortOrder5limit9nextToken014includeDeletedD0ACSS_AA0b11MessageDateK0VSgAA04SortM0OSgSiSgSSSgSbSgtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(emailFolderId:dateRange:sortOrder:limit:nextToken:includeDeletedMessages:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange9sortOrder5limit9nextToken014includeDeletedD0ACSS_AA0b11MessageDateK0VSgAA04SortM0OSgSiSgSSSgSbSgtcfc">init(emailFolderId:<wbr>dateRange:<wbr>sortOrder:<wbr>limit:<wbr>nextToken:<wbr>includeDeletedMessages:<wbr>)</a>
+                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV6filterAA0B13MessageFilterOSgvp"></a>
+                    <a name="//apple_ref/swift/Property/filter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV6filterAA0B13MessageFilterOSgvp">filter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Filter rules to be applied to the list.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange9sortOrder5limit9nextToken014includeDeletedD06filterACSS_AA0b11MessageDateK0VSgAA04SortM0OSgSiSgSSSgSbSgAA0bT6FilterOSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(emailFolderId:dateRange:sortOrder:limit:nextToken:includeDeletedMessages:filter:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail04Listb11MessagesForB13FolderIdInputV05emailfG09dateRange9sortOrder5limit9nextToken014includeDeletedD06filterACSS_AA0b11MessageDateK0VSgAA04SortM0OSgSiSgSSSgSbSgAA0bT6FilterOSgtcfc">init(emailFolderId:<wbr>dateRange:<wbr>sortOrder:<wbr>limit:<wbr>nextToken:<wbr>includeDeletedMessages:<wbr>filter:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -643,7 +676,8 @@
     <span class="nv">sortOrder</span><span class="p">:</span> <span class="kt"><a href="../Enums/SortOrder.html">SortOrder</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Global%20Variables.html#/s:9SudoEmail07defaultB12MessageLimitSivp">defaultEmailMessageLimit</a></span><span class="p">,</span>
     <span class="nv">nextToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">includeDeletedMessages</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="nv">includeDeletedMessages</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">filter</span><span class="p">:</span> <span class="kt"><a href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -659,7 +693,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-04-13)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-05-14)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

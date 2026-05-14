@@ -7,17 +7,17 @@
 import Foundation
 
 /// Representation of an unsealed blocked email address in Platform SDK
-public struct UnsealedBlockedAddress {
+public struct UnsealedBlockedAddress: Sendable {
 
     /// The state of the retreival and unsealing procedure of a particular blocked address
     /// If the status is 'Failed' there will be an error indicating the cause.
-    public enum UnsealedBlockedAddressStatus {
+    public enum UnsealedBlockedAddressStatus: Sendable {
         case completed
-        case failed(cause: Error)
+        case failed(cause: any Error & Sendable)
     }
 
     /// The action to take on incoming messages from the blocked address
-    public enum BlockedAddressAction {
+    public enum BlockedAddressAction: Sendable {
         /// Do nothing. Message will not appear in user's account
         case drop
         /// Redirect to SPAM folder, if available

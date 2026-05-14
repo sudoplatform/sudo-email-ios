@@ -7,7 +7,7 @@
 import Foundation
 
 /// Representation of an email message with body attachments used in the Sudo Platform Email SDK.
-public struct EmailMessageWithBody {
+public struct EmailMessageWithBody: Sendable {
 
     /// Unique identifier of the email message.
     public let id: String

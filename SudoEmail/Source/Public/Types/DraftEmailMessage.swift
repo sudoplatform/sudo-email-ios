@@ -7,7 +7,7 @@
 import Foundation
 
 /// Representation of a draft email message object associated with a draft email message in Platform SDK.
-public struct DraftEmailMessage: Equatable {
+public struct DraftEmailMessage: Equatable, Sendable {
 
     /// Unique identifier of the draft email message.
     public var id: String

@@ -2332,8 +2332,8 @@ internal struct ListEmailMessagesForEmailFolderIdInput: GraphQLMapConvertible {
 internal struct EmailMessageFilterInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(algorithm: Optional<StringFilterInput?> = nil, and: Optional<[EmailMessageFilterInput?]?> = nil, clientRefId: Optional<IDFilterInput?> = nil, direction: Optional<EmailMessageDirectionFilterInput?> = nil, folderId: Optional<IDFilterInput?> = nil, forwarded: Optional<BooleanFilterInput?> = nil, id: Optional<IDFilterInput?> = nil, keyId: Optional<IDFilterInput?> = nil, messageId: Optional<IDFilterInput?> = nil, not: Optional<EmailMessageFilterInput?> = nil, or: Optional<[EmailMessageFilterInput?]?> = nil, repliedTo: Optional<BooleanFilterInput?> = nil, seen: Optional<BooleanFilterInput?> = nil, state: Optional<EmailMessageStateFilterInput?> = nil) {
-    graphQLMap = ["algorithm": algorithm, "and": and, "clientRefId": clientRefId, "direction": direction, "folderId": folderId, "forwarded": forwarded, "id": id, "keyId": keyId, "messageId": messageId, "not": not, "or": or, "repliedTo": repliedTo, "seen": seen, "state": state]
+  internal init(algorithm: Optional<StringFilterInput?> = nil, and: Optional<[EmailMessageFilterInput?]?> = nil, clientRefId: Optional<IDFilterInput?> = nil, direction: Optional<EmailMessageDirectionFilterInput?> = nil, folderId: Optional<IDFilterInput?> = nil, forwarded: Optional<BooleanFilterInput?> = nil, id: Optional<IDFilterInput?> = nil, keyId: Optional<IDFilterInput?> = nil, mailboxIds: Optional<[MailboxIdsFilterInput?]?> = nil, messageId: Optional<IDFilterInput?> = nil, not: Optional<EmailMessageFilterInput?> = nil, or: Optional<[EmailMessageFilterInput?]?> = nil, repliedTo: Optional<BooleanFilterInput?> = nil, seen: Optional<BooleanFilterInput?> = nil, state: Optional<EmailMessageStateFilterInput?> = nil) {
+    graphQLMap = ["algorithm": algorithm, "and": and, "clientRefId": clientRefId, "direction": direction, "folderId": folderId, "forwarded": forwarded, "id": id, "keyId": keyId, "mailboxIds": mailboxIds, "messageId": messageId, "not": not, "or": or, "repliedTo": repliedTo, "seen": seen, "state": state]
   }
 
   internal var algorithm: Optional<StringFilterInput?> {
@@ -2405,6 +2405,15 @@ internal struct EmailMessageFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "keyId")
+    }
+  }
+
+  internal var mailboxIds: Optional<[MailboxIdsFilterInput?]?> {
+    get {
+      return graphQLMap["mailboxIds"] as? [MailboxIdsFilterInput?]?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "mailboxIds")
     }
   }
 
@@ -2511,6 +2520,65 @@ internal struct BooleanFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "ne")
+    }
+  }
+}
+
+internal struct MailboxIdsFilterInput: GraphQLMapConvertible {
+  internal var graphQLMap: GraphQLMap
+
+  internal init(id: StringFilterInput, type: MailboxType) {
+    graphQLMap = ["id": id, "type": type]
+  }
+
+  internal var id: StringFilterInput {
+    get {
+      return graphQLMap["id"] as! StringFilterInput
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  internal var type: MailboxType {
+    get {
+      return graphQLMap["type"] as! MailboxType
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "type")
+    }
+  }
+}
+
+internal enum MailboxType: RawRepresentable, Equatable, JSONDecodable, JSONEncodable {
+  internal typealias RawValue = String
+  case address
+  case mask
+  /// Auto generated constant for unknown enum values
+  case unknown(RawValue)
+
+  internal init?(rawValue: RawValue) {
+    switch rawValue {
+      case "ADDRESS": self = .address
+      case "MASK": self = .mask
+      default: self = .unknown(rawValue)
+    }
+  }
+
+  internal var rawValue: RawValue {
+    switch self {
+      case .address: return "ADDRESS"
+      case .mask: return "MASK"
+      case .unknown(let value): return value
+    }
+  }
+
+  internal static func == (lhs: MailboxType, rhs: MailboxType) -> Bool {
+    switch (lhs, rhs) {
+      case (.address, .address): return true
+      case (.mask, .mask): return true
+      case (.unknown(let lhsValue), .unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
     }
   }
 }

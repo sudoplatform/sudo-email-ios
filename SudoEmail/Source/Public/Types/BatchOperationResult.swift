@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum BatchOperationResultStatus {
+public enum BatchOperationResultStatus: Sendable {
     case success
     case partial
     case failure
@@ -35,8 +35,10 @@ public struct BatchOperationResult<S, F> {
     }
 }
 
+extension BatchOperationResult: Sendable where S: Sendable, F: Sendable {}
+
 /// Representation of the result of an unsuccessful operation performed on an email message
-public struct EmailMessageOperationFailureResult: Error, Equatable {
+public struct EmailMessageOperationFailureResult: Error, Equatable, Sendable {
 
     // MARK: - Properties
 

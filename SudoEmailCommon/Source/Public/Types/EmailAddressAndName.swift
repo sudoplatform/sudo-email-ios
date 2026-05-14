@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct EmailAddressAndName: Equatable, CustomStringConvertible {
+public struct EmailAddressAndName: Equatable, CustomStringConvertible, Sendable {
     
     // MARK: - Properties
     

@@ -7,9 +7,9 @@
 import Foundation
 
 /// Representation of an Email Mask used in Sudo Email SDK.
-public struct EmailMask: Equatable {
+public struct EmailMask: Equatable, Sendable {
 
-    public enum EmailMaskStatus: Equatable {
+    public enum EmailMaskStatus: Equatable, Sendable {
         /// Mask is enabled and will be functional for forwarding emails.
         case enabled
 
@@ -23,7 +23,7 @@ public struct EmailMask: Equatable {
         case pending
     }
 
-    public enum RealAddressType: Equatable {
+    public enum RealAddressType: Equatable, Sendable {
         /// The real address is a Sudo Email Address.
         case `internal`
 

@@ -7,7 +7,7 @@
 import Foundation
 
 /// Represents different public key formats.
-public enum PublicKeyFormat: String, Equatable {
+public enum PublicKeyFormat: String, Equatable, Sendable {
 
     /// PKCS#1 RSA Public Key.
     case rsaPublicKey

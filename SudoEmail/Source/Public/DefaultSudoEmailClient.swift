@@ -59,6 +59,19 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     let emailCryptoService: EmailCryptoService
 
+    // MARK: - Properties: Cache
+
+    let emailMessageBodyCache: EmailMessageBodyCache
+
+    /// Internal subscriber that removes cache entries when messages are deleted remotely.
+    private let cacheInvalidationSubscriber: CacheInvalidationSubscriber
+
+    /// Stable ID for the internal cache invalidation subscriber registration.
+    private let cacheInvalidationSubscriberId = "com.sudoplatform.email.cache-invalidation"
+
+    /// Whether the internal cache invalidation subscription has been set up.
+    private var isCacheInvalidationSubscriptionActive = false
+
     // MARK: - Properties: Utility
 
     let rfc822MessageDataProcessor: Rfc822MessageDataProcessor
@@ -85,7 +98,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     convenience init(
         config: SudoEmailConfig?,
         keyNamespace: String = SudoEmailCommon.Constants.defaultKeyNamespace,
-        userClient: SudoUserClient
+        userClient: SudoUserClient,
+        emailMessageBodyCache: EmailMessageBodyCache? = nil
     ) throws {
         let graphQLClient: SudoApiClient
         if let config {
@@ -114,6 +128,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let emailMaskRepository = DefaultEmailMaskRepository(appSyncClient: graphQLClient, deviceKeyWorker: serviceKeyWorker)
         let emailFolderRepository = DefaultEmailFolderRepository(appSyncClient: graphQLClient, deviceKeyWorker: serviceKeyWorker)
         let awsS3Worker = try DefaultAWSS3Worker(region: s3Region)
+        let resolvedCache = emailMessageBodyCache ?? SQLiteEmailMessageBodyCache(logger: .emailSDKLogger)
         let emailMessageRepository = DefaultEmailMessageRepository(
             unsealer: emailMessageUnsealerService,
             sudoApiClient: graphQLClient,
@@ -124,7 +139,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             s3Worker: awsS3Worker,
             emailCryptoService: emailCryptoService,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor,
-            deviceKeyWorker: serviceKeyWorker
+            deviceKeyWorker: serviceKeyWorker,
+            emailMessageBodyCache: resolvedCache
         )
         let blockedAddressRepository = DefaultBlockedAddressRepository(appSyncClient: graphQLClient, keyWorker: serviceKeyWorker)
         let domainRepository = DefaultDomainRepository(appSyncClient: graphQLClient)
@@ -152,7 +168,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             awsS3Worker: awsS3Worker,
             blockedAddressRepository: blockedAddressRepository,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor,
-            subscriptionManager: subscriptionManager
+            subscriptionManager: subscriptionManager,
+            emailMessageBodyCache: resolvedCache
         )
     }
 
@@ -177,7 +194,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         logger: SudoLogging.Logger = .emailSDKLogger,
         blockedAddressRepository: BlockedAddressRepository,
         rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
-        subscriptionManager: SubscriptionManager
+        subscriptionManager: SubscriptionManager,
+        emailMessageBodyCache: EmailMessageBodyCache? = nil
     ) {
         self.graphQLClient = graphQLClient
         self.userClient = userClient
@@ -197,12 +215,29 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         self.blockedAddressRepository = blockedAddressRepository
         self.rfc822MessageDataProcessor = rfc822MessageDataProcessor
         self.subscriptionManager = subscriptionManager
+        self.emailMessageBodyCache = emailMessageBodyCache ?? SQLiteEmailMessageBodyCache(logger: logger)
+        cacheInvalidationSubscriber = CacheInvalidationSubscriber(cache: self.emailMessageBodyCache)
     }
 
     public func reset() async throws {
         logger.info("Resetting client state.")
         try serviceKeyWorker.removeAllKeys()
         await subscriptionManager.unsubscribeAll()
+        await emailMessageBodyCache.flushAll()
+        isCacheInvalidationSubscriptionActive = false
+    }
+
+    // MARK: - Cache Management
+
+    public func flushMessageBodyCache(input: FlushMessageBodyCacheInput) async {
+        await emailMessageBodyCache.flush(input: CacheFlushInput(
+            sudoId: input.sudoId,
+            emailAddressId: input.emailAddressId
+        ))
+    }
+
+    public func setCacheSizeLimit(bytes: Int64) async throws {
+        try await emailMessageBodyCache.setCacheSizeLimit(bytes: bytes)
     }
 
     // MARK: - SudoEmailClient
@@ -236,6 +271,9 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
         let emailAccount = try await useCase.execute(emailAccountId: id)
+
+        // Flush cached message bodies for this email address
+        await emailMessageBodyCache.flush(input: CacheFlushInput(sudoId: nil, emailAddressId: id))
 
         let apiTransformer = EmailAddressAPITransformer(deviceKeyWorker: serviceKeyWorker)
         return apiTransformer.transform(emailAccount)
@@ -282,7 +320,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailConfigRepository: emailConfigurationDataRepository
+            emailConfigRepository: emailConfigurationDataRepository,
+            emailMessageBodyCache: emailMessageBodyCache
         )
         let deleteResult = try await useCase.execute(withIds: ids)
         let successItems = deleteResult.successItems != nil ? deleteResult.successItems?.map { DeleteEmailMessageSuccessResult(id: $0) } : []
@@ -297,7 +336,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         try await ensureSignedIn()
         let useCase = useCaseFactory.generateDeleteEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailConfigRepository: emailConfigurationDataRepository
+            emailConfigRepository: emailConfigurationDataRepository,
+            emailMessageBodyCache: emailMessageBodyCache
         )
         let result = try await useCase.execute(withIds: [id])
         switch result.status {
@@ -643,18 +683,9 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return transformer.transformEmailMessages(messagesResult)
     }
 
-    @available(*, deprecated, message: "Use getEmailMessageWithBody instead to retrieve email message data")
-    public func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data {
-        try await ensureSignedIn()
-        let useCase = useCaseFactory.generateFetchEmailMessageRFC822DataUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
-        )
-        return try await useCase.execute(withMessageId: input.id, emailAddressId: input.emailAddressId)
-    }
-
     public func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
         try await ensureSignedIn()
+        await ensureCacheInvalidationSubscription()
         let useCase = useCaseFactory.generateGetEmailMessageWithBodyUseCase(
             emailMessageRepository: emailMessageRepository
         )
@@ -852,5 +883,21 @@ public class DefaultSudoEmailClient: SudoEmailClient {
     /// - Throws: Any error thrown by the sign-in delegate
     private func ensureSignedIn() async throws {
         try await signInGuard.ensureSignedIn()
+    }
+
+    /// Ensures the internal cache invalidation subscription is active.
+    /// Called lazily on the first cache read/write (i.e., first call to `getEmailMessageWithBody`).
+    /// Silently no-ops if the user is not signed in or if already active.
+    private func ensureCacheInvalidationSubscription() async {
+        guard !isCacheInvalidationSubscriptionActive else { return }
+        guard let owner = try? await userClient.getSubject() else { return }
+
+        await subscriptionManager.subscribe(
+            id: cacheInvalidationSubscriberId,
+            notificationType: .messageDeleted,
+            subscriber: cacheInvalidationSubscriber,
+            owner: owner
+        )
+        isCacheInvalidationSubscriptionActive = true
     }
 }

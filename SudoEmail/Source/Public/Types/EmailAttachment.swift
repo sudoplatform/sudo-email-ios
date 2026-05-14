@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct EmailAttachment: Hashable, Equatable {
+public struct EmailAttachment: Hashable, Equatable, Sendable {
 
     // MARK: - Properties
 

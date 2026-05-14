@@ -112,6 +112,9 @@
                 <a class="nav-group-task-link" href="../Enums/EmailMessageFilter.html">EmailMessageFilter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/EmailMessageMailboxType.html">EmailMessageMailboxType</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/EmailMessageStateFilter.html">EmailMessageStateFilter</a>
               </li>
               <li class="nav-group-task">
@@ -295,6 +298,9 @@
                 <a class="nav-group-task-link" href="../Structs/EnableEmailMaskInput.html">EnableEmailMaskInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlushMessageBodyCacheInput.html">FlushMessageBodyCacheInput</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/GetDraftEmailMessageInput.html">GetDraftEmailMessageInput</a>
               </li>
               <li class="nav-group-task">
@@ -302,9 +308,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/GetEmailMessageInput.html">GetEmailMessageInput</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GetEmailMessageRfc822DataInput.html">GetEmailMessageRfc822DataInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/GetEmailMessageWithBodyInput.html">GetEmailMessageWithBodyInput</a>
@@ -347,6 +350,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/LookupEmailAddressesPublicInfoInput.html">LookupEmailAddressesPublicInfoInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/MailboxIdsFilter.html">MailboxIdsFilter</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Owner.html">Owner</a>
@@ -497,6 +503,125 @@ sudo services.</p>
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">reset</span><span class="p">()</span> <span class="k">async</span> <span class="k">throws</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Cache%20Management"></a>
+                <a name="//apple_ref/swift/Section/Cache Management" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Cache%20Management"></a>
+                  <h3 class="section-name"><span>Cache Management</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP21flushMessageBodyCache5inputyAA05FlushefG5InputV_tYaF"></a>
+                    <a name="//apple_ref/swift/Method/flushMessageBodyCache(input:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP21flushMessageBodyCache5inputyAA05FlushefG5InputV_tYaF">flushMessageBodyCache(input:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Flush cached message bodies scoped to a sudo or email address.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">flushMessageBodyCache</span><span class="p">(</span><span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/FlushMessageBodyCacheInput.html">FlushMessageBodyCacheInput</a></span><span class="p">)</span> <span class="k">async</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>input</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The flush scope (sudo ID or email address ID).</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP17setCacheSizeLimit5bytesys5Int64V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/setCacheSizeLimit(bytes:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP17setCacheSizeLimit5bytesys5Int64V_tYaKF">setCacheSizeLimit(bytes:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set the maximum cache size in bytes.</p>
+
+<p>Triggers immediate LRU eviction if current usage exceeds the new limit.
+Setting to 0 disables caching entirely.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>SudoEmailError.invalidArgument</code> if <code>bytes</code> is negative.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setCacheSizeLimit</span><span class="p">(</span><span class="nv">bytes</span><span class="p">:</span> <span class="kt">Int64</span><span class="p">)</span> <span class="k">async</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>bytes</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new cache size limit in bytes. Must be &gt;= 0.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -2261,65 +2386,6 @@ Returns an empty list if no email messages can be found.</li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:9SudoEmail0aB6ClientP03getB17MessageRfc822Data9withInput10Foundation0G0VAA03GetbefgI0V_tYaKF"></a>
-                    <a name="//apple_ref/swift/Method/getEmailMessageRfc822Data(withInput:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB17MessageRfc822Data9withInput10Foundation0G0VAA03GetbefgI0V_tYaKF">getEmailMessageRfc822Data(withInput:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Asynchronous
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Get the raw RFC 6854 (supersedes RFC 822) data of an email message associated with the <code>messageId</code>.</p>
-
-<p>If no email message exists for <code>messageId</code>, <code>SudoEmailError.noEmailMessageRFC822Available</code> will be returned.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Use getEmailMessageWithBody instead to retrieve email message data"</span><span class="p">)</span>
-<span class="kd">func</span> <span class="nf">getEmailMessageRfc822Data</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/GetEmailMessageRfc822DataInput.html">GetEmailMessageRfc822DataInput</a></span><span class="p">)</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Data</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>messageId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Message identifier associated with the RFC 6854 data attempting to be fetched.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><ul>
-<li>Success: Stored RFC 6854 email message data of the email message.</li>
-<li>Failure: <code>SudoEmailError.noEmailMessageRFC822Available</code> if the email message cannot be accessed/found.</li>
-</ul></p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP03getB15MessageWithBody9withInputAA0befG0VSgAA03GetbefgI0V_tYaKF"></a>
                     <a name="//apple_ref/swift/Method/getEmailMessageWithBody(withInput:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB15MessageWithBody9withInputAA0befG0VSgAA03GetbefgI0V_tYaKF">getEmailMessageWithBody(withInput:<wbr>)</a>
@@ -3663,7 +3729,7 @@ throws an error, that error will be propagated to the caller and the original op
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-04-13)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-05-14)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

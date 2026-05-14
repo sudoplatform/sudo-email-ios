@@ -7,7 +7,7 @@
 import Foundation
 
 /// The result of a successful email message delete
-public struct DeleteEmailMessageSuccessResult: Equatable {
+public struct DeleteEmailMessageSuccessResult: Equatable, Sendable {
 
     // MARK: - Properties
 

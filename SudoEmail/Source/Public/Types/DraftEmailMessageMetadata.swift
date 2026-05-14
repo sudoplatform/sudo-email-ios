@@ -7,7 +7,7 @@
 import Foundation
 
 /// Representation of a draft email message metadata object associated with a draft email message in Platform SDK.
-public struct DraftEmailMessageMetadata {
+public struct DraftEmailMessageMetadata: Sendable {
 
     /// Unique identifier of the draft email message.
     public var id: String

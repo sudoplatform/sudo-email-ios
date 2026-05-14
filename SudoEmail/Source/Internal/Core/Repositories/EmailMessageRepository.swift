@@ -159,13 +159,6 @@ protocol EmailMessageRepository: Repository {
         withInput input: ListEmailMessagesForEmailFolderIdInput
     ) async throws -> ListOutputEntity<SealedEmailMessageEntity>
 
-    /// Fetch the sealed email message RFC 6854 (supersedes RFC 822) data remotely.
-    /// - Parameters:
-    ///   - sealedId: Identifier of the email message to fetch.
-    ///   - rfc822DataAttributes: S3 bucket and key attributes for the RFC 822 data.
-    /// - Returns: The RFC822 S3Object for the email message.
-    func fetchEmailMessageRFC822Data(_ sealedId: String, rfc822DataAttributes: SealedEmailMessageEntity.Rfc822DataAttributes) async throws -> S3ObjectEntity?
-
     /// Get a saved draft email message.
     ///  - Parameters:
     ///   - input: input parameters for the get draft email message query

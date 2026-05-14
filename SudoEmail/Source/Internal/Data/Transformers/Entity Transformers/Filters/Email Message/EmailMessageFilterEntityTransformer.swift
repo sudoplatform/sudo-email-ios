@@ -21,6 +21,9 @@ struct EmailMessageFilterEntityTransformer {
     /// Utility to transform `EmailMessage.State` to `StateEntity`.
     let stringFilterTransformer = StringFilterEntityTransformer()
 
+    /// Utility to transform `MailboxIdsFilter` to `MailboxIdsFilterEntity`.
+    let mailboxIdsFilterTransformer = MailboxIdsFilterEntityTransformer()
+
     // MARK: - Methods
 
     /// Transform a input `EmailMessageFilter` into a `EmailMessageFilterEntity`.
@@ -60,6 +63,9 @@ struct EmailMessageFilterEntityTransformer {
         case .folderId(let folderIdFilter):
             let folderIdFilter = stringFilterTransformer.transform(folderIdFilter)
             return .folderId(folderIdFilter)
+        case .mailboxIds(let mailboxIdsFilters):
+            let mailboxIdsFilters = mailboxIdsFilters.map(mailboxIdsFilterTransformer.transform(_:))
+            return .mailboxIds(mailboxIdsFilters)
         case .not(let emailMessageFilter):
             let emailMessageFilter = transform(emailMessageFilter)
             return .not(emailMessageFilter)

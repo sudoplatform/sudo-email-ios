@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct EmailFolder: Equatable {
+public struct EmailFolder: Equatable, Sendable {
 
     // MARK: - Properties
 

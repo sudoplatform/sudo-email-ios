@@ -28,6 +28,8 @@ indirect enum EmailMessageFilterEntity: Equatable {
     case forwarded(BoolFilterEntity)
     /// Filter rule for an `state` property.
     case state(EmailMessageStateFilterEntity)
+    /// Filter rule for a `mailboxIds` property.
+    case mailboxIds([MailboxIdsFilterEntity])
     /// Filter rule for negating a `EmailMessageEntity` filter rule.
     case not(EmailMessageFilterEntity)
     /// Filter rule for logical AND compounding `EmailMessageEntity` filter rules.

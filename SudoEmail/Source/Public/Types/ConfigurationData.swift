@@ -7,7 +7,7 @@
 import Foundation
 
 /// Representation of email configuration data in Platform SDK.
-public struct ConfigurationData: Equatable {
+public struct ConfigurationData: Equatable, Sendable {
 
     /// The number of email messages that can be deleted at a time.
     public var deleteEmailMessagesLimit: Int

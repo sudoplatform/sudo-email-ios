@@ -21,6 +21,9 @@ struct EmailMessageFilterInputGQLTransformer {
     /// Utility class to transform `StringFilterEntity` to `StringFilterInput`.
     let stringFilterTransformer = StringFilterInputGQLTransformer()
 
+    /// Utility class to transform `MailboxIdsFilterEntity` to `MailboxIdsFilterInput`.
+    let mailboxIdsFilterTransformer = MailboxIdsFilterInputGQLTransformer()
+
     // MARK: - Methods
 
     /// Transform a `EmailMessageFilterEntity` filter rule into a GraphQL `EmailMessageFilterInput` filter rule.
@@ -59,6 +62,9 @@ struct EmailMessageFilterInputGQLTransformer {
         case .forwarded(let forwarded):
             let forwarded = boolFilterTransformer.transform(forwarded)
             return GraphQL.EmailMessageFilterInput(forwarded: forwarded)
+        case .mailboxIds(let mailboxIds):
+            let mailboxIds = mailboxIds.map(mailboxIdsFilterTransformer.transform(_:))
+            return GraphQL.EmailMessageFilterInput(mailboxIds: mailboxIds)
         case .not(let emailMessageFilter):
             let emailMessageFilter = transform(emailMessageFilter)
             return GraphQL.EmailMessageFilterInput(not: emailMessageFilter)

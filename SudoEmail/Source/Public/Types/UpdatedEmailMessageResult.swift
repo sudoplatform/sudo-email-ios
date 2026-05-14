@@ -7,7 +7,7 @@
 import Foundation
 
 /// The result of a successful email message update
-public struct UpdatedEmailMessageSuccess {
+public struct UpdatedEmailMessageSuccess: Sendable {
 
     /// The unique identifier of the email message
     public let id: String

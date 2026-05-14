@@ -7,7 +7,7 @@
 import Foundation
 
 /// Result type of an API call to send an email message
-public struct SendEmailMessageResult {
+public struct SendEmailMessageResult: Sendable {
 
     /// The unique identifier of the email message
     public var id: String

@@ -5,13 +5,12 @@
 //
 
 import Foundation
-import Gzip
 
 class GetEmailMessageWithBodyUseCase {
 
     // MARK: - Properties
 
-    /// Email message repository used to send the email message.
+    /// Email message repository used to retrieve the email message.
     let emailMessageRepository: EmailMessageRepository
 
     // MARK: - Lifecycle
@@ -25,8 +24,8 @@ class GetEmailMessageWithBodyUseCase {
 
     /// Execute the use case.
     /// - Parameters:
-    ///   - id: Identifier of the email message to be accessed.
-    ///   - completion: Body of the email message associated with `id`, or error on failure.
+    ///   - input: Input containing the message ID and email address ID.
+    /// - Returns: The email message with parsed body, or nil if not found.
     func execute(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
         let messageId = input.id
         let emailAddressId = input.emailAddressId

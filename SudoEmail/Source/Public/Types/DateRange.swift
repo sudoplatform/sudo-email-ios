@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct DateRange: Equatable {
+public struct DateRange: Equatable, Sendable {
 
     /// The starting date of the range to query.
     public let startDate: Date

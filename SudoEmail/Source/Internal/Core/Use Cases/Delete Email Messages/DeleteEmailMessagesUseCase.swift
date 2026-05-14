@@ -17,12 +17,20 @@ class DeleteEmailMessagesUseCase {
     /// Email configuration repository.
     let emailConfigRepository: EmailConfigurationDataRepository
 
+    /// Cache for sealed email message bodies.
+    let emailMessageBodyCache: EmailMessageBodyCache
+
     // MARK: - Lifecycle
 
     /// Initialize an instance of `DeleteEmailMessagesUseCase`.
-    init(emailMessageRepository: EmailMessageRepository, emailConfigRepository: EmailConfigurationDataRepository) {
+    init(
+        emailMessageRepository: EmailMessageRepository,
+        emailConfigRepository: EmailConfigurationDataRepository,
+        emailMessageBodyCache: EmailMessageBodyCache
+    ) {
         self.emailMessageRepository = emailMessageRepository
         self.emailConfigRepository = emailConfigRepository
+        self.emailMessageBodyCache = emailMessageBodyCache
     }
 
     // MARK: - Methods
@@ -61,6 +69,16 @@ class DeleteEmailMessagesUseCase {
             status = BatchOperationResultStatus.failure
         } else {
             status = BatchOperationResultStatus.partial
+        }
+
+        // Fire-and-forget cache deletion for successfully deleted messages
+        if !successIds.isEmpty {
+            let cache = emailMessageBodyCache
+            Task {
+                for id in successIds {
+                    await cache.deleteMessage(messageId: id)
+                }
+            }
         }
 
         return BatchOperationResult(

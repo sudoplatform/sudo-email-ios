@@ -71,11 +71,13 @@ class UseCaseFactory {
 
     func generateDeleteEmailMessagesUseCase(
         emailMessageRepository: EmailMessageRepository,
-        emailConfigRepository: EmailConfigurationDataRepository
+        emailConfigRepository: EmailConfigurationDataRepository,
+        emailMessageBodyCache: EmailMessageBodyCache
     ) -> DeleteEmailMessagesUseCase {
         return DeleteEmailMessagesUseCase(
             emailMessageRepository: emailMessageRepository,
-            emailConfigRepository: emailConfigRepository
+            emailConfigRepository: emailConfigRepository,
+            emailMessageBodyCache: emailMessageBodyCache
         )
     }
 
@@ -306,16 +308,6 @@ class UseCaseFactory {
             emailMessageRepository: emailMessageRepository,
             emailMessageUnsealerService: emailMessageUnsealerService,
             sealedEmailMessageEntityTransformer: sealedEmailMessageEntityTransformer
-        )
-    }
-
-    func generateFetchEmailMessageRFC822DataUseCase(
-        emailMessageRepository: EmailMessageRepository,
-        emailMessageUnsealerService: EmailMessageUnsealerService
-    ) -> FetchEmailMessageRFC822DataUseCase {
-        return FetchEmailMessageRFC822DataUseCase(
-            emailMessageRepository: emailMessageRepository,
-            emailMessageUnsealerService: emailMessageUnsealerService
         )
     }
 

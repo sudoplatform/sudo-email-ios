@@ -10,10 +10,10 @@ import SudoUser
 
 /// Generic type associated with API completion/closures. Generic type O is the expected output result in a
 /// success case.
-public typealias ClientCompletion<O> = (Swift.Result<O, Error>) -> Void
+public typealias ClientCompletion<O> = @Sendable (Swift.Result<O, Error>) -> Void
 
 /// Generic type associated with Subscription Status change completion/closures.
-public typealias SudoSubscriptionStatusChangeHandler = (PlatformSubscriptionStatus) -> Void
+public typealias SudoSubscriptionStatusChangeHandler = @Sendable (PlatformSubscriptionStatus) -> Void
 
 /// Maximum number of draft messages that can be deleted per request.
 public let deleteDraftsRequestLimit = 10
@@ -31,6 +31,22 @@ public protocol SudoEmailClient: AnyObject {
     /// It is important to note that this will clear ALL cached data related to all
     /// sudo services.
     func reset() async throws
+
+    // MARK: - Cache Management
+
+    /// Flush cached message bodies scoped to a sudo or email address.
+    ///
+    /// - Parameter input: The flush scope (sudo ID or email address ID).
+    func flushMessageBodyCache(input: FlushMessageBodyCacheInput) async
+
+    /// Set the maximum cache size in bytes.
+    ///
+    /// Triggers immediate LRU eviction if current usage exceeds the new limit.
+    /// Setting to 0 disables caching entirely.
+    ///
+    /// - Parameter bytes: The new cache size limit in bytes. Must be >= 0.
+    /// - Throws: `SudoEmailError.invalidArgument` if `bytes` is negative.
+    func setCacheSizeLimit(bytes: Int64) async throws
 
     // MARK: - Mutations
 
@@ -343,17 +359,6 @@ public protocol SudoEmailClient: AnyObject {
     func listEmailMessagesForEmailFolderId(
         withInput: ListEmailMessagesForEmailFolderIdInput
     ) async throws -> ListAPIResult<EmailMessage, PartialEmailMessage>
-
-    /// Get the raw RFC 6854 (supersedes RFC 822) data of an email message associated with the `messageId`.
-    ///
-    /// If no email message exists for `messageId`, `SudoEmailError.noEmailMessageRFC822Available` will be returned.
-    /// - Parameters:
-    ///   - messageId: Message identifier associated with the RFC 6854 data attempting to be fetched.
-    /// - Returns:
-    ///   - Success: Stored RFC 6854 email message data of the email message.
-    ///   - Failure: `SudoEmailError.noEmailMessageRFC822Available` if the email message cannot be accessed/found.
-    @available(*, deprecated, message: "Use getEmailMessageWithBody instead to retrieve email message data")
-    func getEmailMessageRfc822Data(withInput input: GetEmailMessageRfc822DataInput) async throws -> Data
 
     /// Get the body and attachment data of an `EmailMessage`
     ///

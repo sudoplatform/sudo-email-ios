@@ -27,13 +27,17 @@ public struct ListEmailMessagesForEmailFolderIdInput: Equatable {
     /// Whether to include deleted messages or not. Defaults to false.
     public let includeDeletedMessages: Bool?
 
+    /// Filter rules to be applied to the list.
+    public let filter: EmailMessageFilter?
+
     public init(
         emailFolderId: String,
         dateRange: EmailMessageDateRange? = nil,
         sortOrder: SortOrder? = nil,
         limit: Int? = defaultEmailMessageLimit,
         nextToken: String? = nil,
-        includeDeletedMessages: Bool? = false
+        includeDeletedMessages: Bool? = false,
+        filter: EmailMessageFilter? = nil
     ) {
         self.emailFolderId = emailFolderId
         self.dateRange = dateRange
@@ -41,5 +45,6 @@ public struct ListEmailMessagesForEmailFolderIdInput: Equatable {
         self.limit = limit
         self.nextToken = nextToken
         self.includeDeletedMessages = includeDeletedMessages
+        self.filter = filter
     }
 }

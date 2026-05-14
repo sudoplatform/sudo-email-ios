@@ -5,7 +5,7 @@
 //
 
 /// Filter for a `EmailMessage`.
-public indirect enum EmailMessageFilter {
+public indirect enum EmailMessageFilter: Equatable {
     /// Filter rule for an `id` property.
     case id(StringFilter)
     /// Filter rule for a `messageId` property.
@@ -28,6 +28,8 @@ public indirect enum EmailMessageFilter {
     case forwarded(BoolFilter)
     /// Filter rule for an `state` property.
     case state(EmailMessageStateFilter)
+    /// Filter rule for a `mailboxIds` property.
+    case mailboxIds([MailboxIdsFilter])
     /// Filter rule for negating a `EmailMessage` filter rule.
     case not(EmailMessageFilter)
     /// Filter rule for logical AND compounding `EmailMessage` filter rules.

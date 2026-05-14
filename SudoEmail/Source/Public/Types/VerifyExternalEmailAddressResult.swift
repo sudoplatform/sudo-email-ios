@@ -7,7 +7,7 @@
 import Foundation
 
 /// Result of verifying an external email address
-public struct VerifyExternalEmailAddressResult: Equatable {
+public struct VerifyExternalEmailAddressResult: Equatable, Sendable {
 
     /// Indicates whether the email address was successfully verified
     public let isVerified: Bool

@@ -84,6 +84,11 @@ struct SealedEmailMessageEntity {
 
     /// SEALED - RFC 822 header data for the email message. Contains the recipients and subject matter.
     var rfc822Header: String
+
+    /// The sudo ID extracted from the owners array (issuer == "sudoplatform.sudoservice"), if available.
+    var sudoId: String? {
+        return owners.first(where: { $0.issuer == "sudoplatform.sudoservice" })?.id
+    }
 }
 
 // MARK: - Nested Types

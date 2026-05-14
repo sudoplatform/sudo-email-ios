@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ScheduledDraftMessageState: Equatable {
+public enum ScheduledDraftMessageState: Equatable, Sendable {
     /// Message has been scheduled, but no attempts to send have been made.
     case scheduled
 
@@ -20,7 +20,7 @@ public enum ScheduledDraftMessageState: Equatable {
     case cancelled
 }
 
-public struct ScheduledDraftMessage: Equatable {
+public struct ScheduledDraftMessage: Equatable, Sendable {
 
     // MARK: - Properties
 

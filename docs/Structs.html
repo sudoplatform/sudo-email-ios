@@ -112,6 +112,9 @@
                 <a class="nav-group-task-link" href="Enums/EmailMessageFilter.html">EmailMessageFilter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/EmailMessageMailboxType.html">EmailMessageMailboxType</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/EmailMessageStateFilter.html">EmailMessageStateFilter</a>
               </li>
               <li class="nav-group-task">
@@ -295,6 +298,9 @@
                 <a class="nav-group-task-link" href="Structs/EnableEmailMaskInput.html">EnableEmailMaskInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/FlushMessageBodyCacheInput.html">FlushMessageBodyCacheInput</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/GetDraftEmailMessageInput.html">GetDraftEmailMessageInput</a>
               </li>
               <li class="nav-group-task">
@@ -302,9 +308,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/GetEmailMessageInput.html">GetEmailMessageInput</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/GetEmailMessageRfc822DataInput.html">GetEmailMessageRfc822DataInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/GetEmailMessageWithBodyInput.html">GetEmailMessageWithBodyInput</a>
@@ -347,6 +350,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/LookupEmailAddressesPublicInfoInput.html">LookupEmailAddressesPublicInfoInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/MailboxIdsFilter.html">MailboxIdsFilter</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Owner.html">Owner</a>
@@ -498,6 +504,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BatchOperationResult</span><span class="o">&lt;</span><span class="kt">S</span><span class="p">,</span> <span class="kt">F</span><span class="o">&gt;</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BatchOperationResult</span><span class="p">:</span> <span class="kt">Sendable</span> <span class="k">where</span> <span class="kt">S</span><span class="p">:</span> <span class="kt">Sendable</span><span class="p">,</span> <span class="kt">F</span><span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -525,7 +532,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageOperationFailureResult</span> <span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageOperationFailureResult</span> <span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -553,7 +560,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ConfigurationData</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ConfigurationData</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -580,7 +587,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DateRange</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DateRange</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -608,7 +615,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DeleteEmailMessageSuccessResult</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DeleteEmailMessageSuccessResult</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -636,7 +643,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DraftEmailMessage</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DraftEmailMessage</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -664,7 +671,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DraftEmailMessageMetadata</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DraftEmailMessageMetadata</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -691,7 +698,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAddress</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAddress</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -719,7 +726,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAddressPublicInfo</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAddressPublicInfo</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -747,7 +754,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAddressPublicKey</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAddressPublicKey</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -774,7 +781,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAttachment</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailAttachment</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -805,7 +812,7 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailDomain</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailDomain</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -832,7 +839,7 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailFolder</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailFolder</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -860,7 +867,7 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMask</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMask</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -888,7 +895,7 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessage</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessage</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -916,7 +923,7 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">PartialEmailMessage</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">PartialEmailMessage</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -946,7 +953,7 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageDateRange</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageDateRange</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -974,7 +981,35 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageWithBody</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmailMessageWithBody</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail16MailboxIdsFilterV"></a>
+                    <a name="//apple_ref/swift/Struct/MailboxIdsFilter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail16MailboxIdsFilterV">MailboxIdsFilter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Filter for matching email messages by mailbox ID.</p>
+
+                        <a href="Structs/MailboxIdsFilter.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">MailboxIdsFilter</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -1313,6 +1348,34 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail26FlushMessageBodyCacheInputV"></a>
+                    <a name="//apple_ref/swift/Struct/FlushMessageBodyCacheInput" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail26FlushMessageBodyCacheInputV">FlushMessageBodyCacheInput</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Input for the <code>flushMessageBodyCache</code> operation.</p>
+
+                        <a href="Structs/FlushMessageBodyCacheInput.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">FlushMessageBodyCacheInput</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail08GetDraftB12MessageInputV"></a>
                     <a name="//apple_ref/swift/Struct/GetDraftEmailMessageInput" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail08GetDraftB12MessageInputV">GetDraftEmailMessageInput</a>
@@ -1387,34 +1450,6 @@ It contains the domain name, a flag indicating whether it is a mask domain, and 
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GetEmailMessageInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:9SudoEmail03GetB22MessageRfc822DataInputV"></a>
-                    <a name="//apple_ref/swift/Struct/GetEmailMessageRfc822DataInput" class="dashAnchor"></a>
-                    <a class="token" href="#/s:9SudoEmail03GetB22MessageRfc822DataInputV">GetEmailMessageRfc822DataInput</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>input object for getting an email message&rsquo;s RFC822 data using <code><a href="Protocols/SudoEmailClient.html">SudoEmailClient</a></code></p>
-
-                        <a href="Structs/GetEmailMessageRfc822DataInput.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GetEmailMessageRfc822DataInput</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -2155,7 +2190,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">InternetMessageFormatHeader</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">InternetMessageFormatHeader</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2183,6 +2218,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">PartialResult</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">PartialResult</span><span class="p">:</span> <span class="kt">Sendable</span> <span class="k">where</span> <span class="kt">P</span><span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2214,6 +2250,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListOutput</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
 <pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">ListOutput</span><span class="p">:</span> <span class="kt">Equatable</span> <span class="k">where</span> <span class="kt">T</span><span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">ListOutput</span><span class="p">:</span> <span class="kt">Sendable</span> <span class="k">where</span> <span class="kt">T</span><span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2243,7 +2280,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Owner</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Owner</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2270,7 +2307,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ScheduledDraftMessage</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ScheduledDraftMessage</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2298,7 +2335,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SendEmailMessageResult</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SendEmailMessageResult</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2326,7 +2363,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UnsealedBlockedAddress</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UnsealedBlockedAddress</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2354,7 +2391,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UpdatedEmailMessageSuccess</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UpdatedEmailMessageSuccess</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2382,7 +2419,7 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">VerifyExternalEmailAddressResult</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">VerifyExternalEmailAddressResult</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2454,7 +2491,7 @@ has updated its Sudo Platform Email Notification Extension SDK</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-04-13)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-05-14)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

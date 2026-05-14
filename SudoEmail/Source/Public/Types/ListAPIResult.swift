@@ -8,9 +8,9 @@ import Foundation
 
 public struct PartialResult<P> {
     public var partial: P
-    public var error: Error
+    public var error: any Error & Sendable
 
-    public init(partial: P, error: Error) {
+    public init(partial: P, error: any Error & Sendable) {
         self.partial = partial
         self.error = error
     }
@@ -48,3 +48,8 @@ public enum ListAPIResult<T, P> {
     /// Result is partial, returning a list of mixed success and partial results.
     case partial(ListPartialResult)
 }
+
+extension PartialResult: Sendable where P: Sendable {}
+extension ListAPIResult: Sendable where T: Sendable, P: Sendable {}
+extension ListAPIResult.ListSuccessResult: Sendable where T: Sendable {}
+extension ListAPIResult.ListPartialResult: Sendable where T: Sendable, P: Sendable {}

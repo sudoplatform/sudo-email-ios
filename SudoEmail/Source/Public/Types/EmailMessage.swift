@@ -7,12 +7,12 @@
 import Foundation
 
 /// Representation of a email message object associated with a email message in Platform SDK.
-public struct EmailMessage: Equatable {
+public struct EmailMessage: Equatable, Sendable {
 
     public typealias EmailAddress = EmailAddressAndName
 
     /// Direction of an email message.
-    public enum Direction: Equatable {
+    public enum Direction: Equatable, Sendable {
         /// Message is inbound to the user - message has been received by the user.
         case inbound
         /// Message is outbound to the user - message has been sent by the user.
@@ -20,7 +20,7 @@ public struct EmailMessage: Equatable {
     }
 
     /// State of an email message.
-    public enum State: Equatable {
+    public enum State: Equatable, Sendable {
         /// Outbound message is queued to be sent.
         case queued
         /// Outbound message has been sent.
@@ -179,7 +179,7 @@ public struct EmailMessage: Equatable {
 }
 
 /// Representation of an email message object without any unsealed attributes associated with a email message in Platform SDK.
-public struct PartialEmailMessage: Equatable {
+public struct PartialEmailMessage: Equatable, Sendable {
 
     /// Unique identifier of the email message.
     public var id: String

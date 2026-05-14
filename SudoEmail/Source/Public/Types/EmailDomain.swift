@@ -10,7 +10,7 @@ import Foundation
 ///
 /// The `EmailDomain` struct represents an email domain that may be associated with an email address.
 /// It contains the domain name, a flag indicating whether it is a mask domain, and metadata about the domain.
-public struct EmailDomain: Hashable {
+public struct EmailDomain: Hashable, Sendable {
 
     // MARK: - Properties
 
