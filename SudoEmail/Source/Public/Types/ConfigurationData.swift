@@ -39,6 +39,9 @@ public struct ConfigurationData: Equatable, Sendable {
     /// addresses as masked destinations.
     public var externalEmailMasksEnabled: Bool
 
+    /// Whether or not a user can provision an email address/mask that they have previously deprovisioned
+    public var allowOwnerEmailAddressReuse: Bool
+
     public init(
         deleteEmailMessagesLimit: Int,
         updateEmailMessagesLimit: Int,
@@ -48,7 +51,8 @@ public struct ConfigurationData: Equatable, Sendable {
         encryptedEmailMessageRecipientsLimit: Int,
         prohibitedFileExtensions: [String] = [],
         emailMasksEnabled: Bool,
-        externalEmailMasksEnabled: Bool
+        externalEmailMasksEnabled: Bool,
+        allowOwnerEmailAddressReuse: Bool
     ) {
         self.deleteEmailMessagesLimit = deleteEmailMessagesLimit
         self.updateEmailMessagesLimit = updateEmailMessagesLimit
@@ -59,5 +63,6 @@ public struct ConfigurationData: Equatable, Sendable {
         self.prohibitedFileExtensions = prohibitedFileExtensions
         self.emailMasksEnabled = emailMasksEnabled
         self.externalEmailMasksEnabled = externalEmailMasksEnabled
+        self.allowOwnerEmailAddressReuse = allowOwnerEmailAddressReuse
     }
 }

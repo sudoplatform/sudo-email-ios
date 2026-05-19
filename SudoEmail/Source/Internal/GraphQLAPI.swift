@@ -8804,6 +8804,7 @@ internal final class GetEmailConfigQuery: GraphQLQuery {
         GraphQLField("prohibitedFileExtensions", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
         GraphQLField("emailMasksEnabled", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("externalEmailMasksEnabled", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("allowOwnerEmailAddressReuse", type: .nonNull(.scalar(Bool.self))),
       ]
 
       internal var snapshot: Snapshot
@@ -8812,8 +8813,8 @@ internal final class GetEmailConfigQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int, prohibitedFileExtensions: [String], emailMasksEnabled: Bool, externalEmailMasksEnabled: Bool) {
-        self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit, "prohibitedFileExtensions": prohibitedFileExtensions, "emailMasksEnabled": emailMasksEnabled, "externalEmailMasksEnabled": externalEmailMasksEnabled])
+      internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int, prohibitedFileExtensions: [String], emailMasksEnabled: Bool, externalEmailMasksEnabled: Bool, allowOwnerEmailAddressReuse: Bool) {
+        self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit, "prohibitedFileExtensions": prohibitedFileExtensions, "emailMasksEnabled": emailMasksEnabled, "externalEmailMasksEnabled": externalEmailMasksEnabled, "allowOwnerEmailAddressReuse": allowOwnerEmailAddressReuse])
       }
 
       internal var __typename: String {
@@ -8903,6 +8904,15 @@ internal final class GetEmailConfigQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "externalEmailMasksEnabled")
+        }
+      }
+
+      internal var allowOwnerEmailAddressReuse: Bool {
+        get {
+          return snapshot["allowOwnerEmailAddressReuse"]! as! Bool
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "allowOwnerEmailAddressReuse")
         }
       }
 
@@ -21130,7 +21140,7 @@ internal struct EmailAddressPublicInfo: GraphQLFragment {
 
 internal struct EmailConfigurationData: GraphQLFragment {
   internal static let fragmentString =
-    "fragment EmailConfigurationData on EmailConfigurationData {\n  __typename\n  deleteEmailMessagesLimit\n  updateEmailMessagesLimit\n  emailMessageMaxInboundMessageSize\n  emailMessageMaxOutboundMessageSize\n  emailMessageRecipientsLimit\n  encryptedEmailMessageRecipientsLimit\n  prohibitedFileExtensions\n  emailMasksEnabled\n  externalEmailMasksEnabled\n}"
+    "fragment EmailConfigurationData on EmailConfigurationData {\n  __typename\n  deleteEmailMessagesLimit\n  updateEmailMessagesLimit\n  emailMessageMaxInboundMessageSize\n  emailMessageMaxOutboundMessageSize\n  emailMessageRecipientsLimit\n  encryptedEmailMessageRecipientsLimit\n  prohibitedFileExtensions\n  emailMasksEnabled\n  externalEmailMasksEnabled\n  allowOwnerEmailAddressReuse\n}"
 
   internal static let possibleTypes = ["EmailConfigurationData"]
 
@@ -21145,6 +21155,7 @@ internal struct EmailConfigurationData: GraphQLFragment {
     GraphQLField("prohibitedFileExtensions", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
     GraphQLField("emailMasksEnabled", type: .nonNull(.scalar(Bool.self))),
     GraphQLField("externalEmailMasksEnabled", type: .nonNull(.scalar(Bool.self))),
+    GraphQLField("allowOwnerEmailAddressReuse", type: .nonNull(.scalar(Bool.self))),
   ]
 
   internal var snapshot: Snapshot
@@ -21153,8 +21164,8 @@ internal struct EmailConfigurationData: GraphQLFragment {
     self.snapshot = snapshot
   }
 
-  internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int, prohibitedFileExtensions: [String], emailMasksEnabled: Bool, externalEmailMasksEnabled: Bool) {
-    self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit, "prohibitedFileExtensions": prohibitedFileExtensions, "emailMasksEnabled": emailMasksEnabled, "externalEmailMasksEnabled": externalEmailMasksEnabled])
+  internal init(deleteEmailMessagesLimit: Int, updateEmailMessagesLimit: Int, emailMessageMaxInboundMessageSize: Int, emailMessageMaxOutboundMessageSize: Int, emailMessageRecipientsLimit: Int, encryptedEmailMessageRecipientsLimit: Int, prohibitedFileExtensions: [String], emailMasksEnabled: Bool, externalEmailMasksEnabled: Bool, allowOwnerEmailAddressReuse: Bool) {
+    self.init(snapshot: ["__typename": "EmailConfigurationData", "deleteEmailMessagesLimit": deleteEmailMessagesLimit, "updateEmailMessagesLimit": updateEmailMessagesLimit, "emailMessageMaxInboundMessageSize": emailMessageMaxInboundMessageSize, "emailMessageMaxOutboundMessageSize": emailMessageMaxOutboundMessageSize, "emailMessageRecipientsLimit": emailMessageRecipientsLimit, "encryptedEmailMessageRecipientsLimit": encryptedEmailMessageRecipientsLimit, "prohibitedFileExtensions": prohibitedFileExtensions, "emailMasksEnabled": emailMasksEnabled, "externalEmailMasksEnabled": externalEmailMasksEnabled, "allowOwnerEmailAddressReuse": allowOwnerEmailAddressReuse])
   }
 
   internal var __typename: String {
@@ -21244,6 +21255,15 @@ internal struct EmailConfigurationData: GraphQLFragment {
     }
     set {
       snapshot.updateValue(newValue, forKey: "externalEmailMasksEnabled")
+    }
+  }
+
+  internal var allowOwnerEmailAddressReuse: Bool {
+    get {
+      return snapshot["allowOwnerEmailAddressReuse"]! as! Bool
+    }
+    set {
+      snapshot.updateValue(newValue, forKey: "allowOwnerEmailAddressReuse")
     }
   }
 }

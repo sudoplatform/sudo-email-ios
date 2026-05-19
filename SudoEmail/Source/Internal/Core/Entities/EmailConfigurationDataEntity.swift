@@ -38,4 +38,7 @@ struct EmailConfigurationDataEntity {
     /// emailMasksEnabled setting must be true in order for the additional functionality
     /// of external masks to be available.
     var externalEmailMasksEnabled: Bool
+
+    /// Whether or not a user can provision an email address/mask that they have previously deprovisioned
+    var allowOwnerEmailAddressReuse: Bool
 }
