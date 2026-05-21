@@ -138,7 +138,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
 
     // MARK: - SealedEmailMessageRepository
 
-    /// Sends an out-of-network email message.
+    // Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
         let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailAccountId)
 
@@ -152,8 +152,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
-    /// Sends an in-network email message with E2E encryption.
-    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    // Sends an in-network email message with E2E encryption.
+    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessage(
         withRFC822Data data: Data,
         emailAccountId: String,
@@ -196,8 +196,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         )
     }
 
-    /// Sends an email message from a masked email address
-    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    // Sends an email message from a masked email address
+    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessageFromMask(
         withRFC822Data data: Data,
         emailMaskId: String,
@@ -704,7 +704,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             guard let emailMessage = result.getEmailMessage else {
                 return nil
             }
-            return try transformer.transform(emailMessage)
+            let entity = try transformer.transform(emailMessage)
+            return entity
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error

@@ -33,6 +33,7 @@ class DeprovisionEmailAccountUseCase {
     ///   - emailAccountId: Identifier of the email account to deprovision.
     ///   - completion: Returns the email account that was deleted on success, or error on failure.
     func execute(emailAccountId: String) async throws -> EmailAccountEntity {
-        return try await emailAccountRepository.deleteWithId(emailAccountId)
+        let emailAccount = try await emailAccountRepository.deleteWithId(emailAccountId)
+        return emailAccount
     }
 }

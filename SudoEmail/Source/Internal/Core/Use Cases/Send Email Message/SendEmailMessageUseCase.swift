@@ -66,6 +66,52 @@ class SendEmailMessageUseCase {
     ///   - input: Input parameters used to send email message.
     /// - Returns: SendEmailMessageResult
     func execute(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult {
+        let (senderIdentification, emailMessageHeader, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (
+            input.senderIdentification,
+            input.emailMessageHeader,
+            input.attachments,
+            input.inlineAttachments,
+            input.replyingMessageId,
+            input.forwardingMessageId
+        )
+        let (rfc822Data, encryptionStatus) = try await constructMessageData(input: input)
+        let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
+        switch senderIdentification {
+        case .maskId(let maskId):
+            return try await emailMessageRepository.sendEmailMessageFromMask(
+                withRFC822Data: rfc822Data,
+                emailMaskId: maskId,
+                emailMessageHeader: emailMessageHeader,
+                hasAttachments: hasAttachments,
+                encryptionStatus: encryptionStatus,
+                replyingMessageId: replyingMessageId,
+                forwardingMessageId: forwardingMessageId
+            )
+        case .emailAddressId(let emailAddressId):
+            if encryptionStatus == .UNENCRYPTED {
+                return try await emailMessageRepository.sendEmailMessage(
+                    withRFC822Data: rfc822Data,
+                    emailAccountId: emailAddressId
+                )
+            } else {
+                return try await emailMessageRepository.sendEmailMessage(
+                    withRFC822Data: rfc822Data,
+                    emailAccountId: emailAddressId,
+                    emailMessageHeader: emailMessageHeader,
+                    hasAttachments: hasAttachments,
+                    replyingMessageId: replyingMessageId,
+                    forwardingMessageId: forwardingMessageId
+                )
+            }
+        }
+    }
+
+    func executeSizeEstimate(withInput input: SendEmailMessageInput) async throws -> Int {
+        let result = try await constructMessageData(input: input)
+        return result.rfc822Data.count
+    }
+
+    private func constructMessageData(input: SendEmailMessageInput) async throws -> (rfc822Data: Data, encryptionStatus: EncryptionStatus) {
         let (senderIdentification, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (
             input.senderIdentification,
             input.emailMessageHeader,
@@ -126,28 +172,7 @@ class SendEmailMessageUseCase {
                 emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
             )
             let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
-
-            switch senderIdentification {
-            case .maskId(let maskId):
-                return try await emailMessageRepository.sendEmailMessageFromMask(
-                    withRFC822Data: encryptedRfc822Data,
-                    emailMaskId: maskId,
-                    emailMessageHeader: emailMessageHeader,
-                    hasAttachments: hasAttachments,
-                    encryptionStatus: EncryptionStatus.ENCRYPTED,
-                    replyingMessageId: replyingMessageId,
-                    forwardingMessageId: forwardingMessageId
-                )
-            case .emailAddressId(let emailAddressId):
-                return try await emailMessageRepository.sendEmailMessage(
-                    withRFC822Data: encryptedRfc822Data,
-                    emailAccountId: emailAddressId,
-                    emailMessageHeader: emailMessageHeader,
-                    hasAttachments: hasAttachments,
-                    replyingMessageId: replyingMessageId,
-                    forwardingMessageId: forwardingMessageId
-                )
-            }
+            return (rfc822Data: encryptedRfc822Data, encryptionStatus: .ENCRYPTED)
         }
 
         // Not all recipients are internal, or at least one doesn't support encryption,
@@ -166,25 +191,7 @@ class SendEmailMessageUseCase {
             forwardMessageId: forwardingMessageId,
             emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
         )
-
-        switch senderIdentification {
-        case .maskId(let maskId):
-            let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
-            return try await emailMessageRepository.sendEmailMessageFromMask(
-                withRFC822Data: rfc822Data,
-                emailMaskId: maskId,
-                emailMessageHeader: emailMessageHeader,
-                hasAttachments: hasAttachments,
-                encryptionStatus: EncryptionStatus.UNENCRYPTED,
-                replyingMessageId: replyingMessageId,
-                forwardingMessageId: forwardingMessageId
-            )
-        case .emailAddressId(let emailAddressId):
-            return try await emailMessageRepository.sendEmailMessage(
-                withRFC822Data: rfc822Data,
-                emailAccountId: emailAddressId
-            )
-        }
+        return (rfc822Data, encryptionStatus: .UNENCRYPTED)
     }
 
     /// Returns the set of internal domains, including configured domains and email mask domains if enabled.
@@ -203,7 +210,7 @@ class SendEmailMessageUseCase {
 
     /// Checks whether all recipients are internal (belong to internal domains).
     /// Note that if the list of recipients is empty, this function returns false,
-    /// as there are no recipients to be considered internal.
+    // as there are no recipients to be considered internal.
     ///
     /// - Parameters:
     ///   - config: The email configuration data

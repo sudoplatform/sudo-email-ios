@@ -71,7 +71,8 @@ class DefaultEmailFolderRepository: EmailFolderRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            return try transformer.transform(result.createCustomEmailFolder)
+            let entity = try transformer.transform(result.createCustomEmailFolder)
+            return entity
         } catch {
             logger.error("CreateCustomEmailFolder result transformation failed with \(error)")
             throw error
@@ -121,7 +122,8 @@ class DefaultEmailFolderRepository: EmailFolderRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            return try transformer.transform(result.updateCustomEmailFolder)
+            let entity = try transformer.transform(result.updateCustomEmailFolder)
+            return entity
         } catch {
             logger.error("UpdateCustomEmailFolder result transformation failed with \(error)")
             throw error

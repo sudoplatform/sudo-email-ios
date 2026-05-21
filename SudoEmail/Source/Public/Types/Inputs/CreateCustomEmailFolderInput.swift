@@ -6,7 +6,7 @@
 
 import Foundation
 
-// Input object for creating a custom EmailFolder
+/// Input object for creating a custom EmailFolder
 
 public struct CreateCustomEmailFolderInput {
 

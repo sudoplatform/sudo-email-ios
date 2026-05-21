@@ -535,6 +535,14 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func listEmailMasksForOwner(withInput input: ListEmailMasksForOwnerInput) async throws -> ListOutput<EmailMask>
 
+    /// Get the estimated size of an email message once it has had any encoding/encryption applied to it.
+    /// - Parameters:
+    ///   - input: Parameters used to send an email message
+    /// - Returns:
+    ///   - Success: Int
+    ///   - Failure: `SudoEmailError`.
+    func getEncodedEmailMessageSize(withInput input: SendEmailMessageInput) async throws -> Int
+
     // MARK: - Subscriptions
 
     /// Subscribes to be notified of changes to distributed vaults and members.

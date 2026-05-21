@@ -297,6 +297,8 @@
 		9FDA6FC52DCB211E00D23746 /* CancelScheduledDraftMessageUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDA6FC42DCB211E00D23746 /* CancelScheduledDraftMessageUseCaseTests.swift */; };
 		9FDA6FC72DCB278400D23746 /* CancelScheduledDraftMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDA6FC62DCB278400D23746 /* CancelScheduledDraftMessageTests.swift */; };
 		9FDA6FC92DCB28DE00D23746 /* MockCancelScheduledDraftMessageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDA6FC82DCB28DE00D23746 /* MockCancelScheduledDraftMessageUseCase.swift */; };
+		9FDD3D5D2FBBF2CB00BE6120 /* GetEncodedEmailMessageSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD3D5C2FBBF2CB00BE6120 /* GetEncodedEmailMessageSizeTests.swift */; };
+		9FDD3D5F2FBBF67800BE6120 /* GetEncodedEmailMessageSizeIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD3D5E2FBBF67800BE6120 /* GetEncodedEmailMessageSizeIntegrationTests.swift */; };
 		9FE8EB972CF4118B00ABE2DA /* MockDeleteCustomEmailFolderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8EB962CF4118B00ABE2DA /* MockDeleteCustomEmailFolderUseCase.swift */; };
 		9FE8EB992CF411FC00ABE2DA /* MockCreateCustomEmailFolderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8EB982CF411FC00ABE2DA /* MockCreateCustomEmailFolderUseCase.swift */; };
 		9FE8EB9B2CF4140A00ABE2DA /* DeleteCustomEmailFolderUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8EB9A2CF4140A00ABE2DA /* DeleteCustomEmailFolderUseCaseTests.swift */; };
@@ -950,6 +952,8 @@
 		9FDA6FC42DCB211E00D23746 /* CancelScheduledDraftMessageUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelScheduledDraftMessageUseCaseTests.swift; sourceTree = "<group>"; };
 		9FDA6FC62DCB278400D23746 /* CancelScheduledDraftMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelScheduledDraftMessageTests.swift; sourceTree = "<group>"; };
 		9FDA6FC82DCB28DE00D23746 /* MockCancelScheduledDraftMessageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCancelScheduledDraftMessageUseCase.swift; sourceTree = "<group>"; };
+		9FDD3D5C2FBBF2CB00BE6120 /* GetEncodedEmailMessageSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEncodedEmailMessageSizeTests.swift; sourceTree = "<group>"; };
+		9FDD3D5E2FBBF67800BE6120 /* GetEncodedEmailMessageSizeIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEncodedEmailMessageSizeIntegrationTests.swift; sourceTree = "<group>"; };
 		9FE8EB922CF4093800ABE2DA /* DeleteCustomEmailFolderInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCustomEmailFolderInput.swift; sourceTree = "<group>"; };
 		9FE8EB942CF40D2000ABE2DA /* DeleteCustomEmailFolderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCustomEmailFolderUseCase.swift; sourceTree = "<group>"; };
 		9FE8EB962CF4118B00ABE2DA /* MockDeleteCustomEmailFolderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeleteCustomEmailFolderUseCase.swift; sourceTree = "<group>"; };
@@ -1870,6 +1874,7 @@
 				848314FC24B81D68004E89EA /* GetEmailAddressByAddressByIdTests.swift */,
 				AD02AA2B2F32C97A00D31728 /* GetEmailMaskDomainsTests.swift */,
 				8483150024B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift */,
+				9FDD3D5C2FBBF2CB00BE6120 /* GetEncodedEmailMessageSizeTests.swift */,
 				848314FA24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift */,
 				95AEC1142AB187A000BEC70B /* ImportExportKeysTests.swift */,
 				848314F024B81C38004E89EA /* LifecycleTests.swift */,
@@ -2319,6 +2324,7 @@
 				ADFCB3E22F305E5F00CD6876 /* GetEmailMaskDomainsIntegrationTests.swift */,
 				842888F324984E0500D39E6C /* GetEmailMessageByIdIntegrationTests.swift */,
 				51A06DC62BC633A80002B1F3 /* GetEmailMessageWithBodyIntegrationTests.swift */,
+				9FDD3D5E2FBBF67800BE6120 /* GetEncodedEmailMessageSizeIntegrationTests.swift */,
 				84B260682488C6CE00E99401 /* GetSupportedDomainsIntegrationTests.swift */,
 				95AEC1162AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift */,
 				84A6E19F249203040025F05A /* ListEmailAddressesIntegrationTests.swift */,
@@ -3303,6 +3309,7 @@
 				ADFCB3E42F305E5F00CD6876 /* GetEmailMaskDomainsIntegrationTests.swift in Sources */,
 				842888F424984E0500D39E6C /* GetEmailMessageByIdIntegrationTests.swift in Sources */,
 				51A06DC72BC633A80002B1F3 /* GetEmailMessageWithBodyIntegrationTests.swift in Sources */,
+				9FDD3D5F2FBBF67800BE6120 /* GetEncodedEmailMessageSizeIntegrationTests.swift in Sources */,
 				84B260692488C6CE00E99401 /* GetSupportedDomainsIntegrationTests.swift in Sources */,
 				95AEC1172AB92F3E00BEC70B /* ImportExportKeysIntegrationTests.swift in Sources */,
 				84A6E1A0249203040025F05A /* ListEmailAddressesIntegrationTests.swift in Sources */,
@@ -3428,6 +3435,7 @@
 				AD02AA342F32C97A00D31728 /* GetEmailMaskDomainsTests.swift in Sources */,
 				8483150124B81D9D004E89EA /* GetEmailMessagesWithIdTests.swift in Sources */,
 				9F5FF5292FB2A97500F50838 /* GetEmailMessageWithBodyUseCaseTests.swift in Sources */,
+				9FDD3D5D2FBBF2CB00BE6120 /* GetEncodedEmailMessageSizeTests.swift in Sources */,
 				848314FB24B81D55004E89EA /* GetSupportedEmailDomainsTests.swift in Sources */,
 				95AEC1152AB187A000BEC70B /* ImportExportKeysTests.swift in Sources */,
 				84B2601D24876DBE00E99401 /* KeyEntityTransformerTests.swift in Sources */,
