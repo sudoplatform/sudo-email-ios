@@ -7,7 +7,7 @@
 import Foundation
 import SudoLogging
 
-/// Core use case representing an operation to update a custom email folder
+// Core use case representing an operation to update a custom email folder
 
 class UpdateCustomEmailFolderUseCase {
 
@@ -37,13 +37,12 @@ class UpdateCustomEmailFolderUseCase {
     ///     - values: The new values for the custom email folder
     /// - Returns: The update folder
     func execute(withInput input: UpdateCustomEmailFolderInput) async throws -> EmailFolderEntity {
-        let emailFolder = try await emailFolderRepository.updateCustomEmailFolder(
+        return try await emailFolderRepository.updateCustomEmailFolder(
             withInput: UpdateCustomEmailFolderInput(
                 emailFolderId: input.emailFolderId,
                 emailAddressId: input.emailAddressId,
                 values: input.values
             )
         )
-        return emailFolder
     }
 }

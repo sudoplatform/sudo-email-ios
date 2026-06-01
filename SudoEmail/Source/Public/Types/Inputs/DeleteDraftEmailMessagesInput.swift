@@ -6,7 +6,7 @@
 
 import Foundation
 
-/// input object for deleting draft email messages using `SudoEmailClient`
+// input object for deleting draft email messages using `SudoEmailClient`
 
 public struct DeleteDraftEmailMessagesInput {
 

@@ -7,25 +7,25 @@
 import Foundation
 import SudoNotification
 
-// JSON logic rule matching email service notification types we do not know how to handle
-// This string is compared across platforms and must match across them all.
+/// JSON logic rule matching email service notification types we do not know how to handle
+/// This string is compared across platforms and must match across them all.
 let defaultFirstRuleString = """
 {"!=":[{"var":"meta.type"},"\(EmailServiceNotificationType.messageReceived.rawValue)"]}
 """
 
-// Notification filter rule excluding email service notification types we do not know how to handle
+/// Notification filter rule excluding email service notification types we do not know how to handle
 let defaultFirstRule = NotificationFilterItem(
     name: Constants.serviceName,
     status: false,
     rules: defaultFirstRuleString
 )
 
-// JSON logic rule that always evaluates to true
+/// JSON logic rule that always evaluates to true
 let defaultLastRuleString = """
 {"==":[1,1]}
 """
 
-// Notification filter defaulting to enable
+/// Notification filter defaulting to enable
 let defaultLastRule = NotificationFilterItem(
     name: Constants.serviceName,
     status: true,

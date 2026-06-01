@@ -210,7 +210,7 @@ class SendEmailMessageUseCase {
 
     /// Checks whether all recipients are internal (belong to internal domains).
     /// Note that if the list of recipients is empty, this function returns false,
-    // as there are no recipients to be considered internal.
+    /// as there are no recipients to be considered internal.
     ///
     /// - Parameters:
     ///   - config: The email configuration data

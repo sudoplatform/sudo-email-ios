@@ -81,7 +81,7 @@ public struct SendEmailMessageInput: Equatable {
         self.forwardingMessageId = forwardingMessageId
     }
 
-    // Email address initializer
+    /// Email address initializer
     public init(
         senderEmailAddressId: String,
         emailMessageHeader: InternetMessageFormatHeader,
@@ -102,7 +102,7 @@ public struct SendEmailMessageInput: Equatable {
         )
     }
 
-    // Initializer for mask IDs
+    /// Initializer for mask IDs
     public init(
         senderMaskId: String,
         emailMessageHeader: InternetMessageFormatHeader,

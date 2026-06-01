@@ -29,7 +29,6 @@ class ScheduleSendDraftMessageUseCase {
         if input.sendAt.millisecondsSince1970 <= Date().millisecondsSince1970 {
             throw SudoEmailError.invalidArgument("sendAt must be in the future")
         }
-        let result = try await emailMessageRepository.scheduleSendDraftMessage(withInput: input)
-        return result
+        return try await emailMessageRepository.scheduleSendDraftMessage(withInput: input)
     }
 }

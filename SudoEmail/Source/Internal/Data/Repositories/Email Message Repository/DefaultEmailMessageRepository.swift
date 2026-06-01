@@ -138,7 +138,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
 
     // MARK: - SealedEmailMessageRepository
 
-    // Sends an out-of-network email message.
+    /// Sends an out-of-network email message.
     func sendEmailMessage(withRFC822Data data: Data, emailAccountId: String) async throws -> SendEmailMessageResult {
         let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailAccountId)
 
@@ -152,8 +152,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return SendEmailMessageResult(id: result.sendEmailMessageV2.id, createdAt: Date(millisecondsSince1970: result.sendEmailMessageV2.createdAtEpochMs))
     }
 
-    // Sends an in-network email message with E2E encryption.
-    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    /// Sends an in-network email message with E2E encryption.
+    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessage(
         withRFC822Data data: Data,
         emailAccountId: String,
@@ -196,8 +196,8 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         )
     }
 
-    // Sends an email message from a masked email address
-    // For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
+    /// Sends an email message from a masked email address
+    /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
     func sendEmailMessageFromMask(
         withRFC822Data data: Data,
         emailMaskId: String,
@@ -333,10 +333,12 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     func scheduleSendDraftMessage(
         withInput input: ScheduleSendDraftMessageInput
     ) async throws -> ScheduledDraftMessageEntity {
-        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
+        guard var s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
-        let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
+        s3KeyPrefix = "\(s3KeyPrefix)/draft"
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: input.emailMaskId)
+        let s3Key = "\(s3KeyPrefix)/\(input.id)"
         var downloaded: S3ObjectEntity
         do {
             downloaded = try await s3Worker.getObject(bucket: emailBucket, key: s3Key)
@@ -376,10 +378,12 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     func cancelScheduledDraftMessage(
         withInput input: CancelScheduledDraftMessageInput
     ) async throws -> String {
-        guard let s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
+        guard var s3KeyPrefix = await getS3KeyForSenderId(senderId: input.emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
-        let s3Key = "\(s3KeyPrefix)/draft/\(input.id)"
+        s3KeyPrefix = "\(s3KeyPrefix)/draft"
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: input.emailMaskId)
+        let s3Key = "\(s3KeyPrefix)/\(input.id)"
 
         let cancelScheduledDraftMessageInput = GraphQL.CancelScheduledDraftMessageInput(
             draftMessageKey: s3Key,
@@ -704,8 +708,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             guard let emailMessage = result.getEmailMessage else {
                 return nil
             }
-            let entity = try transformer.transform(emailMessage)
-            return entity
+            return try transformer.transform(emailMessage)
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error

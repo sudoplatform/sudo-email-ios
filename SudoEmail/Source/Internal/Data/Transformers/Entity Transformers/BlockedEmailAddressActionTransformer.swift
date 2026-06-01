@@ -6,7 +6,7 @@
 
 struct BlockedEmailAddressActionTransformer {
 
-    /// Transform a `GraphQL.BlockedAddressAction` into a `UnsealedBlockedAddress.BlockedAddressAction`
+    // Transform a `GraphQL.BlockedAddressAction` into a `UnsealedBlockedAddress.BlockedAddressAction`
 
     func transform(_ data: GraphQL.BlockedAddressAction?) -> UnsealedBlockedAddress.BlockedAddressAction {
         switch data {
