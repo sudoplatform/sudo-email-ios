@@ -187,7 +187,8 @@ class EmailMessageUtil {
         emailAddressesPublicInfo: [EmailAddressPublicInfoEntity] = [],
         replyMessageId: String? = nil,
         forwardMessageId: String? = nil,
-        emailMessageMaxOutboundMessageSize: Int
+        emailMessageMaxOutboundMessageSize: Int,
+        skipSizeLimitCheck: Bool = false
     ) async throws -> Data {
         // Generate unencrypted RFC822 email data
         var rfc822Data = try buildMessageData(
@@ -227,7 +228,7 @@ class EmailMessageUtil {
             )
         }
 
-        if rfc822Data.count > emailMessageMaxOutboundMessageSize {
+        if rfc822Data.count > emailMessageMaxOutboundMessageSize, !skipSizeLimitCheck {
             logger.error("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes. Message size: \(rfc822Data.count)")
             throw SudoEmailError.messageSizeLimitExceeded("Email message size exceeded. Limit: \(emailMessageMaxOutboundMessageSize) bytes")
         }

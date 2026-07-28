@@ -107,11 +107,11 @@ class SendEmailMessageUseCase {
     }
 
     func executeSizeEstimate(withInput input: SendEmailMessageInput) async throws -> Int {
-        let result = try await constructMessageData(input: input)
+        let result = try await constructMessageData(input: input, skipSizeLimitCheck: true)
         return result.rfc822Data.count
     }
 
-    private func constructMessageData(input: SendEmailMessageInput) async throws -> (rfc822Data: Data, encryptionStatus: EncryptionStatus) {
+    private func constructMessageData(input: SendEmailMessageInput, skipSizeLimitCheck: Bool = false) async throws -> (rfc822Data: Data, encryptionStatus: EncryptionStatus) {
         let (senderIdentification, emailMessageHeader, body, attachments, inlineAttachments, replyingMessageId, forwardingMessageId) = (
             input.senderIdentification,
             input.emailMessageHeader,
@@ -169,7 +169,8 @@ class SendEmailMessageUseCase {
                 emailAddressesPublicInfo: emailAddressesPublicInfo,
                 replyMessageId: replyingMessageId,
                 forwardMessageId: forwardingMessageId,
-                emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
+                emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize,
+                skipSizeLimitCheck: skipSizeLimitCheck
             )
             let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
             return (rfc822Data: encryptedRfc822Data, encryptionStatus: .ENCRYPTED)
@@ -189,7 +190,8 @@ class SendEmailMessageUseCase {
             encryptionStatus: EncryptionStatus.UNENCRYPTED,
             replyMessageId: replyingMessageId,
             forwardMessageId: forwardingMessageId,
-            emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize
+            emailMessageMaxOutboundMessageSize: config.emailMessageMaxOutboundMessageSize,
+            skipSizeLimitCheck: skipSizeLimitCheck
         )
         return (rfc822Data, encryptionStatus: .UNENCRYPTED)
     }
