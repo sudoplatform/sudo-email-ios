@@ -32,7 +32,7 @@ struct S3ObjectEntity: Equatable {
     /// The metadata associated with the
     var metadata: [String: String]?
 
-    /// The content encoding value for the data
+    // The content encoding value for the data
     var contentEncoding: String?
 }
 

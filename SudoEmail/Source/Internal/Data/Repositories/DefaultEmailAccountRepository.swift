@@ -50,9 +50,10 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await fetch(query)
         do {
             let transformer = EmailAddressEntityTransformer()
-            return try result.checkEmailAddressAvailability.addresses.map {
+            let entities = try result.checkEmailAddressAvailability.addresses.map {
                 try transformer.transform($0, alias: nil)
             }
+            return entities
         } catch {
             logger.error("CheckEmailAddressAvailabilityQuery result transformation failed with \(error)")
             throw error
@@ -107,7 +108,8 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            return try transformer.transform(result)
+            let entity = try transformer.transform(result)
+            return entity
         } catch {
             logger.error("ProvisionEmailAddressMutation result transformation failed with \(error)")
             throw error
@@ -155,7 +157,8 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            return try transformer.transform(result)
+            let entity = try transformer.transform(result)
+            return entity
         } catch {
             logger.error("DeprovisionEmailAddressMutation result transformation failed with \(error)")
             throw error
@@ -170,7 +173,8 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
             guard let emailAddress = result.getEmailAddress else {
                 return nil
             }
-            return try transformer.transform(emailAddress)
+            let entity = try transformer.transform(emailAddress)
+            return entity
         } catch {
             logger.error("GetEmailAddressQuery result transformation failed with \(error)")
             throw error

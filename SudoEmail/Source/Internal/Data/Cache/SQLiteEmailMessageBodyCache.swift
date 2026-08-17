@@ -78,9 +78,7 @@ actor SQLiteEmailMessageBodyCache: EmailMessageBodyCache {
     private var cacheSizeLimitBytes: Int64
 
     /// Whether the database was successfully opened.
-    private var isDatabaseOpen: Bool {
-        db != nil
-    }
+    private var isDatabaseOpen: Bool { db != nil }
 
     /// All columns in select order for the cache table.
     private static var allColumns: String {

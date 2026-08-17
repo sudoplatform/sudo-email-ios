@@ -43,11 +43,12 @@ class CreateCustomEmailFolderUseCase {
         guard try (await emailAccountRepository.fetchWithEmailAddressId(input.emailAddressId)) != nil else {
             throw SudoEmailError.addressNotFound
         }
-        return try await emailFolderRepository.createCustomEmailFolder(
+        let emailFolder = try await emailFolderRepository.createCustomEmailFolder(
             withInput: CreateCustomEmailFolderInput(
                 emailAddressId: input.emailAddressId,
                 customFolderName: input.customFolderName
             )
         )
+        return emailFolder
     }
 }

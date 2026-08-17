@@ -72,10 +72,11 @@ class ProvisionEmailAccountUseCase {
             logger.error("Error getting public key \(error.localizedDescription)")
             throw SudoEmailError.internalError(error.localizedDescription)
         }
-        return try await emailAccountRepository.createWithEmailAddress(
+        let emailAccount = try await emailAccountRepository.createWithEmailAddress(
             emailAddress,
             publicKey: publicKey,
             ownershipProofToken: ownershipProofToken
         )
+        return emailAccount
     }
 }

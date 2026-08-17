@@ -107,17 +107,19 @@ class Rfc822MessageDataProcessor {
             builder.textBody = body
         }
 
-        // Build Mailcore attachments from provided message attachments
-        let allAttachments = (message.attachments ?? []) + (message.inlineAttachments ?? [])
-        try allAttachments.forEach { attachment in
-            guard let mcoAttachment = MCOAttachment(data: attachment.data, filename: attachment.filename) else {
-                throw SudoEmailError.internalError("Failed to build attachment")
-            }
-            mcoAttachment.mimeType = attachment.mimetype
-            mcoAttachment.isInlineAttachment = attachment.inlineAttachment
-            mcoAttachment.contentID = attachment.contentId
+        // Inline parts must be related rather than mixed siblings, or Apple Mail renders them twice.
+        let inlineAttachments = message.inlineAttachments ?? []
+        // With no HTML part nothing references them, so they stay regular attachments and remain reachable.
+        let relatedAttachments = message.isHtml ? inlineAttachments : []
+        let regularAttachments = (message.attachments ?? []) + (message.isHtml ? [] : inlineAttachments)
 
+        try regularAttachments.forEach { attachment in
+            let mcoAttachment = try buildMCOAttachment(from: attachment)
             builder.addAttachment(mcoAttachment)
+        }
+        try relatedAttachments.forEach { attachment in
+            let mcoAttachment = try buildMCOAttachment(from: attachment)
+            builder.addRelatedAttachment(mcoAttachment)
         }
 
         guard let data = builder.data() else {
@@ -153,9 +155,9 @@ class Rfc822MessageDataProcessor {
         let bcc = header.bcc as? [MCOAddress] ?? []
         let replyTo = header.replyTo as? [MCOAddress] ?? []
         let subject = header.subject
-        // This is forcing HTML for incoming email. Even plain text would resolve to a HTML render.
-        // Product decision as to whether we *need* support for raw plaintext. If we do, this might
-        // need some minor refactoring. e.g: let isHtml = parser.isPlaintext()
+        /// This is forcing HTML for incoming email. Even plain text would resolve to a HTML render.
+        /// Product decision as to whether we *need* support for raw plaintext. If we do, this might
+        /// need some minor refactoring. e.g: let isHtml = parser.isPlaintext()
         let isHtml = true
         let renderer = parser.isPlaintext() ?
             HTMLPlaintextRenderer(logger: Logger.emailSDKLogger) : HTMLRenderer()
@@ -219,5 +221,22 @@ class Rfc822MessageDataProcessor {
         }
 
         return result
+    }
+
+    // MARK: - Private Methods
+
+    /// Builds the Mailcore attachment for the given email attachment.
+    /// - Parameter attachment: The attachment to transform.
+    /// - Returns: The equivalent `MCOAttachment`.
+    /// - Throws: `SudoEmailError.internalError` if Mailcore could not build the attachment.
+    private func buildMCOAttachment(from attachment: EmailAttachment) throws -> MCOAttachment {
+        guard let mcoAttachment = MCOAttachment(data: attachment.data, filename: attachment.filename) else {
+            throw SudoEmailError.internalError("Failed to build attachment")
+        }
+        mcoAttachment.mimeType = attachment.mimetype
+        mcoAttachment.isInlineAttachment = attachment.inlineAttachment
+        mcoAttachment.contentID = attachment.contentId
+
+        return mcoAttachment
     }
 }
