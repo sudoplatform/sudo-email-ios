@@ -1340,8 +1340,8 @@ internal struct DeprovisionEmailMaskInput: GraphQLMapConvertible {
 internal struct UpdateEmailMaskInput: GraphQLMapConvertible {
   internal var graphQLMap: GraphQLMap
 
-  internal init(expiresAtEpochSec: Optional<Int?> = nil, id: GraphQLID, metadata: Optional<SealedAttributeInput?> = nil) {
-    graphQLMap = ["expiresAtEpochSec": expiresAtEpochSec, "id": id, "metadata": metadata]
+  internal init(expiresAtEpochSec: Optional<Int?> = nil, id: GraphQLID, metadata: Optional<SealedAttributeInput?> = nil, realAddress: Optional<String?> = nil) {
+    graphQLMap = ["expiresAtEpochSec": expiresAtEpochSec, "id": id, "metadata": metadata, "realAddress": realAddress]
   }
 
   internal var expiresAtEpochSec: Optional<Int?> {
@@ -1368,6 +1368,15 @@ internal struct UpdateEmailMaskInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "metadata")
+    }
+  }
+
+  internal var realAddress: Optional<String?> {
+    get {
+      return graphQLMap["realAddress"] as? String?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "realAddress")
     }
   }
 }

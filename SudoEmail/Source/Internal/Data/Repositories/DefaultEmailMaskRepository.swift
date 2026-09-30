@@ -121,7 +121,8 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
     func updateEmailMask(
         emailMaskId: String,
         metadata: [String: String]?,
-        expiresAt: Date?
+        expiresAt: Date?,
+        realAddress: String?
     ) async throws -> EmailMaskEntity {
         logger.debug("Updating email mask with ID: \(emailMaskId)")
         let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
@@ -157,10 +158,14 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
                 expiresAtEpochSec = Int??.some(epochSeconds)
             }
         }
+        // Use double optional pattern: .none means don't include field, .some(value) means include it
+        let realAddressInput: String?? = realAddress.map { .some($0) } ?? .none
+
         let updateEmailMaskInput = GraphQL.UpdateEmailMaskInput(
             expiresAtEpochSec: expiresAtEpochSec,
             id: emailMaskId,
-            metadata: sealedMetadata
+            metadata: sealedMetadata,
+            realAddress: realAddressInput
         )
 
         let mutation = GraphQL.UpdateEmailMaskMutation(input: updateEmailMaskInput)

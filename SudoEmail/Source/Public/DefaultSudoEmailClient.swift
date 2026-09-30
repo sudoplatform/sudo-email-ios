@@ -812,7 +812,7 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             emailMaskRepository: emailMaskRepository,
             logger: logger
         )
-        let result = try await useCase.execute(emailMaskId: input.emailMaskId, metadata: input.metadata, expiresAt: input.expiresAt)
+        let result = try await useCase.execute(emailMaskId: input.emailMaskId, metadata: input.metadata, expiresAt: input.expiresAt, realAddress: input.realAddress)
         let transformer = EmailMaskAPITransformer()
         return transformer.transform(result)
     }

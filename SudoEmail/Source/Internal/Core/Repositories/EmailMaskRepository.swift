@@ -38,11 +38,13 @@ protocol EmailMaskRepository: Repository {
     ///   - emailMaskId: The unique identifier of email mask to update.
     ///   - metadata: Optional name/value pair metadata to associate with the email mask. Provide empty map to clear.
     ///   - expiresAt: Optional expiration date for the email mask. Provide date of 0 to clear existing expiration.
+    ///   - realAddress: Optional real email address for the email mask. Only valid for external masks in a pending state.
     /// - Returns: The updated email mask entity.
     func updateEmailMask(
         emailMaskId: String,
         metadata: [String: String]?,
-        expiresAt: Date?
+        expiresAt: Date?,
+        realAddress: String?
     ) async throws -> EmailMaskEntity
 
     /// Enable a previously disabled email mask, allowing it to forward emails again.

@@ -19,9 +19,14 @@ public struct UpdateEmailMaskInput: Equatable {
     /// Optional expiration date for the email mask. Provide a date of 0 to clear existing expiration.
     public let expiresAt: Date?
 
-    public init(emailMaskId: String, metadata: [String: String]? = nil, expiresAt: Date? = nil) {
+    /// Optional real email address for the email mask. Only valid for external masks in a pending state. Intended for the
+    /// use case of accidentally inputting the wrong external address.
+    public let realAddress: String?
+
+    public init(emailMaskId: String, metadata: [String: String]? = nil, expiresAt: Date? = nil, realAddress: String? = nil) {
         self.emailMaskId = emailMaskId
         self.metadata = metadata
         self.expiresAt = expiresAt
+        self.realAddress = realAddress
     }
 }

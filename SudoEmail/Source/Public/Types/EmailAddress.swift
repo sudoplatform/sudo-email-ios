@@ -6,6 +6,7 @@
 
 import Foundation
 
+/// Representation of an email address in the Sudo Email SDK.
 public struct EmailAddress: Equatable, Sendable {
 
     // MARK: - Properties
@@ -34,7 +35,8 @@ public struct EmailAddress: Equatable, Sendable {
     /// The total size, in bytes, of all email messages assigned to the email address.
     public let size: Double
 
-    /// The total number of email messages assigned to the email address.
+    /// The total number of email messages assigned to the email address. Drafts are messages
+    /// that have not yet been sent or received, so they are not considered in this count.
     public let numberOfEmailMessages: Int
 
     /// Version of this entity, increments on update.
