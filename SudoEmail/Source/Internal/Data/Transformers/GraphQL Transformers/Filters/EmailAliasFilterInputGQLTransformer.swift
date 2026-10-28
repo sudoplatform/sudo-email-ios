@@ -6,11 +6,11 @@
 
 import Foundation
 
-/// Utility class to transform email mask entity filter data to the GraphQL input filter data.
-struct EmailMaskFilterInputGQLTransformer {
+/// Utility class to transform email alias entity filter data to the GraphQL input filter data.
+struct EmailAliasFilterInputGQLTransformer {
 
-    /// Transform a `EmailMaskFilterEntity` filter rule into a GraphQL `EmailMaskFilterInput` filter rule.
-    func transform(_ entity: EmailMaskFilterEntity) -> GraphQL.EmailMaskFilterInput {
+    /// Transform a `EmailAliasFilterEntity` filter rule into a GraphQL `EmailMaskFilterInput` filter rule.
+    func transform(_ entity: EmailAliasFilterEntity) -> GraphQL.EmailMaskFilterInput {
         // Conditionally add filters only if they are provided - this ensures we do not send explicit nulls
         var filterInput = GraphQL.EmailMaskFilterInput()
 
@@ -24,8 +24,8 @@ struct EmailMaskFilterInputGQLTransformer {
         return filterInput
     }
 
-    /// Transform a `EmailMaskStatusFilterEntity` to a GraphQL `EmailMaskStatusFilterInput`.
-    private func transformStatusFilter(_ entity: EmailMaskStatusFilterEntity) -> GraphQL.EmailMaskStatusFilterInput {
+    /// Transform a `EmailAliasStatusFilterEntity` to a GraphQL `EmailMaskStatusFilterInput`.
+    private func transformStatusFilter(_ entity: EmailAliasStatusFilterEntity) -> GraphQL.EmailMaskStatusFilterInput {
         switch entity {
         case .equal(let status):
             let graphQLStatus = transformStatusEntity(status)
@@ -42,8 +42,8 @@ struct EmailMaskFilterInputGQLTransformer {
         }
     }
 
-    /// Transform a `EmailMaskRealAddressTypeFilterEntity` to a GraphQL `EmailMaskRealAddressTypeFilterInput`.
-    private func transformAddressTypeFilter(_ entity: EmailMaskRealAddressTypeFilterEntity) -> GraphQL.EmailMaskRealAddressTypeFilterInput {
+    /// Transform a `EmailAliasRealAddressTypeFilterEntity` to a GraphQL `EmailMaskRealAddressTypeFilterInput`.
+    private func transformAddressTypeFilter(_ entity: EmailAliasRealAddressTypeFilterEntity) -> GraphQL.EmailMaskRealAddressTypeFilterInput {
         switch entity {
         case .equal(let addressType):
             let graphQLAddressType = transformAddressTypeEntity(addressType)
@@ -60,8 +60,8 @@ struct EmailMaskFilterInputGQLTransformer {
         }
     }
 
-    /// Transform `EmailMaskStatusEntity` to GraphQL `EmailMaskStatus`.
-    private func transformStatusEntity(_ entity: EmailMaskStatusEntity) -> GraphQL.EmailMaskStatus {
+    /// Transform `EmailAliasStatusEntity` to GraphQL `EmailMaskStatus`.
+    private func transformStatusEntity(_ entity: EmailAliasStatusEntity) -> GraphQL.EmailMaskStatus {
         switch entity {
         case .enabled:
             return GraphQL.EmailMaskStatus.enabled
@@ -74,8 +74,8 @@ struct EmailMaskFilterInputGQLTransformer {
         }
     }
 
-    /// Transform `EmailMaskRealAddressTypeEntity` to GraphQL `EmailMaskRealAddressType`.
-    private func transformAddressTypeEntity(_ entity: EmailMaskRealAddressTypeEntity) -> GraphQL.EmailMaskRealAddressType {
+    /// Transform `EmailAliasRealAddressTypeEntity` to GraphQL `EmailMaskRealAddressType`.
+    private func transformAddressTypeEntity(_ entity: EmailAliasRealAddressTypeEntity) -> GraphQL.EmailMaskRealAddressType {
         switch entity {
         case .internal:
             return GraphQL.EmailMaskRealAddressType.internal

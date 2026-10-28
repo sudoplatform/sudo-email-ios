@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -18,6 +18,6 @@ struct DraftEmailMessageMetadataEntity: Equatable {
     /// Time at which the draft was last updated
     var updatedAt: Date
 
-    /// Unique identifier of the email mask associated with the draft email message.
-    var emailMaskId: String?
+    /// Unique identifier of the email alias associated with the draft email message.
+    var emailAliasId: String?
 }

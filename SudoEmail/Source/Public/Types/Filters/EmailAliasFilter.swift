@@ -6,39 +6,39 @@
 
 import Foundation
 
-public enum EmailMaskStatusFilter: Equatable {
+public enum EmailAliasStatusFilter: Equatable {
     /// Return only results that match the given status.
-    case equal(EmailMask.EmailMaskStatus)
+    case equal(EmailAlias.EmailAliasStatus)
     /// Return only results that match one of the given statuses.
-    case oneOf([EmailMask.EmailMaskStatus])
+    case oneOf([EmailAlias.EmailAliasStatus])
     /// Return only results that do not match the given status.
-    case notEqual(EmailMask.EmailMaskStatus)
+    case notEqual(EmailAlias.EmailAliasStatus)
     /// Return only results that do not match any of the given statuses.
-    case notOneOf([EmailMask.EmailMaskStatus])
+    case notOneOf([EmailAlias.EmailAliasStatus])
 }
 
-public enum EmailMaskAddressTypeFilter: Equatable {
+public enum EmailAliasAddressTypeFilter: Equatable {
     /// Return only results that match the given address type.
-    case equal(EmailMask.RealAddressType)
+    case equal(EmailAlias.RealAddressType)
     /// Return only results that match one of the given address types.
-    case oneOf([EmailMask.RealAddressType])
+    case oneOf([EmailAlias.RealAddressType])
     /// Return only results that do not match the given address type.
-    case notEqual(EmailMask.RealAddressType)
+    case notEqual(EmailAlias.RealAddressType)
     /// Return only results that do not match any of the given address types.
-    case notOneOf([EmailMask.RealAddressType])
+    case notOneOf([EmailAlias.RealAddressType])
 }
 
-public struct EmailMaskFilter: Equatable {
+public struct EmailAliasFilter: Equatable {
 
     /// Filter by `status` property
-    public var status: EmailMaskStatusFilter?
+    public var status: EmailAliasStatusFilter?
 
-    // filter by realAddressType property
-    public var realAddressType: EmailMaskAddressTypeFilter?
+    /// filter by realAddressType property
+    public var realAddressType: EmailAliasAddressTypeFilter?
 
     public init(
-        status: EmailMaskStatusFilter? = nil,
-        realAddressType: EmailMaskAddressTypeFilter? = nil
+        status: EmailAliasStatusFilter? = nil,
+        realAddressType: EmailAliasAddressTypeFilter? = nil
     ) {
         self.status = status
         self.realAddressType = realAddressType

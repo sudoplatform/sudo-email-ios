@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -111,7 +111,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
     /// Builds an S3 email object by uploading data and creating the GraphQL input
     /// - Parameters:
     ///   - data: The RFC822 email data to upload
-    ///   - senderId: The identifier of the sender (email address ID or mask ID)
+    ///   - senderId: The identifier of the sender (email address ID or alias ID)
     /// - Returns: S3EmailObjectInput for GraphQL mutations
     private func buildS3EmailObject(data: Data, senderId: String) async throws -> GraphQL.S3EmailObjectInput {
         guard let keyPrefix = await getS3KeyForSenderId(senderId: senderId) else {
@@ -196,18 +196,18 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         )
     }
 
-    /// Sends an email message from a masked email address
+    /// Sends an email message from an aliased email address
     /// For replying/forwarding messages, `replyingMessageId` and/or `forwardingMessageId` must be provided as an argument
-    func sendEmailMessageFromMask(
+    func sendEmailMessageFromAlias(
         withRFC822Data data: Data,
-        emailMaskId: String,
+        emailAliasId: String,
         emailMessageHeader: InternetMessageFormatHeader,
         hasAttachments: Bool,
         encryptionStatus: EncryptionStatus,
         replyingMessageId: String? = nil,
         forwardingMessageId: String? = nil
     ) async throws -> SendEmailMessageResult {
-        let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailMaskId)
+        let s3EmailObjectInput = try await buildS3EmailObject(data: data, senderId: emailAliasId)
 
         var rfc822HeaderInput = GraphQL.Rfc822HeaderInput(
             bcc: emailMessageHeader.bcc.map(\.description),
@@ -227,7 +227,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         }
 
         let input = GraphQL.SendMaskedEmailMessageInput(
-            emailMaskId: emailMaskId,
+            emailMaskId: emailAliasId,
             encryptionStatus: encryptionStatusTransformer.transform(encryptionStatus),
             message: s3EmailObjectInput,
             rfc822Header: rfc822HeaderInput
@@ -277,7 +277,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         rfc822Data: Data,
         senderEmailAddressId: String,
         id: String?,
-        emailMaskId: String?
+        emailAliasId: String?
     ) async throws -> DraftEmailMessageMetadataEntity {
         guard let symmetricKeyId = try deviceKeyWorker.getCurrentSymmetricKeyId() else {
             throw SudoEmailError.keyNotFound
@@ -286,7 +286,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         s3KeyPrefix = "\(s3KeyPrefix)/draft"
-        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: emailMaskId)
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailAliasId: emailAliasId)
         let draftId = id ?? UUID().uuidString
         let s3Key = "\(s3KeyPrefix)/\(draftId)"
         let sealedRfc822String = try deviceKeyWorker.sealString(
@@ -313,19 +313,19 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.internalError("updatedAt not set for draft.")
         }
 
-        return DraftEmailMessageMetadataEntity(id: draftId, emailAddressId: senderEmailAddressId, updatedAt: updatedAt, emailMaskId: emailMaskId)
+        return DraftEmailMessageMetadataEntity(id: draftId, emailAddressId: senderEmailAddressId, updatedAt: updatedAt, emailAliasId: emailAliasId)
     }
 
     func deleteDraft(
         id: String,
         emailAddressId: String,
-        emailMaskId: String?
+        emailAliasId: String?
     ) async throws -> String {
         guard var s3KeyPrefix = await getS3KeyForSenderId(senderId: emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         s3KeyPrefix = "\(s3KeyPrefix)/draft"
-        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: emailMaskId)
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailAliasId: emailAliasId)
         let s3Key = "\(s3KeyPrefix)/\(id)"
         return try await s3Worker.deleteObject(bucket: emailBucket, key: s3Key)
     }
@@ -337,7 +337,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         s3KeyPrefix = "\(s3KeyPrefix)/draft"
-        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: input.emailMaskId)
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailAliasId: input.emailAliasId)
         let s3Key = "\(s3KeyPrefix)/\(input.id)"
         var downloaded: S3ObjectEntity
         do {
@@ -366,7 +366,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         let scheduleSendDraftMessageInput = GraphQL.ScheduleSendDraftMessageInput(
             draftMessageKey: s3Key,
             emailAddressId: input.emailAddressId,
-            emailMaskId: input.emailMaskId.map { Optional($0) },
+            emailMaskId: input.emailAliasId.map { Optional($0) },
             sendAtEpochMs: input.sendAt.millisecondsSince1970,
             symmetricKey: symmetricKey
         )
@@ -382,13 +382,13 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         s3KeyPrefix = "\(s3KeyPrefix)/draft"
-        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: input.emailMaskId)
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailAliasId: input.emailAliasId)
         let s3Key = "\(s3KeyPrefix)/\(input.id)"
 
         let cancelScheduledDraftMessageInput = GraphQL.CancelScheduledDraftMessageInput(
             draftMessageKey: s3Key,
             emailAddressId: input.emailAddressId,
-            emailMaskId: input.emailMaskId.map { Optional($0) }
+            emailMaskId: input.emailAliasId.map { Optional($0) }
         )
 
         let mutation = GraphQL.CancelScheduledDraftMessageMutation(input: cancelScheduledDraftMessageInput)
@@ -594,7 +594,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         s3KeyPrefix = "\(s3KeyPrefix)/draft"
-        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: input.emailMaskId)
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailAliasId: input.emailAliasId)
         let s3Key = "\(s3KeyPrefix)/\(input.id)"
 
         var downloaded: S3ObjectEntity
@@ -650,7 +650,7 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
                 emailAddressId: input.emailAddressId,
                 updatedAt: updatedAt,
                 rfc822Data: rfc822Data,
-                emailMaskId: input.emailMaskId
+                emailAliasId: input.emailAliasId
             )
         } else {
             return DraftEmailMessage(
@@ -658,17 +658,17 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
                 emailAddressId: input.emailAddressId,
                 updatedAt: updatedAt,
                 rfc822Data: Data(unsealedString.utf8),
-                emailMaskId: input.emailMaskId
+                emailAliasId: input.emailAliasId
             )
         }
     }
 
-    func draftExists(id: String, emailAddressId: String, emailMaskId: String?) async throws -> Bool {
+    func draftExists(id: String, emailAddressId: String, emailAliasId: String?) async throws -> Bool {
         guard var s3KeyPrefix = await getS3KeyForSenderId(senderId: emailAddressId) else {
             throw SudoEmailError.internalError("Unable to find identity id")
         }
         s3KeyPrefix = "\(s3KeyPrefix)/draft"
-        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailMaskId: emailMaskId)
+        s3KeyPrefix = addEmailMaskIdToS3KeyPrefix(prefix: s3KeyPrefix, emailAliasId: emailAliasId)
         let s3Key = "\(s3KeyPrefix)/\(id)"
         do {
             return try await s3Worker.objectExists(bucket: emailBucket, key: s3Key)
@@ -733,10 +733,10 @@ class DefaultEmailMessageRepository: EmailMessageRepository {
         return "\(keyPrefix)/\(id)-\(publicKeyId)"
     }
 
-    func addEmailMaskIdToS3KeyPrefix(prefix: String, emailMaskId: String?) -> String {
-        guard let emailMaskId = emailMaskId else {
+    func addEmailMaskIdToS3KeyPrefix(prefix: String, emailAliasId: String?) -> String {
+        guard let emailAliasId = emailAliasId else {
             return prefix
         }
-        return "\(prefix)/mask/\(emailMaskId)"
+        return "\(prefix)/mask/\(emailAliasId)"
     }
 }

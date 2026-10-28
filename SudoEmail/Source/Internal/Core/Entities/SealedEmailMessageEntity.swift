@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,8 +26,8 @@ struct SealedEmailMessageEntity {
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
 
-    /// Email mask identity that sent/received this message, if any.
-    var emailMaskId: String?
+    /// Email alias identity that sent/received this message, if any.
+    var emailAliasId: String?
 
     /// Unique identifier of the associated decryption/encryption key.
     var keyId: String

@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -41,5 +41,7 @@ public class DefaultSudoEmailNotificationFilterClient: SudoNotificationFilterCli
 
     public init() {}
 
-    public func getSchema() -> NotificationMetaData { return DefaultSudoEmailNotificationFilterClient.schema }
+    public func getSchema() -> NotificationMetaData {
+        return DefaultSudoEmailNotificationFilterClient.schema
+    }
 }

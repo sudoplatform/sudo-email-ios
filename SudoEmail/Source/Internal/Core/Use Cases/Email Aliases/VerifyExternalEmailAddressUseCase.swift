@@ -9,13 +9,13 @@ import SudoLogging
 
 /// Core use case representation of an operation to verify an external email address.
 ///
-/// Verifies an external email address for use with email masking.
+/// Verifies an external email address for use with email aliasing.
 class VerifyExternalEmailAddressUseCase {
 
     // MARK: - Properties
 
-    /// Email mask repository to access the email mask service.
-    let emailMaskRepository: EmailMaskRepository
+    /// Email alias repository to access the email alias service.
+    let emailAliasRepository: EmailAliasRepository
 
     /// Logs diagnostic and error information.
     let logger: Logger
@@ -23,8 +23,8 @@ class VerifyExternalEmailAddressUseCase {
     // MARK: - Lifecycle
 
     /// Initialize an instance of `VerifyExternalEmailAddressUseCase`.
-    init(emailMaskRepository: EmailMaskRepository, logger: Logger) {
-        self.emailMaskRepository = emailMaskRepository
+    init(emailAliasRepository: EmailAliasRepository, logger: Logger) {
+        self.emailAliasRepository = emailAliasRepository
         self.logger = logger
     }
 
@@ -33,14 +33,14 @@ class VerifyExternalEmailAddressUseCase {
     /// Execute the use case.
     /// - Parameters:
     ///   - emailAddress: The external email address to verify.
-    ///   - emailMaskId: The unique identifier of the email mask.
+    ///   - emailAliasId: The unique identifier of the email alias.
     ///   - verificationCode: Optional verification code.
     /// - Returns: The verification result.
-    func execute(emailAddress: String, emailMaskId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity {
-        logger.info("Verifying external email address for mask ID: \(emailMaskId)")
-        return try await emailMaskRepository.verifyExternalEmailAddress(
+    func execute(emailAddress: String, emailAliasId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity {
+        logger.info("Verifying external email address for alias ID: \(emailAliasId)")
+        return try await emailAliasRepository.verifyExternalEmailAddress(
             emailAddress: emailAddress,
-            emailMaskId: emailMaskId,
+            emailAliasId: emailAliasId,
             verificationCode: verificationCode
         )
     }

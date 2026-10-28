@@ -21,8 +21,8 @@ struct EmailConfigurationDataEntityTransformer {
             emailMessageRecipientsLimit: graphQLConfigurationData.emailMessageRecipientsLimit,
             encryptedEmailMessageRecipientsLimit: graphQLConfigurationData.encryptedEmailMessageRecipientsLimit,
             prohibitedFileExtensions: graphQLConfigurationData.prohibitedFileExtensions,
-            emailMasksEnabled: graphQLConfigurationData.emailMasksEnabled,
-            externalEmailMasksEnabled: graphQLConfigurationData.externalEmailMasksEnabled,
+            emailAliasesEnabled: graphQLConfigurationData.emailMasksEnabled,
+            externalEmailAliasesEnabled: graphQLConfigurationData.externalEmailMasksEnabled,
             allowOwnerEmailAddressReuse: graphQLConfigurationData.allowOwnerEmailAddressReuse
         )
     }
@@ -37,8 +37,8 @@ struct EmailConfigurationDataEntityTransformer {
             emailMessageRecipientsLimit: emailConfigurationDataEntity.emailMessageRecipientsLimit,
             encryptedEmailMessageRecipientsLimit: emailConfigurationDataEntity.encryptedEmailMessageRecipientsLimit,
             prohibitedFileExtensions: emailConfigurationDataEntity.prohibitedFileExtensions,
-            emailMasksEnabled: emailConfigurationDataEntity.emailMasksEnabled,
-            externalEmailMasksEnabled: emailConfigurationDataEntity.externalEmailMasksEnabled,
+            emailAliasesEnabled: emailConfigurationDataEntity.emailAliasesEnabled,
+            externalEmailAliasesEnabled: emailConfigurationDataEntity.externalEmailAliasesEnabled,
             allowOwnerEmailAddressReuse: emailConfigurationDataEntity.allowOwnerEmailAddressReuse
         )
     }

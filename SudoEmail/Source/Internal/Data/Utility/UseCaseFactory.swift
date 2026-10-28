@@ -14,13 +14,11 @@ class UseCaseFactory {
     func generateProvisionEmailAccountUseCase(
         keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
-        keyId: String? = nil,
         logger: Logger
     ) -> ProvisionEmailAccountUseCase {
         return ProvisionEmailAccountUseCase(
             keyWorker: keyWorker,
             emailAccountRepository: emailAccountRepository,
-            keyId: keyId,
             logger: logger
         )
     }
@@ -41,8 +39,8 @@ class UseCaseFactory {
         return FetchConfiguredDomainsUseCase(domainRepository: domainRepository)
     }
 
-    func generateFetchEmailMaskDomainsUseCase(domainRepository: DomainRepository) -> FetchEmailMaskDomainsUseCase {
-        return FetchEmailMaskDomainsUseCase(domainRepository: domainRepository)
+    func generateFetchEmailAliasDomainsUseCase(domainRepository: DomainRepository) -> FetchEmailAliasDomainsUseCase {
+        return FetchEmailAliasDomainsUseCase(domainRepository: domainRepository)
     }
 
     func generateListEmailDomainsUseCase(domainRepository: DomainRepository) -> ListEmailDomainsUseCase {
@@ -361,75 +359,75 @@ class UseCaseFactory {
         return GetEmailConfigurationDataUseCase(emailConfigurationDataRepository: emailConfigurationDataRepository)
     }
 
-    func generateProvisionEmailMaskUseCase(
+    func generateProvisionEmailAliasUseCase(
         keyWorker: ServiceKeyWorker,
-        emailMaskRepository: EmailMaskRepository,
+        emailAliasRepository: EmailAliasRepository,
         domainRepository: DomainRepository,
         logger: Logger
-    ) -> ProvisionEmailMaskUseCase {
-        return ProvisionEmailMaskUseCase(
+    ) -> ProvisionEmailAliasUseCase {
+        return ProvisionEmailAliasUseCase(
             keyWorker: keyWorker,
-            emailMaskRepository: emailMaskRepository,
+            emailAliasRepository: emailAliasRepository,
             domainRepository: domainRepository,
             logger: logger
         )
     }
 
-    func generateDeprovisionEmailMaskUseCase(
-        emailMaskRepository: EmailMaskRepository,
+    func generateDeprovisionEmailAliasUseCase(
+        emailAliasRepository: EmailAliasRepository,
         logger: Logger
-    ) -> DeprovisionEmailMaskUseCase {
-        return DeprovisionEmailMaskUseCase(
-            emailMaskRepository: emailMaskRepository,
+    ) -> DeprovisionEmailAliasUseCase {
+        return DeprovisionEmailAliasUseCase(
+            emailAliasRepository: emailAliasRepository,
             logger: logger
         )
     }
 
-    func generateUpdateEmailMaskUseCase(
-        emailMaskRepository: EmailMaskRepository,
+    func generateUpdateEmailAliasUseCase(
+        emailAliasRepository: EmailAliasRepository,
         logger: Logger
-    ) -> UpdateEmailMaskUseCase {
-        return UpdateEmailMaskUseCase(
-            emailMaskRepository: emailMaskRepository,
+    ) -> UpdateEmailAliasUseCase {
+        return UpdateEmailAliasUseCase(
+            emailAliasRepository: emailAliasRepository,
             logger: logger
         )
     }
 
-    func generateEnableEmailMaskUseCase(
-        emailMaskRepository: EmailMaskRepository,
+    func generateEnableEmailAliasUseCase(
+        emailAliasRepository: EmailAliasRepository,
         logger: Logger
-    ) -> EnableEmailMaskUseCase {
-        return EnableEmailMaskUseCase(
-            emailMaskRepository: emailMaskRepository,
+    ) -> EnableEmailAliasUseCase {
+        return EnableEmailAliasUseCase(
+            emailAliasRepository: emailAliasRepository,
             logger: logger
         )
     }
 
-    func generateDisableEmailMaskUseCase(
-        emailMaskRepository: EmailMaskRepository,
+    func generateDisableEmailAliasUseCase(
+        emailAliasRepository: EmailAliasRepository,
         logger: Logger
-    ) -> DisableEmailMaskUseCase {
-        return DisableEmailMaskUseCase(
-            emailMaskRepository: emailMaskRepository,
+    ) -> DisableEmailAliasUseCase {
+        return DisableEmailAliasUseCase(
+            emailAliasRepository: emailAliasRepository,
             logger: logger
         )
     }
 
     func generateVerifyExternalEmailAddressUseCase(
-        emailMaskRepository: EmailMaskRepository,
+        emailAliasRepository: EmailAliasRepository,
         logger: Logger
     ) -> VerifyExternalEmailAddressUseCase {
         return VerifyExternalEmailAddressUseCase(
-            emailMaskRepository: emailMaskRepository,
+            emailAliasRepository: emailAliasRepository,
             logger: logger
         )
     }
 
-    func generateListEmailMasksForOwnerUseCase(
-        emailMaskRepository: EmailMaskRepository,
+    func generateListEmailAliasesForOwnerUseCase(
+        emailAliasRepository: EmailAliasRepository,
         logger: Logger
-    ) -> ListEmailMasksForOwnerUseCase {
-        return ListEmailMasksForOwnerUseCase(emailMaskRepository: emailMaskRepository,
-                                             logger: logger)
+    ) -> ListEmailAliasesForOwnerUseCase {
+        return ListEmailAliasesForOwnerUseCase(emailAliasRepository: emailAliasRepository,
+                                               logger: logger)
     }
 }

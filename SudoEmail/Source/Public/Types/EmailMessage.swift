@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -52,8 +52,8 @@ public struct EmailMessage: Equatable, Sendable {
     /// Email address id that is associated with the account of the email message - which account sent/received this message.
     public var emailAddressId: String
 
-    /// Email mask id that sent/received this message (if any)
-    public var emailMaskId: String?
+    /// Email alias id that sent/received this message (if any)
+    public var emailAliasId: String?
 
     /// Unique identifier of the email folder which the message is assigned to.
     public var folderId: String
@@ -125,7 +125,7 @@ public struct EmailMessage: Equatable, Sendable {
         owner: String,
         owners: [Owner],
         emailAddressId: String,
-        emailMaskId: String?,
+        emailAliasId: String?,
         folderId: String,
         previousFolderId: String?,
         createdAt: Date,
@@ -156,7 +156,7 @@ public struct EmailMessage: Equatable, Sendable {
         self.updatedAt = updatedAt
         self.sortDate = sortDate
         self.emailAddressId = emailAddressId
-        self.emailMaskId = emailMaskId
+        self.emailAliasId = emailAliasId
         self.folderId = folderId
         self.previousFolderId = previousFolderId
         self.seen = seen
@@ -196,8 +196,8 @@ public struct PartialEmailMessage: Equatable, Sendable {
     /// Email address id that is associated with the account of the email message - which account sent/received this message.
     public var emailAddressId: String
 
-    /// Emask mask id that sent/received this message (if any)
-    public var emailMaskId: String?
+    /// Email alias id that sent/received this message (if any)
+    public var emailAliasId: String?
 
     /// Unique identifier of the email folder which the message is assigned to.
     public var folderId: String
@@ -249,7 +249,7 @@ public struct PartialEmailMessage: Equatable, Sendable {
         owner: String,
         owners: [Owner],
         emailAddressId: String,
-        emailMaskId: String?,
+        emailAliasId: String?,
         folderId: String,
         previousFolderId: String?,
         createdAt: Date,
@@ -273,7 +273,7 @@ public struct PartialEmailMessage: Equatable, Sendable {
         self.updatedAt = updatedAt
         self.sortDate = sortDate
         self.emailAddressId = emailAddressId
-        self.emailMaskId = emailMaskId
+        self.emailAliasId = emailAliasId
         self.folderId = folderId
         self.previousFolderId = previousFolderId
         self.seen = seen

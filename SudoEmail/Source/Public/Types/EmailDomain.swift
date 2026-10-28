@@ -18,14 +18,14 @@ public struct EmailDomain: Hashable, Sendable {
     public let domain: String
 
     /// Indicates whether the email domain is a mask domain.
-    public let isMaskDomain: Bool
+    public let isAliasDomain: Bool
 
     /// Metadata associated with the email domain.
     public let metadata: [String: String]
 
-    public init(domain: String, isMaskDomain: Bool, metadata: [String: String]) {
+    public init(domain: String, isAliasDomain: Bool, metadata: [String: String]) {
         self.domain = domain
-        self.isMaskDomain = isMaskDomain
+        self.isAliasDomain = isAliasDomain
         self.metadata = metadata
     }
 }

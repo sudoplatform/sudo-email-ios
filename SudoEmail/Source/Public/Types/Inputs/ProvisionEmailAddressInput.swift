@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -16,16 +16,16 @@ public struct ProvisionEmailAddressInput: Equatable {
     ///  The ownership proof must contain an audience of "sudoplatform".
     public let ownershipProofToken: String
 
-    /// An alias for the email address.
-    public let alias: String?
+    /// An optional user defined display name for the email address.
+    public let displayName: String?
 
     /// Optional identifier of the Public Key to use to provision the email address.
     public let keyId: String?
 
-    public init(emailAddress: String, ownershipProofToken: String, alias: String? = nil, keyId: String? = nil) {
+    public init(emailAddress: String, ownershipProofToken: String, displayName: String? = nil, keyId: String? = nil) {
         self.emailAddress = emailAddress
         self.ownershipProofToken = ownershipProofToken
-        self.alias = alias
+        self.displayName = displayName
         self.keyId = keyId
     }
 }

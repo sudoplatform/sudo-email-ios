@@ -77,10 +77,10 @@ class SendEmailMessageUseCase {
         let (rfc822Data, encryptionStatus) = try await constructMessageData(input: input)
         let hasAttachments = !attachments.isEmpty || !inlineAttachments.isEmpty
         switch senderIdentification {
-        case .maskId(let maskId):
-            return try await emailMessageRepository.sendEmailMessageFromMask(
+        case .aliasId(let aliasId):
+            return try await emailMessageRepository.sendEmailMessageFromAlias(
                 withRFC822Data: rfc822Data,
-                emailMaskId: maskId,
+                emailAliasId: aliasId,
                 emailMessageHeader: emailMessageHeader,
                 hasAttachments: hasAttachments,
                 encryptionStatus: encryptionStatus,
@@ -196,15 +196,15 @@ class SendEmailMessageUseCase {
         return (rfc822Data, encryptionStatus: .UNENCRYPTED)
     }
 
-    /// Returns the set of internal domains, including configured domains and email mask domains if enabled.
+    /// Returns the set of internal domains, including configured domains and email alias domains if enabled.
     /// - Parameter config: The email configuration data
     /// - Returns: Array of domain entities representing all valid domains
     private func getInternalDomains(config: EmailConfigurationDataEntity) async throws -> [DomainEntity] {
         var domains = try await emailDomainRepository.fetchConfiguredDomains()
 
-        if config.emailMasksEnabled {
-            let maskDomains = try await emailDomainRepository.fetchEmailMaskDomains()
-            domains.append(contentsOf: maskDomains)
+        if config.emailAliasesEnabled {
+            let aliasDomains = try await emailDomainRepository.fetchEmailAliasDomains()
+            domains.append(contentsOf: aliasDomains)
         }
 
         return domains
@@ -212,7 +212,7 @@ class SendEmailMessageUseCase {
 
     /// Checks whether all recipients are internal (belong to internal domains).
     /// Note that if the list of recipients is empty, this function returns false,
-    // as there are no recipients to be considered internal.
+    /// as there are no recipients to be considered internal.
     ///
     /// - Parameters:
     ///   - config: The email configuration data

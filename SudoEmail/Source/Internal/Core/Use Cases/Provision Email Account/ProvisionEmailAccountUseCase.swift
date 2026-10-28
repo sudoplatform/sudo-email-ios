@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,9 +25,6 @@ class ProvisionEmailAccountUseCase {
 
     // MARK: - Properties
 
-    /// Identifier of the Public Key to provision the email account with.
-    let keyId: String?
-
     /// Logs diagnostic and error information.
     let logger: Logger
 
@@ -37,12 +34,10 @@ class ProvisionEmailAccountUseCase {
     init(
         keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
-        keyId: String? = nil,
         logger: Logger = .emailSDKLogger
     ) {
         self.keyWorker = keyWorker
         self.emailAccountRepository = emailAccountRepository
-        self.keyId = keyId
         self.logger = logger
     }
 
@@ -53,10 +48,10 @@ class ProvisionEmailAccountUseCase {
     ///   - emailAddress: Email address to use to provision.
     ///   - sudoId: Identifier of the sudo to provision the email account to.
     /// - Returns: A newly created email account.
-    func execute(emailAddress: EmailAddressEntity, ownershipProofToken: String) async throws -> EmailAccountEntity {
+    func execute(withInput input: ProvisionEmailAddressInput) async throws -> EmailAccountEntity {
         var publicKey: KeyEntity
         do {
-            if let keyId = keyId {
+            if let keyId = input.keyId {
                 guard let pubKey = try await keyWorker.getPublicKeyWithId(keyId: keyId) else {
                     throw SudoEmailError.keyNotFound
                 }
@@ -72,11 +67,11 @@ class ProvisionEmailAccountUseCase {
             logger.error("Error getting public key \(error.localizedDescription)")
             throw SudoEmailError.internalError(error.localizedDescription)
         }
-        let emailAccount = try await emailAccountRepository.createWithEmailAddress(
-            emailAddress,
+        return try await emailAccountRepository.createWithEmailAddress(
+            input.emailAddress,
             publicKey: publicKey,
-            ownershipProofToken: ownershipProofToken
+            ownershipProofToken: input.ownershipProofToken,
+            displayName: input.displayName
         )
-        return emailAccount
     }
 }

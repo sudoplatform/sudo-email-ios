@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -22,15 +22,15 @@ struct DraftEmailMetadataEntityTransformer {
         guard let updatedAt = awsS3Object.lastModified else {
             throw SudoEmailError.internalError("draft email message has no last modified date")
         }
-        let emailMaskId = extractEmailMaskIdFromDraftMessageS3Key(key: key)
-        if let emailMaskId, !emailMaskId.isEmpty {
-            fullS3KeyPrefix += "mask/\(emailMaskId)/"
+        let emailAliasId = extractEmailMaskIdFromDraftMessageS3Key(key: key)
+        if let emailAliasId, !emailAliasId.isEmpty {
+            fullS3KeyPrefix += "mask/\(emailAliasId)/"
         }
         return DraftEmailMessageMetadataEntity(
             id: key.replacingOccurrences(of: fullS3KeyPrefix, with: ""),
             emailAddressId: emailAddressId,
             updatedAt: updatedAt,
-            emailMaskId: emailMaskId
+            emailAliasId: emailAliasId
         )
     }
 
@@ -39,7 +39,7 @@ struct DraftEmailMetadataEntityTransformer {
             id: entity.id,
             emailAddressId: entity.emailAddressId,
             updatedAt: entity.updatedAt,
-            emailMaskId: entity.emailMaskId
+            emailAliasId: entity.emailAliasId
         )
     }
 
@@ -47,7 +47,7 @@ struct DraftEmailMetadataEntityTransformer {
     /// - Parameter key: The S3 key string
     /// - Returns: The email mask ID if found, otherwise `nil`
     private func extractEmailMaskIdFromDraftMessageS3Key(key: String) -> String? {
-        let pattern = #"/mask/([^/]+)/"# // matches '/mask/{emailMaskId}/'
+        let pattern = #"/mask/([^/]+)/"# // matches '/mask/{emailAliasId}/'
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
             return nil
         }

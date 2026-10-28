@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -21,7 +21,6 @@ class GetDraftEmailMessageUseCase {
     // MARK: - Methods
 
     func execute(withInput input: GetDraftEmailMessageInput) async throws -> DraftEmailMessage? {
-        let draftEmailMessage = try await emailMessageRepository.getDraft(withInput: input)
-        return draftEmailMessage
+        return try await emailMessageRepository.getDraft(withInput: input)
     }
 }

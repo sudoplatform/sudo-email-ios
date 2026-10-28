@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,7 +26,7 @@ struct DomainEntityTransformer {
 
         return EmailDomainEntity(
             domain: data.domain,
-            isMaskDomain: data.isMaskDomain,
+            isAliasDomain: data.isMaskDomain,
             metadata: metadata
         )
     }

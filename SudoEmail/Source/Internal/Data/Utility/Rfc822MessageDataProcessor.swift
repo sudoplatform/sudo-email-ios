@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -155,9 +155,9 @@ class Rfc822MessageDataProcessor {
         let bcc = header.bcc as? [MCOAddress] ?? []
         let replyTo = header.replyTo as? [MCOAddress] ?? []
         let subject = header.subject
-        /// This is forcing HTML for incoming email. Even plain text would resolve to a HTML render.
-        /// Product decision as to whether we *need* support for raw plaintext. If we do, this might
-        /// need some minor refactoring. e.g: let isHtml = parser.isPlaintext()
+        // This is forcing HTML for incoming email. Even plain text would resolve to a HTML render.
+        // Product decision as to whether we *need* support for raw plaintext. If we do, this might
+        // need some minor refactoring. e.g: let isHtml = parser.isPlaintext()
         let isHtml = true
         let renderer = parser.isPlaintext() ?
             HTMLPlaintextRenderer(logger: Logger.emailSDKLogger) : HTMLRenderer()

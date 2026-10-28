@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -38,7 +38,7 @@ struct EmailAddressAPITransformer {
         let owners = entity.owners.map(ownerTransformer.transform(_:))
         let keyIds = entity.keyIds
         let identityId = entity.identityId
-        let emailAddress = entity.emailAddress.emailAddress
+        let emailAddress = entity.emailAddress
         let folders = entity.folders.map(folderTransformer.transform(_:))
         let size = entity.size
         let numberOfEmailMessages = entity.numberOfEmailMessages
@@ -46,6 +46,7 @@ struct EmailAddressAPITransformer {
         let createdAt = entity.createdAt
         let updatedAt = entity.updatedAt
         let lastReceivedAt = entity.lastReceivedAt
+        let displayName = entity.displayName
         return EmailAddress(
             id: id,
             owner: owner,
@@ -60,7 +61,7 @@ struct EmailAddressAPITransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             lastReceivedAt: lastReceivedAt,
-            alias: entity.emailAddress.alias
+            displayName: displayName
         )
     }
 }

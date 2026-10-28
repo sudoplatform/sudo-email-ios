@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -40,9 +40,15 @@ enum SecureEmailAttachmentType {
         }
     }
 
-    func fileName() -> String { getValues().fileName }
+    func fileName() -> String {
+        getValues().fileName
+    }
 
-    func mimeType() -> String { getValues().mimeType }
+    func mimeType() -> String {
+        getValues().mimeType
+    }
 
-    func contentId() -> String { getValues().contentId }
+    func contentId() -> String {
+        getValues().contentId
+    }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -49,8 +49,8 @@ class DeleteDraftEmailMessagesUseCase {
         guard !input.ids.isEmpty else {
             return BatchOperationResult(status: .success)
         }
-        let result = await deleteDraftEmailMessages(withIds: input.ids, emailAddressId: input.emailAddressId, emailMaskId: input.emailMaskId)
-        await cancelScheduledDraftMessages(withIds: result.successItems, emailAddressId: input.emailAddressId, emailMaskId: input.emailMaskId)
+        let result = await deleteDraftEmailMessages(withIds: input.ids, emailAddressId: input.emailAddressId, emailAliasId: input.emailAliasId)
+        await cancelScheduledDraftMessages(withIds: result.successItems, emailAddressId: input.emailAddressId, emailAliasId: input.emailAliasId)
         return result
     }
 
@@ -59,13 +59,13 @@ class DeleteDraftEmailMessagesUseCase {
     func deleteDraftEmailMessages(
         withIds ids: [String],
         emailAddressId: String,
-        emailMaskId: String?
+        emailAliasId: String?
     ) async -> BatchOperationResult<String, EmailMessageOperationFailureResult> {
         return await withTaskGroup(of: Result<String, EmailMessageOperationFailureResult>.self) { taskGroup in
             for id in ids {
                 taskGroup.addTask {
                     do {
-                        let deletedId = try await self.emailMessageRepository.deleteDraft(id: id, emailAddressId: emailAddressId, emailMaskId: emailMaskId)
+                        let deletedId = try await self.emailMessageRepository.deleteDraft(id: id, emailAddressId: emailAddressId, emailAliasId: emailAliasId)
                         return .success(deletedId)
                     } catch {
                         self.logger.error("Failed to delete draft \(id) with \(error)")
@@ -92,7 +92,7 @@ class DeleteDraftEmailMessagesUseCase {
         }
     }
 
-    func cancelScheduledDraftMessages(withIds ids: [String]?, emailAddressId: String, emailMaskId: String? = nil) async {
+    func cancelScheduledDraftMessages(withIds ids: [String]?, emailAddressId: String, emailAliasId: String? = nil) async {
         guard let ids, !ids.isEmpty else {
             return
         }
@@ -100,7 +100,7 @@ class DeleteDraftEmailMessagesUseCase {
             for id in ids {
                 taskGroup.addTask {
                     do {
-                        let input = CancelScheduledDraftMessageInput(id: id, emailAddressId: emailAddressId, emailMaskId: emailMaskId)
+                        let input = CancelScheduledDraftMessageInput(id: id, emailAddressId: emailAddressId, emailAliasId: emailAliasId)
                         _ = try await self.emailMessageRepository.cancelScheduledDraftMessage(withInput: input)
                         self.logger.debug("Successfully cancelled scheduled draft \(id) if it existed")
                     } catch {

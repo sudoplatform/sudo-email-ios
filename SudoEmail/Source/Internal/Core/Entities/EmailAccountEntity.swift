@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -28,7 +28,10 @@ struct EmailAccountEntity: Equatable {
     var keyIds: [String]
 
     /// Email address associated with the account.
-    var emailAddress: EmailAddressEntity
+    var emailAddress: String
+
+    /// The display name (or personal name) of the email address.
+    var displayName: String?
 
     /// The total size in bytes of all email messages assigned to the email account.
     var size: Double

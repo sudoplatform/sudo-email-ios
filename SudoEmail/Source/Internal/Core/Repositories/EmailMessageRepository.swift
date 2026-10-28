@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -34,19 +34,19 @@ protocol EmailMessageRepository: Repository {
         forwardingMessageId: String?
     ) async throws -> SendEmailMessageResult
 
-    /// Send an email message from a mask email address.
+    /// Send an email message from an alias email address.
     /// - Parameters:
     ///   - data: RFC 6854 (supersedes RFC 822) data to be sent representing the email message.
-    ///   - emailMaskId: Identifier of the email mask to send the email message from. The user must own this mask.
+    ///   - emailAliasId: Identifier of the email alias to send the email message from. The user must own this alias.
     ///   - emailMessageHeader: Message headers used for E2E encryption.
     ///   - hasAttachments: Indicates whether or not the encrypted data contains email attachments.
     ///   - encryptionStatus: The encryption status of the email message to be sent.
     ///   - replyingMessageId: Identifier of the email message being replied to.
     ///   - forwardingMessageId: Identifier of the email message being forwarded.
     /// - Returns: SendEmailMessageResult
-    func sendEmailMessageFromMask(
+    func sendEmailMessageFromAlias(
         withRFC822Data data: Data,
-        emailMaskId: String,
+        emailAliasId: String,
         emailMessageHeader: InternetMessageFormatHeader,
         hasAttachments: Bool,
         encryptionStatus: EncryptionStatus,
@@ -77,25 +77,25 @@ protocol EmailMessageRepository: Repository {
     ///   - rfc822Data: The RFC822 data of the draft email message
     ///   - senderEmailAddressId: The id of the sender's email address
     ///   - id: The id of the draft email message to save
-    ///   - emailMaskId - The id of the email mask associated with the draft message
+    ///   - emailAliasId - The id of the email alias associated with the draft message
     ///   - Returns: On success, the metadata associated with the saved draft email message
     func saveDraft(
         rfc822Data: Data,
         senderEmailAddressId: String,
         id: String?,
-        emailMaskId: String?
+        emailAliasId: String?
     ) async throws -> DraftEmailMessageMetadataEntity
 
     /// Delete a draft email message.
     ///  - Parameters:
     ///    - id: The identifier of the draft email message to delete.
     ///    - emailAddressId: The email address id associated with the draft email message to delete.
-    ///    - emailMaskId - The id of the email mask associated with the draft message
+    ///    - emailAliasId - The id of the email alias associated with the draft message
     ///  - Returns: The identifier of the deleted email message.
     func deleteDraft(
         id: String,
         emailAddressId: String,
-        emailMaskId: String?
+        emailAliasId: String?
     ) async throws -> String
 
     /// Schedule a draft message to be sent at a specified time in the future
@@ -169,9 +169,9 @@ protocol EmailMessageRepository: Repository {
     ///  - Parameters:
     ///    - id: The identifier of the draft email message to check.
     ///    - emailAddressId: Identifier of the email address associated with the draft email message.
-    ///    - emailMaskId: Identifier of the email mask associated with this draft email message.
+    ///    - emailAliasId: Identifier of the email alias associated with this draft email message.
     ///  - Returns: true if the draft email message exists, false otherwise.
-    func draftExists(id: String, emailAddressId: String, emailMaskId: String?) async throws -> Bool
+    func draftExists(id: String, emailAddressId: String, emailAliasId: String?) async throws -> Bool
 
     /// List draft email message metadata for the specified email address identifier.
     ///  - Parameters:

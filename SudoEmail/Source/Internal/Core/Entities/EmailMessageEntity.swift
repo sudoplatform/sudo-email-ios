@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -51,8 +51,8 @@ struct EmailMessageEntity: Equatable {
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
 
-    /// Email mask identifier that sent/received this message, if any.
-    var emailMaskId: String?
+    /// Email alias identifier that sent/received this message, if any.
+    var emailAliasId: String?
 
     /// Unique identifier associated with this entity for its key encryption/decryption.
     var keyId: String
@@ -143,8 +143,8 @@ struct PartialEmailMessageEntity: Equatable {
     /// This is the id of the account that sent/received this message.
     var emailAddressId: String
 
-    /// Email mask identifier that sent/received this message, if any.
-    var emailMaskId: String?
+    /// Email alias identifier that sent/received this message, if any.
+    var emailAliasId: String?
 
     /// Unique identifier associated with this entity for its key encryption/decryption.
     var keyId: String

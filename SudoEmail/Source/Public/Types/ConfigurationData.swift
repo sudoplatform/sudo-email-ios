@@ -30,16 +30,16 @@ public struct ConfigurationData: Equatable, Sendable {
     /// The set of file extensions not permitted to be sent as attachments
     public var prohibitedFileExtensions: [String]
 
-    /// Whether or not email masks are enabled in this environment. The basic level of support
-    /// for masked emails allows masking internal (in-network) addresses only.
-    public var emailMasksEnabled: Bool
+    /// Whether or not email aliases are enabled in this environment. The basic level of support
+    /// for aliased emails allows aliasing internal (in-network) addresses only.
+    public var emailAliasesEnabled: Bool
 
-    /// Whether or not external email masks are enabled in this environment. The above emailMasksEnabled
+    /// Whether or not external email aliases are enabled in this environment. The above emailAliasesEnabled
     /// value must be true in order to permit the additional functionality of using external
-    /// addresses as masked destinations.
-    public var externalEmailMasksEnabled: Bool
+    /// addresses as aliased destinations.
+    public var externalEmailAliasesEnabled: Bool
 
-    /// Whether or not a user can provision an email address/mask that they have previously deprovisioned
+    /// Whether or not a user can provision an email address/alias that they have previously deprovisioned
     public var allowOwnerEmailAddressReuse: Bool
 
     public init(
@@ -50,8 +50,8 @@ public struct ConfigurationData: Equatable, Sendable {
         emailMessageRecipientsLimit: Int,
         encryptedEmailMessageRecipientsLimit: Int,
         prohibitedFileExtensions: [String] = [],
-        emailMasksEnabled: Bool,
-        externalEmailMasksEnabled: Bool,
+        emailAliasesEnabled: Bool,
+        externalEmailAliasesEnabled: Bool,
         allowOwnerEmailAddressReuse: Bool
     ) {
         self.deleteEmailMessagesLimit = deleteEmailMessagesLimit
@@ -61,8 +61,8 @@ public struct ConfigurationData: Equatable, Sendable {
         self.emailMessageRecipientsLimit = emailMessageRecipientsLimit
         self.encryptedEmailMessageRecipientsLimit = encryptedEmailMessageRecipientsLimit
         self.prohibitedFileExtensions = prohibitedFileExtensions
-        self.emailMasksEnabled = emailMasksEnabled
-        self.externalEmailMasksEnabled = externalEmailMasksEnabled
+        self.emailAliasesEnabled = emailAliasesEnabled
+        self.externalEmailAliasesEnabled = externalEmailAliasesEnabled
         self.allowOwnerEmailAddressReuse = allowOwnerEmailAddressReuse
     }
 }

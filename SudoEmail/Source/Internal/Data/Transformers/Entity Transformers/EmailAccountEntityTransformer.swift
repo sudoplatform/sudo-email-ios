@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -42,10 +42,7 @@ struct EmailAccountEntityTransformer {
                 algorithm: alias.algorithm
             )
         }
-        let emailAddress: EmailAddressEntity = try emailAddressTransformer.transform(
-            graphQLEmail.emailAddress,
-            alias: unsealedAlias
-        )
+        let emailAddress = graphQLEmail.emailAddress
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
@@ -63,6 +60,7 @@ struct EmailAccountEntityTransformer {
             keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
+            displayName: unsealedAlias,
             size: size,
             numberOfEmailMessages: numberOfEmailMessages,
             version: version,
@@ -90,10 +88,7 @@ struct EmailAccountEntityTransformer {
                 algorithm: alias.algorithm
             )
         }
-        let emailAddress = try emailAddressTransformer.transform(
-            graphQLEmail.emailAddress,
-            alias: unsealedAlias
-        )
+        let emailAddress = graphQLEmail.emailAddress
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
@@ -110,6 +105,7 @@ struct EmailAccountEntityTransformer {
             keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
+            displayName: unsealedAlias,
             size: size,
             numberOfEmailMessages: numberOfEmailMessages,
             version: version,
@@ -136,10 +132,7 @@ struct EmailAccountEntityTransformer {
                 algorithm: alias.algorithm
             )
         }
-        let emailAddress = try emailAddressTransformer.transform(
-            graphQLEmail.emailAddress,
-            alias: unsealedAlias
-        )
+        let emailAddress = graphQLEmail.emailAddress
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
@@ -157,6 +150,7 @@ struct EmailAccountEntityTransformer {
             keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
+            displayName: unsealedAlias,
             size: size,
             numberOfEmailMessages: numberOfEmailMessages,
             version: version,
@@ -183,10 +177,7 @@ struct EmailAccountEntityTransformer {
                 algorithm: alias.algorithm
             )
         }
-        let emailAddress = try emailAddressTransformer.transform(
-            graphQLEmail.emailAddress,
-            alias: unsealedAlias
-        )
+        let emailAddress = graphQLEmail.emailAddress
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
@@ -202,6 +193,7 @@ struct EmailAccountEntityTransformer {
             keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
+            displayName: unsealedAlias,
             size: size,
             numberOfEmailMessages: numberOfEmailMessages,
             version: version,
@@ -230,10 +222,7 @@ struct EmailAccountEntityTransformer {
                 algorithm: alias.algorithm
             )
         }
-        let emailAddress = try emailAddressTransformer.transform(
-            graphQLEmail.emailAddress,
-            alias: unsealedAlias
-        )
+        let emailAddress = graphQLEmail.emailAddress
         let size = graphQLEmail.size
         let numberOfEmailMessages = graphQLEmail.numberOfEmailMessages
         let version = graphQLEmail.version
@@ -249,6 +238,7 @@ struct EmailAccountEntityTransformer {
             keyRingId: keyRingId,
             keyIds: keyIds,
             emailAddress: emailAddress,
+            displayName: unsealedAlias,
             size: size,
             numberOfEmailMessages: numberOfEmailMessages,
             version: version,
@@ -259,14 +249,15 @@ struct EmailAccountEntityTransformer {
         )
     }
 
-    // Transform an `EmailAccountEntity` to an `EmailAddress`
+    /// Transform an `EmailAccountEntity` to an `EmailAddress`
     func transform(_ emailAccountEntity: EmailAccountEntity) throws -> EmailAddress {
         let id = emailAccountEntity.id
         let owner = emailAccountEntity.owner
         let owners = emailAccountEntity.owners.map(ownerTransformer.transform(_:))
         let identityId = emailAccountEntity.identityId
         let keyIds = emailAccountEntity.keyIds
-        let emailAddress = emailAccountEntity.emailAddress.emailAddress
+        let emailAddress = emailAccountEntity.emailAddress
+        let displayName = emailAccountEntity.displayName
         let folders = emailAccountEntity.folders.map(folderTransformer.transform(_:))
         let size = emailAccountEntity.size
         let numberOfEmailMessages = emailAccountEntity.numberOfEmailMessages
@@ -288,7 +279,7 @@ struct EmailAccountEntityTransformer {
             createdAt: createdAt,
             updatedAt: updatedAt,
             lastReceivedAt: lastReceivedAt,
-            alias: emailAccountEntity.emailAddress.alias
+            displayName: displayName
         )
     }
 }

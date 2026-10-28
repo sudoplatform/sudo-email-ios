@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -23,12 +23,6 @@ public struct EmailAddressPublicInfo: Equatable, Sendable {
     /// Indicates whether encryption is enabled for this email address.
     public let enableEncryption: Bool
 
-    // MARK: - Properties: Deprecated
-
-    /// The raw value of the public key for the email address.
-    @available(*, deprecated, message: "Use `publicKeyDetails` instead")
-    public let publicKey: String
-
     // MARK: - Lifecycle
 
     /// Initialize a`EmailAddressPublicInfo` instance.
@@ -42,19 +36,5 @@ public struct EmailAddressPublicInfo: Equatable, Sendable {
         self.keyId = keyId
         self.publicKeyDetails = publicKeyDetails
         self.enableEncryption = enableEncryption
-        publicKey = publicKeyDetails.publicKey
-    }
-
-    @available(*, deprecated, message: "Use `init(emailAddress:keyId:publicKeyDetails:enableEncryption:)` instead")
-    public init(emailAddress: String, keyId: String, publicKey: String) {
-        self.emailAddress = emailAddress
-        self.keyId = keyId
-        self.publicKey = publicKey
-        enableEncryption = true
-        publicKeyDetails = EmailAddressPublicKey(
-            publicKey: publicKey,
-            keyFormat: .rsaPublicKey,
-            algorithm: DefaultDeviceKeyWorker.Defaults.algorithm
-        )
     }
 }

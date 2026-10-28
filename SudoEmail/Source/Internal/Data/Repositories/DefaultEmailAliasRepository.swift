@@ -9,10 +9,10 @@ import Foundation
 import SudoApiClient
 import SudoLogging
 
-/// Data implementation of the core `EmailMaskRepository`.
+/// Data implementation of the core `EmailAliasRepository`.
 ///
-/// Allows manipulation of email mask data on the email service, via AppSync GraphQL.
-class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
+/// Allows manipulation of email alias data on the email service, via AppSync GraphQL.
+class DefaultEmailAliasRepository: EmailAliasRepository, Repository {
 
     // MARK: - Properties
 
@@ -27,24 +27,24 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
 
     // MARK: - Lifecycle
 
-    /// Initialize an instance of `DefaultEmailMaskRepository`.
+    /// Initialize an instance of `DefaultEmailAliasRepository`.
     init(appSyncClient: SudoApiClient, deviceKeyWorker: DeviceKeyWorker, logger: SudoLogging.Logger = .emailSDKLogger) {
         sudoApiClient = appSyncClient
         self.deviceKeyWorker = deviceKeyWorker
         self.logger = logger
     }
 
-    // MARK: - EmailMaskRepository
+    // MARK: - EmailAliasRepository
 
-    func provisionEmailMask(
-        maskAddress: String,
+    func provisionEmailAlias(
+        aliasAddress: String,
         realAddress: String,
         ownershipProofToken: String,
         publicKey: KeyEntity,
         metadata: [String: String]?,
         expiresAt: Date?
-    ) async throws -> EmailMaskEntity {
-        logger.debug("Provisioning email mask: \(maskAddress) -> \(realAddress)")
+    ) async throws -> EmailAliasEntity {
+        logger.debug("Provisioning email alias: \(aliasAddress) -> \(realAddress)")
 
         let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
             (deviceKeyWorker.generateNewCurrentSymmetricKey())
@@ -88,7 +88,7 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
                 return nil
             }(),
             key: publicKeyInput,
-            maskAddress: maskAddress,
+            maskAddress: aliasAddress,
             metadata: sealedMetadata,
             ownershipProofTokens: [ownershipProofToken],
             realAddress: realAddress
@@ -97,34 +97,30 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         let mutation = GraphQL.ProvisionEmailMaskMutation(input: provisionEmailMaskInput)
         let result = try await perform(mutation)
 
-        let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        let unsealedEmailMask = try transformer.transform(result)
-
-        return unsealedEmailMask
+        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        return try transformer.transform(result)
     }
 
-    func deprovisionEmailMask(emailMaskId: String) async throws -> EmailMaskEntity {
-        logger.debug("Deprovisioning email mask with ID: \(emailMaskId)")
+    func deprovisionEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {
+        logger.debug("Deprovisioning email alias with ID: \(emailAliasId)")
         let deprovisionEmailMaskInput = GraphQL.DeprovisionEmailMaskInput(
-            emailMaskId: emailMaskId,
+            emailMaskId: emailAliasId
         )
 
         let mutation = GraphQL.DeprovisionEmailMaskMutation(input: deprovisionEmailMaskInput)
         let result = try await perform(mutation)
 
-        let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        let unsealedEmailMask = try transformer.transform(result)
-
-        return unsealedEmailMask
+        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        return try transformer.transform(result)
     }
 
-    func updateEmailMask(
-        emailMaskId: String,
+    func updateEmailAlias(
+        emailAliasId: String,
         metadata: [String: String]?,
         expiresAt: Date?,
         realAddress: String?
-    ) async throws -> EmailMaskEntity {
-        logger.debug("Updating email mask with ID: \(emailMaskId)")
+    ) async throws -> EmailAliasEntity {
+        logger.debug("Updating email alias with ID: \(emailAliasId)")
         let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
             (deviceKeyWorker.generateNewCurrentSymmetricKey())
 
@@ -163,7 +159,7 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
 
         let updateEmailMaskInput = GraphQL.UpdateEmailMaskInput(
             expiresAtEpochSec: expiresAtEpochSec,
-            id: emailMaskId,
+            id: emailAliasId,
             metadata: sealedMetadata,
             realAddress: realAddressInput
         )
@@ -171,51 +167,45 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         let mutation = GraphQL.UpdateEmailMaskMutation(input: updateEmailMaskInput)
         let result = try await perform(mutation)
 
-        let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        let unsealedEmailMask = try transformer.transform(result)
-
-        return unsealedEmailMask
+        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        return try transformer.transform(result)
     }
 
-    func enableEmailMask(emailMaskId: String) async throws -> EmailMaskEntity {
-        logger.debug("Enabling email mask with ID: \(emailMaskId)")
+    func enableEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {
+        logger.debug("Enabling email alias with ID: \(emailAliasId)")
         let enableEmailMaskInput = GraphQL.EnableEmailMaskInput(
-            emailMaskId: emailMaskId,
+            emailMaskId: emailAliasId
         )
 
         let mutation = GraphQL.EnableEmailMaskMutation(input: enableEmailMaskInput)
         let result = try await perform(mutation)
 
-        let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        let unsealedEmailMask = try transformer.transform(result)
-
-        return unsealedEmailMask
+        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        return try transformer.transform(result)
     }
 
-    func disableEmailMask(emailMaskId: String) async throws -> EmailMaskEntity {
-        logger.debug("Disabling email mask with ID: \(emailMaskId)")
+    func disableEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {
+        logger.debug("Disabling email alias with ID: \(emailAliasId)")
         let disableEmailMaskInput = GraphQL.DisableEmailMaskInput(
-            emailMaskId: emailMaskId,
+            emailMaskId: emailAliasId
         )
 
         let mutation = GraphQL.DisableEmailMaskMutation(input: disableEmailMaskInput)
         let result = try await perform(mutation)
 
-        let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        let unsealedEmailMask = try transformer.transform(result)
-
-        return unsealedEmailMask
+        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        return try transformer.transform(result)
     }
 
-    func verifyExternalEmailAddress(emailAddress: String, emailMaskId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity {
-        logger.debug("Verifying external email address for mask ID: \(emailMaskId)")
+    func verifyExternalEmailAddress(emailAddress: String, emailAliasId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity {
+        logger.debug("Verifying external email address for alias ID: \(emailAliasId)")
 
         // Use double optional pattern: .none means don't include field, .some(value) means include it
         let verificationCodeInput: String?? = verificationCode.map { .some($0) } ?? .none
 
         let verifyInput = GraphQL.VerifyExternalEmailAddressInput(
             emailAddress: emailAddress,
-            emailMaskId: emailMaskId,
+            emailMaskId: emailAliasId,
             verificationCode: verificationCodeInput
         )
 
@@ -237,8 +227,8 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         )
     }
 
-    func listEmailMasksForOwner(filter: EmailMaskFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailMaskEntity> {
-        logger.debug("Listing email masks for owner with limit: \(limit ?? -1), nextToken: \(nextToken ?? "nil")")
+    func listEmailAliasesForOwner(filter: EmailAliasFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailAliasEntity> {
+        logger.debug("Listing email aliases for owner with limit: \(limit ?? -1), nextToken: \(nextToken ?? "nil")")
 
         var graphQLFilter: GraphQL.EmailMaskFilterInput?
         if let filter = filter {
@@ -254,9 +244,9 @@ class DefaultEmailMaskRepository: EmailMaskRepository, Repository {
         let result = try await fetch(query)
 
         do {
-            var emailMaskEntities: [EmailMaskEntity] = []
+            var emailMaskEntities: [EmailAliasEntity] = []
             let emailMasks = result.listEmailMasksForOwner.items
-            let transformer = EmailMaskEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
             emailMaskEntities = try emailMasks.map(transformer.transform(_:))
             let nextToken = result.listEmailMasksForOwner.nextToken
             return ListOutputEntity(items: emailMaskEntities, nextToken: nextToken)

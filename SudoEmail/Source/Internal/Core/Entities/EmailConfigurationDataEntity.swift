@@ -30,15 +30,15 @@ struct EmailConfigurationDataEntity {
     /// The set of file extensions which are prohibited from being sent as attachments
     var prohibitedFileExtensions: [String]
 
-    /// Whether or not email masks are enabled in this environment. The base level of
-    /// mask functionality permits masking an internal (in-network) email address.
-    var emailMasksEnabled: Bool
+    /// Whether or not email aliases are enabled in this environment. The base level of
+    /// alias functionality permits aliasing an internal (in-network) email address.
+    var emailAliasesEnabled: Bool
 
-    /// Whether or not external email masks are enabled in this environment. The above
-    /// emailMasksEnabled setting must be true in order for the additional functionality
-    // of external masks to be available.
-    var externalEmailMasksEnabled: Bool
+    /// Whether or not external email aliases are enabled in this environment. The above
+    /// emailAliasesEnabled setting must be true in order for the additional functionality
+    /// of external aliases to be available.
+    var externalEmailAliasesEnabled: Bool
 
-    /// Whether or not a user can provision an email address/mask that they have previously deprovisioned
+    /// Whether or not a user can provision an email address/alias that they have previously deprovisioned
     var allowOwnerEmailAddressReuse: Bool
 }

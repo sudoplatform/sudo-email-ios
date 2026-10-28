@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -43,12 +43,11 @@ class CreateCustomEmailFolderUseCase {
         guard try (await emailAccountRepository.fetchWithEmailAddressId(input.emailAddressId)) != nil else {
             throw SudoEmailError.addressNotFound
         }
-        let emailFolder = try await emailFolderRepository.createCustomEmailFolder(
+        return try await emailFolderRepository.createCustomEmailFolder(
             withInput: CreateCustomEmailFolderInput(
                 emailAddressId: input.emailAddressId,
                 customFolderName: input.customFolderName
             )
         )
-        return emailFolder
     }
 }

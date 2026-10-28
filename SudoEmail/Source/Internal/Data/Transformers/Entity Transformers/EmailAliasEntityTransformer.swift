@@ -7,7 +7,7 @@
 import Foundation
 
 /// Utility class to transform data received from GraphQL to the Core/Entity level of the SDK.
-struct EmailMaskEntityTransformer {
+struct EmailAliasEntityTransformer {
 
     /// Utility for transforming owners to `OwnerTransformer`.
     let ownerTransformer = OwnerEntityTransformer()
@@ -18,18 +18,18 @@ struct EmailMaskEntityTransformer {
         self.deviceKeyWorker = deviceKeyWorker
     }
 
-    /// Transform the success result of `ProvisionEmailMaskMutation` from the service to a `EmailMaskEntity`.
-    func transform(_ data: GraphQL.ProvisionEmailMaskMutation.Data) throws -> EmailMaskEntity {
+    /// Transform the success result of `ProvisionEmailMaskMutation` from the service to a `EmailAliasEntity`.
+    func transform(_ data: GraphQL.ProvisionEmailMaskMutation.Data) throws -> EmailAliasEntity {
         let graphQLEmailMask = data.provisionEmailMask
         let id = String(graphQLEmailMask.id)
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
         let keyRingId = graphQLEmailMask.keyRingId
-        let maskAddress = graphQLEmailMask.maskAddress
+        let aliasAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
-        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
-        let status = transformStatus(graphQLEmailMask.getEmailMaskStatus())
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
         let inboundReceived = graphQLEmailMask.inboundReceived
         let inboundDelivered = graphQLEmailMask.inboundDelivered
         let outboundReceived = graphQLEmailMask.outboundReceived
@@ -59,13 +59,13 @@ struct EmailMaskEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
         let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
 
-        return EmailMaskEntity(
+        return EmailAliasEntity(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
             keyRingId: keyRingId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -83,18 +83,18 @@ struct EmailMaskEntityTransformer {
         )
     }
 
-    /// Transform the success result of `DeprovisionEmailMaskMutation` from the service to a `EmailMaskEntity`.
-    func transform(_ data: GraphQL.DeprovisionEmailMaskMutation.Data) throws -> EmailMaskEntity {
+    /// Transform the success result of `DeprovisionEmailMaskMutation` from the service to a `EmailAliasEntity`.
+    func transform(_ data: GraphQL.DeprovisionEmailMaskMutation.Data) throws -> EmailAliasEntity {
         let graphQLEmailMask = data.deprovisionEmailMask
         let id = String(graphQLEmailMask.id)
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
         let keyRingId = graphQLEmailMask.keyRingId
-        let maskAddress = graphQLEmailMask.maskAddress
+        let aliasAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
-        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
-        let status = transformStatus(graphQLEmailMask.getEmailMaskStatus())
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
         let inboundReceived = graphQLEmailMask.inboundReceived
         let inboundDelivered = graphQLEmailMask.inboundDelivered
         let outboundReceived = graphQLEmailMask.outboundReceived
@@ -124,13 +124,13 @@ struct EmailMaskEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
         let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
 
-        return EmailMaskEntity(
+        return EmailAliasEntity(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
             keyRingId: keyRingId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -148,18 +148,18 @@ struct EmailMaskEntityTransformer {
         )
     }
 
-    /// Transform the success result of `UpdateEmailMaskMutation` from the service to a `EmailMaskEntity`.
-    func transform(_ data: GraphQL.UpdateEmailMaskMutation.Data) throws -> EmailMaskEntity {
+    /// Transform the success result of `UpdateEmailMaskMutation` from the service to a `EmailAliasEntity`.
+    func transform(_ data: GraphQL.UpdateEmailMaskMutation.Data) throws -> EmailAliasEntity {
         let graphQLEmailMask = data.updateEmailMask
         let id = String(graphQLEmailMask.id)
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
         let keyRingId = graphQLEmailMask.keyRingId
-        let maskAddress = graphQLEmailMask.maskAddress
+        let aliasAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
-        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
-        let status = transformStatus(graphQLEmailMask.getEmailMaskStatus())
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
         let inboundReceived = graphQLEmailMask.inboundReceived
         let inboundDelivered = graphQLEmailMask.inboundDelivered
         let outboundReceived = graphQLEmailMask.outboundReceived
@@ -189,13 +189,13 @@ struct EmailMaskEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
         let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
 
-        return EmailMaskEntity(
+        return EmailAliasEntity(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
             keyRingId: keyRingId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -213,18 +213,18 @@ struct EmailMaskEntityTransformer {
         )
     }
 
-    /// Transform the success result of `EnableEmailMaskMutation` from the service to a `EmailMaskEntity`.
-    func transform(_ data: GraphQL.EnableEmailMaskMutation.Data) throws -> EmailMaskEntity {
+    /// Transform the success result of `EnableEmailMaskMutation` from the service to a `EmailAliasEntity`.
+    func transform(_ data: GraphQL.EnableEmailMaskMutation.Data) throws -> EmailAliasEntity {
         let graphQLEmailMask = data.enableEmailMask
         let id = String(graphQLEmailMask.id)
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
         let keyRingId = graphQLEmailMask.keyRingId
-        let maskAddress = graphQLEmailMask.maskAddress
+        let aliasAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
-        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
-        let status = transformStatus(graphQLEmailMask.getEmailMaskStatus())
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
         let inboundReceived = graphQLEmailMask.inboundReceived
         let inboundDelivered = graphQLEmailMask.inboundDelivered
         let outboundReceived = graphQLEmailMask.outboundReceived
@@ -254,13 +254,13 @@ struct EmailMaskEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
         let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
 
-        return EmailMaskEntity(
+        return EmailAliasEntity(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
             keyRingId: keyRingId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -278,18 +278,18 @@ struct EmailMaskEntityTransformer {
         )
     }
 
-    /// Transform the success result of `DisableEmailMaskMutation` from the service to a `EmailMaskEntity`.
-    func transform(_ data: GraphQL.DisableEmailMaskMutation.Data) throws -> EmailMaskEntity {
+    /// Transform the success result of `DisableEmailMaskMutation` from the service to a `EmailAliasEntity`.
+    func transform(_ data: GraphQL.DisableEmailMaskMutation.Data) throws -> EmailAliasEntity {
         let graphQLEmailMask = data.disableEmailMask
         let id = String(graphQLEmailMask.id)
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
         let keyRingId = graphQLEmailMask.keyRingId
-        let maskAddress = graphQLEmailMask.maskAddress
+        let aliasAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
-        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
-        let status = transformStatus(graphQLEmailMask.getEmailMaskStatus())
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
         let inboundReceived = graphQLEmailMask.inboundReceived
         let inboundDelivered = graphQLEmailMask.inboundDelivered
         let outboundReceived = graphQLEmailMask.outboundReceived
@@ -319,13 +319,13 @@ struct EmailMaskEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
         let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
 
-        return EmailMaskEntity(
+        return EmailAliasEntity(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
             keyRingId: keyRingId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -343,17 +343,17 @@ struct EmailMaskEntityTransformer {
         )
     }
 
-    /// Transform `ListEmailMasksForOwnerQuery.Data.ListEmailMasksForOwner.Item` from the service to a `EmailMaskEntity`.
-    func transform(_ graphQLEmailMask: GraphQL.ListEmailMasksForOwnerQuery.Data.ListEmailMasksForOwner.Item) throws -> EmailMaskEntity {
+    /// Transform `ListEmailMasksForOwnerQuery.Data.ListEmailMasksForOwner.Item` from the service to a `EmailAliasEntity`.
+    func transform(_ graphQLEmailMask: GraphQL.ListEmailMasksForOwnerQuery.Data.ListEmailMasksForOwner.Item) throws -> EmailAliasEntity {
         let id = String(graphQLEmailMask.id)
         let owner = String(graphQLEmailMask.owner)
         let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
         let identityId = String(graphQLEmailMask.identityId)
         let keyRingId = graphQLEmailMask.keyRingId
-        let maskAddress = graphQLEmailMask.maskAddress
+        let aliasAddress = graphQLEmailMask.maskAddress
         let realAddress = graphQLEmailMask.realAddress
-        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailMaskRealAddressType())
-        let status = transformStatus(graphQLEmailMask.getEmailMaskStatus())
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
         let inboundReceived = graphQLEmailMask.inboundReceived
         let inboundDelivered = graphQLEmailMask.inboundDelivered
         let outboundReceived = graphQLEmailMask.outboundReceived
@@ -383,13 +383,13 @@ struct EmailMaskEntityTransformer {
         let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
         let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
 
-        return EmailMaskEntity(
+        return EmailAliasEntity(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
             keyRingId: keyRingId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -409,8 +409,8 @@ struct EmailMaskEntityTransformer {
 
     // MARK: - Helper Methods
 
-    /// Transform GraphQL EmailMaskRealAddressType to EmailMaskRealAddressTypeEntity
-    private func transformRealAddressType(_ rawValue: GraphQL.EmailMaskRealAddressType) -> EmailMaskRealAddressTypeEntity {
+    /// Transform GraphQL EmailMaskRealAddressType to EmailAliasRealAddressTypeEntity
+    private func transformRealAddressType(_ rawValue: GraphQL.EmailMaskRealAddressType) -> EmailAliasRealAddressTypeEntity {
         switch rawValue {
         case .internal:
             return .internal
@@ -421,8 +421,8 @@ struct EmailMaskEntityTransformer {
         }
     }
 
-    /// Transform GraphQL EmailMaskStatus to EmailMaskStatusEntity
-    private func transformStatus(_ rawValue: GraphQL.EmailMaskStatus) -> EmailMaskStatusEntity {
+    /// Transform GraphQL EmailMaskStatus to EmailAliasStatusEntity
+    private func transformStatus(_ rawValue: GraphQL.EmailMaskStatus) -> EmailAliasStatusEntity {
         switch rawValue {
         case .enabled:
             return .enabled

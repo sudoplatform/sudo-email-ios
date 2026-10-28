@@ -5,39 +5,39 @@
 //
 
 /// Core entity representation of a domain business rule. Depicts the rules for a filter of the `status` property of a `ScheduledDraftMessageEntity`.
-enum EmailMaskStatusFilterEntity: Equatable {
+enum EmailAliasStatusFilterEntity: Equatable {
     /// Return only results that match the given status.
-    case equal(EmailMaskStatusEntity)
+    case equal(EmailAliasStatusEntity)
     /// Return only results that match one of the given status.
-    case oneOf([EmailMaskStatusEntity])
+    case oneOf([EmailAliasStatusEntity])
     /// Return only results that do not match the given status.
-    case notEqual(EmailMaskStatusEntity)
+    case notEqual(EmailAliasStatusEntity)
     /// Return only results that do not match any of the given status.
-    case notOneOf([EmailMaskStatusEntity])
+    case notOneOf([EmailAliasStatusEntity])
 }
 
-/// Core entity representation of a domain business rule. Depicts the rules for a filter of the `realAddressType` property of an `EmailMask`.
-enum EmailMaskRealAddressTypeFilterEntity: Equatable {
+/// Core entity representation of a domain business rule. Depicts the rules for a filter of the `realAddressType` property of an `EmailAlias`.
+enum EmailAliasRealAddressTypeFilterEntity: Equatable {
     /// Return only results that match the given address type.
-    case equal(EmailMaskRealAddressTypeEntity)
+    case equal(EmailAliasRealAddressTypeEntity)
     /// Return only results that match one of the given address type.
-    case oneOf([EmailMaskRealAddressTypeEntity])
+    case oneOf([EmailAliasRealAddressTypeEntity])
     /// Return only results that do not match the given address type.
-    case notEqual(EmailMaskRealAddressTypeEntity)
+    case notEqual(EmailAliasRealAddressTypeEntity)
     /// Return only results that do not match any of the given address type.
-    case notOneOf([EmailMaskRealAddressTypeEntity])
+    case notOneOf([EmailAliasRealAddressTypeEntity])
 }
 
-/// Core entity representation of a domain business rule. Depicts the filter traits for an email mask.
+/// Core entity representation of a domain business rule. Depicts the filter traits for an email alias.
 /// The GraphQLFilterable protocol allows us to send no entries instead of explicit nulls for any filters which are not set
-struct EmailMaskFilterEntity: Equatable, GraphQLFilterable {
+struct EmailAliasFilterEntity: Equatable, GraphQLFilterable {
     /// Filter rule for a status
-    var status: EmailMaskStatusFilterEntity?
+    var status: EmailAliasStatusFilterEntity?
     /// Filter rule for an address type property
-    var realAddressType: EmailMaskRealAddressTypeFilterEntity?
+    var realAddressType: EmailAliasRealAddressTypeFilterEntity?
 
-    /// Initialize an EmailMaskFilterEntity with optional filter criteria
-    init(status: EmailMaskStatusFilterEntity? = Optional.none, realAddressType: EmailMaskRealAddressTypeFilterEntity? = Optional.none) {
+    /// Initialize an EmailAliasFilterEntity with optional filter criteria
+    init(status: EmailAliasStatusFilterEntity? = Optional.none, realAddressType: EmailAliasRealAddressTypeFilterEntity? = Optional.none) {
         self.status = status
         self.realAddressType = realAddressType
     }
@@ -52,7 +52,7 @@ struct EmailMaskFilterEntity: Equatable, GraphQLFilterable {
         }
 
         // Use the existing transformer to create the GraphQL input
-        let transformer = EmailMaskFilterInputGQLTransformer()
+        let transformer = EmailAliasFilterInputGQLTransformer()
         return transformer.transform(self)
     }
 }

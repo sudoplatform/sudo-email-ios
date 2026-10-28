@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -65,13 +65,13 @@ class CreateDraftEmailMessageUseCase {
             rfc822Data: rfc822Data,
             senderEmailAddressId: input.senderEmailAddressId,
             id: nil,
-            emailMaskId: input.emailMaskId
+            emailAliasId: input.emailAliasId
         )
         return DraftEmailMessageMetadata(
             id: metadata.id,
             emailAddressId: metadata.emailAddressId,
             updatedAt: metadata.updatedAt,
-            emailMaskId: metadata.emailMaskId
+            emailAliasId: metadata.emailAliasId
         )
     }
 }

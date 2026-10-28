@@ -12,8 +12,8 @@ struct EmailDomainEntity {
     /// Name of the domain.
     var domain: String
 
-    /// Whether the domains is for email masks or not
-    var isMaskDomain: Bool
+    /// Whether the domains is for email aliases or not
+    var isAliasDomain: Bool
 
     /// Metadata about the domain as JSON
     var metadata: [String: String]

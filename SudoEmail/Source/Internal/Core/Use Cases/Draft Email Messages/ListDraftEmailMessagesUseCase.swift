@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -46,7 +46,7 @@ class ListDraftEmailMessagesUseCase {
                                     return try await self.emailMessageRepository.getDraft(withInput: GetDraftEmailMessageInput(
                                         id: m.id,
                                         emailAddressId: account.id,
-                                        emailMaskId: m.emailMaskId
+                                        emailAliasId: m.emailAliasId
                                     ))
                                 }
                             }
@@ -56,8 +56,7 @@ class ListDraftEmailMessagesUseCase {
                             }
                             return drafts
                         }
-                        let draftMessages = draftContent.compactMap { $0 }
-                        return draftMessages
+                        return draftContent.compactMap { $0 }
                     }
                 }
                 for try await drafts in group {

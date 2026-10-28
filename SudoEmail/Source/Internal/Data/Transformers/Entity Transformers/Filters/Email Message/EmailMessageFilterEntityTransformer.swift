@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -31,7 +31,7 @@ struct EmailMessageFilterEntityTransformer {
         switch filter {
         case .id(let idFilter):
             let idFilter = stringFilterTransformer.transform(idFilter)
-            /// This is not a typo - `id` maps to `messageId`
+            // This is not a typo - `id` maps to `messageId`
             return .messageId(idFilter)
         case .messageId(let idFilter):
             let idFilter = stringFilterTransformer.transform(idFilter)

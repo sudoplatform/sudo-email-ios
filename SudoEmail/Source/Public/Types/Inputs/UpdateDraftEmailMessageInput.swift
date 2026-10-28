@@ -1,14 +1,14 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 import Foundation
 
-/// input object for updating a draft email message using `SudoEmailClient`
-/// The email address in the `From` field of the RFC6854 data must match either the `maskAddress` of the Email Mask associated with the
-/// `emailMaskId` property, if provided, otherwise the `emailAddress` of the Email Address associated with the `senderEmailAddressId` property.
+// input object for updating a draft email message using `SudoEmailClient`
+// The email address in the `From` field of the RFC6854 data must match either the `aliasAddress` of the Email Alias associated with the
+// `emailAliasId` property, if provided, otherwise the `emailAddress` of the Email Address associated with the `senderEmailAddressId` property.
 
 public struct UpdateDraftEmailMessageInput {
 
@@ -22,13 +22,13 @@ public struct UpdateDraftEmailMessageInput {
     /// The identifier of the email address used to send the email.
     public var senderEmailAddressId: String
 
-    /// Optional identifier of the email mask associated with the draft email message.
-    public var emailMaskId: String?
+    /// Optional identifier of the email alias associated with the draft email message.
+    public var emailAliasId: String?
 
-    public init(id: String, rfc822Data: Data, senderEmailAddressId: String, emailMaskId: String? = nil) {
+    public init(id: String, rfc822Data: Data, senderEmailAddressId: String, emailAliasId: String? = nil) {
         self.id = id
         self.rfc822Data = rfc822Data
         self.senderEmailAddressId = senderEmailAddressId
-        self.emailMaskId = emailMaskId
+        self.emailAliasId = emailAliasId
     }
 }

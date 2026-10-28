@@ -6,13 +6,13 @@
 
 import Foundation
 
-/// Utility class to transform input email mask filter rules to the entity level filter rule in the Core/Entity level of the SDK.
-struct EmailMaskFilterEntityTransformer {
+/// Utility class to transform input email alias filter rules to the entity level filter rule in the Core/Entity level of the SDK.
+struct EmailAliasFilterEntityTransformer {
 
-    /// Transform a public `EmailMaskFilter` to `EmailMaskFilterEntity`.
-    func transform(_ filter: EmailMaskFilter) -> EmailMaskFilterEntity {
-        var statusFilterEntity: EmailMaskStatusFilterEntity?
-        var realAddressTypeFilterEntity: EmailMaskRealAddressTypeFilterEntity?
+    /// Transform a public `EmailAliasFilter` to `EmailAliasFilterEntity`.
+    func transform(_ filter: EmailAliasFilter) -> EmailAliasFilterEntity {
+        var statusFilterEntity: EmailAliasStatusFilterEntity?
+        var realAddressTypeFilterEntity: EmailAliasRealAddressTypeFilterEntity?
 
         if let statusFilter = filter.status {
             statusFilterEntity = transformStatusFilter(statusFilter)
@@ -22,14 +22,14 @@ struct EmailMaskFilterEntityTransformer {
             realAddressTypeFilterEntity = transformAddressTypeFilter(addressTypeFilter)
         }
 
-        return EmailMaskFilterEntity(
+        return EmailAliasFilterEntity(
             status: statusFilterEntity,
             realAddressType: realAddressTypeFilterEntity
         )
     }
 
-    /// Transform `EmailMaskStatusFilter` to `EmailMaskStatusFilterEntity`.
-    private func transformStatusFilter(_ filter: EmailMaskStatusFilter) -> EmailMaskStatusFilterEntity {
+    /// Transform `EmailAliasStatusFilter` to `EmailAliasStatusFilterEntity`.
+    private func transformStatusFilter(_ filter: EmailAliasStatusFilter) -> EmailAliasStatusFilterEntity {
         switch filter {
         case .equal(let status):
             let statusEntity = transformStatus(status)
@@ -46,8 +46,8 @@ struct EmailMaskFilterEntityTransformer {
         }
     }
 
-    /// Transform `EmailMaskAddressTypeFilter` to `EmailMaskRealAddressTypeFilterEntity`.
-    private func transformAddressTypeFilter(_ filter: EmailMaskAddressTypeFilter) -> EmailMaskRealAddressTypeFilterEntity {
+    /// Transform `EmailAliasAddressTypeFilter` to `EmailAliasRealAddressTypeFilterEntity`.
+    private func transformAddressTypeFilter(_ filter: EmailAliasAddressTypeFilter) -> EmailAliasRealAddressTypeFilterEntity {
         switch filter {
         case .equal(let addressType):
             let addressTypeEntity = transformAddressType(addressType)
@@ -64,8 +64,8 @@ struct EmailMaskFilterEntityTransformer {
         }
     }
 
-    /// Transform `EmailMask.EmailMaskStatus` to `EmailMaskStatusEntity`.
-    private func transformStatus(_ status: EmailMask.EmailMaskStatus) -> EmailMaskStatusEntity {
+    /// Transform `EmailAlias.EmailAliasStatus` to `EmailAliasStatusEntity`.
+    private func transformStatus(_ status: EmailAlias.EmailAliasStatus) -> EmailAliasStatusEntity {
         switch status {
         case .enabled:
             return .enabled
@@ -78,8 +78,8 @@ struct EmailMaskFilterEntityTransformer {
         }
     }
 
-    /// Transform `EmailMask.RealAddressType` to `EmailMaskRealAddressTypeEntity`.
-    private func transformAddressType(_ addressType: EmailMask.RealAddressType) -> EmailMaskRealAddressTypeEntity {
+    /// Transform `EmailAlias.RealAddressType` to `EmailAliasRealAddressTypeEntity`.
+    private func transformAddressType(_ addressType: EmailAlias.RealAddressType) -> EmailAliasRealAddressTypeEntity {
         switch addressType {
         case .internal:
             return .internal

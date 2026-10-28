@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -29,7 +29,6 @@ class ScheduleSendDraftMessageUseCase {
         if input.sendAt.millisecondsSince1970 <= Date().millisecondsSince1970 {
             throw SudoEmailError.invalidArgument("sendAt must be in the future")
         }
-        let result = try await emailMessageRepository.scheduleSendDraftMessage(withInput: input)
-        return result
+        return try await emailMessageRepository.scheduleSendDraftMessage(withInput: input)
     }
 }

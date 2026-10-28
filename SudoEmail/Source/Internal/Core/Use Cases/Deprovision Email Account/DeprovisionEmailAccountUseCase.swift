@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -33,7 +33,6 @@ class DeprovisionEmailAccountUseCase {
     ///   - emailAccountId: Identifier of the email account to deprovision.
     ///   - completion: Returns the email account that was deleted on success, or error on failure.
     func execute(emailAccountId: String) async throws -> EmailAccountEntity {
-        let emailAccount = try await emailAccountRepository.deleteWithId(emailAccountId)
-        return emailAccount
+        return try await emailAccountRepository.deleteWithId(emailAccountId)
     }
 }

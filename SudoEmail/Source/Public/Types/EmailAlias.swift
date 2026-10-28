@@ -6,20 +6,20 @@
 
 import Foundation
 
-/// Representation of an Email Mask used in Sudo Email SDK.
-public struct EmailMask: Equatable, Sendable {
+/// Representation of an Email Alias used in Sudo Email SDK.
+public struct EmailAlias: Equatable, Sendable {
 
-    public enum EmailMaskStatus: Equatable, Sendable {
-        /// Mask is enabled and will be functional for forwarding emails.
+    public enum EmailAliasStatus: Equatable, Sendable {
+        /// Alias is enabled and will be functional for forwarding emails.
         case enabled
 
-        /// Mask is disabled and will not be functional for forwarding emails.
+        /// Alias is disabled and will not be functional for forwarding emails.
         case disabled
 
-        /// Mask has been locked by admin or the system and cannot be used..
+        /// Alias has been locked by admin or the system and cannot be used..
         case locked
 
-        /// Mask has been created but is pending confirmation (external masks only).
+        /// Alias has been created but is pending confirmation (external aliases only).
         case pending
     }
 
@@ -31,20 +31,20 @@ public struct EmailMask: Equatable, Sendable {
         case external
     }
 
-    /// Unique identifier of the email mask
+    /// Unique identifier of the email alias
     public let id: String
 
-    /// Identifier of the user that owns the email mask
+    /// Identifier of the user that owns the email alias
     public let owner: String
 
-    /// List of owner identifiers and issuers associated with this email mask.
+    /// List of owner identifiers and issuers associated with this email alias.
     public let owners: [Owner]
 
-    /// Unique identifier of the identity associated with the email mask.
+    /// Unique identifier of the identity associated with the email alias.
     public let identityId: String
 
-    /// The publicly visible email address that serves as the mask
-    public let maskAddress: String
+    /// The publicly visible email address that serves as the alias
+    public let aliasAddress: String
 
     /// The actual email address that receives forwarded messages
     public let realAddress: String
@@ -52,16 +52,16 @@ public struct EmailMask: Equatable, Sendable {
     /// The type of real address
     public let realAddressType: RealAddressType
 
-    /// The current status of the mask
-    public let status: EmailMaskStatus
+    /// The current status of the alias
+    public let status: EmailAliasStatus
 
-    /// The total number of inbound messages received by this mask
+    /// The total number of inbound messages received by this alias
     public let inboundReceived: Int
 
     /// The total number of inbound messages successfully delivered
     public let inboundDelivered: Int
 
-    /// The total number of outbound messages received from this mask
+    /// The total number of outbound messages received from this alias
     public let outboundReceived: Int
 
     /// The total number of outbound messages successfully delivered
@@ -73,19 +73,19 @@ public struct EmailMask: Equatable, Sendable {
     /// The number of messages identified as containing viruses
     public let virusCount: Int
 
-    /// Email service timestamp to when the email mask was created.
+    /// Email service timestamp to when the email alias was created.
     public let createdAt: Date
 
-    /// Email service timestamp to when the email mask was last updated.
+    /// Email service timestamp to when the email alias was last updated.
     public let updatedAt: Date
 
-    /// Email service timestamp to when the email mask will expire, if applicable
+    /// Email service timestamp to when the email alias will expire, if applicable
     public let expiresAt: Date?
 
-    /// The version number of the mask
+    /// The version number of the alias
     public let version: Int
 
-    /// Optional name/value pair metadata associated with the email mask.
+    /// Optional name/value pair metadata associated with the email alias.
     public let metadata: [String: String]?
 
     public init(
@@ -93,10 +93,10 @@ public struct EmailMask: Equatable, Sendable {
         owner: String,
         owners: [Owner],
         identityId: String,
-        maskAddress: String,
+        aliasAddress: String,
         realAddress: String,
         realAddressType: RealAddressType,
-        status: EmailMaskStatus,
+        status: EmailAliasStatus,
         inboundReceived: Int,
         inboundDelivered: Int,
         outboundReceived: Int,
@@ -113,7 +113,7 @@ public struct EmailMask: Equatable, Sendable {
         self.owner = owner
         self.owners = owners
         self.identityId = identityId
-        self.maskAddress = maskAddress
+        self.aliasAddress = aliasAddress
         self.realAddress = realAddress
         self.realAddressType = realAddressType
         self.status = status

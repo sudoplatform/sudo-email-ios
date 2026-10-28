@@ -9,14 +9,14 @@ import Foundation
 /// Represents the sender identification for an email message.
 public enum SenderIdentification: Equatable {
     case emailAddressId(String)
-    case maskId(String)
+    case aliasId(String)
 }
 
 /// Input object containing information required to send an email message.
 public struct SendEmailMessageInput: Equatable {
 
     /// The identification of the sender used to send the email.
-    /// This can be either an email address ID or a mask ID, but not both.
+    /// This can be either an email address ID or an alias ID, but not both.
     public let senderIdentification: SenderIdentification
 
     /// The identifier of the email address used to send the email.
@@ -25,19 +25,19 @@ public struct SendEmailMessageInput: Equatable {
         switch senderIdentification {
         case .emailAddressId(let id):
             return id
-        case .maskId:
-            fatalError("Cannot access senderEmailAddressId when using maskId")
+        case .aliasId:
+            fatalError("Cannot access senderEmailAddressId when using aliasId")
         }
     }
 
-    /// The identifier of the email mask used to send the email.
-    /// The identifier must match the identifier of the mask of the `from` field in the RFC 6854 data.
-    public var senderMaskId: String {
+    /// The identifier of the email alias used to send the email.
+    /// The identifier must match the identifier of the alias of the `from` field in the RFC 6854 data.
+    public var senderAliasId: String {
         switch senderIdentification {
-        case .maskId(let id):
+        case .aliasId(let id):
             return id
         case .emailAddressId:
-            fatalError("Cannot access senderMaskId when using emailAddressId")
+            fatalError("Cannot access senderAliasId when using emailAddressId")
         }
     }
 
@@ -81,7 +81,7 @@ public struct SendEmailMessageInput: Equatable {
         self.forwardingMessageId = forwardingMessageId
     }
 
-    // Email address initializer
+    /// Email address initializer
     public init(
         senderEmailAddressId: String,
         emailMessageHeader: InternetMessageFormatHeader,
@@ -102,9 +102,9 @@ public struct SendEmailMessageInput: Equatable {
         )
     }
 
-    // Initializer for mask IDs
+    /// Initializer for alias IDs
     public init(
-        senderMaskId: String,
+        senderAliasId: String,
         emailMessageHeader: InternetMessageFormatHeader,
         body: String,
         attachments: [EmailAttachment] = [],
@@ -113,7 +113,7 @@ public struct SendEmailMessageInput: Equatable {
         forwardingMessageId: String? = nil
     ) {
         self.init(
-            senderIdentification: .maskId(senderMaskId),
+            senderIdentification: .aliasId(senderAliasId),
             emailMessageHeader: emailMessageHeader,
             body: body,
             attachments: attachments,

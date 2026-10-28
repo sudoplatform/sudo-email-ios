@@ -54,10 +54,10 @@ public protocol SudoEmailClient: AnyObject {
     /// - Parameters:
     ///   - input: Parameters used to provision an email address, including:
     ///     - emailAddress: Email address to provision, of the form localpart@domain. domain must be a registered domain
-    ///     retrieved from SudoEmailClient.getSupportedEmailDomains
+    ///     retrieved from SudoEmailClient.listEmailDomains
     ///     - ownershipProofToken: The signed ownership proof of the Sudo to be associated with the provisioned email address.
     ///     The ownership proof must contain an audience of "sudoplatform".
-    ///     - alias: An alias for the email address.
+    ///     - displayName: An optional user defined display name for the email address.
     /// - Returns:
     ///   - Success: Successfully provisioned email. This address will return in all lower-case.
     ///   - Failure: `SudoEmailError`.
@@ -88,14 +88,14 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func sendEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
 
-    /// Send an email message using [RFC 6854] supersedes [RFC 822] (https://tools.ietf.org/html/rfc6854) data from a masked email address.
+    /// Send an email message using [RFC 6854] supersedes [RFC 822] (https://tools.ietf.org/html/rfc6854) data from an email alias address.
     /// Email messages sent to in-network recipients (i.e. email addresses that exist within the Sudo Platform) will be sent end-to-end encrypted.
     /// - Parameters:
-    ///   - input: Parameters used to send an email message with a masked email address
+    ///   - input: Parameters used to send an email message with an email alias address
     /// - Returns:
     ///   - Success: SendEmailMessageResult
     ///   - Failure: `SudoEmailError`.
-    func sendMaskedEmailMessage(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
+    func sendEmailMessageViaAlias(withInput input: SendEmailMessageInput) async throws -> SendEmailMessageResult
 
     /// Delete multiple email messages using a list of identifiers.
     ///
@@ -242,22 +242,7 @@ public protocol SudoEmailClient: AnyObject {
     ///   - Failure: `SudoEmailError`.
     func checkEmailAddressAvailability(withInput input: CheckEmailAddressAvailabilityInput) async throws -> [String]
 
-    /// Get a list of the supported email domains. Primarily intended to be used to perform a domain search
-    /// which occurs prior to provisioning an email address.
-    /// - Returns:
-    ///   - Success: Array of supported domains.
-    ///   - Failure: `SudoEmailError`.
-    @available(*, deprecated, message: "Use listEmailDomains instead to retrieve domain data")
-    func getSupportedEmailDomains() async throws -> [String] //
-
-    /// Get a list of all of the email domains on which email masks may be provisioned.
-    /// - Returns:
-    ///   - Success: Array of supported mask domains.
-    ///   - Failure: `SudoEmailError`.
-    @available(*, deprecated, message: "Use listEmailDomains instead to retrieve domain data")
-    func getEmailMaskDomains() async throws -> [String]
-
-    /// Get a list of all supported email domains that can be used for provisioning email addresses and email masks, along with metadata about each domain.
+    /// Get a list of all supported email domains that can be used for provisioning email addresses and email aliases, along with metadata about each domain.
     ///
     /// - Returns:
     ///  -  Success: Array of supported email domains with associated metadata.
@@ -368,13 +353,6 @@ public protocol SudoEmailClient: AnyObject {
     ///   - The data associated with the `EmailMessage` or null if the email message cannot be found.
     func getEmailMessageWithBody(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody?
 
-    /// Lists the metadata and content of all draft email messages for the user.
-    ///
-    /// - Returns:
-    ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
-    @available(*, deprecated, message: "Use listDraftEmailMessageForEmailAddressId instead to reduce unneccessary network calls.")
-    func listDraftEmailMessages() async throws -> [DraftEmailMessage]
-
     /// Lists the metadata and content of all draft email messages for the specified email address identifier.
     ///
     /// - Parameters:
@@ -382,13 +360,6 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - An array of draft email messages or an empty array if no matching draft email messages can be found.
     func listDraftEmailMessagesForEmailAddressId(emailAddressId: String) async throws -> [DraftEmailMessage]
-
-    /// Lists the metadata of all draft messages for the user.
-    ///
-    /// - Returns:
-    ///   - An array of draft email message metadata or an empty array if no matching draft email messages can be found.
-    @available(*, deprecated, message: "Use listDraftEmailMessageMetadataForEmailAddressId instead to reduce unneccessary network calls.")
-    func listDraftEmailMessageMetadata() async throws -> [DraftEmailMessageMetadata]
 
     /// Lists the metadata of all draft messages for a specific email address with pagination support.
     ///
@@ -422,50 +393,50 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns: Key archive data.
     func exportKeys() throws -> Data
 
-    /// Provisions a new email mask with the specified configuration
+    /// Provisions a new email alias with the specified configuration
     ///
     ///  - Parameters:
-    ///    - input: Input parameters used to provision an email mask
+    ///    - input: Input parameters used to provision an email alias
     ///  - Returns:
-    ///    - The newly provisioned EmailMask
-    func provisionEmailMask(withInput input: ProvisionEmailMaskInput) async throws -> EmailMask
+    ///    - The newly provisioned EmailAlias
+    func provisionEmailAlias(withInput input: ProvisionEmailAliasInput) async throws -> EmailAlias
 
-    /// Deprovisions an email mask with the specified id
+    /// Deprovisions an email alias with the specified id
     ///
     ///  - Parameters:
-    ///    - input: Input parameters used to deprovision an email mask
+    ///    - input: Input parameters used to deprovision an email alias
     ///  - Returns:
-    ///    - The deprovisioned EmailMask
-    func deprovisionEmailMask(withInput input: DeprovisionEmailMaskInput) async throws -> EmailMask
+    ///    - The deprovisioned EmailAlias
+    func deprovisionEmailAlias(withInput input: DeprovisionEmailAliasInput) async throws -> EmailAlias
 
-    /// Updates or clears the metadata and/or expiration date of an email mask
+    /// Updates or clears the metadata and/or expiration date of an email alias
     ///
     /// - Parameters:
-    ///   - input: Input parameters used to update an email mask
+    ///   - input: Input parameters used to update an email alias
     /// - Returns:
-    ///   - The updated EmailMask
-    func updateEmailMask(withInput input: UpdateEmailMaskInput) async throws -> EmailMask
+    ///   - The updated EmailAlias
+    func updateEmailAlias(withInput input: UpdateEmailAliasInput) async throws -> EmailAlias
 
-    /// Enables a previously disabled email mask with the specified input, permitting
+    /// Enables a previously disabled email alias with the specified input, permitting
     /// it to forward emails again.
     ///
     ///  - Parameters:
-    ///    - input: Input parameters used to enable an email mask
+    ///    - input: Input parameters used to enable an email alias
     ///  - Returns:
-    ///    - The enabled EmailMask
-    func enableEmailMask(withInput input: EnableEmailMaskInput) async throws -> EmailMask
+    ///    - The enabled EmailAlias
+    func enableEmailAlias(withInput input: EnableEmailAliasInput) async throws -> EmailAlias
 
-    /// Disables an active email mask with the specified input, preventing it from
+    /// Disables an active email alias with the specified input, preventing it from
     /// forwarding any emails.
     ///  - Parameters:
-    ///    - input: Input parameters used to disable an email mask
+    ///    - input: Input parameters used to disable an email alias
     ///  - Returns:
-    ///    - The disabled EmailMask
-    func disableEmailMask(withInput input: DisableEmailMaskInput) async throws -> EmailMask
+    ///    - The disabled EmailAlias
+    func disableEmailAlias(withInput input: DisableEmailAliasInput) async throws -> EmailAlias
 
-    /// Verifies an external email address for use with email masking.
+    /// Verifies an external email address for use with email aliasing.
     ///  - Parameters:
-    ///    - input: Input parameters containing the email address, mask ID, and optional verification code
+    ///    - input: Input parameters containing the email address, alias ID, and optional verification code
     ///  - Returns:
     ///    - The verification result indicating success or failure
     func verifyExternalEmailAddress(withInput input: VerifyExternalEmailAddressInput) async throws -> VerifyExternalEmailAddressResult
@@ -489,17 +460,6 @@ public protocol SudoEmailClient: AnyObject {
         emailAddressId: String?,
         blockLevel: BlockedEmailAddressLevel
     ) async throws -> BatchOperationResult<String, String>
-
-    /// Unblocks the addresses given from sending to the user
-    ///
-    ///  - Parameters:
-    ///    - addresses: Array of addresses to unblock as strings
-    ///  - Returns: The status of the unblocking:
-    ///     Success - All addresses were succesfully unblocked.
-    ///     Partial - Only a partial number of the addresses were unblocked successfully. Includes a list of the
-    ///           addresses that failed and succeeded to be unblocked.
-    ///     Failure - All addresses failed to be unblocked.
-    func unblockEmailAddresses(addresses: [String]) async throws -> BatchOperationResult<String, String>
 
     /// Unblocks the hashed addresses given from sending to the user
     ///
@@ -526,14 +486,14 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns: The id of the folder
     func deleteMessagesForFolderId(withInput input: DeleteMessagesForFolderIdInput) async throws -> String
 
-    /// List email masks owned by the current user, with optional filtering and pagination
+    /// List email aliases owned by the current user, with optional filtering and pagination
     ///
     /// - Parameters:
     ///   - input: Input parameters for filtering and pagination
     /// - Returns:
-    ///   - Success: Email masks associated with user, or empty list if no email mask can be found.
+    ///   - Success: Email aliases associated with user, or empty list if no email alias can be found.
     ///   - Failure: `SudoEmailError`.
-    func listEmailMasksForOwner(withInput input: ListEmailMasksForOwnerInput) async throws -> ListOutput<EmailMask>
+    func listEmailAliasesForOwner(withInput input: ListEmailAliasesForOwnerInput) async throws -> ListOutput<EmailAlias>
 
     /// Get the estimated size of an email message once it has had any encoding/encryption applied to it.
     /// - Parameters:

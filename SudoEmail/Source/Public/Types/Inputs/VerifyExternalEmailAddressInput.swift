@@ -12,15 +12,15 @@ public struct VerifyExternalEmailAddressInput: Equatable {
     /// The external email address to verify
     public let emailAddress: String
 
-    /// The unique identifier of the email mask associated with this verification
-    public let emailMaskId: String
+    /// The unique identifier of the email alias associated with this verification
+    public let emailAliasId: String
 
     /// Optional verification code (if required by the verification flow)
     public let verificationCode: String?
 
-    public init(emailAddress: String, emailMaskId: String, verificationCode: String? = nil) {
+    public init(emailAddress: String, emailAliasId: String, verificationCode: String? = nil) {
         self.emailAddress = emailAddress
-        self.emailMaskId = emailMaskId
+        self.emailAliasId = emailAliasId
         self.verificationCode = verificationCode
     }
 }

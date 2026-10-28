@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -54,12 +54,5 @@ public struct EmailMessageOperationFailureResult: Error, Equatable, Sendable {
     public init(id: String, errorType: String) {
         self.id = id
         self.errorType = errorType
-    }
-
-    // MARK: - Conformance: Equatable
-
-    public static func == (lhs: EmailMessageOperationFailureResult, rhs: EmailMessageOperationFailureResult) -> Bool {
-        return lhs.id == rhs.id &&
-            lhs.errorType == rhs.errorType
     }
 }

@@ -6,16 +6,16 @@
 
 import Foundation
 
-/// Utility class to transform entities from the Core level to EmailMask output results of the SDK.
-struct EmailMaskAPITransformer {
+/// Utility class to transform entities from the Core level to EmailAlias output results of the SDK.
+struct EmailAliasAPITransformer {
 
     /// Utility for transforming owner entities to `Owner`.
     let ownerTransformer = OwnerAPITransformer()
 
     /// Transform an optional entity from the core layer to the API layer.
     /// - Parameter entity: Core entity to transform.
-    /// - Returns: Transformed EmailMask or nil if entity is nil.
-    func transform(_ entity: EmailMaskEntity?) -> EmailMask? {
+    /// - Returns: Transformed EmailAlias or nil if entity is nil.
+    func transform(_ entity: EmailAliasEntity?) -> EmailAlias? {
         guard let entity = entity else {
             return nil
         }
@@ -24,13 +24,13 @@ struct EmailMaskAPITransformer {
 
     /// Transform an entity from the core layer to the API layer.
     /// - Parameter entity: Core entity to transform.
-    /// - Returns: Transformed EmailMask.
-    func transform(_ entity: EmailMaskEntity) -> EmailMask {
+    /// - Returns: Transformed EmailAlias.
+    func transform(_ entity: EmailAliasEntity) -> EmailAlias {
         let id = entity.id
         let owner = entity.owner
         let owners = entity.owners.map(ownerTransformer.transform(_:))
         let identityId = entity.identityId
-        let maskAddress = entity.maskAddress
+        let aliasAddress = entity.aliasAddress
         let realAddress = entity.realAddress
         let realAddressType = transformRealAddressType(entity.realAddressType)
         let status = transformStatus(entity.status)
@@ -48,12 +48,12 @@ struct EmailMaskAPITransformer {
 
         let metadata = entity.metadata
 
-        return EmailMask(
+        return EmailAlias(
             id: id,
             owner: owner,
             owners: owners,
             identityId: identityId,
-            maskAddress: maskAddress,
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             realAddressType: realAddressType,
             status: status,
@@ -71,8 +71,8 @@ struct EmailMaskAPITransformer {
         )
     }
 
-    /// Transform EmailMaskRealAddressTypeEntity to RealAddressType
-    private func transformRealAddressType(_ entityType: EmailMaskRealAddressTypeEntity) -> EmailMask.RealAddressType {
+    /// Transform EmailAliasRealAddressTypeEntity to RealAddressType
+    private func transformRealAddressType(_ entityType: EmailAliasRealAddressTypeEntity) -> EmailAlias.RealAddressType {
         switch entityType {
         case .internal:
             return .internal
@@ -81,8 +81,8 @@ struct EmailMaskAPITransformer {
         }
     }
 
-    /// Transform EmailMaskStatusEntity to EmailMask.EmailMaskStatus
-    private func transformStatus(_ entityStatus: EmailMaskStatusEntity) -> EmailMask.EmailMaskStatus {
+    /// Transform EmailAliasStatusEntity to EmailAlias.EmailAliasStatus
+    private func transformStatus(_ entityStatus: EmailAliasStatusEntity) -> EmailAlias.EmailAliasStatus {
         switch entityStatus {
         case .enabled:
             return .enabled

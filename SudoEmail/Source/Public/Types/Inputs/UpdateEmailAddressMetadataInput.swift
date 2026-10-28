@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -9,11 +9,11 @@ import Foundation
 /// object defining the values to be set when updating email address metadata using `SudoEmailClient`
 public struct UpdateEmailAddressMetadataValues: Equatable {
 
-    /// alias associated with this email address
-    public let alias: String?
+    /// display name associated with this email address
+    public let displayName: String?
 
-    public init(alias: String?) {
-        self.alias = alias
+    public init(displayName: String?) {
+        self.displayName = displayName
     }
 }
 
@@ -23,7 +23,7 @@ public struct UpdateEmailAddressMetadataInput: Equatable {
     /// The unique identity of email address to update.
     public let id: String
 
-    /// An alias for the email address.
+    /// The values to update for the email address, including the display name.
     public let values: UpdateEmailAddressMetadataValues
 
     public init(id: String, values: UpdateEmailAddressMetadataValues) {

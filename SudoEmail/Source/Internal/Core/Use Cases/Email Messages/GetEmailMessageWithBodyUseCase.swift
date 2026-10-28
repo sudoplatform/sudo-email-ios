@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -29,10 +29,9 @@ class GetEmailMessageWithBodyUseCase {
     func execute(withInput input: GetEmailMessageWithBodyInput) async throws -> EmailMessageWithBody? {
         let messageId = input.id
         let emailAddressId = input.emailAddressId
-        let emailMessageWithBody = try await emailMessageRepository.getEmailMessageWithBody(
+        return try await emailMessageRepository.getEmailMessageWithBody(
             messageId: messageId,
             emailAddressId: emailAddressId
         )
-        return emailMessageWithBody
     }
 }

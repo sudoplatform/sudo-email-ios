@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -71,8 +71,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            let entity = try transformer.transform(result.createCustomEmailFolder)
-            return entity
+            return try transformer.transform(result.createCustomEmailFolder)
         } catch {
             logger.error("CreateCustomEmailFolder result transformation failed with \(error)")
             throw error
@@ -122,8 +121,7 @@ class DefaultEmailFolderRepository: EmailFolderRepository {
         let result = try await perform(mutation)
         do {
             let transformer = EmailFolderEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            let entity = try transformer.transform(result.updateCustomEmailFolder)
-            return entity
+            return try transformer.transform(result.updateCustomEmailFolder)
         } catch {
             logger.error("UpdateCustomEmailFolder result transformation failed with \(error)")
             throw error

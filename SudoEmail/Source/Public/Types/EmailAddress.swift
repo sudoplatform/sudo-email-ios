@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -51,8 +51,8 @@ public struct EmailAddress: Equatable, Sendable {
     /// Date when the email account received its last email message. `nil` if no messages received.
     public let lastReceivedAt: Date?
 
-    /// An optional user defined alias name for the the email address.
-    public let alias: String?
+    /// An optional user defined display name for the email address.
+    public let displayName: String?
 
     /// Initialize an instance of `EmailAddress`.
     public init(
@@ -69,7 +69,7 @@ public struct EmailAddress: Equatable, Sendable {
         createdAt: Date,
         updatedAt: Date,
         lastReceivedAt: Date?,
-        alias: String?
+        displayName: String?
     ) {
         self.id = id
         self.owner = owner
@@ -84,6 +84,6 @@ public struct EmailAddress: Equatable, Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.lastReceivedAt = lastReceivedAt
-        self.alias = alias
+        self.displayName = displayName
     }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -21,20 +21,20 @@ public struct DraftEmailMessage: Equatable, Sendable {
     /// The RFC 822 formatted draft email message content.
     public var rfc822Data: Data
 
-    /// Unique identifier of the email mask associated with the draft email message, if any.
-    public var emailMaskId: String?
+    /// Unique identifier of the email alias associated with the draft email message, if any.
+    public var emailAliasId: String?
 
     public init(
         id: String,
         emailAddressId: String,
         updatedAt: Date,
         rfc822Data: Data,
-        emailMaskId: String? = nil
+        emailAliasId: String? = nil
     ) {
         self.id = id
         self.emailAddressId = emailAddressId
         self.updatedAt = updatedAt
         self.rfc822Data = rfc822Data
-        self.emailMaskId = emailMaskId
+        self.emailAliasId = emailAliasId
     }
 }

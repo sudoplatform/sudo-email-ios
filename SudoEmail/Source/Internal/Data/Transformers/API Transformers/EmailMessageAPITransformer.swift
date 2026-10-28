@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -81,7 +81,7 @@ struct EmailMessageAPITransformer {
 
     /// Transform a email message entity into an email message result of the SDK.
     func transform(_ entity: EmailMessageEntity) -> EmailMessage {
-        /// Mapping to messageId is correct as the internal `id` is used internally only.
+        // Mapping to messageId is correct as the internal `id` is used internally only.
         let id = entity.id
         let clientRefid = entity.clientRefId
         let owner = entity.owner
@@ -90,7 +90,7 @@ struct EmailMessageAPITransformer {
         let updatedAt = entity.updatedAt
         let sortDate = entity.sortDate
         let emailAddressId = entity.emailAddressId
-        let emailMaskId = entity.emailMaskId
+        let emailAliasId = entity.emailAliasId
         let folderId = entity.folderId
         let previousFolderId = entity.previousFolderId
         let seen = entity.seen
@@ -115,7 +115,7 @@ struct EmailMessageAPITransformer {
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
-            emailMaskId: emailMaskId,
+            emailAliasId: emailAliasId,
             folderId: folderId,
             previousFolderId: previousFolderId,
             createdAt: createdAt,
@@ -142,7 +142,7 @@ struct EmailMessageAPITransformer {
 
     /// Transform a partial email message entity into a partial email message result of the SDK.
     func transform(_ entity: PartialEmailMessageEntity) -> PartialEmailMessage {
-        /// Mapping to messageId is correct as the internal `id` is used internally only.
+        // Mapping to messageId is correct as the internal `id` is used internally only.
         let id = entity.id
         let clientRefid = entity.clientRefId
         let owner = entity.owner
@@ -151,7 +151,7 @@ struct EmailMessageAPITransformer {
         let updatedAt = entity.updatedAt
         let sortDate = entity.sortDate
         let emailAddressId = entity.emailAddressId
-        let emailMaskId = entity.emailMaskId
+        let emailAliasId = entity.emailAliasId
         let folderId = entity.folderId
         let previousFolderId = entity.previousFolderId
         let seen = entity.seen
@@ -169,7 +169,7 @@ struct EmailMessageAPITransformer {
             owner: owner,
             owners: owners,
             emailAddressId: emailAddressId,
-            emailMaskId: emailMaskId,
+            emailAliasId: emailAliasId,
             folderId: folderId,
             previousFolderId: previousFolderId,
             createdAt: createdAt,

@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -22,7 +22,7 @@ struct ScheduledDraftMessageEntityTransformer {
         return ScheduledDraftMessageEntity(
             id: id,
             emailAddressId: scheduledDraftMessage.emailAddressId,
-            emailMaskId: scheduledDraftMessage.emailMaskId,
+            emailAliasId: scheduledDraftMessage.emailMaskId,
             sendAt: Date(millisecondsSince1970: scheduledDraftMessage.sendAtEpochMs),
             owner: scheduledDraftMessage.owner,
             owners: scheduledDraftMessage.owners.map(ownerTransformer.transform(_:)),
@@ -45,7 +45,7 @@ struct ScheduledDraftMessageEntityTransformer {
         return ScheduledDraftMessageEntity(
             id: id,
             emailAddressId: scheduledDraftMessage.emailAddressId,
-            emailMaskId: scheduledDraftMessage.emailMaskId,
+            emailAliasId: scheduledDraftMessage.emailMaskId,
             sendAt: Date(millisecondsSince1970: scheduledDraftMessage.sendAtEpochMs),
             owner: scheduledDraftMessage.owner,
             owners: scheduledDraftMessage.owners.map(ownerTransformer.transform(_:)),

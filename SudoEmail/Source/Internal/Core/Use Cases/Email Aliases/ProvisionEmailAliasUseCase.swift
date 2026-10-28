@@ -7,18 +7,18 @@
 import Foundation
 import SudoLogging
 
-/// Core use case representation of an operation to provision an email mask.
+/// Core use case representation of an operation to provision an email alias.
 ///
-/// Provisions a new email mask with the specified configuration.
-class ProvisionEmailMaskUseCase {
+/// Provisions a new email alias with the specified configuration.
+class ProvisionEmailAliasUseCase {
 
     // MARK: - Properties
 
     /// Cryptographic key worker for this device
     let keyWorker: ServiceKeyWorker
 
-    /// Email mask repository to access the email mask from the service.
-    let emailMaskRepository: EmailMaskRepository
+    /// Email alias repository to access the email alias from the service.
+    let emailAliasRepository: EmailAliasRepository
 
     /// Domain repository to access domain information.
     let domainRepository: DomainRepository
@@ -28,10 +28,10 @@ class ProvisionEmailMaskUseCase {
 
     // MARK: - Lifecycle
 
-    /// Initialize an instance of `ProvisionEmailMaskUseCase`.
-    init(keyWorker: ServiceKeyWorker, emailMaskRepository: EmailMaskRepository, domainRepository: DomainRepository, logger: Logger) {
+    /// Initialize an instance of `ProvisionEmailAliasUseCase`.
+    init(keyWorker: ServiceKeyWorker, emailAliasRepository: EmailAliasRepository, domainRepository: DomainRepository, logger: Logger) {
         self.keyWorker = keyWorker
-        self.emailMaskRepository = emailMaskRepository
+        self.emailAliasRepository = emailAliasRepository
         self.domainRepository = domainRepository
         self.logger = logger
     }
@@ -40,22 +40,22 @@ class ProvisionEmailMaskUseCase {
 
     /// Execute the use case.
     /// - Parameters:
-    ///   - maskAddress: The email mask address to provision, in the form `${localPart}@${domain}`.
-    ///   - realAddress: The real email address to which the mask will forward to, in the form `${localPart}@${domain}`.
-    ///   - ownershipProofToken: The signed ownership proof of the Sudo to be associated with the provisioned email mask.
-    ///   - metadata: Optional name/value pair metadata to associate with the email mask.
-    ///   - expiresAt: Optional expiration date for the email mask. If not provided, the mask does not expire.
-    ///   - keyId: Optional identifier of the Public Key to use to provision the email mask.
-    /// - Returns: The newly provisioned email mask entity.
+    ///   - aliasAddress: The email alias address to provision, in the form `${localPart}@${domain}`.
+    ///   - realAddress: The real email address to which the alias will forward to, in the form `${localPart}@${domain}`.
+    ///   - ownershipProofToken: The signed ownership proof of the Sudo to be associated with the provisioned email alias.
+    ///   - metadata: Optional name/value pair metadata to associate with the email alias.
+    ///   - expiresAt: Optional expiration date for the email alias. If not provided, the alias does not expire.
+    ///   - keyId: Optional identifier of the Public Key to use to provision the email alias.
+    /// - Returns: The newly provisioned email alias entity.
     func execute(
-        maskAddress: String,
+        aliasAddress: String,
         realAddress: String,
         ownershipProofToken: String,
         metadata: [String: String]?,
         expiresAt: Date?,
         keyId: String?
-    ) async throws -> EmailMaskEntity {
-        logger.info("Provisioning email mask: \(maskAddress) -> \(realAddress)")
+    ) async throws -> EmailAliasEntity {
+        logger.info("Provisioning email alias: \(aliasAddress) -> \(realAddress)")
 
         var publicKey: KeyEntity
         do {
@@ -76,8 +76,8 @@ class ProvisionEmailMaskUseCase {
             throw SudoEmailError.internalError(error.localizedDescription)
         }
 
-        return try await emailMaskRepository.provisionEmailMask(
-            maskAddress: maskAddress,
+        return try await emailAliasRepository.provisionEmailAlias(
+            aliasAddress: aliasAddress,
             realAddress: realAddress,
             ownershipProofToken: ownershipProofToken,
             publicKey: publicKey,

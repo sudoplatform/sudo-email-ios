@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -32,7 +32,7 @@ struct S3ObjectEntity: Equatable {
     /// The metadata associated with the
     var metadata: [String: String]?
 
-    // The content encoding value for the data
+    /// The content encoding value for the data
     var contentEncoding: String?
 }
 

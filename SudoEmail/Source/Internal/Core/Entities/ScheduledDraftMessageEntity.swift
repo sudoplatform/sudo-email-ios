@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -25,8 +25,8 @@ struct ScheduledDraftMessageEntity: Equatable {
     /// The identifier of the email address to send the message from
     var emailAddressId: String
 
-    /// The identifier of the email mask used to send the message, if applicable
-    var emailMaskId: String?
+    /// The identifier of the email alias used to send the message, if applicable
+    var emailAliasId: String?
 
     /// The timestamp of when to send the message
     var sendAt: Date

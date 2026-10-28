@@ -1,5 +1,5 @@
 //
-// Copyright © 2025 Anonyome Labs, Inc. All rights reserved.
+// Copyright © 2026 Anonyome Labs, Inc. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -24,11 +24,13 @@ protocol EmailAccountRepository: Repository {
     ///   - emailAddress: Email address to use to create the email account.
     ///   - publicKey: Public key to be associated with the account. Used to encrypt user data.
     ///   - ownershipProofToken: A signed ownership proof of the user to create the account.
+    ///   - displayName: The public display name for the email account.
     /// - Returns: The email account that was created.
     func createWithEmailAddress(
-        _ emailAddress: EmailAddressEntity,
+        _ emailAddress: String,
         publicKey: KeyEntity,
-        ownershipProofToken: String
+        ownershipProofToken: String,
+        displayName: String?
     ) async throws -> EmailAccountEntity
 
     /// Delete an email account.

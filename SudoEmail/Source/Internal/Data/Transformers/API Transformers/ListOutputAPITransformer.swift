@@ -54,9 +54,9 @@ struct ListOutputAPITransformer {
         return ListOutput(items: items, nextToken: nextToken)
     }
 
-    /// Transform an email mask entity list output to API list output of email masks.
-    func transformEmailMasks(_ entities: ListOutputEntity<EmailMaskEntity>) -> ListOutput<EmailMask> {
-        let transformer = EmailMaskAPITransformer()
+    /// Transform an email alias entity list output to API list output of email aliases.
+    func transformEmailAliases(_ entities: ListOutputEntity<EmailAliasEntity>) -> ListOutput<EmailAlias> {
+        let transformer = EmailAliasAPITransformer()
         let items = entities.items.map(transformer.transform(_:))
         let nextToken = entities.nextToken
         return ListOutput(items: items, nextToken: nextToken)
