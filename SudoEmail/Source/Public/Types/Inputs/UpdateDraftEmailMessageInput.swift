@@ -6,9 +6,9 @@
 
 import Foundation
 
-// input object for updating a draft email message using `SudoEmailClient`
-// The email address in the `From` field of the RFC6854 data must match either the `aliasAddress` of the Email Alias associated with the
-// `emailAliasId` property, if provided, otherwise the `emailAddress` of the Email Address associated with the `senderEmailAddressId` property.
+/// input object for updating a draft email message using `SudoEmailClient`
+/// The email address in the `From` field of the RFC6854 data must match either the `aliasAddress` of the Email Alias associated with the
+/// `emailAliasId` property, if provided, otherwise the `emailAddress` of the Email Address associated with the `senderEmailAddressId` property.
 
 public struct UpdateDraftEmailMessageInput {
 

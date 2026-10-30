@@ -33,7 +33,7 @@ public struct EmailAliasFilter: Equatable {
     /// Filter by `status` property
     public var status: EmailAliasStatusFilter?
 
-    /// filter by realAddressType property
+    // filter by realAddressType property
     public var realAddressType: EmailAliasAddressTypeFilter?
 
     public init(

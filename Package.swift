@@ -24,7 +24,13 @@ let package = Package(
         .package(url: "https://github.com/sudoplatform/sudo-key-manager-ios", from: "5.0.0"),
         .package(url: "https://github.com/sudoplatform/sudo-notification-ios", from: "6.0.0"),
         .package(url: "https://github.com/sudoplatform/sudo-user-ios", from: "19.0.0"),
-        .package(url: "https://github.com/aws-amplify/amplify-swift", from: "2.49.1"),
+        .package(url: "https://github.com/aws-amplify/amplify-swift", from: "2.58.3"),
+        .package(url: "https://github.com/awslabs/aws-sdk-swift", from: "1.6.71"),
+        // Explicitly depend on smithy-swift so the required Smithy products are linked
+        // into the final binary. smithy-swift is already a transitive dependency of
+        // aws-sdk-swift; declaring it here makes the link explicit and pins a version
+        // (0.191.0+) that compiles cleanly under the Swift 6 toolchain used in CI.
+        .package(url: "https://github.com/smithy-lang/smithy-swift", from: "0.191.0"),
         .package(url: "https://github.com/anonyome/mailcore2", from: "2.0.0"),
         .package(url: "https://github.com/1024jp/GzipSwift", from: "5.0.0")
     ],
@@ -46,6 +52,7 @@ let package = Package(
                 .product(name: "AWSS3StoragePlugin", package: "amplify-swift"),
                 .product(name: "AWSCognitoAuthPlugin", package: "amplify-swift"),
                 .product(name: "AWSPluginsCore", package: "amplify-swift"),
+                .product(name: "AWSS3", package: "aws-sdk-swift"),
                 .product(name: "SudoLogging", package: "sudo-logging-ios"),
                 .product(name: "SudoConfigManager", package: "sudo-config-manager-ios"),
                 .product(name: "SudoKeyManager", package: "sudo-key-manager-ios"),

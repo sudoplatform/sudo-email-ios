@@ -98,20 +98,24 @@ class DefaultEmailAliasRepository: EmailAliasRepository, Repository {
         let result = try await perform(mutation)
 
         let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func deprovisionEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {
         logger.debug("Deprovisioning email alias with ID: \(emailAliasId)")
         let deprovisionEmailMaskInput = GraphQL.DeprovisionEmailMaskInput(
-            emailMaskId: emailAliasId
+            emailMaskId: emailAliasId,
         )
 
         let mutation = GraphQL.DeprovisionEmailMaskMutation(input: deprovisionEmailMaskInput)
         let result = try await perform(mutation)
 
         let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func updateEmailAlias(
@@ -168,33 +172,39 @@ class DefaultEmailAliasRepository: EmailAliasRepository, Repository {
         let result = try await perform(mutation)
 
         let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func enableEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {
         logger.debug("Enabling email alias with ID: \(emailAliasId)")
         let enableEmailMaskInput = GraphQL.EnableEmailMaskInput(
-            emailMaskId: emailAliasId
+            emailMaskId: emailAliasId,
         )
 
         let mutation = GraphQL.EnableEmailMaskMutation(input: enableEmailMaskInput)
         let result = try await perform(mutation)
 
         let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func disableEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {
         logger.debug("Disabling email alias with ID: \(emailAliasId)")
         let disableEmailMaskInput = GraphQL.DisableEmailMaskInput(
-            emailMaskId: emailAliasId
+            emailMaskId: emailAliasId,
         )
 
         let mutation = GraphQL.DisableEmailMaskMutation(input: disableEmailMaskInput)
         let result = try await perform(mutation)
 
         let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        return try transformer.transform(result)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
     }
 
     func verifyExternalEmailAddress(emailAddress: String, emailAliasId: String, verificationCode: String?) async throws -> VerifyExternalEmailAddressResultEntity {

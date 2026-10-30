@@ -8,7 +8,7 @@ import Foundation
 
 /// Input object for listing email aliases for owner using `SudoEmailClient`
 public struct ListEmailAliasesForOwnerInput: Equatable {
-    /// Any filters to apply to the list operation.
+    // Any filters to apply to the list operation.
     public let filter: EmailAliasFilter?
     /// Limit of the results to return. If nil, the limit is 10.
     public let limit: Int?

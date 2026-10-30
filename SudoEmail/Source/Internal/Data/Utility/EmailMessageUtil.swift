@@ -188,7 +188,7 @@ class EmailMessageUtil {
         replyMessageId: String? = nil,
         forwardMessageId: String? = nil,
         emailMessageMaxOutboundMessageSize: Int,
-        skipSizeLimitCheck: Bool = false
+        skipSizeLimitCheck: Bool = false,
     ) async throws -> Data {
         // Generate unencrypted RFC822 email data
         var rfc822Data = try buildMessageData(
