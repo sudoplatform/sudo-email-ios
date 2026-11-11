@@ -267,4 +267,18 @@ struct OwnerEntityTransformer {
         let issuer = data.issuer
         return OwnerEntity(id: id, issuer: issuer)
     }
+
+    /// Transform the success result of `ListEmailMasks` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.ListEmailMasksQuery.Data.ListEmailMask.Item.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
+
+    /// Transform the success result of `GetEmailMaskById` from the service to a `OwnerEntity`.
+    func transform(_ data: GraphQL.GetEmailMaskByIdQuery.Data.GetEmailMaskById.Owner) -> OwnerEntity {
+        let id = data.id
+        let issuer = data.issuer
+        return OwnerEntity(id: id, issuer: issuer)
+    }
 }

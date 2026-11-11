@@ -40,6 +40,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
     case emailFolderNotFound
     /// The email message supplied could not be found.
     case emailMessageNotFound
+    /// The email alias supplied could not be found
+    case emailAliasNotFound
     /// The email address supplied is not authorized to perform the operation.
     case unauthorizedAddress
     /// The email address domain specified is invalid.
@@ -81,6 +83,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
             return "Email folder could not be found"
         case .bodyAttachmentNotFound:
             return "Body attachments could not be found"
+        case .emailAliasNotFound:
+            return "Email alias could not be found"
         case .decodingError:
             return "A decoding error has occurred"
         case .emailAddressFormatValidationFailed:

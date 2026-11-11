@@ -259,6 +259,9 @@
                 <a class="nav-group-task-link" href="../Structs/EmailAliasFilter.html">EmailAliasFilter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/EmailAliasListItem.html">EmailAliasListItem</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/EmailAttachment.html">EmailAttachment</a>
               </li>
               <li class="nav-group-task">
@@ -329,6 +332,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListEmailAliasesForOwnerInput.html">ListEmailAliasesForOwnerInput</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListEmailAliasesInput.html">ListEmailAliasesInput</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListEmailFoldersForEmailAddressIdInput.html">ListEmailFoldersForEmailAddressIdInput</a>
@@ -2979,6 +2985,68 @@ forwarding any emails.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail0aB6ClientP03getB9AliasById04withG0AA0bE0VSS_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/getEmailAliasById(withId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP03getB9AliasById04withG0AA0bE0VSS_tYaKF">getEmailAliasById(withId:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the Email Alias assosicated with the given id</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <ul>
+<li>emailAliasNotFound: if not found</li>
+</ul>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getEmailAliasById</span><span class="p">(</span><span class="n">withId</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/EmailAlias.html">EmailAlias</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The unique id of the Alias to retrieve</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>The retrieved EmailAlias</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail0aB6ClientP05blockB9Addresses9addresses6action14emailAddressId0D5LevelAA20BatchOperationResultVyS2SGSaySSG_AA015UnsealedBlockedI0V0pI6ActionOSSSgAA0pbiK0OtYaKF"></a>
                     <a name="//apple_ref/swift/Method/blockEmailAddresses(addresses:action:emailAddressId:blockLevel:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail0aB6ClientP05blockB9Addresses9addresses6action14emailAddressId0D5LevelAA20BatchOperationResultVyS2SGSaySSG_AA015UnsealedBlockedI0V0pI6ActionOSSSgAA0pbiK0OtYaKF">blockEmailAddresses(addresses:<wbr>action:<wbr>emailAddressId:<wbr>blockLevel:<wbr>)</a>
@@ -3248,7 +3316,64 @@ This method does not wait for deletion to complete. To check for completion, lis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailAliasesForOwner</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEmailAliasesForOwnerInput.html">ListEmailAliasesForOwnerInput</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailAlias.html">EmailAlias</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@available(*, deprecated, message: "Use listEmailAliases instead to retrieve alias data")</span>
+<span class="kd">func</span> <span class="nf">listEmailAliasesForOwner</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEmailAliasesForOwnerInput.html">ListEmailAliasesForOwnerInput</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailAlias.html">EmailAlias</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>input</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Input parameters for filtering and pagination</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><ul>
+<li>Success: Email aliases associated with user, or empty list if no email alias can be found.</li>
+<li>Failure: <code>SudoEmailError</code>.</li>
+</ul></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP04listB7Aliases9withInputAA10ListOutputVyAA0b5AliasH4ItemVGAA0hbeG0V_tYaKF"></a>
+                    <a name="//apple_ref/swift/Method/listEmailAliases(withInput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP04listB7Aliases9withInputAA10ListOutputVyAA0b5AliasH4ItemVGAA0hbeG0V_tYaKF">listEmailAliases(withInput:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>List email aliases owned by the current user, with optional filtering and pagination</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">listEmailAliases</span><span class="p">(</span><span class="n">withInput</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEmailAliasesInput.html">ListEmailAliasesInput</a></span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ListOutput.html">ListOutput</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EmailAliasListItem.html">EmailAliasListItem</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -3577,7 +3702,7 @@ throws an error, that error will be propagated to the caller and the original op
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-10-30)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-11-11)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

@@ -265,4 +265,51 @@ class DefaultEmailAliasRepository: EmailAliasRepository, Repository {
             throw error
         }
     }
+
+    func listEmailAliases(sudoId: String?, filter: EmailAliasFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailAliasListItemEntity> {
+        logger.debug("Listing email aliases with sudoId: \(sudoId ?? "nil"), limit: \(limit ?? -1), nextToken: \(nextToken ?? "nil")")
+
+        var graphQLFilter: GraphQL.EmailMaskFilterInput?
+        if let filter = filter {
+            graphQLFilter = filter.toGraphQLFilter()
+        }
+        let input = GraphQL.ListEmailMasksInput(
+            filter: graphQLFilter,
+            limit: limit,
+            nextToken: nextToken,
+            sudoId: sudoId
+        )
+
+        let query = GraphQL.ListEmailMasksQuery(input: input)
+        let result = try await fetch(query)
+
+        do {
+            var emailMaskListEntities: [EmailAliasListItemEntity] = []
+            let emailMasks = result.listEmailMasks.items
+            let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            emailMaskListEntities = try emailMasks.map(transformer.transform(_:))
+            let nextToken = result.listEmailMasks.nextToken
+            return ListOutputEntity(items: emailMaskListEntities, nextToken: nextToken)
+        } catch {
+            logger.error("listEmailAliases result transformation failed with \(error)")
+            throw error
+        }
+    }
+
+    func getEmailAliasById(id: String) async throws -> EmailAliasEntity {
+        logger.debug("Getting email alias with id: \(id)")
+
+        let query = GraphQL.GetEmailMaskByIdQuery(id: id)
+        let result = try await fetch(query)
+        guard let emailMask = result.getEmailMaskById else {
+            throw SudoEmailError.emailAliasNotFound
+        }
+        do {
+            let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            return try transformer.transform(emailMask)
+        } catch {
+            logger.error("GetEmailAliasById result transformation failed with \(error)")
+            throw error
+        }
+    }
 }

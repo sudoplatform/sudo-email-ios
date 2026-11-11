@@ -430,4 +430,18 @@ class UseCaseFactory {
         return ListEmailAliasesForOwnerUseCase(emailAliasRepository: emailAliasRepository,
                                                logger: logger)
     }
+
+    func generateListEmailAliasesUseCase(
+        emailAliasRepository: EmailAliasRepository,
+        logger: Logger
+    ) -> ListEmailAliasesUseCase {
+        return ListEmailAliasesUseCase(emailAliasRepository: emailAliasRepository,
+                                       logger: logger)
+    }
+
+    func generateGetEmailAliasByIdUseCase(
+        emailAliasRepository: EmailAliasRepository
+    ) -> GetEmailAliasByIdUseCase {
+        return GetEmailAliasByIdUseCase(emailAliasRepository: emailAliasRepository)
+    }
 }

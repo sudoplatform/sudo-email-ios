@@ -74,4 +74,20 @@ protocol EmailAliasRepository: Repository {
     ///   - nextToken: Next token to be used when accessing the next page of information.
     /// - Returns: A list of email alias entities with pagination information.
     func listEmailAliasesForOwner(filter: EmailAliasFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailAliasEntity>
+
+    /// List email aliases owned by the current user with optional filtering and pagination.
+    /// - Parameters:
+    ///   - sudoId: Optional identifier of a Sudo to filter the email aliases by.
+    ///   - filter: Optional filter to apply to the email aliases being listed.
+    ///   - limit: Limit of the results to return.
+    ///   - nextToken: Next token to be used when accessing the next page of information.
+    /// - Returns: A list of email alias entities with pagination information.
+    func listEmailAliases(sudoId: String?, filter: EmailAliasFilterEntity?, limit: Int?, nextToken: String?) async throws -> ListOutputEntity<EmailAliasListItemEntity>
+
+    /// Retrieve a specific email alias by it's unique id
+    /// - Parameters:
+    ///   - id: The unique id of the alias to retrive
+    /// - Returns: The alias entity
+    /// - Throws: EmailAliasNotFound error if alias is not found
+    func getEmailAliasById(id: String) async throws -> EmailAliasEntity
 }

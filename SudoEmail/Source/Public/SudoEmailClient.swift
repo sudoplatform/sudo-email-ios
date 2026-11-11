@@ -441,6 +441,15 @@ public protocol SudoEmailClient: AnyObject {
     ///    - The verification result indicating success or failure
     func verifyExternalEmailAddress(withInput input: VerifyExternalEmailAddressInput) async throws -> VerifyExternalEmailAddressResult
 
+    /// Retrieves the Email Alias assosicated with the given id
+    ///  - Parameters:
+    ///    - id: The unique id of the Alias to retrieve
+    ///  - Returns:
+    ///    - The retrieved EmailAlias
+    ///  - Throws:
+    ///    - emailAliasNotFound: if not found
+    func getEmailAliasById(withId id: String) async throws -> EmailAlias
+
     /// Blocks the addresses given from sending to the user
     ///
     ///  - Parameters:
@@ -493,7 +502,17 @@ public protocol SudoEmailClient: AnyObject {
     /// - Returns:
     ///   - Success: Email aliases associated with user, or empty list if no email alias can be found.
     ///   - Failure: `SudoEmailError`.
+    @available(*, deprecated, message: "Use listEmailAliases instead to retrieve alias data")
     func listEmailAliasesForOwner(withInput input: ListEmailAliasesForOwnerInput) async throws -> ListOutput<EmailAlias>
+
+    /// List email aliases owned by the current user, with optional filtering and pagination
+    ///
+    /// - Parameters:
+    ///   - input: Input parameters for filtering and pagination
+    /// - Returns:
+    ///   - Success: Email aliases associated with user, or empty list if no email alias can be found.
+    ///   - Failure: `SudoEmailError`.
+    func listEmailAliases(withInput input: ListEmailAliasesInput) async throws -> ListOutput<EmailAliasListItem>
 
     /// Get the estimated size of an email message once it has had any encoding/encryption applied to it.
     /// - Parameters:

@@ -407,6 +407,130 @@ struct EmailAliasEntityTransformer {
         )
     }
 
+    func transform(_ graphQLEmailMask: GraphQL.ListEmailMasksQuery.Data.ListEmailMask.Item) throws -> EmailAliasListItemEntity {
+        let id = String(graphQLEmailMask.id)
+        let owner = String(graphQLEmailMask.owner)
+        let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
+        let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
+        let aliasAddress = graphQLEmailMask.maskAddress
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
+        let inboundReceived = graphQLEmailMask.inboundReceived
+        let inboundDelivered = graphQLEmailMask.inboundDelivered
+        let outboundReceived = graphQLEmailMask.outboundReceived
+        let outboundDelivered = graphQLEmailMask.outboundDelivered
+        let spamCount = graphQLEmailMask.spamCount
+        let virusCount = graphQLEmailMask.virusCount
+        let version = graphQLEmailMask.version
+
+        // Handle metadata unsealing
+        var unsealedMetadata: [String: String]?
+        if let metadata = graphQLEmailMask.metadata {
+            let unsealedJsonString = try deviceKeyWorker.unsealString(
+                metadata.base64EncodedSealedData,
+                withKeyId: metadata.keyId,
+                algorithm: metadata.algorithm
+            )
+
+            // Parse JSON string back to dictionary
+            if let jsonData = unsealedJsonString.data(using: .utf8),
+               let metadataDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: String] {
+                unsealedMetadata = metadataDict
+            }
+        }
+
+        // Handle timestamps
+        let createdAt = Date(millisecondsSince1970: graphQLEmailMask.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
+        let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
+
+        return EmailAliasListItemEntity(
+            id: id,
+            owner: owner,
+            owners: owners,
+            identityId: identityId,
+            keyRingId: keyRingId,
+            aliasAddress: aliasAddress,
+            realAddressType: realAddressType,
+            status: status,
+            inboundReceived: inboundReceived,
+            inboundDelivered: inboundDelivered,
+            outboundReceived: outboundReceived,
+            outboundDelivered: outboundDelivered,
+            spamCount: spamCount,
+            virusCount: virusCount,
+            metadata: unsealedMetadata,
+            expiresAt: expiresAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            version: version
+        )
+    }
+
+    func transform(_ graphQLEmailMask: GraphQL.GetEmailMaskByIdQuery.Data.GetEmailMaskById) throws -> EmailAliasEntity {
+        let id = String(graphQLEmailMask.id)
+        let owner = String(graphQLEmailMask.owner)
+        let owners = graphQLEmailMask.owners.map(ownerTransformer.transform(_:))
+        let identityId = String(graphQLEmailMask.identityId)
+        let keyRingId = graphQLEmailMask.keyRingId
+        let aliasAddress = graphQLEmailMask.maskAddress
+        let realAddress = graphQLEmailMask.realAddress
+        let realAddressType = transformRealAddressType(graphQLEmailMask.getEmailAliasRealAddressType())
+        let status = transformStatus(graphQLEmailMask.getEmailAliasStatus())
+        let inboundReceived = graphQLEmailMask.inboundReceived
+        let inboundDelivered = graphQLEmailMask.inboundDelivered
+        let outboundReceived = graphQLEmailMask.outboundReceived
+        let outboundDelivered = graphQLEmailMask.outboundDelivered
+        let spamCount = graphQLEmailMask.spamCount
+        let virusCount = graphQLEmailMask.virusCount
+        let version = graphQLEmailMask.version
+
+        // Handle metadata unsealing
+        var unsealedMetadata: [String: String]?
+        if let metadata = graphQLEmailMask.metadata {
+            let unsealedJsonString = try deviceKeyWorker.unsealString(
+                metadata.base64EncodedSealedData,
+                withKeyId: metadata.keyId,
+                algorithm: metadata.algorithm
+            )
+
+            // Parse JSON string back to dictionary
+            if let jsonData = unsealedJsonString.data(using: .utf8),
+               let metadataDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: String] {
+                unsealedMetadata = metadataDict
+            }
+        }
+
+        // Handle timestamps
+        let createdAt = Date(millisecondsSince1970: graphQLEmailMask.createdAtEpochMs)
+        let updatedAt = Date(millisecondsSince1970: graphQLEmailMask.updatedAtEpochMs)
+        let expiresAt = graphQLEmailMask.expiresAtEpochSec.map { Date(timeIntervalSince1970: TimeInterval($0)) }
+
+        return EmailAliasEntity(
+            id: id,
+            owner: owner,
+            owners: owners,
+            identityId: identityId,
+            keyRingId: keyRingId,
+            aliasAddress: aliasAddress,
+            realAddress: realAddress,
+            realAddressType: realAddressType,
+            status: status,
+            inboundReceived: inboundReceived,
+            inboundDelivered: inboundDelivered,
+            outboundReceived: outboundReceived,
+            outboundDelivered: outboundDelivered,
+            spamCount: spamCount,
+            virusCount: virusCount,
+            metadata: unsealedMetadata,
+            expiresAt: expiresAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            version: version
+        )
+    }
+
     // MARK: - Helper Methods
 
     /// Transform GraphQL EmailMaskRealAddressType to EmailAliasRealAddressTypeEntity

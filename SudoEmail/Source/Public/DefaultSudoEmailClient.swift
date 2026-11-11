@@ -823,6 +823,34 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         return transformer.transformEmailAliases(result)
     }
 
+    public func listEmailAliases(withInput input: ListEmailAliasesInput) async throws -> ListOutput<EmailAliasListItem> {
+        try await ensureSignedIn()
+        let useCase = useCaseFactory.generateListEmailAliasesUseCase(
+            emailAliasRepository: emailAliasRepository,
+            logger: logger
+        )
+
+        var filterEntity: EmailAliasFilterEntity?
+        if let filter = input.filter {
+            let filterTransformer = EmailAliasFilterEntityTransformer()
+            filterEntity = filterTransformer.transform(filter)
+        }
+
+        let result = try await useCase.execute(sudoId: input.sudoId, filter: filterEntity, limit: input.limit, nextToken: input.nextToken)
+        let transformer = ListOutputAPITransformer(deviceKeyWorker: serviceKeyWorker)
+        return transformer.transformEmailAliasListItems(result)
+    }
+
+    public func getEmailAliasById(withId id: String) async throws -> EmailAlias {
+        try await ensureSignedIn()
+        let useCase = useCaseFactory.generateGetEmailAliasByIdUseCase(emailAliasRepository: emailAliasRepository)
+
+        let result = try await useCase.execute(withId: id)
+
+        let transformer = EmailAliasAPITransformer()
+        return transformer.transform(result)
+    }
+
     public func getEncodedEmailMessageSize(withInput input: SendEmailMessageInput) async throws -> Int {
         try await ensureSignedIn()
         let useCase = useCaseFactory.generateSendEmailMessageUseCase(

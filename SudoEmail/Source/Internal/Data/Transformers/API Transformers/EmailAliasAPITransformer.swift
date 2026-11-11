@@ -71,6 +71,50 @@ struct EmailAliasAPITransformer {
         )
     }
 
+    func transform(_ entity: EmailAliasListItemEntity) -> EmailAliasListItem {
+        let id = entity.id
+        let owner = entity.owner
+        let owners = entity.owners.map(ownerTransformer.transform(_:))
+        let identityId = entity.identityId
+        let aliasAddress = entity.aliasAddress
+        let realAddressType = transformRealAddressType(entity.realAddressType)
+        let status = transformStatus(entity.status)
+        let inboundReceived = entity.inboundReceived
+        let inboundDelivered = entity.inboundDelivered
+        let outboundReceived = entity.outboundReceived
+        let outboundDelivered = entity.outboundDelivered
+        let spamCount = entity.spamCount
+        let virusCount = entity.virusCount
+        let version = entity.version
+
+        let createdAt = entity.createdAt
+        let updatedAt = entity.updatedAt
+        let expiresAt = entity.expiresAt
+
+        let metadata = entity.metadata
+
+        return EmailAliasListItem(
+            id: id,
+            owner: owner,
+            owners: owners,
+            identityId: identityId,
+            aliasAddress: aliasAddress,
+            realAddressType: realAddressType,
+            status: status,
+            inboundReceived: inboundReceived,
+            inboundDelivered: inboundDelivered,
+            outboundReceived: outboundReceived,
+            outboundDelivered: outboundDelivered,
+            spamCount: spamCount,
+            virusCount: virusCount,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            version: version,
+            expiresAt: expiresAt,
+            metadata: metadata
+        )
+    }
+
     /// Transform EmailAliasRealAddressTypeEntity to RealAddressType
     private func transformRealAddressType(_ entityType: EmailAliasRealAddressTypeEntity) -> EmailAlias.RealAddressType {
         switch entityType {

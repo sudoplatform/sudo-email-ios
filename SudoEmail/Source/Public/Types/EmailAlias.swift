@@ -130,3 +130,103 @@ public struct EmailAlias: Equatable, Sendable {
         self.metadata = metadata
     }
 }
+
+/// Representation of an Email Alias list result used in Sudo Email SDK.
+/// This is the same as the EmailAliase, minus the realAddress property which is not available
+/// via the list endpoint
+public struct EmailAliasListItem: Equatable, Sendable {
+
+    /// Unique identifier of the email alias
+    public let id: String
+
+    /// Identifier of the user that owns the email alias
+    public let owner: String
+
+    /// List of owner identifiers and issuers associated with this email alias.
+    public let owners: [Owner]
+
+    /// Unique identifier of the identity associated with the email alias.
+    public let identityId: String
+
+    /// The publicly visible email address that serves as the alias
+    public let aliasAddress: String
+
+    /// The type of real address
+    public let realAddressType: EmailAlias.RealAddressType
+
+    /// The current status of the alias
+    public let status: EmailAlias.EmailAliasStatus
+
+    /// The total number of inbound messages received by this alias
+    public let inboundReceived: Int
+
+    /// The total number of inbound messages successfully delivered
+    public let inboundDelivered: Int
+
+    /// The total number of outbound messages received from this alias
+    public let outboundReceived: Int
+
+    /// The total number of outbound messages successfully delivered
+    public let outboundDelivered: Int
+
+    /// The number of messages identified as spam
+    public let spamCount: Int
+
+    /// The number of messages identified as containing viruses
+    public let virusCount: Int
+
+    /// Email service timestamp to when the email alias was created.
+    public let createdAt: Date
+
+    /// Email service timestamp to when the email alias was last updated.
+    public let updatedAt: Date
+
+    /// Email service timestamp to when the email alias will expire, if applicable
+    public let expiresAt: Date?
+
+    /// The version number of the alias
+    public let version: Int
+
+    /// Optional name/value pair metadata associated with the email alias.
+    public let metadata: [String: String]?
+
+    public init(
+        id: String,
+        owner: String,
+        owners: [Owner],
+        identityId: String,
+        aliasAddress: String,
+        realAddressType: EmailAlias.RealAddressType,
+        status: EmailAlias.EmailAliasStatus,
+        inboundReceived: Int,
+        inboundDelivered: Int,
+        outboundReceived: Int,
+        outboundDelivered: Int,
+        spamCount: Int,
+        virusCount: Int,
+        createdAt: Date,
+        updatedAt: Date,
+        version: Int,
+        expiresAt: Date? = nil,
+        metadata: [String: String]? = nil
+    ) {
+        self.id = id
+        self.owner = owner
+        self.owners = owners
+        self.identityId = identityId
+        self.aliasAddress = aliasAddress
+        self.realAddressType = realAddressType
+        self.status = status
+        self.inboundReceived = inboundReceived
+        self.inboundDelivered = inboundDelivered
+        self.outboundReceived = outboundReceived
+        self.outboundDelivered = outboundDelivered
+        self.spamCount = spamCount
+        self.virusCount = virusCount
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.version = version
+        self.expiresAt = expiresAt
+        self.metadata = metadata
+    }
+}

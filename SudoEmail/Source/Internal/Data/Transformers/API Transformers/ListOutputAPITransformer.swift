@@ -61,4 +61,11 @@ struct ListOutputAPITransformer {
         let nextToken = entities.nextToken
         return ListOutput(items: items, nextToken: nextToken)
     }
+
+    func transformEmailAliasListItems(_ entities: ListOutputEntity<EmailAliasListItemEntity>) -> ListOutput<EmailAliasListItem> {
+        let transformer = EmailAliasAPITransformer()
+        let items = entities.items.map(transformer.transform(_:))
+        let nextToken = entities.nextToken
+        return ListOutput(items: items, nextToken: nextToken)
+    }
 }
