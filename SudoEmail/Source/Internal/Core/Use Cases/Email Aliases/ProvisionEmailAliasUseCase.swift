@@ -23,17 +23,27 @@ class ProvisionEmailAliasUseCase {
     /// Domain repository to access domain information.
     let domainRepository: DomainRepository
 
+    /// Chooses the key pair to provision with, and removes it if the provision is rejected.
+    let keyProvider: ProvisioningKeyProvider
+
     /// Logs diagnostic and error information.
     let logger: Logger
 
     // MARK: - Lifecycle
 
     /// Initialize an instance of `ProvisionEmailAliasUseCase`.
-    init(keyWorker: ServiceKeyWorker, emailAliasRepository: EmailAliasRepository, domainRepository: DomainRepository, logger: Logger) {
+    init(
+        keyWorker: ServiceKeyWorker,
+        emailAliasRepository: EmailAliasRepository,
+        domainRepository: DomainRepository,
+        logger: Logger,
+        clientConfig: SudoEmailClientConfig = SudoEmailClientConfig()
+    ) {
         self.keyWorker = keyWorker
         self.emailAliasRepository = emailAliasRepository
         self.domainRepository = domainRepository
         self.logger = logger
+        keyProvider = ProvisioningKeyProvider(keyWorker: keyWorker, clientConfig: clientConfig, logger: logger)
     }
 
     // MARK: - Methods
@@ -57,32 +67,15 @@ class ProvisionEmailAliasUseCase {
     ) async throws -> EmailAliasEntity {
         logger.info("Provisioning email alias: \(aliasAddress) -> \(realAddress)")
 
-        var publicKey: KeyEntity
-        do {
-            if let keyId = keyId {
-                guard let pubKey = try await keyWorker.getPublicKeyWithId(keyId: keyId) else {
-                    throw SudoEmailError.keyNotFound
-                }
-                publicKey = pubKey
-            } else {
-                let keyPair = try await keyWorker.generateKeyPair()
-                publicKey = keyPair.publicKey
-            }
-        } catch let error as SudoEmailError {
-            logger.error("Error getting public key \(error.localizedDescription)")
-            throw error
-        } catch {
-            logger.error("Error getting public key \(error.localizedDescription)")
-            throw SudoEmailError.internalError(error.localizedDescription)
-        }
-
+        let key = try await keyProvider.key(forKeyId: keyId)
         return try await emailAliasRepository.provisionEmailAlias(
             aliasAddress: aliasAddress,
             realAddress: realAddress,
             ownershipProofToken: ownershipProofToken,
-            publicKey: publicKey,
+            publicKey: key.publicKey,
             metadata: metadata,
-            expiresAt: expiresAt
+            expiresAt: expiresAt,
+            onDefinitiveRejection: { keyProvider.discardRejectedKey(key) }
         )
     }
 }

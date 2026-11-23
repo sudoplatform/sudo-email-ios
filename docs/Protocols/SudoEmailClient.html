@@ -211,6 +211,12 @@
                 <a class="nav-group-task-link" href="../Structs/CreateDraftEmailMessageInput.html">CreateDraftEmailMessageInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CreateSingletonKeysIfAbsentResult.html">CreateSingletonKeysIfAbsentResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CreateSingletonKeysIfAbsentResult/KeyResult.html">– KeyResult</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DateRange.html">DateRange</a>
               </li>
               <li class="nav-group-task">
@@ -319,6 +325,9 @@
                 <a class="nav-group-task-link" href="../Structs/InternetMessageFormatHeader.html">InternetMessageFormatHeader</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/KeyPairRemovalFailedError.html">KeyPairRemovalFailedError</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListDraftEmailMessageMetadataForEmailAddressIdInput.html">ListDraftEmailMessageMetadataForEmailAddressIdInput</a>
               </li>
               <li class="nav-group-task">
@@ -389,6 +398,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SendEmailMessageResult.html">SendEmailMessageResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SudoEmailClientConfig.html">SudoEmailClientConfig</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/UnsealedBlockedAddress.html">UnsealedBlockedAddress</a>
@@ -497,6 +509,9 @@ the implementation class is only meant to be used for initializing an instance o
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Removes all keys associated with this client, resets any cached data, cleans up subscriptions, and purges any pending operations.</p>
+
+<p>The keys removed include the singleton key pair, so call <code><a href="../Protocols/SudoEmailClient.html#/s:9SudoEmail0aB6ClientP27createSingletonKeysIfAbsentAA06CreateefgH6ResultVyYaKF">createSingletonKeysIfAbsent()</a></code> again before
+provisioning if the client enforces one.</p>
 
 <p>It is important to note that this will clear ALL cached data related to all
 sudo services.</p>
@@ -719,6 +734,11 @@ Setting to 0 disables caching entirely.</p>
                       <div class="abstract">
                         <p>Deprovision an email address.</p>
 
+<p>If <code><a href="../Structs/SudoEmailClientConfig.html#/s:9SudoEmail0aB12ClientConfigV22allowCallerManagedKeysSbvp">SudoEmailClientConfig.allowCallerManagedKeys</a></code> is <code>false</code>, once the email address is deprovisioned its key
+pair is removed from the device, unless another of the user&rsquo;s email addresses or email aliases still uses it.
+Nothing is removed if the client allows caller managed keys (the default) or enforces a singleton key pair, or
+if the service can&rsquo;t say whether the key pair is still used.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -751,7 +771,10 @@ Setting to 0 disables caching entirely.</p>
                         <h4>Return Value</h4>
                         <p><ul>
 <li>Success: Successfully deprovisioned email.</li>
-<li>Failure: <code>SudoEmailError</code>.</li>
+<li>Failure:</li>
+<li><code><a href="../Structs/KeyPairRemovalFailedError.html">KeyPairRemovalFailedError</a></code> if the email address was deprovisioned, but its key pair couldn&rsquo;t be removed
+from the device. The error carries the deprovisioned email address.</li>
+<li><code>SudoEmailError</code> if the email address wasn&rsquo;t deprovisioned.</li>
 </ul></p>
                       </div>
                     </section>
@@ -1592,7 +1615,24 @@ Any messages in the folder will be moved to TRASH</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Imports cryptographic keys from a key archive.</p>
+                        <p>Import cryptographic keys from a key archive produced by <code><a href="../Protocols/SudoEmailClient.html#/s:9SudoEmail0aB6ClientP10exportKeys10Foundation4DataVyKF">exportKeys()</a></code>.</p>
+
+<p>The archive replaces the on-device keys. It&rsquo;s read and checked first, so an archive that is invalid or that
+this client can&rsquo;t import leaves the existing keys in place. An archive with no keys imports nothing and leaves
+the existing keys in place.</p>
+
+<p>The archive&rsquo;s keys must be in this client&rsquo;s key namespace (<code>keyNamespace</code> when the client was created).</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <ul>
+<li><code>SudoEmailError.keyArchiveNotImportable</code> if the archive contains keys this client can&rsquo;t import, for
+example keys exported under a different key namespace. The existing keys are unchanged.</li>
+<li><code>SudoEmailError.invalidKeyArchive</code> if the archive is invalid. The existing keys are unchanged.</li>
+<li>Another error if saving the keys fails. Saving happens after the existing keys are removed, so in that case
+restore them from the app&rsquo;s own copy, such as an archive exported before the import.</li>
+</ul>
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -1621,6 +1661,56 @@ Any messages in the folder will be moved to TRASH</p>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB6ClientP27createSingletonKeysIfAbsentAA06CreateefgH6ResultVyYaKF"></a>
+                    <a name="//apple_ref/swift/Method/createSingletonKeysIfAbsent()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB6ClientP27createSingletonKeysIfAbsentAA06CreateefgH6ResultVyYaKF">createSingletonKeysIfAbsent()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create the singleton key pair every email address and email alias is sealed to, if this device doesn&rsquo;t have
+it.</p>
+
+<p>Requires <code><a href="../Structs/SudoEmailClientConfig.html#/s:9SudoEmail0aB12ClientConfigV23enforceSingletonKeyPairSbvp">SudoEmailClientConfig.enforceSingletonKeyPair</a></code>. Call it once the user is signed in, before
+provisioning: provisioning never creates the key, and fails with <code>SudoEmailError.singletonKeyPairNotFound</code>
+without it.</p>
+
+<p>The result says whether the key had to be created. If it was, the device&rsquo;s key material has changed, so back
+the keys up again with <code><a href="../Protocols/SudoEmailClient.html#/s:9SudoEmail0aB6ClientP10exportKeys10Foundation4DataVyKF">exportKeys()</a></code>. If the user already has email addresses or aliases, a new key also means
+this device doesn&rsquo;t have the one they&rsquo;re sealed to (for example a second device, or one whose keys were
+removed), so import the user&rsquo;s key backup with <code><a href="../Protocols/SudoEmailClient.html#/s:9SudoEmail0aB6ClientP10importKeys11archiveDatay10Foundation0G0V_tKF">importKeys(archiveData:)</a></code>.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>SudoEmailError.invalidConfig</code> if the client doesn&rsquo;t enforce a singleton key pair; otherwise
+<code>SudoEmailError</code> if the key can&rsquo;t be created.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">createSingletonKeysIfAbsent</span><span class="p">()</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/CreateSingletonKeysIfAbsentResult.html">CreateSingletonKeysIfAbsentResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Whether the singleton key pair was created, and its ID.</p>
                       </div>
                     </section>
                   </div>
@@ -3702,7 +3792,7 @@ throws an error, that error will be propagated to the caller and the original op
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-11-11)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-11-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

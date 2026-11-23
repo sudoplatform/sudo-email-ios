@@ -28,6 +28,9 @@ public protocol SudoEmailClient: AnyObject {
 
     /// Removes all keys associated with this client, resets any cached data, cleans up subscriptions, and purges any pending operations.
     ///
+    /// The keys removed include the singleton key pair, so call `createSingletonKeysIfAbsent()` again before
+    /// provisioning if the client enforces one.
+    ///
     /// It is important to note that this will clear ALL cached data related to all
     /// sudo services.
     func reset() async throws
@@ -64,11 +67,20 @@ public protocol SudoEmailClient: AnyObject {
     func provisionEmailAddress(withInput input: ProvisionEmailAddressInput) async throws -> EmailAddress
 
     /// Deprovision an email address.
+    ///
+    /// If `SudoEmailClientConfig.allowCallerManagedKeys` is `false`, once the email address is deprovisioned its key
+    /// pair is removed from the device, unless another of the user's email addresses or email aliases still uses it.
+    /// Nothing is removed if the client allows caller managed keys (the default) or enforces a singleton key pair, or
+    /// if the service can't say whether the key pair is still used.
+    ///
     /// - Parameters:
     ///   - id: Unique identifier of the email address to be deprovisioned.
     /// - Returns:
     ///   - Success: Successfully deprovisioned email.
-    ///   - Failure: `SudoEmailError`.
+    ///   - Failure:
+    ///     - `KeyPairRemovalFailedError` if the email address was deprovisioned, but its key pair couldn't be removed
+    ///       from the device. The error carries the deprovisioned email address.
+    ///     - `SudoEmailError` if the email address wasn't deprovisioned.
     func deprovisionEmailAddress(_ id: String) async throws -> EmailAddress
 
     /// Update the metadata of an email address.
@@ -227,10 +239,39 @@ public protocol SudoEmailClient: AnyObject {
         withInput input: UpdateCustomEmailFolderInput
     ) async throws -> EmailFolder
 
-    /// Imports cryptographic keys from a key archive.
+    /// Import cryptographic keys from a key archive produced by `exportKeys()`.
+    ///
+    /// The archive replaces the on-device keys. It's read and checked first, so an archive that is invalid or that
+    /// this client can't import leaves the existing keys in place. An archive with no keys imports nothing and leaves
+    /// the existing keys in place.
+    ///
+    /// The archive's keys must be in this client's key namespace (`keyNamespace` when the client was created).
     ///
     /// - Parameter archiveData: Key archive data to import the keys from.
+    /// - Throws:
+    ///   - `SudoEmailError.keyArchiveNotImportable` if the archive contains keys this client can't import, for
+    ///     example keys exported under a different key namespace. The existing keys are unchanged.
+    ///   - `SudoEmailError.invalidKeyArchive` if the archive is invalid. The existing keys are unchanged.
+    ///   - Another error if saving the keys fails. Saving happens after the existing keys are removed, so in that case
+    ///     restore them from the app's own copy, such as an archive exported before the import.
     func importKeys(archiveData: Data) throws
+
+    /// Create the singleton key pair every email address and email alias is sealed to, if this device doesn't have
+    /// it.
+    ///
+    /// Requires `SudoEmailClientConfig.enforceSingletonKeyPair`. Call it once the user is signed in, before
+    /// provisioning: provisioning never creates the key, and fails with `SudoEmailError.singletonKeyPairNotFound`
+    /// without it.
+    ///
+    /// The result says whether the key had to be created. If it was, the device's key material has changed, so back
+    /// the keys up again with `exportKeys()`. If the user already has email addresses or aliases, a new key also means
+    /// this device doesn't have the one they're sealed to (for example a second device, or one whose keys were
+    /// removed), so import the user's key backup with `importKeys(archiveData:)`.
+    ///
+    /// - Returns: Whether the singleton key pair was created, and its ID.
+    /// - Throws: `SudoEmailError.invalidConfig` if the client doesn't enforce a singleton key pair; otherwise
+    ///   `SudoEmailError` if the key can't be created.
+    func createSingletonKeysIfAbsent() async throws -> CreateSingletonKeysIfAbsentResult
 
     // MARK: - Queries
 

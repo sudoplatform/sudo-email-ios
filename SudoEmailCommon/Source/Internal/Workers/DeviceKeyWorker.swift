@@ -119,9 +119,15 @@ public protocol DeviceKeyWorker: AnyObject {
     /// - Returns: Key archive data.
     func exportKeys() throws -> Data
 
-    /// Imports cryptographic keys from a key archive.
+    /// Import cryptographic keys from a key archive produced by `exportKeys()`.
+    ///
+    /// The archive replaces the existing keys. An archive that is invalid, or contains keys outside this worker's
+    /// key namespace or that the key store would otherwise skip, is refused before anything is removed. An archive
+    /// with no keys imports nothing.
     ///
     /// - Parameter archiveData: Key archive data to import the keys from.
+    /// - Throws: `SudoEmailError.keyArchiveNotImportable` if the archive contains keys that can't be imported;
+    ///   `SudoEmailError.invalidKeyArchive` if the archive is invalid; another error if saving the keys fails.
     func importKeys(archiveData: Data) throws
 
     /// remove all cryptographic keys from the KeyManager
@@ -333,16 +339,18 @@ open class DefaultDeviceKeyWorker: DeviceKeyWorker {
         return try archive.archive(nil)
     }
 
-    public func importKeys(archiveData: Data) throws {
-        try self.keyManager.removeAllKeys()
-        guard let archive = SecureKeyArchiveImpl(
-            archiveData: archiveData,
-            keyManager: self.keyManager,
-            zip: true
-        ) else {
-            throw SudoEmailError.invalidKeyArchive
+    open func importKeys(archiveData: Data) throws {
+        // Read and check the archive before removing anything, so an archive that can't be imported leaves this
+        // device's keys in place.
+        let archive = try unarchive(archiveData)
+        guard !archive.keys.isEmpty else {
+            // For example, exported by a user with no provisioned email addresses. There's nothing to restore.
+            logger.info("The key archive contains no keys, so nothing was imported")
+            return
         }
-        try archive.unarchive(nil)
+        try checkEveryKeyIsImportable(archive.keys)
+
+        try keyManager.removeAllKeys()
         try archive.saveKeys()
     }
 
@@ -351,6 +359,47 @@ open class DefaultDeviceKeyWorker: DeviceKeyWorker {
     }
 
     // MARK: - Helpers
+
+    /// The archive's keys, read without touching the key store.
+    private func unarchive(_ archiveData: Data) throws -> SecureKeyArchiveImpl {
+        guard let archive = SecureKeyArchiveImpl(archiveData: archiveData, keyManager: keyManager, zip: true) else {
+            throw SudoEmailError.invalidKeyArchive
+        }
+        do {
+            try archive.unarchive(nil)
+        } catch {
+            logger.error("Reading the key archive failed: \(error)")
+            throw SudoEmailError.invalidKeyArchive
+        }
+        return archive
+    }
+
+    /// Throws `keyArchiveNotImportable` if the key store would skip any of `keys`.
+    ///
+    /// `SudoKeyManager.importKeys` skips, without an error, any key that isn't in its namespace, has no name, has a
+    /// type it doesn't know, or has data that isn't base64. An import that skipped keys would report success while
+    /// leaving this device without them, so it's refused before the existing keys are removed.
+    private func checkEveryKeyIsImportable(_ keys: [[KeyAttributeName: AnyObject]]) throws {
+        let namespace = keyManager.namespace
+        let unimportable = keys.filter { key in
+            guard
+                key[.namespace] as? String == namespace,
+                key[.name] is String,
+                let type = key[.type] as? String,
+                KeyType(rawValue: type) != .unknown,
+                let data = key[.data] as? String,
+                Data(base64Encoded: data) != nil
+            else { return true }
+            return false
+        }
+        guard !unimportable.isEmpty else { return }
+
+        let namespaces = Set(unimportable.map { ($0[.namespace] as? String).map { "\"\($0)\"" } ?? "none" })
+        throw SudoEmailError.keyArchiveNotImportable(
+            "\(unimportable.count) of \(keys.count) keys can't be imported into key namespace \"\(namespace)\". "
+                + "Their namespaces: \(namespaces.sorted().joined(separator: ", "))."
+        )
+    }
 
     /// Decrypt the input string using the keyId.
     ///

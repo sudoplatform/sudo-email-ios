@@ -17,6 +17,8 @@ protocol EmailAliasRepository: Repository {
     ///   - publicKey: Public key to be associated with the email alias. Used to encrypt user data.
     ///   - metadata: Optional name/value pair metadata to associate with the email alias.
     ///   - expiresAt: Optional expiration date for the email alias.
+    ///   - onDefinitiveRejection: Called, before the error is thrown, if the service definitely didn't provision the
+    ///     alias: the request failed before it was sent, or the service refused it.
     /// - Returns: The newly provisioned email alias entity.
     func provisionEmailAlias(
         aliasAddress: String,
@@ -24,7 +26,8 @@ protocol EmailAliasRepository: Repository {
         ownershipProofToken: String,
         publicKey: KeyEntity,
         metadata: [String: String]?,
-        expiresAt: Date?
+        expiresAt: Date?,
+        onDefinitiveRejection: () -> Void
     ) async throws -> EmailAliasEntity
 
     /// Deprovision an existing email alias.

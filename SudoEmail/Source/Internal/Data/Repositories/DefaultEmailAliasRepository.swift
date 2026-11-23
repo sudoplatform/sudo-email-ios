@@ -42,9 +42,50 @@ class DefaultEmailAliasRepository: EmailAliasRepository, Repository {
         ownershipProofToken: String,
         publicKey: KeyEntity,
         metadata: [String: String]?,
-        expiresAt: Date?
+        expiresAt: Date?,
+        onDefinitiveRejection: () -> Void
     ) async throws -> EmailAliasEntity {
         logger.debug("Provisioning email alias: \(aliasAddress) -> \(realAddress)")
+        let mutation: GraphQL.ProvisionEmailMaskMutation
+        do {
+            mutation = try makeProvisionEmailMaskMutation(
+                aliasAddress: aliasAddress,
+                realAddress: realAddress,
+                ownershipProofToken: ownershipProofToken,
+                publicKey: publicKey,
+                metadata: metadata,
+                expiresAt: expiresAt
+            )
+        } catch {
+            // The request was never sent, so the service didn't act on it.
+            onDefinitiveRejection()
+            throw error
+        }
+        let result = try await perform(mutation, onDefinitiveRejection: onDefinitiveRejection)
+
+        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+        let unsealedEmailMask = try transformer.transform(result)
+
+        return unsealedEmailMask
+    }
+
+    /// Build the mutation that provisions an email alias, sealing its metadata.
+    /// - Parameters:
+    ///   - aliasAddress: The email alias address to provision.
+    ///   - realAddress: The real email address to which the alias will forward to.
+    ///   - ownershipProofToken: The signed ownership proof of the Sudo to be associated with the email alias.
+    ///   - publicKey: Public key to register with the email alias.
+    ///   - metadata: Optional name/value pair metadata to associate with the email alias.
+    ///   - expiresAt: Optional expiration date for the email alias.
+    /// - Returns: The mutation.
+    private func makeProvisionEmailMaskMutation(
+        aliasAddress: String,
+        realAddress: String,
+        ownershipProofToken: String,
+        publicKey: KeyEntity,
+        metadata: [String: String]?,
+        expiresAt: Date?
+    ) throws -> GraphQL.ProvisionEmailMaskMutation {
 
         let symmetricKeyId = try (deviceKeyWorker.getCurrentSymmetricKeyId()) ??
             (deviceKeyWorker.generateNewCurrentSymmetricKey())
@@ -94,13 +135,7 @@ class DefaultEmailAliasRepository: EmailAliasRepository, Repository {
             realAddress: realAddress
         )
 
-        let mutation = GraphQL.ProvisionEmailMaskMutation(input: provisionEmailMaskInput)
-        let result = try await perform(mutation)
-
-        let transformer = EmailAliasEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-        let unsealedEmailMask = try transformer.transform(result)
-
-        return unsealedEmailMask
+        return GraphQL.ProvisionEmailMaskMutation(input: provisionEmailMaskInput)
     }
 
     func deprovisionEmailAlias(emailAliasId: String) async throws -> EmailAliasEntity {

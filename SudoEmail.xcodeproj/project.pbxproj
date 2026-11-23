@@ -23,9 +23,12 @@
 		1BDEB98F2C6EF15B003FD274 /* test_inline_image.eml in Resources */ = {isa = PBXBuildFile; fileRef = 1BDEB98E2C6EF15B003FD274 /* test_inline_image.eml */; };
 		1BDEB9912C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml in Resources */ = {isa = PBXBuildFile; fileRef = 1BDEB9902C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml */; };
 		1BDEB9932C6EF186003FD274 /* complicated_with_attachments_and_inline.eml in Resources */ = {isa = PBXBuildFile; fileRef = 1BDEB9922C6EF185003FD274 /* complicated_with_attachments_and_inline.eml */; };
+		265245006663ED97FC10F509 /* ProvisioningKeyCleanupIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C035653004C9B6BFE6912F8 /* ProvisioningKeyCleanupIntegrationTests.swift */; };
+		3339EEA072EFF761F72F7681 /* ServiceKeyWorkerKeychainIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7AE934B9398FD3378B130D /* ServiceKeyWorkerKeychainIntegrationTests.swift */; };
 		41DFDA282DA78D96003C2934 /* MockSudoApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DFDA272DA78D96003C2934 /* MockSudoApiClient.swift */; };
 		41DFDA2A2DA7980F003C2934 /* UnsubscribeWithIdCalled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DFDA292DA7980F003C2934 /* UnsubscribeWithIdCalled.swift */; };
 		41EC16382D94F12700A9923D /* SubscriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EC16372D94F12700A9923D /* SubscriptionUtilities.swift */; };
+		4723D91B097B0B370DE769E7 /* CreateSingletonKeysIfAbsentUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB4CE14CE36556C5498346 /* CreateSingletonKeysIfAbsentUseCaseTests.swift */; };
 		5106CFE22BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5106CFE12BB26E15005D2063 /* EmailAddressPublicKeyIntegrationTests.swift */; };
 		510F5D312BBF6E7B0096FD10 /* SealedKeyEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510F5D302BBF6E7B0096FD10 /* SealedKeyEntityTests.swift */; };
 		517845662BF7259600268489 /* DataFactory+Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517845652BF7259600268489 /* DataFactory+Core.swift */; };
@@ -172,6 +175,7 @@
 		84F652A924A9A41F009EDD3A /* MockFetchEmailAccountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F652A824A9A41F009EDD3A /* MockFetchEmailAccountUseCase.swift */; };
 		84F652AD24A9AC42009EDD3A /* FetchEmailAccountUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F652AC24A9AC42009EDD3A /* FetchEmailAccountUseCaseTests.swift */; };
 		84F652AF24A9B602009EDD3A /* GetEmailAddressByIdIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F652AE24A9B602009EDD3A /* GetEmailAddressByIdIntegrationTests.swift */; };
+		942A84DD529827DE0800C1F0 /* CreateSingletonKeysIfAbsentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179B8029D373AD11772937BC /* CreateSingletonKeysIfAbsentTests.swift */; };
 		952BDA552901231B00C63A4C /* MockGetDraftEmailMessageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952BDA542901231B00C63A4C /* MockGetDraftEmailMessageUseCase.swift */; };
 		952BDA5729012AC900C63A4C /* GetDraftEmailMessageUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952BDA5629012AC900C63A4C /* GetDraftEmailMessageUseCaseTests.swift */; };
 		95388C0B284AEC59004D971D /* ListEmailMessagesForEmailAddrIdUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95388C0A284AEC59004D971D /* ListEmailMessagesForEmailAddrIdUseCaseTests.swift */; };
@@ -360,6 +364,8 @@
 		E25EE59A2D7775AD0040D032 /* SudoEntitlementsAdmin in Frameworks */ = {isa = PBXBuildFile; productRef = E25EE5992D7775AD0040D032 /* SudoEntitlementsAdmin */; };
 		E25EE59C2D7775B40040D032 /* SudoEntitlements in Frameworks */ = {isa = PBXBuildFile; productRef = E25EE59B2D7775B40040D032 /* SudoEntitlements */; };
 		E2C741A82D7E3F010012F488 /* SudoKeyManager in Frameworks */ = {isa = PBXBuildFile; productRef = E2C741A72D7E3F010012F488 /* SudoKeyManager */; };
+		E32440308EC955A743DBC698 /* AsyncLockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73BE72DADAFC09A75BFC85 /* AsyncLockTests.swift */; };
+		FD0014D64967E44D9B49EFAB /* ProvisioningKeyProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C95FC91C1FCA59306FC7A4 /* ProvisioningKeyProviderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -430,6 +436,7 @@
 		0CCA5B102C7EE8B10045F1CA /* MockFetchConfiguredDomainsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFetchConfiguredDomainsUseCase.swift; sourceTree = "<group>"; };
 		0CCA5B152C7EE9470045F1CA /* FetchConfiguredDomainsUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchConfiguredDomainsUseCaseTests.swift; sourceTree = "<group>"; };
 		0CCA5B192C7EEA510045F1CA /* GetConfiguredEmailDomainsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConfiguredEmailDomainsTests.swift; sourceTree = "<group>"; };
+		179B8029D373AD11772937BC /* CreateSingletonKeysIfAbsentTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreateSingletonKeysIfAbsentTests.swift; sourceTree = "<group>"; };
 		1BDEB97A2C699CC2003FD274 /* HTMLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLRenderer.swift; sourceTree = "<group>"; };
 		1BDEB97C2C699CFB003FD274 /* HTMLPlaintextRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLPlaintextRenderer.swift; sourceTree = "<group>"; };
 		1BDEB97E2C6ADE78003FD274 /* MailCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MailCore.xcframework; path = Pods/AnonyomeMailCore2/Frameworks/MailCore.xcframework; sourceTree = "<group>"; };
@@ -437,6 +444,8 @@
 		1BDEB9902C6EF16A003FD274 /* simple_with_regular_and_inline_attachments.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simple_with_regular_and_inline_attachments.eml; sourceTree = "<group>"; };
 		1BDEB9922C6EF185003FD274 /* complicated_with_attachments_and_inline.eml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = complicated_with_attachments_and_inline.eml; sourceTree = "<group>"; };
 		1BDEB9D62C744FDE003FD274 /* MCOMessageParser+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MCOMessageParser+Extensions.swift"; sourceTree = "<group>"; };
+		1C73BE72DADAFC09A75BFC85 /* AsyncLockTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AsyncLockTests.swift; sourceTree = "<group>"; };
+		2C035653004C9B6BFE6912F8 /* ProvisioningKeyCleanupIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProvisioningKeyCleanupIntegrationTests.swift; sourceTree = "<group>"; };
 		4140151B2DA734A4005409E3 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		4140151D2DA745BC005409E3 /* SubscriptionNotificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionNotificationType.swift; sourceTree = "<group>"; };
 		4140151F2DA745C9005409E3 /* SubscriptionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionNotification.swift; sourceTree = "<group>"; };
@@ -530,6 +539,7 @@
 		5DDE24692C045C6100387540 /* DeviceKeyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceKeyWorker.swift; sourceTree = "<group>"; };
 		5DDE246B2C04647600387540 /* MockServiceKeyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockServiceKeyWorker.swift; sourceTree = "<group>"; };
 		5DDE246D2C04659D00387540 /* DefaultServiceKeyWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultServiceKeyWorkerTests.swift; sourceTree = "<group>"; };
+		7E7AE934B9398FD3378B130D /* ServiceKeyWorkerKeychainIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ServiceKeyWorkerKeychainIntegrationTests.swift; sourceTree = "<group>"; };
 		8407BD1C23E135B90018ABEA /* PublicKeyEncryptionAlgorithm+StringInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PublicKeyEncryptionAlgorithm+StringInitializable.swift"; sourceTree = "<group>"; };
 		841145112343214800D3612A /* AnyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyError.swift; sourceTree = "<group>"; };
 		841E5CB123418ABC004219B9 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -982,6 +992,7 @@
 		9FFABE262C06CB2D006A3932 /* MailServiceInteroperabilityIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailServiceInteroperabilityIntegrationTests.swift; sourceTree = "<group>"; };
 		9FFEFC83309C28C1009ACABD /* GetEmailAliasByIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEmailAliasByIdTests.swift; sourceTree = "<group>"; };
 		9FFEFC85309C2E0B009ACABD /* GetEmailAliasByIdIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEmailAliasByIdIntegrationTests.swift; sourceTree = "<group>"; };
+		A6C95FC91C1FCA59306FC7A4 /* ProvisioningKeyProviderTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProvisioningKeyProviderTests.swift; sourceTree = "<group>"; };
 		AD02AA1A2F32C1A600D31728 /* MockDeprovisionEmailAliasUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeprovisionEmailAliasUseCase.swift; sourceTree = "<group>"; };
 		AD02AA1B2F32C1A600D31728 /* MockDisableEmailAliasUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDisableEmailAliasUseCase.swift; sourceTree = "<group>"; };
 		AD02AA1C2F32C1A600D31728 /* MockEnableEmailAliasUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEnableEmailAliasUseCase.swift; sourceTree = "<group>"; };
@@ -1048,6 +1059,7 @@
 		ADFCB3ED2F31956400CD6876 /* ListEmailAliasesForOwnerInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEmailAliasesForOwnerInput.swift; sourceTree = "<group>"; };
 		ADFCB3EE2F31956400CD6876 /* ProvisionEmailAliasInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisionEmailAliasInput.swift; sourceTree = "<group>"; };
 		ADFCB3EF2F31956400CD6876 /* UpdateEmailAliasInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailAliasInput.swift; sourceTree = "<group>"; };
+		D0AB4CE14CE36556C5498346 /* CreateSingletonKeysIfAbsentUseCaseTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreateSingletonKeysIfAbsentUseCaseTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1134,6 +1146,14 @@
 				4140151D2DA745BC005409E3 /* SubscriptionNotificationType.swift */,
 			);
 			path = Subscriptions;
+			sourceTree = "<group>";
+		};
+		4CBFB7C20342F77D31D0958D /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB4CE14CE36556C5498346 /* CreateSingletonKeysIfAbsentUseCaseTests.swift */,
+			);
+			path = Keys;
 			sourceTree = "<group>";
 		};
 		510F5D2A2BBD9CA70096FD10 /* Secure */ = {
@@ -1867,6 +1887,7 @@
 				9FDA6FC62DCB278400D23746 /* CancelScheduledDraftMessageTests.swift */,
 				84872C1824D145450078E205 /* CheckEmailAddressAvailabilityTests.swift */,
 				9F6A9DB42CCF253E0026CAE1 /* CreateCustomEmailFolderTests.swift */,
+				179B8029D373AD11772937BC /* CreateSingletonKeysIfAbsentTests.swift */,
 				9FE8EB9C2CF418AF00ABE2DA /* DeleteCustomEmailFolderTests.swift */,
 				848314F824B81D3E004E89EA /* DeleteEmailMessagesTests.swift */,
 				9FEB91382D8BB04C00EE4BAA /* DeleteMessagesForFolderIdTests.swift */,
@@ -2180,6 +2201,7 @@
 				9F7A94AF2F85EB1000975592 /* Email Domains */,
 				95A1A79A28BD7A9300AAC84B /* Email Folders */,
 				842888E92498415B00D39E6C /* Email Messages */,
+				4CBFB7C20342F77D31D0958D /* Keys */,
 				84B25FDA2485EB2400E99401 /* Provision Email Account */,
 				84B260A0248E00A900E99401 /* Send Email Message */,
 				84B2605C2488B24400E99401 /* Supported Domains */,
@@ -2304,6 +2326,7 @@
 			isa = PBXGroup;
 			children = (
 				9FD921E52E274AED00A45992 /* Interoperability */,
+				EBB219FBC5A3AAB79112BD12 /* Keys */,
 				84B2603B2488889000E99401 /* SudoEmailClient */,
 				9FFABE262C06CB2D006A3932 /* MailServiceInteroperabilityIntegrationTests.swift */,
 			);
@@ -2345,6 +2368,7 @@
 				51A456842B557DBE0097DFF6 /* LookupEmailAddressesPublicInfo.swift */,
 				84B2603C248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift */,
 				ADFCB3E32F305E5F00CD6876 /* ProvisionEmailAliasesIntegrationTests.swift */,
+				2C035653004C9B6BFE6912F8 /* ProvisioningKeyCleanupIntegrationTests.swift */,
 				9F7CCA902DA6123200C428D5 /* ScheduleSendDraftMessageIntegrationTests.swift */,
 				84B260B9248F405400E99401 /* SendEmailMessageIntegrationTests.swift */,
 				AD498A922F42CFB700EAE545 /* SendEmailMessageViaAliasIntegrationTests.swift */,
@@ -2616,8 +2640,10 @@
 		84F6529724A971FA009EDD3A /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				1C73BE72DADAFC09A75BFC85 /* AsyncLockTests.swift */,
 				9F372BA22B706911009FD8CC /* EmailAddressParserTests.swift */,
 				9F66AD5A2C252351000CF5A2 /* EmailRfc822HeaderCodecTests.swift */,
+				A6C95FC91C1FCA59306FC7A4 /* ProvisioningKeyProviderTests.swift */,
 				9F9EE4402B96A0C500BD3EC7 /* Rfc822MessageDataProcessorTests.swift */,
 				9F372BA42B706ADE009FD8CC /* StringHasherTests.swift */,
 				84F6529824A97210009EDD3A /* SubscriptionManagerTests.swift */,
@@ -2933,6 +2959,14 @@
 				ADFCB3E02F30303900CD6876 /* UpdateEmailAliasUseCase.swift */,
 			);
 			path = "Email Aliases";
+			sourceTree = "<group>";
+		};
+		EBB219FBC5A3AAB79112BD12 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				7E7AE934B9398FD3378B130D /* ServiceKeyWorkerKeychainIntegrationTests.swift */,
+			);
+			path = Keys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3338,12 +3372,14 @@
 				9F955CE82E2760C00037086D /* PlatformInteropTests.swift in Sources */,
 				84B2603D248888A800E99401 /* ProvisionEmailAddressIntegrationTests.swift in Sources */,
 				ADFCB3E52F305E5F00CD6876 /* ProvisionEmailAliasesIntegrationTests.swift in Sources */,
+				265245006663ED97FC10F509 /* ProvisioningKeyCleanupIntegrationTests.swift in Sources */,
 				84B2604B24888DA700E99401 /* Result+Convenience.swift in Sources */,
 				84B260BC248F4BF100E99401 /* RFC822Generator.swift in Sources */,
 				9FAD95B42FA02A870076AD4C /* S3TestAccount.swift in Sources */,
 				9F7CCA912DA6123200C428D5 /* ScheduleSendDraftMessageIntegrationTests.swift in Sources */,
 				84B260BA248F405400E99401 /* SendEmailMessageIntegrationTests.swift in Sources */,
 				AD498A932F42CFB700EAE545 /* SendEmailMessageViaAliasIntegrationTests.swift in Sources */,
+				3339EEA072EFF761F72F7681 /* ServiceKeyWorkerKeychainIntegrationTests.swift in Sources */,
 				AD272FA62F56A06D00881BA1 /* SignInDelegateEmailAddressIntegrationTests.swift in Sources */,
 				AD8A42602F593F760094F1AA /* SignInDelegateEmailMessageIntegrationTests.swift in Sources */,
 				84F652A124A994CA009EDD3A /* SubscribeToEmailMessageIntegrationTests.swift in Sources */,
@@ -3364,6 +3400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E25EE58E2D7769C30040D032 /* AnyError.swift in Sources */,
+				E32440308EC955A743DBC698 /* AsyncLockTests.swift in Sources */,
 				9F372BA72B706E53009FD8CC /* BlockEmailAddressesTests.swift in Sources */,
 				9F372B9F2B6CB6E8009FD8CC /* BlockEmailAddressesUseCaseTests.swift in Sources */,
 				84288966249B1BA700D39E6C /* BooleanFilterInputGQLTransformerTests.swift in Sources */,
@@ -3375,6 +3412,8 @@
 				9F6A9DB52CCF253E0026CAE1 /* CreateCustomEmailFolderTests.swift in Sources */,
 				9F6A9DB32CCF1DC30026CAE1 /* CreateCustomEmailFolderUseCaseTests.swift in Sources */,
 				956F1EEB28F38F94002E2E5A /* CreateDraftEmailMessageUseCaseTests.swift in Sources */,
+				942A84DD529827DE0800C1F0 /* CreateSingletonKeysIfAbsentTests.swift in Sources */,
+				4723D91B097B0B370DE769E7 /* CreateSingletonKeysIfAbsentUseCaseTests.swift in Sources */,
 				9F42BE772D6E8DE300505C43 /* Data+Utility.swift in Sources */,
 				8483152624BD2094004E89EA /* DataFactory+Core.swift in Sources */,
 				847EF2B924BD5DD500423B74 /* DataFactory+GraphQL.swift in Sources */,
@@ -3558,6 +3597,7 @@
 				848314F324B81CCD004E89EA /* ProvisionEmailAddressTests.swift in Sources */,
 				AD02AA302F32C97A00D31728 /* ProvisionEmailAliasTests.swift in Sources */,
 				AD27E7912F2885950070F79F /* ProvisionEmailAliasUseCaseTests.swift in Sources */,
+				FD0014D64967E44D9B49EFAB /* ProvisioningKeyProviderTests.swift in Sources */,
 				84B25FFB24861D7B00E99401 /* PublicKeyEncryptionAlgorithm+StringInitializableTests.swift in Sources */,
 				8483152024BC1514004E89EA /* Result+ErrorMapTests.swift in Sources */,
 				9F9EE4412B96A0C500BD3EC7 /* Rfc822MessageDataProcessorTests.swift in Sources */,

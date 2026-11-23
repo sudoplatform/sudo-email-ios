@@ -11,7 +11,7 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
 
     // MARK: - Client
 
-    /// Configuration supplied to `DefaultSudoEmailClient` is invalid.
+    /// Configuration supplied to `DefaultSudoEmailClient` is invalid, or doesn't support the operation called.
     case invalidConfig
     /// User is not signed in.
     case notSignedIn
@@ -19,8 +19,15 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
     case noEmailMessageRFC822Available
     /// Device cryptographic key not found
     case keyNotFound
+    /// The client enforces a singleton key pair, but it isn't on this device. Create it with
+    /// `createSingletonKeysIfAbsent()`, or import the user's key backup.
+    case singletonKeyPairNotFound
     /// Indicates that the key archive imported was invalid.
     case invalidKeyArchive
+    /// The key archive contains keys this client can't import, usually because they were exported under a different
+    /// key namespace, for example by another app or platform. Nothing was imported and the device's keys are
+    /// unchanged. The associated value describes the keys that couldn't be imported.
+    case keyArchiveNotImportable(_ cause: String?)
     /// No key attachments were found on message body.
     case keyAttachmentsNotFound
     /// No body attachment was found on message body.
@@ -42,6 +49,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
     case emailMessageNotFound
     /// The email alias supplied could not be found
     case emailAliasNotFound
+    /// The email alias address supplied is already provisioned.
+    case emailAliasAlreadyExists
     /// The email address supplied is not authorized to perform the operation.
     case unauthorizedAddress
     /// The email address domain specified is invalid.
@@ -85,6 +94,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
             return "Body attachments could not be found"
         case .emailAliasNotFound:
             return "Email alias could not be found"
+        case .emailAliasAlreadyExists:
+            return "Email alias already exists"
         case .decodingError:
             return "A decoding error has occurred"
         case .emailAddressFormatValidationFailed:
@@ -110,7 +121,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
         case let .invalidArgument(msg):
             return msg ?? "An invalid argument has been provided"
         case .invalidConfig:
-            return "There was an issue with the configuration file. Please check that a valid configuration is included in the bundle"
+            return "The client's configuration is invalid or doesn't support this operation. "
+                + "Check that a valid configuration file is included in the bundle, and the SudoEmailClientConfig the client was created with"
         case .invalidEmailAddressDomain:
             return "Email address domain is not supported"
         case .invalidToken:
@@ -119,6 +131,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
             return "Key attachments could not be found"
         case .keyNotFound:
             return "Key not found"
+        case .singletonKeyPairNotFound:
+            return "The singleton key pair is not on this device"
         case let .limitExceeded(msg):
             return msg ?? "API limit exceeded"
         case .noEmailMessageRFC822Available:
@@ -143,6 +157,8 @@ public enum SudoEmailError: Error, Equatable, LocalizedError, Sendable {
             return msg ?? "Unexpected API operation error"
         case .invalidKeyArchive:
             return "The imported key archive is invalid"
+        case .keyArchiveNotImportable:
+            return "The key backup contains keys this app can't import. No keys were changed."
         case let .messageSizeLimitExceeded(msg):
             return msg ?? "Email message size exceeded"
         case let .inNetworkAddressNotFound(msg):

@@ -59,6 +59,15 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     let emailCryptoService: EmailCryptoService
 
+    // MARK: - Properties: Configuration
+
+    /// Options for how the client manages key pairs.
+    let clientConfig: SudoEmailClientConfig
+
+    /// Serialises the operations that register key pairs with the service or remove them from the device, so that a
+    /// deprovision can't remove a key pair that a provisioning running alongside it is registering.
+    let keyRegistrationLock = AsyncLock()
+
     // MARK: - Properties: Cache
 
     let emailMessageBodyCache: EmailMessageBodyCache
@@ -84,22 +93,40 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     // MARK: - Lifecycle
 
-    /// Initialize an instance of `DefaultSudoEmailClient`. It uses configuration parameters defined in `sudoplatformconfig.json` file located in the app
-    /// bundle.
+    /// Initialize an instance of `DefaultSudoEmailClient` with the default `SudoEmailClientConfig`. It uses configuration parameters defined in
+    /// `sudoplatformconfig.json` file located in the app bundle.
     /// - Parameters:
     ///   - keyNamespace: Namespace to use for the keys and passwords. This should be left as the default property.
     ///   - userClient: SudoUserClient instance used for authentication.
     /// Throws:
     ///     - `SudoEmailError` if invalid config.
     public convenience init(keyNamespace: String = SudoEmailCommon.Constants.defaultKeyNamespace, userClient: SudoUserClient) throws {
-        try self.init(config: nil, keyNamespace: keyNamespace, userClient: userClient)
+        try self.init(keyNamespace: keyNamespace, userClient: userClient, clientConfig: SudoEmailClientConfig())
+    }
+
+    /// Initialize an instance of `DefaultSudoEmailClient`. It uses configuration parameters defined in `sudoplatformconfig.json` file located in the app
+    /// bundle.
+    /// - Parameters:
+    ///   - keyNamespace: Namespace to use for the keys and passwords. This should be left as the default property.
+    ///   - userClient: SudoUserClient instance used for authentication.
+    ///   - clientConfig: Options for how the client manages key pairs, such as whether every email address and email alias shares one key
+    ///     pair.
+    /// Throws:
+    ///     - `SudoEmailError` if invalid config.
+    public convenience init(
+        keyNamespace: String = SudoEmailCommon.Constants.defaultKeyNamespace,
+        userClient: SudoUserClient,
+        clientConfig: SudoEmailClientConfig
+    ) throws {
+        try self.init(config: nil, keyNamespace: keyNamespace, userClient: userClient, clientConfig: clientConfig)
     }
 
     convenience init(
         config: SudoEmailConfig?,
         keyNamespace: String = SudoEmailCommon.Constants.defaultKeyNamespace,
         userClient: SudoUserClient,
-        emailMessageBodyCache: EmailMessageBodyCache? = nil
+        emailMessageBodyCache: EmailMessageBodyCache? = nil,
+        clientConfig: SudoEmailClientConfig = SudoEmailClientConfig()
     ) throws {
         let graphQLClient: SudoApiClient
         if let config {
@@ -169,7 +196,8 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             blockedAddressRepository: blockedAddressRepository,
             rfc822MessageDataProcessor: rfc822MessageDataProcessor,
             subscriptionManager: subscriptionManager,
-            emailMessageBodyCache: resolvedCache
+            emailMessageBodyCache: resolvedCache,
+            clientConfig: clientConfig
         )
     }
 
@@ -195,8 +223,10 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         blockedAddressRepository: BlockedAddressRepository,
         rfc822MessageDataProcessor: Rfc822MessageDataProcessor,
         subscriptionManager: SubscriptionManager,
-        emailMessageBodyCache: EmailMessageBodyCache? = nil
+        emailMessageBodyCache: EmailMessageBodyCache? = nil,
+        clientConfig: SudoEmailClientConfig = SudoEmailClientConfig()
     ) {
+        self.clientConfig = clientConfig
         self.graphQLClient = graphQLClient
         self.userClient = userClient
         signInGuard = SignInGuard(userClient: userClient)
@@ -253,10 +283,13 @@ public class DefaultSudoEmailClient: SudoEmailClient {
         let provisionEmailAccountUseCase = useCaseFactory.generateProvisionEmailAccountUseCase(
             keyWorker: serviceKeyWorker,
             emailAccountRepository: emailAccountRepository,
+            clientConfig: clientConfig,
             logger: logger
         )
 
-        let emailAccount = try await provisionEmailAccountUseCase.execute(withInput: input)
+        let emailAccount = try await keyRegistrationLock.withLock {
+            try await provisionEmailAccountUseCase.execute(withInput: input)
+        }
         let apiTransformer = EmailAddressAPITransformer(deviceKeyWorker: serviceKeyWorker)
         let emailAddress = apiTransformer.transform(emailAccount)
         return emailAddress
@@ -264,14 +297,23 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func deprovisionEmailAddress(_ id: String) async throws -> EmailAddress {
         try await ensureSignedIn()
-        let useCase = useCaseFactory.generateDeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
-        let emailAccount = try await useCase.execute(emailAccountId: id)
+        let useCase = useCaseFactory.generateDeprovisionEmailAccountUseCase(
+            emailAccountRepository: emailAccountRepository,
+            keyWorker: serviceKeyWorker,
+            clientConfig: clientConfig
+        )
+        let result = try await keyRegistrationLock.withLock {
+            try await useCase.execute(emailAccountId: id)
+        }
 
         // Flush cached message bodies for this email address
         await emailMessageBodyCache.flush(input: CacheFlushInput(sudoId: nil, emailAddressId: id))
 
         let apiTransformer = EmailAddressAPITransformer(deviceKeyWorker: serviceKeyWorker)
-        let emailAddress = apiTransformer.transform(emailAccount)
+        let emailAddress = apiTransformer.transform(result.emailAccount)
+        guard result.keyIdsNotRemoved.isEmpty else {
+            throw KeyPairRemovalFailedError(emailAddress: emailAddress, keyIds: result.keyIdsNotRemoved)
+        }
         return emailAddress
     }
 
@@ -487,6 +529,15 @@ public class DefaultSudoEmailClient: SudoEmailClient {
 
     public func exportKeys() throws -> Data {
         try serviceKeyWorker.exportKeys()
+    }
+
+    public func createSingletonKeysIfAbsent() async throws -> CreateSingletonKeysIfAbsentResult {
+        try await ensureSignedIn()
+        let useCase = useCaseFactory.generateCreateSingletonKeysIfAbsentUseCase(
+            keyWorker: serviceKeyWorker,
+            enforceSingletonKeyPair: clientConfig.enforceSingletonKeyPair
+        )
+        return try await useCase.execute()
     }
 
     public func checkEmailAddressAvailability(withInput input: CheckEmailAddressAvailabilityInput) async throws -> [String] {
@@ -730,16 +781,19 @@ public class DefaultSudoEmailClient: SudoEmailClient {
             keyWorker: serviceKeyWorker,
             emailAliasRepository: emailAliasRepository,
             domainRepository: domainRepository,
+            clientConfig: clientConfig,
             logger: logger
         )
-        let result = try await useCase.execute(
-            aliasAddress: input.aliasAddress,
-            realAddress: input.realAddress,
-            ownershipProofToken: input.ownershipProofToken,
-            metadata: input.metadata,
-            expiresAt: input.expiresAt,
-            keyId: input.keyId
-        )
+        let result = try await keyRegistrationLock.withLock {
+            try await useCase.execute(
+                aliasAddress: input.aliasAddress,
+                realAddress: input.realAddress,
+                ownershipProofToken: input.ownershipProofToken,
+                metadata: input.metadata,
+                expiresAt: input.expiresAt,
+                keyId: input.keyId
+            )
+        }
         let transformer = EmailAliasAPITransformer()
         return transformer.transform(result)
     }

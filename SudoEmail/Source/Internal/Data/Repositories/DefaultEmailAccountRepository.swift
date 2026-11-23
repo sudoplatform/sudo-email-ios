@@ -65,7 +65,45 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         publicKey: KeyEntity,
         ownershipProofToken: String,
         displayName: String? = nil,
+        onDefinitiveRejection: () -> Void
     ) async throws -> EmailAccountEntity {
+        let mutation: GraphQL.ProvisionEmailAddressMutation
+        do {
+            mutation = try makeProvisionEmailAddressMutation(
+                emailAddress,
+                publicKey: publicKey,
+                ownershipProofToken: ownershipProofToken,
+                displayName: displayName
+            )
+        } catch {
+            // The request was never sent, so the service didn't act on it.
+            onDefinitiveRejection()
+            throw error
+        }
+        let result = try await perform(mutation, onDefinitiveRejection: onDefinitiveRejection)
+        do {
+            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
+            let entity = try transformer.transform(result)
+            return entity
+        } catch {
+            logger.error("ProvisionEmailAddressMutation result transformation failed with \(error)")
+            throw error
+        }
+    }
+
+    /// Build the mutation that provisions an email address, sealing its display name.
+    /// - Parameters:
+    ///   - emailAddress: Email address to provision.
+    ///   - publicKey: Public key to register with the email address.
+    ///   - ownershipProofToken: A signed ownership proof of the user to create the account.
+    ///   - displayName: The public display name for the email account.
+    /// - Returns: The mutation.
+    private func makeProvisionEmailAddressMutation(
+        _ emailAddress: String,
+        publicKey: KeyEntity,
+        ownershipProofToken: String,
+        displayName: String?
+    ) throws -> GraphQL.ProvisionEmailAddressMutation {
         let publicKeyData = publicKey.keyData.base64EncodedString()
         // Extract format from the public key and transform to GraphQL format
         let keyFormatTransformer = KeyFormatGQLTransformer()
@@ -105,16 +143,7 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
                 ownershipProofTokens: [ownershipProofToken]
             )
         }
-        let mutation = GraphQL.ProvisionEmailAddressMutation(input: input)
-        let result = try await perform(mutation)
-        do {
-            let transformer = EmailAccountEntityTransformer(deviceKeyWorker: deviceKeyWorker)
-            let entity = try transformer.transform(result)
-            return entity
-        } catch {
-            logger.error("ProvisionEmailAddressMutation result transformation failed with \(error)")
-            throw error
-        }
+        return GraphQL.ProvisionEmailAddressMutation(input: input)
     }
 
     func updateMetadata(id: String, values: UpdateEmailAddressMetadataValues) async throws -> String {
@@ -226,5 +255,23 @@ class DefaultEmailAccountRepository: EmailAccountRepository {
         let result = try await fetch(query)
         let transformer = EmailAddressPublicInfoEntityTransformer()
         return transformer.transform(result)
+    }
+
+    func listPublicKeyRegistrations() async throws -> [PublicKeyRegistrationEntity] {
+        var registrations: [PublicKeyRegistrationEntity] = []
+        var nextToken: String?
+        // A page can be empty while more remain, so read until there's no next token.
+        repeat {
+            // An empty list asks for every key format; omitting it returns only RSA_PUBLIC_KEY keys.
+            let query = GraphQL.GetPublicKeysForEmailQuery(nextToken: nextToken, keyFormats: [])
+            let result = try await fetch(query)
+            let page = result.getPublicKeysForEmail
+            registrations += page.items.map {
+                let key = $0.fragments.publicKey
+                return PublicKeyRegistrationEntity(keyId: key.keyId, keyRingId: key.keyRingId)
+            }
+            nextToken = page.nextToken
+        } while nextToken != nil
+        return registrations
     }
 }

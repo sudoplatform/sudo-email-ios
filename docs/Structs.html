@@ -211,6 +211,12 @@
                 <a class="nav-group-task-link" href="Structs/CreateDraftEmailMessageInput.html">CreateDraftEmailMessageInput</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/CreateSingletonKeysIfAbsentResult.html">CreateSingletonKeysIfAbsentResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/CreateSingletonKeysIfAbsentResult/KeyResult.html">– KeyResult</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DateRange.html">DateRange</a>
               </li>
               <li class="nav-group-task">
@@ -319,6 +325,9 @@
                 <a class="nav-group-task-link" href="Structs/InternetMessageFormatHeader.html">InternetMessageFormatHeader</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/KeyPairRemovalFailedError.html">KeyPairRemovalFailedError</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListDraftEmailMessageMetadataForEmailAddressIdInput.html">ListDraftEmailMessageMetadataForEmailAddressIdInput</a>
               </li>
               <li class="nav-group-task">
@@ -389,6 +398,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/SendEmailMessageResult.html">SendEmailMessageResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/SudoEmailClientConfig.html">SudoEmailClientConfig</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/UnsealedBlockedAddress.html">UnsealedBlockedAddress</a>
@@ -567,6 +579,34 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ConfigurationData</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail33CreateSingletonKeysIfAbsentResultV"></a>
+                    <a name="//apple_ref/swift/Struct/CreateSingletonKeysIfAbsentResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail33CreateSingletonKeysIfAbsentResultV">CreateSingletonKeysIfAbsentResult</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The result of <code><a href="Protocols/SudoEmailClient.html#/s:9SudoEmail0aB6ClientP27createSingletonKeysIfAbsentAA06CreateefgH6ResultVyYaKF">SudoEmailClient.createSingletonKeysIfAbsent()</a></code>.</p>
+
+                        <a href="Structs/CreateSingletonKeysIfAbsentResult.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CreateSingletonKeysIfAbsentResult</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2276,6 +2316,37 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:9SudoEmail25KeyPairRemovalFailedErrorV"></a>
+                    <a name="//apple_ref/swift/Struct/KeyPairRemovalFailedError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail25KeyPairRemovalFailedErrorV">KeyPairRemovalFailedError</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Thrown by <code><a href="Protocols/SudoEmailClient.html#/s:9SudoEmail0aB6ClientP011deprovisionB7AddressyAA0bE0VSSYaKF">SudoEmailClient.deprovisionEmailAddress(_:)</a></code> when the service deprovisioned the email address, but
+some of its key pairs couldn&rsquo;t be removed from the device.</p>
+
+<p>Treat the email address as deprovisioned. The key pairs stay on the device until <code>reset()</code>.</p>
+
+                        <a href="Structs/KeyPairRemovalFailedError.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">KeyPairRemovalFailedError</span> <span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">LocalizedError</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:9SudoEmail13PartialResultV"></a>
                     <a name="//apple_ref/swift/Struct/PartialResult" class="dashAnchor"></a>
                     <a class="token" href="#/s:9SudoEmail13PartialResultV">PartialResult</a>
@@ -2412,6 +2483,35 @@ Some further rules (beyond RFC 6854) must also be applied to the data:</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SendEmailMessageResult</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9SudoEmail0aB12ClientConfigV"></a>
+                    <a name="//apple_ref/swift/Struct/SudoEmailClientConfig" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9SudoEmail0aB12ClientConfigV">SudoEmailClientConfig</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Options for how a <code><a href="Classes/DefaultSudoEmailClient.html">DefaultSudoEmailClient</a></code> manages the key pairs that email addresses and email aliases are
+provisioned with.</p>
+
+                        <a href="Structs/SudoEmailClientConfig.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SudoEmailClientConfig</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -2567,7 +2667,7 @@ has updated its Sudo Platform Email Notification Extension SDK</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-11-11)</p>
+      <p>&copy; 2026 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2026-11-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

@@ -10,9 +10,9 @@ import SudoLogging
 /// Core use case representation of a operation to provision an email account.
 ///
 /// Performs the following operations:
-/// - Checks to see if the device key is registered and if not, will register the key.
-/// - Gets the user's ownership proof for the account.
+/// - Chooses the key pair to provision with, following the client's `SudoEmailClientConfig`.
 /// - Calls the sudo email service provision email api to finish the provision.
+/// - Removes a key pair generated for the provision if the service definitely didn't carry it out.
 class ProvisionEmailAccountUseCase {
 
     // MARK: - Properties: Repositories
@@ -22,6 +22,9 @@ class ProvisionEmailAccountUseCase {
 
     /// Email account repository to create the email account.
     let emailAccountRepository: EmailAccountRepository
+
+    /// Chooses the key pair to provision with, and removes it if the provision is rejected.
+    let keyProvider: ProvisioningKeyProvider
 
     // MARK: - Properties
 
@@ -34,44 +37,29 @@ class ProvisionEmailAccountUseCase {
     init(
         keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
+        clientConfig: SudoEmailClientConfig = SudoEmailClientConfig(),
         logger: Logger = .emailSDKLogger
     ) {
         self.keyWorker = keyWorker
         self.emailAccountRepository = emailAccountRepository
         self.logger = logger
+        keyProvider = ProvisioningKeyProvider(keyWorker: keyWorker, clientConfig: clientConfig, logger: logger)
     }
 
     // MARK: - Methods
 
     /// Execute the use case.
-    /// - Parameters:
-    ///   - emailAddress: Email address to use to provision.
-    ///   - sudoId: Identifier of the sudo to provision the email account to.
+    /// - Parameter input: Parameters used to provision the email address.
     /// - Returns: A newly created email account.
+    /// - Throws: `SudoEmailError`; see `ProvisioningKeyProvider.key(forKeyId:)` for the key errors.
     func execute(withInput input: ProvisionEmailAddressInput) async throws -> EmailAccountEntity {
-        var publicKey: KeyEntity
-        do {
-            if let keyId = input.keyId {
-                guard let pubKey = try await keyWorker.getPublicKeyWithId(keyId: keyId) else {
-                    throw SudoEmailError.keyNotFound
-                }
-                publicKey = pubKey
-            } else {
-                let keyPair = try await keyWorker.generateKeyPair()
-                publicKey = keyPair.publicKey
-            }
-        } catch let error as SudoEmailError {
-            logger.error("Error getting public key \(error.localizedDescription)")
-            throw error
-        } catch {
-            logger.error("Error getting public key \(error.localizedDescription)")
-            throw SudoEmailError.internalError(error.localizedDescription)
-        }
+        let key = try await keyProvider.key(forKeyId: input.keyId)
         let emailAccount = try await emailAccountRepository.createWithEmailAddress(
             input.emailAddress,
-            publicKey: publicKey,
+            publicKey: key.publicKey,
             ownershipProofToken: input.ownershipProofToken,
-            displayName: input.displayName
+            displayName: input.displayName,
+            onDefinitiveRejection: { keyProvider.discardRejectedKey(key) }
         )
         return emailAccount
     }

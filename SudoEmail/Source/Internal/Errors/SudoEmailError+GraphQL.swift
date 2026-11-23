@@ -27,6 +27,8 @@ extension SudoEmailError {
             self = .emailMessageNotFound
         case "sudoplatform.email.EmailMaskNotFound":
             self = .emailAliasNotFound
+        case "sudoplatform.email.EmailMaskAlreadyExists":
+            self = .emailAliasAlreadyExists
         case "sudoplatform.email.EntitlementExceededError":
             self = .entitlementExceeded
         case "sudoplatform.email.UnauthorizedAddress":

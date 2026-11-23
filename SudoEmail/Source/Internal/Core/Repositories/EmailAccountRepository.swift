@@ -25,12 +25,15 @@ protocol EmailAccountRepository: Repository {
     ///   - publicKey: Public key to be associated with the account. Used to encrypt user data.
     ///   - ownershipProofToken: A signed ownership proof of the user to create the account.
     ///   - displayName: The public display name for the email account.
+    ///   - onDefinitiveRejection: Called, before the error is thrown, if the service definitely didn't create the
+    ///     account: the request failed before it was sent, or the service refused it.
     /// - Returns: The email account that was created.
     func createWithEmailAddress(
         _ emailAddress: String,
         publicKey: KeyEntity,
         ownershipProofToken: String,
-        displayName: String?
+        displayName: String?,
+        onDefinitiveRejection: () -> Void
     ) async throws -> EmailAccountEntity
 
     /// Delete an email account.
@@ -77,4 +80,9 @@ protocol EmailAccountRepository: Repository {
     ///   - emailAddresses: A list of email address strings in format 'local-part@domain'.
     ///   - Returns: The list of public info objects found, or empty if no email addresses or public keys were found.
     func lookupPublicInfo(emailAddresses: [String]) async throws -> [EmailAddressPublicInfoEntity]
+
+    /// List every registration of the user's public keys, across all of the user's email addresses and email aliases,
+    /// in every key format. Reads every page.
+    /// - Returns: The registrations; a key registered for several addresses or aliases appears once for each.
+    func listPublicKeyRegistrations() async throws -> [PublicKeyRegistrationEntity]
 }

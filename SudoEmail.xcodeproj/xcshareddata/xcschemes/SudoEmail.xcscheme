@@ -32,10 +32,10 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "84783B29231C916200CCBC27"
-            BuildableName = "SudoEmail.framework"
+            BlueprintIdentifier = "SudoEmail"
+            BuildableName = "SudoEmail"
             BlueprintName = "SudoEmail"
-            ReferencedContainer = "container:SudoEmail.xcodeproj">
+            ReferencedContainer = "container:">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>

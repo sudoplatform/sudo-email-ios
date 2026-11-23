@@ -16634,27 +16634,29 @@ internal final class GetPublicKeyForEmailQuery: GraphQLQuery {
 
 internal final class GetPublicKeysForEmailQuery: GraphQLQuery {
   internal static let operationString =
-    "query GetPublicKeysForEmail($limit: Int, $nextToken: String) {\n  getPublicKeysForEmail(limit: $limit, nextToken: $nextToken) {\n    __typename\n    ...PaginatedPublicKey\n  }\n}"
+    "query GetPublicKeysForEmail($limit: Int, $nextToken: String, $keyFormats: [KeyFormat!]) {\n  getPublicKeysForEmail(limit: $limit, nextToken: $nextToken, keyFormats: $keyFormats) {\n    __typename\n    ...PaginatedPublicKey\n  }\n}"
 
   internal static var requestString: String { return operationString.appending(PaginatedPublicKey.fragmentString).appending(PublicKey.fragmentString) }
 
   internal var limit: Int?
   internal var nextToken: String?
+  internal var keyFormats: [KeyFormat]?
 
-  internal init(limit: Int? = nil, nextToken: String? = nil) {
+  internal init(limit: Int? = nil, nextToken: String? = nil, keyFormats: [KeyFormat]?) {
     self.limit = limit
     self.nextToken = nextToken
+    self.keyFormats = keyFormats
   }
 
   internal var variables: GraphQLMap? {
-    return ["limit": limit, "nextToken": nextToken]
+    return ["limit": limit, "nextToken": nextToken, "keyFormats": keyFormats]
   }
 
   internal struct Data: GraphQLSelectionSet {
     internal static let possibleTypes = ["Query"]
 
     internal static let selections: [GraphQLSelection] = [
-      GraphQLField("getPublicKeysForEmail", arguments: ["limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken")], type: .nonNull(.object(GetPublicKeysForEmail.selections))),
+      GraphQLField("getPublicKeysForEmail", arguments: ["limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken"), "keyFormats": GraphQLVariable("keyFormats")], type: .nonNull(.object(GetPublicKeysForEmail.selections))),
     ]
 
     internal var snapshot: Snapshot

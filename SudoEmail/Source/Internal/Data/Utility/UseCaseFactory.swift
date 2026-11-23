@@ -11,20 +11,37 @@ import SudoUser
 /// Utility class for generating use cases from the core level of the SDK in the consumer/API level.
 class UseCaseFactory {
 
+    func generateCreateSingletonKeysIfAbsentUseCase(
+        keyWorker: ServiceKeyWorker,
+        enforceSingletonKeyPair: Bool
+    ) -> CreateSingletonKeysIfAbsentUseCase {
+        return CreateSingletonKeysIfAbsentUseCase(keyWorker: keyWorker, enforceSingletonKeyPair: enforceSingletonKeyPair)
+    }
+
     func generateProvisionEmailAccountUseCase(
         keyWorker: ServiceKeyWorker,
         emailAccountRepository: EmailAccountRepository,
+        clientConfig: SudoEmailClientConfig,
         logger: Logger
     ) -> ProvisionEmailAccountUseCase {
         return ProvisionEmailAccountUseCase(
             keyWorker: keyWorker,
             emailAccountRepository: emailAccountRepository,
+            clientConfig: clientConfig,
             logger: logger
         )
     }
 
-    func generateDeprovisionEmailAccountUseCase(emailAccountRepository: EmailAccountRepository) -> DeprovisionEmailAccountUseCase {
-        return DeprovisionEmailAccountUseCase(emailAccountRepository: emailAccountRepository)
+    func generateDeprovisionEmailAccountUseCase(
+        emailAccountRepository: EmailAccountRepository,
+        keyWorker: ServiceKeyWorker,
+        clientConfig: SudoEmailClientConfig
+    ) -> DeprovisionEmailAccountUseCase {
+        return DeprovisionEmailAccountUseCase(
+            emailAccountRepository: emailAccountRepository,
+            keyWorker: keyWorker,
+            clientConfig: clientConfig
+        )
     }
 
     func generateUpdateEmailAccountMetadataUseCase(emailAccountRepository: EmailAccountRepository) -> UpdateEmailAccountMetadataUseCase {
@@ -363,13 +380,15 @@ class UseCaseFactory {
         keyWorker: ServiceKeyWorker,
         emailAliasRepository: EmailAliasRepository,
         domainRepository: DomainRepository,
+        clientConfig: SudoEmailClientConfig,
         logger: Logger
     ) -> ProvisionEmailAliasUseCase {
         return ProvisionEmailAliasUseCase(
             keyWorker: keyWorker,
             emailAliasRepository: emailAliasRepository,
             domainRepository: domainRepository,
-            logger: logger
+            logger: logger,
+            clientConfig: clientConfig
         )
     }
 
